@@ -18,7 +18,7 @@ DELETE /api/.../:id
 
 ## Schemas Zod
 
-- Body e query em `apps/api/src/modules/lancamento-despesa/` *(path kebab a definir na implementação)*.
+- Body e query em `apps/api-nest/src/modules/lancamento-despesa/` *(path kebab a definir na implementação)*.
 
 ## Tenancy e auditoria
 

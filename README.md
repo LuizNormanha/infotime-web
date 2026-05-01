@@ -16,8 +16,7 @@ O projeto surge da necessidade de **substituir de forma incremental** o sistema 
 |--------|-------------|
 | Monorepo | **pnpm** workspaces |
 | Frontend | **React 18**, **TypeScript**, **Vite**, **PrimeReact** / PrimeFlex / PrimeIcons, **React Router**, **TanStack Query**, **React Hook Form**, **Zod** |
-| API principal | **NestJS** com **@nestjs/platform-fastify**, **Passport/JWT**, **Zod**, módulos por domínio (auth, usuários, clientes, grupos, aplicações, health) |
-| API alternativa | **Fastify** puro em `apps/api` (`@infotime/api-fastify`) — uso opcional / legado |
+| API | **NestJS** com **@nestjs/platform-fastify**, **Passport/JWT**, **Zod**, módulos por domínio (auth, usuários, clientes, grupos, aplicações, health) — único backend em [`apps/api-nest`](apps/api-nest) |
 | Dados | **PostgreSQL** (base `liga_infotime`), **Prisma** no pacote `@infotime/database`, pacote `@infotime/shared-types` |
 | Infra prevista | **Redis** (filas **BullMQ**), **S3/MinIO** para uploads — conforme `.env.example` |
 | Qualidade | **Vitest** na API, **ESLint**, script **`pnpm verify`** (alinhado ao CI) |
@@ -32,8 +31,8 @@ O projeto surge da necessidade de **substituir de forma incremental** o sistema 
 
 ## Estrutura principal
 
-- **API principal:** [`apps/api-nest`](apps/api-nest) (`@infotime/api`) — prefixo global **`/api/v1`**.
-- **API legada (Fastify puro):** [`apps/api`](apps/api) (`@infotime/api-fastify`) — comando `pnpm dev:fastify`.
+- **API (única):** [`apps/api-nest`](apps/api-nest) (`@infotime/api`) — prefixo global **`/api/v1`**.
+- **Histórico da stack Fastify v1 (somente referência):** [`docs/historico/api-fastify-v1/`](docs/historico/api-fastify-v1/) — código arquivado, não usar em desenvolvimento.
 
 ## Documentação
 
@@ -94,9 +93,6 @@ pnpm dev
 
 # API Nest só
 pnpm --filter @infotime/api dev
-
-# API Fastify legada (opcional)
-pnpm dev:fastify
 
 # Web só
 pnpm --filter @infotime/web dev

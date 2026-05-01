@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ClsModule } from 'nestjs-cls';
+import { AppController } from './app.controller';
 import { PrismaModule } from './shared/prisma/prisma.module';
 import { AppConfigModule } from './shared/config/config.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -10,6 +11,7 @@ import { AplicacoesModule } from './modules/aplicacoes/aplicacoes.module';
 import { HealthModule } from './modules/health/health.module';
 
 @Module({
+  controllers: [AppController],
   imports: [
     AppConfigModule,
     PrismaModule,

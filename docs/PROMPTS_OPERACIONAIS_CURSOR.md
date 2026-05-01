@@ -32,7 +32,7 @@ Não gere backend ou frontend ainda.
 ## Gerar backend de uma entidade
 
 ```text
-Implemente o backend da entidade [entidade] com Node.js, Fastify, Prisma, PostgreSQL e Zod.
+Implemente o backend da entidade [entidade] com NestJS, Prisma, PostgreSQL e Zod (padrão do monorepo em apps/api-nest).
 
 Use:
 - specs/[entidade]/README.md
@@ -47,19 +47,19 @@ Use:
 Regras:
 - regras de negócio ficam no service;
 - acesso a banco fica no repository;
-- validação fica no schema;
-- rotas não devem conter lógica de negócio;
+- validação com DTOs Zod / pipes;
+- controllers finos — sem lógica de negócio;
 - usar paginação server-side;
 - aplicar tenant em todas as consultas;
 - aplicar auditoria em insert/update/delete lógico;
 - não inventar campos.
 
 Gere ou atualize:
-- apps/api/src/modules/[entidade]/[entidade].routes.ts
-- apps/api/src/modules/[entidade]/[entidade].controller.ts
-- apps/api/src/modules/[entidade]/[entidade].service.ts
-- apps/api/src/modules/[entidade]/[entidade].repository.ts
-- apps/api/src/modules/[entidade]/[entidade].schema.ts
+- apps/api-nest/src/modules/[entidade]/[entidade].module.ts
+- apps/api-nest/src/modules/[entidade]/[entidade].controller.ts
+- apps/api-nest/src/modules/[entidade]/[entidade].service.ts
+- apps/api-nest/src/modules/[entidade]/[entidade].repository.ts
+- apps/api-nest/src/modules/[entidade]/dto/*.ts
 - testes básicos das regras críticas
 ```
 

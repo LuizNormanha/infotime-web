@@ -18,7 +18,7 @@ DELETE /api/.../:id
 
 ## Schemas Zod
 
-- Body e query em `apps/api/src/modules/proposta/` *(path kebab a definir na implementação)*.
+- Body e query em `apps/api-nest/src/modules/proposta/` *(path kebab a definir na implementação)*.
 
 ## Tenancy e auditoria
 

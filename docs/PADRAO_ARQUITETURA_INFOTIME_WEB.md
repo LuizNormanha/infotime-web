@@ -32,26 +32,24 @@ apps/
         auth/
         utils/
 
-  api/
+  api-nest/
     src/
-      app.ts
-      server.ts
+      app.module.ts
+      main.ts
       modules/
         [entidade]/
-          [entidade].routes.ts
+          [entidade].module.ts
           [entidade].controller.ts
           [entidade].service.ts
           [entidade].repository.ts
-          [entidade].schema.ts
+          dto/
       shared/
         prisma/
-        auth/
-        errors/
-        pagination/
-        tenancy/
-        audit/
-        validation/
-        storage/
+        config/
+        guards/
+        interceptors/
+        pipes/
+        filters/
 
 packages/
   database/
@@ -72,10 +70,10 @@ packages/
 ## Stack
 
 - **Web:** React, TypeScript, PrimeReact, React Hook Form, Zod, TanStack Query.
-- **API:** Node.js, TypeScript, Fastify, Zod, Prisma.
+- **API:** Node.js, TypeScript, NestJS 11 + FastifyAdapter, Passport/JWT, Zod, Prisma.
 - **Banco:** PostgreSQL, base `liga_infotime`, tabelas no schema `public`.
 
 ## Integração entre pacotes
 
-- `apps/api` importa `@infotime/database` (Prisma client) e `@infotime/shared-types`.
+- `apps/api-nest` importa `@infotime/database` (Prisma client) e `@infotime/shared-types`.
 - `apps/web` importa `@infotime/shared-types` para DTOs de listagem e erros comuns.
