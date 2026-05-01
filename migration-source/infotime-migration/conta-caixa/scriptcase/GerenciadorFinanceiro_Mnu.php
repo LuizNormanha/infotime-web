@@ -1,0 +1,12055 @@
+<?php
+include_once('GerenciadorFinanceiro_Mnu_session.php');
+@ini_set('session.cookie_httponly', 1);
+@ini_set('session.use_only_cookies', 1);
+@ini_set('session.cookie_secure', 0);
+session_start();
+if (!function_exists("sc_check_mobile"))
+{
+    include_once("../_lib/lib/php/nm_check_mobile.php");
+}
+$_SESSION['scriptcase']['device_mobile'] = sc_check_mobile();
+if (!isset($_SESSION['scriptcase']['display_mobile']))
+{
+    $_SESSION['scriptcase']['display_mobile'] = true;
+}
+if ($_SESSION['scriptcase']['device_mobile'])
+{
+    if ($_SESSION['scriptcase']['display_mobile'] && isset($_POST['_sc_force_mobile']) && 'out' == $_POST['_sc_force_mobile'])
+    {
+        $_SESSION['scriptcase']['display_mobile'] = false;
+    }
+    elseif (!$_SESSION['scriptcase']['display_mobile'] && isset($_POST['_sc_force_mobile']) && 'in' == $_POST['_sc_force_mobile'])
+    {
+        $_SESSION['scriptcase']['display_mobile'] = true;
+    }
+}
+    $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod']      = "";
+    $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_perfil']         = "ligasistemas";
+    $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_imag_temp'] = "";
+    $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo']      = "";
+    //check publication with the prod
+    $str_path_apl_url  = $_SERVER['PHP_SELF'];
+    $str_path_apl_url  = str_replace("\\", '/', $str_path_apl_url);
+    $str_path_apl_url  = substr($str_path_apl_url, 0, strrpos($str_path_apl_url, "/"));
+    $str_path_apl_url  = substr($str_path_apl_url, 0, strrpos($str_path_apl_url, "/")+1);
+    //check prod
+    if(empty($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod']))
+    {
+            /*check prod*/$_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'] = $str_path_apl_url . "_lib/prod";
+    }
+    //check tmp
+    if(empty($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_imag_temp']))
+    {
+            /*check tmp*/$_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_imag_temp'] = $str_path_apl_url . "_lib/tmp";
+    }
+    //end check publication with the prod
+
+ob_start();
+
+class GerenciadorFinanceiro_Mnu_class
+{
+  var $Db;
+  var $sc_charset;
+  var $force_mobile;
+  var $path_botoes;
+  var $path_imag_apl;
+  var $path_css;
+  var $url_css;
+
+ function sc_Include($path, $tp, $name)
+ {
+     if ((empty($tp) && empty($name)) || ($tp == "F" && !function_exists($name)) || ($tp == "C" && !class_exists($name)))
+     {
+         include_once($path);
+     }
+ } // sc_Include
+
+ function GerenciadorFinanceiro_Mnu_menu()
+ {
+    global $GerenciadorFinanceiro_Mnu_menuData, $nm_data_fixa;
+     if (isset($_POST["nmgp_idioma"]))  
+     { 
+         $Temp_lang = explode(";" , $_POST["nmgp_idioma"]);  
+         $_SESSION['scriptcase']['lang_op_sel'] = $Temp_lang[0];  
+         if (isset($Temp_lang[0]) && !empty($Temp_lang[0]))  
+          { 
+             $_SESSION['scriptcase']['str_lang'] = $Temp_lang[0];
+         } 
+         if (isset($Temp_lang[1]) && !empty($Temp_lang[1])) 
+         { 
+             $_SESSION['scriptcase']['str_conf_reg'] = $Temp_lang[1];
+         } 
+     } 
+ if (isset($_REQUEST["ajax_notif_request"]))    { 
+     } 
+   
+     if (isset($_POST["nmgp_schema"]))  
+     { 
+         $_SESSION['scriptcase']['str_schema_all'] = $_POST["nmgp_schema"] . "/" . $_POST["nmgp_schema"];
+     } 
+   
+           $nm_versao_sc  = "" ; 
+           $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['contr_erro'] = 'off';
+           $Campos_Mens_erro = "";
+           $sc_site_ssl   = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') ? true : false;
+           $NM_dir_atual = getcwd();
+           if (empty($NM_dir_atual))
+           {
+               $str_path_sys          = (isset($_SERVER['SCRIPT_FILENAME'])) ? $_SERVER['SCRIPT_FILENAME'] : $_SERVER['ORIG_PATH_TRANSLATED'];
+               $str_path_sys          = str_replace("\\", '/', $str_path_sys);
+           }
+           else
+           {
+               $sc_nm_arquivo         = explode("/", $_SERVER['PHP_SELF']);
+               $str_path_sys          = str_replace("\\", "/", getcwd()) . "/" . $sc_nm_arquivo[count($sc_nm_arquivo)-1];
+           }
+      //check publication with the prod
+      $str_path_apl_url = $_SERVER['PHP_SELF'];
+      $str_path_apl_url = str_replace("\\", '/', $str_path_apl_url);
+      $str_path_apl_url = substr($str_path_apl_url, 0, strrpos($str_path_apl_url, "/"));
+      $str_path_apl_url = substr($str_path_apl_url, 0, strrpos($str_path_apl_url, "/")+1);
+      $str_path_apl_dir = substr($str_path_sys, 0, strrpos($str_path_sys, "/"));
+      $str_path_apl_dir = substr($str_path_apl_dir, 0, strrpos($str_path_apl_dir, "/")+1);
+      //check prod
+      if(empty($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod']))
+      {
+              /*check prod*/$_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'] = $str_path_apl_url . "_lib/prod";
+      }
+$this->sc_charset['UTF-8'] = 'utf-8';
+$this->sc_charset['ISO-2022-JP'] = 'iso-2022-jp';
+$this->sc_charset['ISO-2022-KR'] = 'iso-2022-kr';
+$this->sc_charset['ISO-8859-1'] = 'iso-8859-1';
+$this->sc_charset['ISO-8859-2'] = 'iso-8859-2';
+$this->sc_charset['ISO-8859-3'] = 'iso-8859-3';
+$this->sc_charset['ISO-8859-4'] = 'iso-8859-4';
+$this->sc_charset['ISO-8859-5'] = 'iso-8859-5';
+$this->sc_charset['ISO-8859-6'] = 'iso-8859-6';
+$this->sc_charset['ISO-8859-7'] = 'iso-8859-7';
+$this->sc_charset['ISO-8859-8'] = 'iso-8859-8';
+$this->sc_charset['ISO-8859-8-I'] = 'iso-8859-8-i';
+$this->sc_charset['ISO-8859-9'] = 'iso-8859-9';
+$this->sc_charset['ISO-8859-10'] = 'iso-8859-10';
+$this->sc_charset['ISO-8859-13'] = 'iso-8859-13';
+$this->sc_charset['ISO-8859-14'] = 'iso-8859-14';
+$this->sc_charset['ISO-8859-15'] = 'iso-8859-15';
+$this->sc_charset['WINDOWS-1250'] = 'windows-1250';
+$this->sc_charset['WINDOWS-1251'] = 'windows-1251';
+$this->sc_charset['WINDOWS-1252'] = 'windows-1252';
+$this->sc_charset['TIS-620'] = 'tis-620';
+$this->sc_charset['WINDOWS-1253'] = 'windows-1253';
+$this->sc_charset['WINDOWS-1254'] = 'windows-1254';
+$this->sc_charset['WINDOWS-1255'] = 'windows-1255';
+$this->sc_charset['WINDOWS-1256'] = 'windows-1256';
+$this->sc_charset['WINDOWS-1257'] = 'windows-1257';
+$this->sc_charset['KOI8-R'] = 'koi8-r';
+$this->sc_charset['BIG-5'] = 'big5';
+$this->sc_charset['EUC-CN'] = 'EUC-CN';
+$this->sc_charset['GB18030'] = 'GB18030';
+$this->sc_charset['GB2312'] = 'gb2312';
+$this->sc_charset['EUC-JP'] = 'euc-jp';
+$this->sc_charset['SJIS'] = 'shift-jis';
+$this->sc_charset['EUC-KR'] = 'euc-kr';
+$_SESSION['scriptcase']['charset_entities']['UTF-8'] = 'UTF-8';
+$_SESSION['scriptcase']['charset_entities']['ISO-8859-1'] = 'ISO-8859-1';
+$_SESSION['scriptcase']['charset_entities']['ISO-8859-5'] = 'ISO-8859-5';
+$_SESSION['scriptcase']['charset_entities']['ISO-8859-15'] = 'ISO-8859-15';
+$_SESSION['scriptcase']['charset_entities']['WINDOWS-1251'] = 'cp1251';
+$_SESSION['scriptcase']['charset_entities']['WINDOWS-1252'] = 'cp1252';
+$_SESSION['scriptcase']['charset_entities']['BIG-5'] = 'BIG5';
+$_SESSION['scriptcase']['charset_entities']['EUC-CN'] = 'GB2312';
+$_SESSION['scriptcase']['charset_entities']['GB2312'] = 'GB2312';
+$_SESSION['scriptcase']['charset_entities']['SJIS'] = 'Shift_JIS';
+$_SESSION['scriptcase']['charset_entities']['EUC-JP'] = 'EUC-JP';
+$_SESSION['scriptcase']['charset_entities']['KOI8-R'] = 'KOI8-R';
+$str_path_web   = $_SERVER['PHP_SELF'];
+$str_path_web   = str_replace("\\", '/', $str_path_web);
+$str_path_web   = str_replace('//', '/', $str_path_web);
+$str_root       = substr($str_path_sys, 0, -1 * strlen($str_path_web));
+$path_link      = substr($str_path_web, 0, strrpos($str_path_web, '/'));
+$path_link      = substr($path_link, 0, strrpos($path_link, '/')) . '/';
+$path_btn       = $str_root . $path_link . "_lib/buttons/";
+$path_imag_cab  = $path_link . "_lib/img";
+$this->force_mobile = false;
+$this->path_botoes    = '../_lib/img';
+$this->path_imag_apl  = $str_root . $path_link . "_lib/img";
+$path_help      = $path_link . "_lib/webhelp/";
+$path_libs      = $str_root . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'] . "/lib/php";
+$path_third     = $str_root . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'] . "/third";
+$path_adodb     = $str_root . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'] . "/third/adodb";
+$path_apls      = $str_root . substr($path_link, 0, strrpos($path_link, '/'));
+$path_img_old   = $str_root . $path_link . "GerenciadorFinanceiro_Mnu/img";
+$this->path_css = $str_root . $path_link . "_lib/css/";
+$_SESSION['scriptcase']['dir_temp'] = $str_root . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_imag_temp'];
+$this->url_css = "../_lib/css/";
+$path_lib_php   = $str_root . $path_link . "_lib/lib/php";
+$menu_mobile_hide          = 'N';
+$menu_mobile_inicial_state = 'escondido';
+$menu_mobile_hide_onclick  = 'S';
+$menutree_mobile_float     = 'S';
+$menu_mobile_hide_icon     = 'N';
+$menu_mobile_hide_icon_menu_position     = 'right';
+$mobile_menu_mobile_hide          = 'S';
+$mobile_menu_mobile_inicial_state = 'aberto';
+$mobile_menu_mobile_hide_onclick  = 'S';
+$mobile_menutree_mobile_float     = 'S';
+$mobile_menu_mobile_hide_icon     = 'N';
+$mobile_menu_mobile_hide_icon_menu_position     = 'right';
+
+$this->sc_Include($path_libs . "/nm_ini_perfil.php", "F", "perfil_lib") ; 
+if (isset($_SESSION['scriptcase']['user_logout']))
+{
+    foreach ($_SESSION['scriptcase']['user_logout'] as $ind => $parms)
+    {
+        if (isset($_SESSION[$parms['V']]) && $_SESSION[$parms['V']] == $parms['U'])
+        {
+            unset($_SESSION['scriptcase']['user_logout'][$ind]);
+            $nm_apl_dest = $parms['R'];
+            $dir = explode("/", $nm_apl_dest);
+            if (count($dir) == 1)
+            {
+                $nm_apl_dest = str_replace(".php", "", $nm_apl_dest);
+                $nm_apl_dest = $path_link . SC_dir_app_name($nm_apl_dest) . "/" . $nm_apl_dest . ".php";
+            }
+?><!DOCTYPE html>
+            <html>
+            <body>
+            <form name="FRedirect" method="POST" action="<?php echo $nm_apl_dest; ?>" target="<?php echo $parms['T']; ?>">
+            </form>
+            <script>
+             document.FRedirect.submit();
+            </script>
+            </body>
+            </html>
+<?php
+            exit;
+        }
+    }
+}
+if (!defined("SC_ERROR_HANDLER"))
+{
+    define("SC_ERROR_HANDLER", 1);
+    include_once(dirname(__FILE__) . "/GerenciadorFinanceiro_Mnu_erro.php");
+}
+include_once(dirname(__FILE__) . "/GerenciadorFinanceiro_Mnu_erro.class.php"); 
+$this->Erro = new GerenciadorFinanceiro_Mnu_erro();
+$str_path = substr($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'], 0, strrpos($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'], '/') + 1);
+if (!is_file($str_root . $str_path . 'devel/class/xmlparser/nmXmlparserIniSys.class.php'))
+{
+    unset($_SESSION['scriptcase']['nm_sc_retorno']);
+    unset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_conexao']);
+}
+
+/* Definição dos Caminhos */
+$GerenciadorFinanceiro_Mnu_menuData         = array();
+$GerenciadorFinanceiro_Mnu_menuData['path'] = array();
+$GerenciadorFinanceiro_Mnu_menuData['url']  = array();
+$GerenciadorFinanceiro_Mnu_menuData['data'] = array();
+$NM_dir_atual = getcwd();
+if (empty($NM_dir_atual))
+{
+    $GerenciadorFinanceiro_Mnu_menuData['path']['sys'] = (isset($_SERVER['SCRIPT_FILENAME'])) ? $_SERVER['SCRIPT_FILENAME'] : $_SERVER['ORIG_PATH_TRANSLATED'];
+    $GerenciadorFinanceiro_Mnu_menuData['path']['sys'] = str_replace("\\", '/', $str_path_sys);
+    $GerenciadorFinanceiro_Mnu_menuData['path']['sys'] = str_replace('//', '/', $str_path_sys);
+}
+else
+{
+    $sc_nm_arquivo                                   = explode("/", $_SERVER['PHP_SELF']);
+    $GerenciadorFinanceiro_Mnu_menuData['path']['sys'] = str_replace("\\", "/", str_replace("\\\\", "\\", getcwd())) . "/" . $sc_nm_arquivo[count($sc_nm_arquivo)-1];
+}
+$GerenciadorFinanceiro_Mnu_menuData['url']['web']   = $_SERVER['PHP_SELF'];
+$GerenciadorFinanceiro_Mnu_menuData['url']['web']   = str_replace("\\", '/', $GerenciadorFinanceiro_Mnu_menuData['url']['web']);
+$GerenciadorFinanceiro_Mnu_menuData['path']['root'] = substr($GerenciadorFinanceiro_Mnu_menuData['path']['sys'],  0, -1 * strlen($GerenciadorFinanceiro_Mnu_menuData['url']['web']));
+$GerenciadorFinanceiro_Mnu_menuData['path']['app']  = substr($GerenciadorFinanceiro_Mnu_menuData['path']['sys'],  0, strrpos($GerenciadorFinanceiro_Mnu_menuData['path']['sys'],  '/'));
+$GerenciadorFinanceiro_Mnu_menuData['path']['link'] = substr($GerenciadorFinanceiro_Mnu_menuData['path']['app'],  0, strrpos($GerenciadorFinanceiro_Mnu_menuData['path']['app'],  '/'));
+$GerenciadorFinanceiro_Mnu_menuData['path']['link'] = substr($GerenciadorFinanceiro_Mnu_menuData['path']['link'], 0, strrpos($GerenciadorFinanceiro_Mnu_menuData['path']['link'], '/')) . '/';
+$GerenciadorFinanceiro_Mnu_menuData['path']['app'] .= '/';
+$GerenciadorFinanceiro_Mnu_menuData['url']['app']   = substr($GerenciadorFinanceiro_Mnu_menuData['url']['web'],  0, strrpos($GerenciadorFinanceiro_Mnu_menuData['url']['web'],  '/'));
+$GerenciadorFinanceiro_Mnu_menuData['url']['link']  = substr($GerenciadorFinanceiro_Mnu_menuData['url']['app'],  0, strrpos($GerenciadorFinanceiro_Mnu_menuData['url']['app'],  '/'));
+if ($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] == "S")
+{
+    $GerenciadorFinanceiro_Mnu_menuData['url']['link']  = substr($GerenciadorFinanceiro_Mnu_menuData['url']['link'], 0, strrpos($GerenciadorFinanceiro_Mnu_menuData['url']['link'], '/'));
+}
+$GerenciadorFinanceiro_Mnu_menuData['url']['link']  .= '/';
+$GerenciadorFinanceiro_Mnu_menuData['url']['app']   .= '/';
+
+
+$_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['sc_apl_link'] = $GerenciadorFinanceiro_Mnu_menuData['url']['link'];
+
+$_SESSION['scriptcase']['lang_op_sel'] = "pt_br";  
+if (!isset($_SESSION['scriptcase']['str_lang']) || empty($_SESSION['scriptcase']['str_lang']))
+{
+    $_SESSION['scriptcase']['str_lang'] = "pt_br";
+}
+if (!isset($_SESSION['scriptcase']['str_conf_reg']) || empty($_SESSION['scriptcase']['str_conf_reg']))
+{
+    $_SESSION['scriptcase']['str_conf_reg'] = "pt_br";
+}
+$this->str_lang        = $_SESSION['scriptcase']['str_lang'];
+$this->str_conf_reg    = $_SESSION['scriptcase']['str_conf_reg'];
+if (isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['lang'])) {
+    $this->str_lang = $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['lang'];
+}
+elseif (!isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['actual_lang']) || $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['actual_lang'] != $this->str_lang) {
+    $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['actual_lang'] = $this->str_lang;
+    setcookie('sc_actual_lang_LIGA_InfoTIME',$this->str_lang,'0','/', '', ini_get('session.cookie_secure'), ini_get('session.cookie_httponly'));
+}
+if (!function_exists("NM_is_utf8"))
+{
+   include_once("../_lib/lib/php/nm_utf8.php");
+}
+if (!function_exists("SC_dir_app_ini"))
+{
+    include_once("../_lib/lib/php/nm_ctrl_app_name.php");
+}
+SC_dir_app_ini('LIGA_InfoTIME');
+if ($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] == "S")
+{
+    $path_apls     = substr($path_apls, 0, strrpos($path_apls, '/'));
+}
+$path_apls     .= "/";
+$this->str_schema_all = (isset($_SESSION['scriptcase']['str_schema_all']) && !empty($_SESSION['scriptcase']['str_schema_all'])) ? $_SESSION['scriptcase']['str_schema_all'] : "Liga_Soft/Liga_Soft";
+include("../_lib/lang/". $this->str_lang .".lang.php");
+include("../_lib/css/" . $this->str_schema_all . "_menu2.php");
+if(isset($pagina_schemamenu) && !empty($pagina_schemamenu) && is_file("../_lib/menuicons/". $pagina_schemamenu .".php"))
+{
+    include("../_lib/menuicons/". $pagina_schemamenu .".php");
+}
+$this->img_sep_toolbar = trim($str_toolbar_separator);
+include("../_lib/lang/config_region.php");
+include("../_lib/lang/lang_config_region.php");
+$this->regionalDefault();
+$Str_btn_menu = trim($str_button) . "/" . trim($str_button) . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".php";
+$Str_btn_css  = trim($str_button) . "/" . trim($str_button) . ".css";
+include($path_btn . $Str_btn_menu);
+if (!function_exists("nmButtonOutput"))
+{
+   include_once("../_lib/lib/php/nm_gp_config_btn.php");
+}
+asort($this->Nm_lang_conf_region);
+$this->sc_Include($path_lib_php . "/nm_data.class.php", "C", "nm_data") ; 
+$this->sc_Include($path_lib_php . "/nm_functions.php", "", "") ; 
+$this->sc_Include($path_lib_php . "/nm_api.php", "", "") ; 
+$this->nm_data = new nm_data("pt_br");
+include_once("GerenciadorFinanceiro_Mnu_toolbar.php");
+
+$this->tab_grupo[0] = "LIGA_InfoTIME/";
+if ($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] != "S")
+{
+    $this->tab_grupo[0] = "";
+}
+
+     $_SESSION['scriptcase']['menu_atual'] = "GerenciadorFinanceiro_Mnu";
+     $_SESSION['scriptcase']['menu_apls']['GerenciadorFinanceiro_Mnu'] = array();
+     if (isset($_SESSION['scriptcase']['sc_connection']) && !empty($_SESSION['scriptcase']['sc_connection']))
+     {
+         foreach ($_SESSION['scriptcase']['sc_connection'] as $NM_con_orig => $NM_con_dest)
+         {
+             if (isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_conexao']) && $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_conexao'] == $NM_con_orig)
+             {
+/*NM*/           $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_conexao'] = $NM_con_dest;
+             }
+             if (isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_perfil']) && $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_perfil'] == $NM_con_orig)
+             {
+/*NM*/           $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_perfil'] = $NM_con_dest;
+             }
+             if (isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_con_' . $NM_con_orig]))
+             {
+                 $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_con_' . $NM_con_orig] = $NM_con_dest;
+             }
+         }
+     }
+$_SESSION['scriptcase']['charset'] = "UTF-8";
+ini_set('default_charset', $_SESSION['scriptcase']['charset']);
+$_SESSION['scriptcase']['charset_html']  = (isset($this->sc_charset[$_SESSION['scriptcase']['charset']])) ? $this->sc_charset[$_SESSION['scriptcase']['charset']] : $_SESSION['scriptcase']['charset'];
+foreach ($this->Nm_conf_reg[$this->str_conf_reg] as $ind => $dados)
+{
+    if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($dados))
+    {
+        $this->Nm_conf_reg[$this->str_conf_reg][$ind] = sc_convert_encoding($dados, $_SESSION['scriptcase']['charset'], "UTF-8");
+    }
+}
+foreach ($this->Nm_lang as $ind => $dados)
+{
+    if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($ind))
+    {
+        $ind = sc_convert_encoding($ind, $_SESSION['scriptcase']['charset'], "UTF-8");
+        $this->Nm_lang[$ind] = $dados;
+    }
+    if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($dados))
+    {
+        $this->Nm_lang[$ind] = sc_convert_encoding($dados, $_SESSION['scriptcase']['charset'], "UTF-8");
+    }
+    $this->Nm_lang[$ind] = str_replace('"', '&quot;',  $this->Nm_lang[$ind]);
+}
+if (isset($this->Nm_lang['lang_errm_dbcn_conn']))
+{
+    $_SESSION['scriptcase']['db_conn_error'] = $this->Nm_lang['lang_errm_dbcn_conn'];
+}
+if (isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['redir'])) {
+    $SS_cod_html  = '<!DOCTYPE html>
+';
+    $SS_cod_html .= "<HTML>\r\n";
+    $SS_cod_html .= " <HEAD>\r\n";
+    $SS_cod_html .= "  <TITLE></TITLE>\r\n";
+    $SS_cod_html .= "   <META http-equiv=\"Content-Type\" content=\"text/html; charset=" . $_SESSION['scriptcase']['charset_html'] . "\"/>\r\n";
+    if ($_SESSION['scriptcase']['proc_mobile']) {
+        $SS_cod_html .= "   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0\"/>\r\n";
+    }
+    $SS_cod_html .= "   <META http-equiv=\"Expires\" content=\"Fri, Jan 01 1900 00:00:00 GMT\"/>\r\n";
+    $SS_cod_html .= "    <META http-equiv=\"Pragma\" content=\"no-cache\"/>\r\n";
+    if ($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['redir_tp'] == "R") {
+        $SS_cod_html .= "  </HEAD>\r\n";
+        $SS_cod_html .= "   <body>\r\n";
+    }
+    else {
+        $SS_cod_html .= "    <link rel=\"shortcut icon\" href=\"../_lib/img/scriptcase__NM__ico__NM__favicon.ico\">\r\n";
+        $SS_cod_html .= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"../_lib/css/" . $this->str_schema_all . "_menu2.css\"/>\r\n";
+        $SS_cod_html .= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"../_lib/css/" . $this->str_schema_all . "_menu2" . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".css\"/>\r\n";
+        $SS_cod_html .= "  </HEAD>\r\n";
+        $SS_cod_html .= "   <body class=\"scMenuHPage\">\r\n";
+        $SS_cod_html .= "    <table align=\"center\"><tr><td style=\"padding: 0\"><div>\r\n";
+        $SS_cod_html .= "    <table class=\"scMenuHMoldura\" width='100%' cellspacing=0 cellpadding=0><tr class=\"scMenuHHeader\"><td class=\"scMenuHHeaderFont\" style=\"padding: 15px 30px; text-align: center\">\r\n";
+        $SS_cod_html .= $this->Nm_lang['lang_errm_expired_session'] . "\r\n";
+        $SS_cod_html .= "     <form name=\"Fsession_redir\" method=\"post\"\r\n";
+        $SS_cod_html .= "           target=\"_self\">\r\n";
+        $SS_cod_html .= "           <input type=\"button\" name=\"sc_sai_seg\" value=\"OK\" onclick=\"sc_session_redir('" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['redir'] . "');\">\r\n";
+        $SS_cod_html .= "     </form>\r\n";
+        $SS_cod_html .= "    </td></tr></table>\r\n";
+        $SS_cod_html .= "    </div></td></tr></table>\r\n";
+    }
+    $SS_cod_html .= "    <script type=\"text/javascript\">\r\n";
+    if ($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['redir_tp'] == "R") {
+        $SS_cod_html .= "      sc_session_redir('" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['redir'] . "');\r\n";
+    }
+    $SS_cod_html .= "      function sc_session_redir(url_redir)\r\n";
+    $SS_cod_html .= "      {\r\n";
+    $SS_cod_html .= "         if (window.parent && window.parent.document != window.document && typeof window.parent.sc_session_redir === 'function')\r\n";
+    $SS_cod_html .= "         {\r\n";
+    $SS_cod_html .= "            window.parent.sc_session_redir(url_redir);\r\n";
+    $SS_cod_html .= "         }\r\n";
+    $SS_cod_html .= "         else\r\n";
+    $SS_cod_html .= "         {\r\n";
+    $SS_cod_html .= "             if (window.opener && typeof window.opener.sc_session_redir === 'function')\r\n";
+    $SS_cod_html .= "             {\r\n";
+    $SS_cod_html .= "                 window.close();\r\n";
+    $SS_cod_html .= "                 window.opener.sc_session_redir(url_redir);\r\n";
+    $SS_cod_html .= "             }\r\n";
+    $SS_cod_html .= "             else\r\n";
+    $SS_cod_html .= "             {\r\n";
+    $SS_cod_html .= "                 window.location = url_redir;\r\n";
+    $SS_cod_html .= "             }\r\n";
+    $SS_cod_html .= "         }\r\n";
+    $SS_cod_html .= "      }\r\n";
+    $SS_cod_html .= "    </script>\r\n";
+    $SS_cod_html .= " </body>\r\n";
+    $SS_cod_html .= "</HTML>\r\n";
+    unset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']);
+    unset($_SESSION['sc_session']);
+}
+if (isset($SS_cod_html))
+{
+    echo $SS_cod_html;
+    exit;
+}
+$_SESSION['scriptcase']['erro']['str_schema'] = $this->str_schema_all . "_error.css";
+$_SESSION['scriptcase']['erro']['str_schema_dir'] = $this->str_schema_all . "_error" . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".css";
+$_SESSION['scriptcase']['erro']['str_lang']   = $this->str_lang;
+if (is_dir($path_img_old))
+{
+    $Res_dir_img = @opendir($path_img_old);
+    if ($Res_dir_img)
+    {
+        while (FALSE !== ($Str_arquivo = @readdir($Res_dir_img))) 
+        {
+           $Str_arquivo = "/" . $Str_arquivo;
+           if (@is_file($path_img_old . $Str_arquivo) && '.' != $Str_arquivo && '..' != $path_img_old . $Str_arquivo)
+           {
+               @unlink($path_img_old . $Str_arquivo);
+           }
+        }
+    }
+    @closedir($Res_dir_img);
+    rmdir($path_img_old);
+}
+//
+if (isset($_GET) && !empty($_GET))
+{
+    foreach ($_GET as $nmgp_var => $nmgp_val)
+    {
+        if (substr($nmgp_var, 0, 11) == "SC_glo_par_")
+        {
+            $nmgp_var = substr($nmgp_var, 11);
+            $nmgp_val = $_SESSION[$nmgp_val];
+        }
+        if ($nmgp_var == "nmgp_parms" && substr($nmgp_val, 0, 8) == "@SC_par@")
+        {
+            $SC_Ind_Val = explode("@SC_par@", $nmgp_val);
+            $nmgp_val = $_SESSION['sc_session'][$SC_Ind_Val[1]][$SC_Ind_Val[2]]['Lig_Md5'][$SC_Ind_Val[3]];
+        }
+         $$nmgp_var = $nmgp_val;
+    }
+}
+if (isset($_POST) && !empty($_POST))
+{
+    foreach ($_POST as $nmgp_var => $nmgp_val)
+    {
+        if (substr($nmgp_var, 0, 11) == "SC_glo_par_")
+        {
+            $nmgp_var = substr($nmgp_var, 11);
+            $nmgp_val = $_SESSION[$nmgp_val];
+        }
+        if ($nmgp_var == "nmgp_parms" && substr($nmgp_val, 0, 8) == "@SC_par@")
+        {
+            $SC_Ind_Val = explode("@SC_par@", $nmgp_val);
+            $nmgp_val = $_SESSION['sc_session'][$SC_Ind_Val[1]][$SC_Ind_Val[2]]['Lig_Md5'][$SC_Ind_Val[3]];
+        }
+         $$nmgp_var = $nmgp_val;
+    }
+}
+if (isset($script_case_init))
+{
+    $_SESSION['sc_session'][1]['GerenciadorFinanceiro_Mnu']['init'] = $script_case_init;
+}
+else
+if (!isset($_SESSION['sc_session'][1]['GerenciadorFinanceiro_Mnu']['init']))
+{
+    $_SESSION['sc_session'][1]['GerenciadorFinanceiro_Mnu']['init'] = "";
+}
+$script_case_init = $_SESSION['sc_session'][1]['GerenciadorFinanceiro_Mnu']['init'];
+if (isset($nmgp_parms) && !empty($nmgp_parms)) 
+{ 
+    $nmgp_parms = NM_decode_input($nmgp_parms);
+    $nmgp_parms = str_replace("*scout", "?@?", $nmgp_parms);
+    $nmgp_parms = str_replace("*scin", "?#?", $nmgp_parms);
+    $todox = str_replace("?#?@?@?", "?#?@ ?@?", $nmgp_parms);
+    $todo  = explode("?@?", $todox);
+    $ix = 0;
+    while (!empty($todo[$ix]))
+    {
+       $cadapar = explode("?#?", $todo[$ix]);
+       if (substr($cadapar[0], 0, 11) == "SC_glo_par_")
+       {
+           $cadapar[0] = substr($cadapar[0], 11);
+           $cadapar[1] = $_SESSION[$cadapar[1]];
+       }
+        if ($cadapar[1] == "@ ") {$cadapar[1] = trim($cadapar[1]); }
+       $Tmp_par   = $cadapar[0];;
+       $$Tmp_par = $cadapar[1];
+       $_SESSION[$cadapar[0]] = $cadapar[1];
+       $ix++;
+     }
+} 
+if (!isset($varDescricao) && isset($vardescricao)) 
+{
+    $_SESSION["varDescricao"] = $vardescricao;
+}
+if (!isset($varMesAtual) && isset($varmesatual)) 
+{
+    $_SESSION["varMesAtual"] = $varmesatual;
+}
+if (!isset($varAnoAtual) && isset($varanoatual)) 
+{
+    $_SESSION["varAnoAtual"] = $varanoatual;
+}
+if (!isset($varIdContaCaixaSel) && isset($varidcontacaixasel)) 
+{
+    $_SESSION["varIdContaCaixaSel"] = $varidcontacaixasel;
+}
+if (!isset($varIdTenacidade) && isset($varidtenacidade)) 
+{
+    $_SESSION["varIdTenacidade"] = $varidtenacidade;
+}
+if (isset($_SESSION['sc_session']['SC_parm_violation']) && !isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['redir']))
+{
+    unset($_SESSION['sc_session']['SC_parm_violation']);
+    echo "<!DOCTYPE html>";
+    echo "<html>";
+    echo "<body>";
+    echo "<table align=\"center\" width=\"50%\" border=1 height=\"50px\">";
+    echo "<tr>";
+    echo "   <td align=\"center\">";
+    echo "       <b><font size=4>" . $this->Nm_lang['lang_errm_ajax_data'] . "</font>";
+    echo "   </b></td>";
+    echo " </tr>";
+    echo "</table>";
+    echo "</body>";
+    echo "</html>";
+    exit;
+}
+$nm_url_saida = "";
+if (isset($nmgp_url_saida))
+{
+    $nm_url_saida = $nmgp_url_saida;
+    if (isset($script_case_init))
+    {
+        $nm_url_saida .= "?script_case_init=" . NM_encode_input($script_case_init);
+    }
+}
+if (isset($_POST["nmgp_idioma"]) || isset($_POST["nmgp_schema"]))  
+{ 
+    $nm_url_saida = $_SESSION['scriptcase']['sc_saida_GerenciadorFinanceiro_Mnu'];
+}
+elseif (!empty($nm_url_saida))
+{
+    $_SESSION['scriptcase']['sc_url_saida'][$script_case_init]  = $nm_url_saida;
+    $_SESSION['scriptcase']['sc_saida_GerenciadorFinanceiro_Mnu'] = $nm_url_saida;
+}
+else
+{
+    $_SESSION['scriptcase']['sc_saida_GerenciadorFinanceiro_Mnu'] = (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : "javascript:window.close()";
+}
+$this->str_schema_all = $STR_schema_all = (isset($_SESSION['scriptcase']['str_schema_all']) && !empty($_SESSION['scriptcase']['str_schema_all'])) ? $_SESSION['scriptcase']['str_schema_all'] : "Liga_Soft/Liga_Soft";
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['GerenciadorFinanceiro_Mnu'] = "on";
+} 
+if (!isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['redir']) && (!isset($_SESSION['scriptcase']['sc_apl_seg']['GerenciadorFinanceiro_Mnu']) || $_SESSION['scriptcase']['sc_apl_seg']['GerenciadorFinanceiro_Mnu'] != "on"))
+{ 
+    $NM_Mens_Erro = $this->Nm_lang['lang_errm_unth_user'];
+       header("X-XSS-Protection: 1; mode=block");
+       header("X-Frame-Options: SAMEORIGIN");
+?>
+<!DOCTYPE html>
+
+    <HTML>
+     <HEAD>
+      <TITLE></TITLE>
+     <META http-equiv="Content-Type" content="text/html; charset=<?php echo $_SESSION['scriptcase']['charset_html'] ?>" />
+      <META http-equiv="Expires" content="Fri, Jan 01 1900 00:00:00 GMT"/>      <META http-equiv="Pragma" content="no-cache"/>
+ <META http <META http <META http <META http      <link rel="shortcut icon" href="../_lib/img/scriptcase__NM__ico__NM__favicon.ico">
+      <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $str_schema_all ?>_menuH.css" /> 
+      <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $str_schema_all ?>_menuH<?php echo $_SESSION['scriptcase']['reg_conf']['css_dir'] ?>.css" /> 
+      <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->str_schema_all ?>_grid.css" /> 
+      <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->str_schema_all ?>_grid<?php echo $_SESSION['scriptcase']['reg_conf']['css_dir'] ?>.css" /> 
+     </HEAD>
+     <body>
+       <table align="center" class="scGridBorder"><tr><td style="padding: 0">
+       <table style="width: 100%" class="scGridTabela"><tr class="scGridFieldOdd"><td class="scGridFieldOddFont" style="padding: 15px 30px; text-align: center">
+        <?php echo $NM_Mens_Erro; ?>
+        <br />
+        <form name="Fseg" method="post" target="_self">
+         <input type="hidden" name="script_case_init" value="<?php echo NM_encode_input($script_case_init) ?>"/> 
+         <input type="button" name="sc_sai_seg" value="OK" onclick="nm_saida()"> 
+        </form> 
+       </td></tr></table>
+       </td></tr></table>
+<?php
+              if (isset($_SESSION['scriptcase']['nm_sc_retorno']) && !empty($_SESSION['scriptcase']['nm_sc_retorno']))
+              {
+?>
+<br /><br /><br />
+<table align="center" class="scGridBorder" style="width: 450px"><tr><td style="padding: 0">
+ <table style="width: 100%" class="scGridTabela">
+  <tr class="scGridFieldOdd">
+   <td class="scGridFieldOddFont" style="padding: 15px 30px">
+    <?php echo $this->Nm_lang['lang_errm_unth_hwto']; ?>
+   </td>
+  </tr>
+ </table>
+</td></tr></table>
+<?php
+              }
+?>
+     </body>
+     <?php
+     if ((isset($nmgp_outra_jan) && $nmgp_outra_jan == 'true') || (isset($_SESSION['scriptcase']['sc_outra_jan']) && ($_SESSION['scriptcase']['sc_outra_jan'] == 'menutree' || $_SESSION['scriptcase']['sc_outra_jan'] == 'menu')))
+     {
+       $saida_final = 'window.close();';
+     }
+     else
+     {
+       $saida_final = 'history.back();';
+     }
+     ?>
+    <script type="text/javascript">
+      function nm_saida()
+      {
+<?php 
+             echo $saida_final;
+?> 
+      }
+     </script> 
+<?php
+    exit;
+} 
+$this->sc_Include($path_libs . "/nm_sec_prod.php", "F", "nm_reg_prod") ; 
+include_once($path_adodb . "/adodb.inc.php"); 
+$this->sc_Include($path_libs . "/nm_ini_perfil.php", "F", "perfil_lib") ; 
+perfil_lib($path_libs);
+if (!isset($_SESSION['sc_session'][1]['SC_Check_Perfil']))
+{
+    if(function_exists("nm_check_perfil_exists")) nm_check_perfil_exists($path_libs, $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod']);
+    $_SESSION['sc_session'][1]['SC_Check_Perfil'] = true;
+}
+$nm_falta_var    = ""; 
+$nm_falta_var_db = ""; 
+if (isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_conexao']) && !empty($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_conexao']))
+{
+    db_conect_devel($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_conexao'], $str_root . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'], 'LIGA_InfoTIME', 2); 
+}
+if (isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_perfil']) && !empty($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_perfil']))
+{
+   $_SESSION['scriptcase']['glo_perfil'] = $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_perfil'];
+}
+if (isset($_SESSION['scriptcase']['glo_perfil']) && !empty($_SESSION['scriptcase']['glo_perfil']))
+{
+    $_SESSION['scriptcase']['glo_senha_protect'] = "";
+    carrega_perfil($_SESSION['scriptcase']['glo_perfil'], $path_libs, "S");
+    if (empty($_SESSION['scriptcase']['glo_senha_protect']))
+    {
+        $nm_falta_var .= "Perfil=" . $_SESSION['scriptcase']['glo_perfil'] . "; ";
+    }
+}
+if (isset($_SESSION['scriptcase']['glo_date_separator']) && !empty($_SESSION['scriptcase']['glo_date_separator']))
+{
+    $SC_temp = trim($_SESSION['scriptcase']['glo_date_separator']);
+    if (strlen($SC_temp) == 2)
+    {
+       $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['SC_sep_date']  = substr($SC_temp, 0, 1); 
+       $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['SC_sep_date1'] = substr($SC_temp, 1, 1); 
+   }
+   else
+    {
+       $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['SC_sep_date']  = $SC_temp; 
+       $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['SC_sep_date1'] = $SC_temp; 
+   }
+}
+if (!isset($_SESSION['scriptcase']['glo_tpbanco']))
+{
+    $nm_falta_var_db .= "glo_tpbanco; ";
+}
+else
+{
+    $nm_tpbanco = $_SESSION['scriptcase']['glo_tpbanco']; 
+}
+if (!isset($_SESSION['scriptcase']['glo_servidor']))
+{
+    $nm_falta_var_db .= "glo_servidor; ";
+}
+else
+{
+    $nm_servidor = $_SESSION['scriptcase']['glo_servidor']; 
+}
+if (!isset($_SESSION['scriptcase']['glo_banco']))
+{
+    $nm_falta_var_db .= "glo_banco; ";
+}
+else
+{
+    $nm_banco = $_SESSION['scriptcase']['glo_banco']; 
+}
+if (!isset($_SESSION['scriptcase']['glo_usuario']))
+{
+    $nm_falta_var_db .= "glo_usuario; ";
+}
+else
+{
+    $nm_usuario = $_SESSION['scriptcase']['glo_usuario']; 
+}
+if (!isset($_SESSION['scriptcase']['glo_senha']))
+{
+    $nm_falta_var_db .= "glo_senha; ";
+}
+else
+{
+    $nm_senha = $_SESSION['scriptcase']['glo_senha']; 
+}
+$nm_con_db2 = array();
+$nm_database_encoding = "";
+if (isset($_SESSION['scriptcase']['glo_database_encoding']))
+{
+    $nm_database_encoding = $_SESSION['scriptcase']['glo_database_encoding']; 
+}
+$nm_arr_db_extra_args = array();
+if (isset($_SESSION['scriptcase']['glo_use_ssl']))
+{
+    $nm_arr_db_extra_args['use_ssl'] = $_SESSION['scriptcase']['glo_use_ssl']; 
+}
+if (isset($_SESSION['scriptcase']['glo_mysql_ssl_key']))
+{
+    $nm_arr_db_extra_args['mysql_ssl_key'] = $_SESSION['scriptcase']['glo_mysql_ssl_key']; 
+}
+if (isset($_SESSION['scriptcase']['glo_mysql_ssl_cert']))
+{
+    $nm_arr_db_extra_args['mysql_ssl_cert'] = $_SESSION['scriptcase']['glo_mysql_ssl_cert']; 
+}
+if (isset($_SESSION['scriptcase']['glo_mysql_ssl_capath']))
+{
+    $nm_arr_db_extra_args['mysql_ssl_capath'] = $_SESSION['scriptcase']['glo_mysql_ssl_capath']; 
+}
+if (isset($_SESSION['scriptcase']['glo_mysql_ssl_ca']))
+{
+    $nm_arr_db_extra_args['mysql_ssl_ca'] = $_SESSION['scriptcase']['glo_mysql_ssl_ca']; 
+}
+if (isset($_SESSION['scriptcase']['glo_mysql_ssl_cipher']))
+{
+    $nm_arr_db_extra_args['mysql_ssl_cipher'] = $_SESSION['scriptcase']['glo_mysql_ssl_cipher']; 
+}
+if (isset($_SESSION['scriptcase']['postgres_sslmode']))
+{
+    $nm_arr_db_extra_args['postgres_sslmode'] = $_SESSION['scriptcase']['postgres_sslmode']; 
+}
+if (isset($_SESSION['scriptcase']['postgres_sslrootcert']))
+{
+    $nm_arr_db_extra_args['postgres_sslrootcert'] = $_SESSION['scriptcase']['postgres_sslrootcert']; 
+}
+if (isset($_SESSION['scriptcase']['postgres_sslkey']))
+{
+    $nm_arr_db_extra_args['postgres_sslkey'] = $_SESSION['scriptcase']['postgres_sslkey']; 
+}
+if (isset($_SESSION['scriptcase']['postgres_sslcert']))
+{
+    $nm_arr_db_extra_args['postgres_sslcert'] = $_SESSION['scriptcase']['postgres_sslcert']; 
+}
+if (isset($_SESSION['scriptcase']['ibase_charset']))
+{
+    $nm_arr_db_extra_args['ibase_charset'] = $_SESSION['scriptcase']['ibase_charset']; 
+}
+if (isset($_SESSION['scriptcase']['ibase_rolename']))
+{
+    $nm_arr_db_extra_args['ibase_rolename'] = $_SESSION['scriptcase']['ibase_rolename']; 
+}
+if (isset($_SESSION['scriptcase']['ibase_dialect']))
+{
+    $nm_arr_db_extra_args['ibase_dialect'] = $_SESSION['scriptcase']['ibase_dialect']; 
+}
+if (isset($_SESSION['scriptcase']['use_ssh']))
+{
+    $nm_arr_db_extra_args['use_ssh'] = $_SESSION['scriptcase']['use_ssh']; 
+}
+if (isset($_SESSION['scriptcase']['ssh_server']))
+{
+    $nm_arr_db_extra_args['ssh_server'] = $_SESSION['scriptcase']['ssh_server']; 
+}
+if (isset($_SESSION['scriptcase']['ssh_user']))
+{
+    $nm_arr_db_extra_args['ssh_user'] = $_SESSION['scriptcase']['ssh_user']; 
+}
+if (isset($_SESSION['scriptcase']['ssh_port']))
+{
+    $nm_arr_db_extra_args['ssh_port'] = $_SESSION['scriptcase']['ssh_port']; 
+}
+if (isset($_SESSION['scriptcase']['ssh_privatecert']))
+{
+    $nm_arr_db_extra_args['ssh_privatecert'] = $_SESSION['scriptcase']['ssh_privatecert']; 
+}
+if (isset($_SESSION['scriptcase']['ssh_localserver']))
+{
+    $nm_arr_db_extra_args['ssh_localserver'] = $_SESSION['scriptcase']['ssh_localserver']; 
+}
+if (isset($_SESSION['scriptcase']['ssh_localport']))
+{
+    $nm_arr_db_extra_args['ssh_localport'] = $_SESSION['scriptcase']['ssh_localport']; 
+}
+if (isset($_SESSION['scriptcase']['ssh_localportforwarding']))
+{
+    $nm_arr_db_extra_args['ssh_localportforwarding'] = $_SESSION['scriptcase']['ssh_localportforwarding']; 
+}
+$nm_con_persistente = "";
+$nm_con_use_schema  = "";
+if (isset($_SESSION['scriptcase']['glo_use_persistent']))
+{
+    $nm_con_persistente = $_SESSION['scriptcase']['glo_use_persistent']; 
+}
+if (isset($_SESSION['scriptcase']['glo_use_schema']))
+{
+    $nm_con_use_schema = $_SESSION['scriptcase']['glo_use_schema']; 
+}
+$str_message = "<html>
+
+<head>
+    <title>{var_str_title}</title>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            overflow-x: hidden;
+            min-width: 320px;
+            background: #FFFFFF;
+            font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            line-height: 1.4285em;
+            color: rgba(0, 0, 0, 0.87);
+            font-smoothing: antialiased;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        user agent stylesheet body {
+            display: block;
+            margin: 8px;
+        }
+
+        html {
+            font-size: 14px;
+        }
+
+        html {
+            line-height: 1.15;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        ::selection {
+            background-color: #CCE2FF;
+            color: rgba(0, 0, 0, 0.87);
+        }
+
+        .ui.container {
+            width: 933px;
+            min-width: 992px;
+            max-width: 1199px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+        .ui.container {
+            display: block;
+            max-width: 100% !important;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        .ui.message:last-child {
+            margin-bottom: 0em;
+        }
+
+        .ui.message:first-child {
+            margin-top: 0em;
+        }
+
+        .ui.message {
+            font-size: 1em;
+        }
+
+        .ui.message {
+            position: relative;
+            min-height: 1em;
+            margin: 1em 0em;
+            background: #F8F8F9;
+            padding: 1em 1.5em;
+            line-height: 1.4285em;
+            color: rgba(0, 0, 0, 0.87);
+            transition: opacity 0.1s ease, color 0.1s ease, background 0.1s ease, box-shadow 0.1s ease;
+            border-radius: 0.28571429rem;
+            box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.22) inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+        }
+
+        article,
+        aside,
+        footer,
+        header,
+        nav,
+        section {
+            display: block;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        .ui.message> :last-child {
+            margin-bottom: 0em;
+        }
+
+        .ui.message> :first-child {
+            margin-top: 0em;
+        }
+
+        .ui.message .header+p {
+            margin-top: 0.25em;
+        }
+
+        .ui.message p {
+            opacity: 0.85;
+            margin: 0.75em 0em;
+        }
+
+        p {
+            margin: 0em 0em 1em;
+            line-height: 1.4285em;
+        }
+
+        .ui.message .header:not(.ui) {
+            font-size: 1.14285714em;
+        }
+
+        .ui.message .header {
+            display: block;
+            font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            margin: -0.14285714em 0em 1.2rem 0em;
+        }
+
+        .ui.button {
+            cursor: pointer;
+            display: inline-block;
+            min-height: 1em;
+            outline: 0;
+            border: none;
+            vertical-align: baseline;
+            background: #e0e1e2 none;
+            color: rgba(0, 0, 0, .6);
+            font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            margin: 0 .25em 0 0;
+            padding: .78571429em 1.5em .78571429em;
+            text-transform: none;
+            text-shadow: none;
+            font-weight: 700;
+            line-height: 1em;
+            font-style: normal;
+            text-align: center;
+            text-decoration: none;
+            border-radius: .28571429rem;
+            box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34, 36, 38, .15) inset;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease;
+            will-change: '';
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .ui.button,
+        .ui.buttons .button,
+        .ui.buttons .or {
+            font-size: 1rem;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+            column-gap: .5rem;
+            display: flex;
+        }
+        
+        .ui.primary.button,
+        .ui.primary.buttons .button {
+            background-color: #2185d0;
+            color: #fff;
+            text-shadow: none;
+            background-image: none;
+        }
+        
+        .ui.primary.button {
+            box-shadow: 0 0 0 0 rgba(34, 36, 38, .15) inset;
+        }
+
+        [type=reset], [type=submit], button, html [type=button] {
+            -webkit-appearance: button;
+        }
+
+        .icon{
+            position: relative;
+            width: 1.2rem;
+            height: 1.2rem;
+            display: block;
+            color: inherit;
+            background-repeat: no-repeat;
+        }
+
+        .icon.database{
+            background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\" fill=\"%23FFFFFF\"><path d=\"M448 80v48c0 44.2-100.3 80-224 80S0 172.2 0 128V80C0 35.8 100.3 0 224 0S448 35.8 448 80zM393.2 214.7c20.8-7.4 39.9-16.9 54.8-28.6V288c0 44.2-100.3 80-224 80S0 332.2 0 288V186.1c14.9 11.8 34 21.2 54.8 28.6C99.7 230.7 159.5 240 224 240s124.3-9.3 169.2-25.3zM0 346.1c14.9 11.8 34 21.2 54.8 28.6C99.7 390.7 159.5 400 224 400s124.3-9.3 169.2-25.3c20.8-7.4 39.9-16.9 54.8-28.6V432c0 44.2-100.3 80-224 80S0 476.2 0 432V346.1z\"/></svg>');
+        }
+    </style>
+</head>
+
+<body>
+    <div class='ui container' style='padding-top:2rem'>
+        <section class='ui message'>
+            <div class='content'>
+                <div class='header'>
+                    <h1 class='ui header'>{var_str_title}</h1>
+                </div>
+                <p>{var_str_message}</p>
+                <p>{var_str_message_conn}</p>
+                {v_str_btn_inside}
+            </div>
+        </section>
+    </div>";
+$str_message_end = "</body>
+</html>";
+$str_message = str_replace('{var_str_title}', $this->Nm_lang['lang_errm_cmlb_nfndtitle'], $str_message);
+$str_message = str_replace('{var_str_message_conn}','', $str_message);
+$str_message = str_replace('{v_str_btn_inside}', '', $str_message);
+if (!empty($nm_falta_var) || !empty($nm_falta_var_db))
+{
+    if (empty($nm_falta_var_db))
+    {
+         $str_message = str_replace('{var_str_message}', $this->Nm_lang['lang_errm_glob'], $str_message);
+    }
+    else
+    {
+         $str_message = str_replace('{var_str_message}', $this->Nm_lang['lang_errm_dbcn_data'], $str_message);
+    }
+    echo $str_message;
+    if (isset($_SESSION['scriptcase']['nm_ret_exec']) && '' != $_SESSION['scriptcase']['nm_ret_exec'])
+    { 
+        if (isset($_SESSION['sc_session'][1]['GerenciadorFinanceiro_Mnu']['sc_outra_jan']) && $_SESSION['sc_session'][1]['GerenciadorFinanceiro_Mnu']['sc_outra_jan'])
+        {
+            echo "<a href='javascript:window.close()'><img border='0' src='" . $path_imag_cab . "/scriptcase__NM__exit.gif' title='" . $this->Nm_lang['lang_btns_menu_rtrn_hint'] . "' align=absmiddle></a> \n" ; 
+        } 
+        else 
+        { 
+            echo "<a href='" . $_SESSION['scriptcase']['nm_ret_exec'] . "><img border='0' src='" . $path_imag_cab . "/scriptcase__NM__exit.gif' title='" . $this->Nm_lang['lang_btns_menu_rtrn_hint'] . "' align=absmiddle></a> \n" ; 
+        } 
+    } 
+    echo $str_message_end;
+    exit ;
+} 
+if (isset($_SESSION['scriptcase']['glo_db_master_usr']) && !empty($_SESSION['scriptcase']['glo_db_master_usr']))
+{
+    $nm_usuario = $_SESSION['scriptcase']['glo_db_master_usr']; 
+}
+if (isset($_SESSION['scriptcase']['glo_db_master_pass']) && !empty($_SESSION['scriptcase']['glo_db_master_pass']))
+{
+    $nm_senha = $_SESSION['scriptcase']['glo_db_master_pass']; 
+}
+if (isset($_SESSION['scriptcase']['glo_db_master_cript']) && !empty($_SESSION['scriptcase']['glo_db_master_cript']))
+{
+    $_SESSION['scriptcase']['glo_senha_protect'] = $_SESSION['scriptcase']['glo_db_master_cript']; 
+}
+$sc_tem_trans_banco = false;
+$this->nm_bases_access    = array("access", "ado_access", "ace_access");
+$this->nm_bases_ibase     = array("ibase", "firebird", "pdo_firebird", "borland_ibase");
+$this->nm_bases_mysql     = array("mysql", "mysqlt", "mysqli", "maxsql", "pdo_mysql", "pdo_mariadb", "azure_mysql", "azure_mysqlt", "azure_mysqli", "azure_maxsql", "azure_pdo_mysql", "azure_pdo_mariadb", "googlecloud_mysql", "googlecloud_mysqlt", "googlecloud_mysqli", "googlecloud_maxsql", "googlecloud_pdo_mysql", "googlecloud_pdo_mariadb", "amazonrds_mysql", "amazonrds_mysqlt", "amazonrds_mysqli", "amazonrds_maxsql", "amazonrds_pdo_mysql", "amazonrds_pdo_mariadb");
+$this->nm_bases_postgres  = array("postgres", "postgres64", "postgres7", "pdo_pgsql", "azure_postgres", "azure_postgres64", "azure_postgres7", "azure_pdo_pgsql", "googlecloud_postgres", "googlecloud_postgres64", "googlecloud_postgres7", "googlecloud_pdo_pgsql", "amazonrds_postgres", "amazonrds_postgres64", "amazonrds_postgres7", "amazonrds_pdo_pgsql");
+$this->nm_bases_sqlite    = array("sqlite", "sqlite3", "pdosqlite");
+$_SESSION['scriptcase']['sc_num_page'] = 1;
+$_SESSION['scriptcase']['nm_bases_security']  = "enc_nm_enc_v1D9NwZ9F7D1NKV5XGHgrKV9FeH5XCHIX7HQNwZkFGHAvmZMBODENOHEXeHEFqHMBiHQXODQFaHAveD5NUHgNKDkBOV5FYHMBiHQNmZSBqHAvCD5BOHgveHArsDWX7HMFGHQBiDuBqHAvOV5XGDMvmV9BUDWXKVoF7HQNwH9BqDSvOZMB/HgrKVkJ3DuFYHIJsD9XsZ9JeD1BeD5F7DMvmVcBUHEFYHMFUHQNmVINUHABYHQBqDEvsHErCDuX/DoBOHQNwZ9F7HABYV5FUHuNOVcFeDWXCDoJsDcBwH9B/Z1rYHQJwDErKZSXeDWr/DoFUD9XsDQX7DSBYV5FGHuzGVIBOV5X7VoJwDcBqZSFaHAN7D5FaDEBOVkJGHEXCVoB/HQJKDQJsZ1vCV5FGHuNOV9FeDWB3VoraHQBsH9B/HArYD5XGDMzGHEXeV5XCDoF7D9JKDQX7HArYD5JsHuNODkFCDWJeHMFaD9JmZ1B/Z1NOD5NUDEBOVkXeH5FYVoB/D9JKDQFGHANOV5JwHgrYDkBsV5FYDoJsD9BiZkFUZ1NOD5BqDEBeHEBUDWF/HIJsD9XsZ9JeD1BeD5F7DMvmVcXKDWJeHIFGD9JmZ1X7Z1BeD5BqDMzGHAFKV5B7DoBqHQXODQFGHAvOV5BODMvmVcFKV5BmVoBqD9BsZkFGHArKHuBOHgBYVkJ3HEFaHMBOHQFYH9BiHANOHQrqDMrwV9BUH5B3VEFGHQBiZ1BOHArKHQFGHgvCHArsDWr/HMJwHQJKZ9XGDSBYHQJeDMrwVcB/H5FqHIXGDcNmZkFGDSvmZMBqDMrYZSXeDuFYVoXGDcJeZ9rqD1BeHuFGDMvsVIBsH5XKVErqDcFYZSBOHAvmD5JeHgvCHArsDurmZuB/HQFYH9BiZ1N7HuX7DMrwVcB/HEFYHIJsHQJmZkFGHABYHQNUHgvCHEJqHEXCHMJwHQXODQFaHIBeHQJsHgNKDkBODuFqDoFGDcBqVIJwD1rwHuBqHgBYVkJqDWX7HIJwHQJKDuBqD1BeHuJwDMrwVcB/DWB3VoX7HQBqZkFGHANOHuBqHgvCHEJqHEFqHMJwHQXsDuBqHANOHurqDMrwVcB/H5XCHIJsHQBsZ1FGHIveHQFGDMrYZSXeDuFYVoXGDcJeZ9rqD1BeV5BqHgvsDkB/V5X7VorqDcBqZ1FaD1rKV5XGDMNKDkBsV5FaZuBODcJeDQFGHAvmV5JwHuBYDkFCDuX7VEF7HQFYH9B/HIveZMB/DEBOHEXeDuX/DoB/DcBwDQJsHABYVWJeDMrwZSJ3H5FqDoJeD9JmZ1B/D1NaD5rqDErKZSXeH5FYDoFUD9JKDQJsZ1rwV5BqHuBYVcXKV5X7VoFGD9XOZSFaHAvmD5BOHgNKHErsDWrGDoXGHQXODQBqHIvsV5BqDMvmVcFKV5BmVoBqD9BsZkFGHAvsD5XGHgveHErsDWrGZuBOHQBiDQBqD1BOV5JeDMvODkBsDWXCDoJsDcBwH9B/Z1rYHQJwHgNKHArsDWr/VoB/HQXsZSFGHABYHuX7HgrKVcFeHEF/HMBOD9BiZSBOHArYHQJwDEBODkFeH5FYVoFGHQJKDQFaHIBeD5BqHgrKDkBODWXKVoFaHQXGH9B/DSrYD5JeDEvsHEFiDWFqVoFGDcJeDQFGD1BOV5BiHgrKV9FiDWXCHMBqD9BsZSB/HANOD5FaDErKVkXeV5FYDoraD9NmDQJsDSBYV5FGHgvsV9FiDWXCHIrqD9BiZ1F7D1rKD5NUHgBeHEFiV5B3DoF7D9XsDuFaHANKVWBqDMrwZSNiDWB3VEB/";
+ $glo_senha_protect = (isset($_SESSION['scriptcase']['glo_senha_protect'])) ? $_SESSION['scriptcase']['glo_senha_protect'] : "S";
+if (isset($_SESSION['scriptcase']['nm_sc_retorno']) && !empty($_SESSION['scriptcase']['nm_sc_retorno']) && isset($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_conexao']) && !empty($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_conexao']))
+{ 
+   $this->Db = db_conect_devel($_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_conexao'], $str_root . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'], 'LIGA_InfoTIME'); 
+} 
+else 
+{ 
+   $this->Db = db_conect($nm_tpbanco, $nm_servidor, $nm_usuario, $nm_senha, $nm_banco, $glo_senha_protect, "S", $nm_con_persistente, $nm_con_db2, $nm_database_encoding, $nm_arr_db_extra_args); 
+} 
+$this->nm_tpbanco = $nm_tpbanco; 
+if (in_array(strtolower($nm_tpbanco), $this->nm_bases_ibase) && function_exists('ibase_timefmt'))
+{
+    ibase_timefmt('%Y-%m-%d %H:%M:%S');
+} 
+//
+      $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['contr_erro'] = 'on';
+if (!isset($_SESSION['varDescricao'])) {$_SESSION['varDescricao'] = "";}
+if (!isset($this->sc_temp_varDescricao)) {$this->sc_temp_varDescricao = (isset($_SESSION['varDescricao'])) ? $_SESSION['varDescricao'] : "";}
+if (!isset($_SESSION['varIdTenacidade'])) {$_SESSION['varIdTenacidade'] = "";}
+if (!isset($this->sc_temp_varIdTenacidade)) {$this->sc_temp_varIdTenacidade = (isset($_SESSION['varIdTenacidade'])) ? $_SESSION['varIdTenacidade'] : "";}
+if (!isset($_SESSION['varAnoAtual'])) {$_SESSION['varAnoAtual'] = "";}
+if (!isset($this->sc_temp_varAnoAtual)) {$this->sc_temp_varAnoAtual = (isset($_SESSION['varAnoAtual'])) ? $_SESSION['varAnoAtual'] : "";}
+if (!isset($_SESSION['varIdContaCaixaSel'])) {$_SESSION['varIdContaCaixaSel'] = "";}
+if (!isset($this->sc_temp_varIdContaCaixaSel)) {$this->sc_temp_varIdContaCaixaSel = (isset($_SESSION['varIdContaCaixaSel'])) ? $_SESSION['varIdContaCaixaSel'] : "";}
+if (!isset($_SESSION['varMesAtual'])) {$_SESSION['varMesAtual'] = "";}
+if (!isset($this->sc_temp_varMesAtual)) {$this->sc_temp_varMesAtual = (isset($_SESSION['varMesAtual'])) ? $_SESSION['varMesAtual'] : "";}
+ ?>
+<style>
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-header {
+    padding-right: 16px;
+    height: 0px !important;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 0.5rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+	
+.header-string-m-text {
+    color: var(--theme-color-text);
+    font-size: 14px !important;
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+</style>
+
+<?php
+
+if (!isset($this->sc_temp_varMesAtual)) {
+	$varMesAtual = date('M');
+	 if (isset($varMesAtual)) {$this->sc_temp_varMesAtual = $varMesAtual;}
+}
+if (empty($this->sc_temp_varAnoAtual)) {
+	$this->sc_temp_varAnoAtual = date('Y');
+}
+if (!isset($this->sc_temp_varIdContaCaixaSel)) {
+  	$varIdContaCaixaSel = '';
+	 if (isset($varIdContaCaixaSel)) {$this->sc_temp_varIdContaCaixaSel = $varIdContaCaixaSel;}
+}
+
+$check_sql = "SELECT GROUP_CONCAT(Descricao SEPARATOR ', ') AS Descricao"
+	. " FROM contacaixa"
+	. "WHERE IdTenacidade = '" . $this->sc_temp_varIdTenacidade . "' AND IdContaCaixa IN (" . $this->sc_temp_varIdContaCaixaSel .")";
+
+ 
+      $nm_select = $check_sql; 
+      $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select; 
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+      $this->rs = array();
+      if ($SCrx = $this->Db->Execute($nm_select)) 
+      { 
+          $SCy = 0; 
+          $nm_count = $SCrx->FieldCount();
+          while (!$SCrx->EOF)
+          { 
+                 for ($SCx = 0; $SCx < $nm_count; $SCx++)
+                 { 
+                        $this->rs[$SCy] [$SCx] = $SCrx->fields[$SCx];
+                 }
+                 $SCy++; 
+                 $SCrx->MoveNext();
+          } 
+          $SCrx->Close();
+      } 
+      elseif (isset($GLOBALS["NM_ERRO_IBASE"]) && $GLOBALS["NM_ERRO_IBASE"] != 1)  
+      { 
+          $this->rs = false;
+          $this->rs_erro = $this->Db->ErrorMsg();
+      } 
+
+if (isset($this->rs[0][0])) {
+    $Descricao = $this->rs[0][0];
+}
+else {
+    $Descricao = 'Não informada.';
+}
+
+$this->sc_temp_varDescricao = $this->sc_temp_varAnoAtual . ' - Conta(s) Caixa: ' . $Descricao;
+if (isset($this->sc_temp_varMesAtual)) {$_SESSION['varMesAtual'] = $this->sc_temp_varMesAtual;}
+if (isset($this->sc_temp_varIdContaCaixaSel)) {$_SESSION['varIdContaCaixaSel'] = $this->sc_temp_varIdContaCaixaSel;}
+if (isset($this->sc_temp_varAnoAtual)) {$_SESSION['varAnoAtual'] = $this->sc_temp_varAnoAtual;}
+if (isset($this->sc_temp_varIdTenacidade)) {$_SESSION['varIdTenacidade'] = $this->sc_temp_varIdTenacidade;}
+if (isset($this->sc_temp_varDescricao)) {$_SESSION['varDescricao'] = $this->sc_temp_varDescricao;}
+$_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['contr_erro'] = 'off';
+/* Dados do menu em sessao */
+$_SESSION['nm_menu'] = array('prod' => $str_root . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'] . '/third/COOLjsMenu/',
+                              'url' => $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod'] . '/third/COOLjsMenu/');
+
+if ((isset($nmgp_outra_jan) && $nmgp_outra_jan == "true") || (isset($_SESSION['scriptcase']['sc_outra_jan']) && $_SESSION['scriptcase']['sc_outra_jan'] == 'GerenciadorFinanceiro_Mnu'))
+{
+    $_SESSION['sc_session'][1]['GerenciadorFinanceiro_Mnu']['sc_outra_jan'] = true;
+     unset($_SESSION['scriptcase']['sc_outra_jan']);
+    $_SESSION['scriptcase']['sc_saida_GerenciadorFinanceiro_Mnu'] = "javascript:window.close()";
+}
+/* Variáveis de Configuração do Menu */
+
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']))
+{
+    $_SESSION['scriptcase']['sc_apl_seg'] = array();
+}
+if(is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/FluxoCaixaAnoBase_Ctr_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/FluxoCaixaAnoBase_Ctr_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+      if (!isset($_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaAnoBase_Ctr']))
+      {
+        $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaAnoBase_Ctr'] = "on";
+      }
+    }
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaAnoBase_Ctr'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/FluxoCaixaAnoBase_Ctr_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/FluxoCaixaAnoBase_Ctr_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaAnoBase_Ctr']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaAnoBase_Ctr'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaAnoBase_Ctr'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaAnoBase_Ctr'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ContaCaixaRegistro_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ContaCaixaRegistro_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ContaCaixaRegistro_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ContaCaixaRegistro_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ContaCaixaRegistro_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ContaCaixaRegistro_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/ExtratoMensal_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['ExtratoMensal_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/FluxoCaixaResumido_Lst_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/FluxoCaixaResumido_Lst_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaResumido_Lst']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaResumido_Lst'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaResumido_Lst'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaResumido_Lst'] = "on";
+} 
+if (is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/FluxoCaixa_AnoEmpresa_Ctr_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/FluxoCaixa_AnoEmpresa_Ctr_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+        if (!isset($_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixa_AnoEmpresa_Ctr']))
+        {
+            $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixa_AnoEmpresa_Ctr'] = "on";
+        }
+    }
+    if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+    { 
+        $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixa_AnoEmpresa_Ctr'] = "on";
+    } 
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixa_AnoEmpresa_Ctr'] = "on";
+} 
+if(is_file($path_apls . $this->tab_grupo[0] . "_lib/_app_data/FluxoCaixaAnoBase_Ctr_ini.php"))
+{
+    include($path_apls . $this->tab_grupo[0] . "_lib/_app_data/FluxoCaixaAnoBase_Ctr_ini.php");
+    if ((!isset($arr_data['status']) || trim($arr_data['status']) == "NAO") || (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N")) 
+    {
+      if (!isset($_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaAnoBase_Ctr']))
+      {
+        $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaAnoBase_Ctr'] = "on";
+      }
+    }
+}
+if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+{ 
+    $_SESSION['scriptcase']['sc_apl_seg']['FluxoCaixaAnoBase_Ctr'] = "on";
+} 
+/* Itens do Menu */
+$_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['contr_erro'] = 'on';
+ $NM_tmp_del = 'item_22';
+if (!is_array($NM_tmp_del))
+{
+    $NM_tmp_del = explode(",", $NM_tmp_del);
+}
+foreach ($NM_tmp_del as $Cada_del)
+{
+    $_SESSION['scriptcase']['sc_menu_del']['GerenciadorFinanceiro_Mnu'][] = trim($Cada_del);
+}
+
+$_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['contr_erro'] = 'off';
+
+$sOutputBuffer = ob_get_contents();
+ob_end_clean();
+
+$saida_apl = $_SESSION['scriptcase']['sc_saida_GerenciadorFinanceiro_Mnu'];
+
+$GerenciadorFinanceiro_Mnu_menuData['data'] = array();
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["FluxoCaixaAnoBase_Ctr"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["FluxoCaixaAnoBase_Ctr"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Escolher Conta Caixa e Ano Base";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_16'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_16&sc_apl_menu=FluxoCaixaAnoBase_Ctr&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-check",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_16",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ContaCaixaRegistro_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ContaCaixaRegistro_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = " Aberturas & Fechamentos";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_22'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_22&sc_apl_menu=ContaCaixaRegistro_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-folder-open",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_22",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+$str_label = "Extrato Mensal";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "#",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-list",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_20",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Janeiro";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_17'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_17&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_17",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Fevereiro";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_4'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_4&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_4",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Março";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_5'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_5&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_5",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Abril";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_6'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_6&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_6",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Maio";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_7'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_7&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_7",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Junho";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_8'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_8&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_8",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Julho";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_9'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_9&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_9",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Agosto";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_10'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_10&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_10",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Setembro";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_11'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_11&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_11",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Outubro";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_12'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_12&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_12",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Novembro";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_13'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_13&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_13",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["ExtratoMensal_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Dezembro";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_20']['itens']['item_14'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_14&sc_apl_menu=ExtratoMensal_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "far fa-calendar-minus",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_14",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_20',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+$str_label = "Anual";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_2'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "#",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-cog",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_2",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["FluxoCaixaResumido_Lst"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["FluxoCaixaResumido_Lst"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Fluxo de Caixa Resumido";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_2']['itens']['item_19'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_19&sc_apl_menu=FluxoCaixaResumido_Lst&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-list",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_19",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_2',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+$str_label = "Contas a Receber Anual";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_2']['itens']['item_18'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "#",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-list",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_18",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_2',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+$str_label = "Contas a Pagar Anual";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_2']['itens']['item_1'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "#",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-list",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_1",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+  0 => 'item_2',
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["FluxoCaixa_AnoEmpresa_Ctr"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["FluxoCaixa_AnoEmpresa_Ctr"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "DRE";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data']['itens']['item_23'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_23&sc_apl_menu=FluxoCaixa_AnoEmpresa_Ctr&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-dollar-sign",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_23",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => array (
+),
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["search"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["search"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Filtro";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data_tb']['itens']['item_tb_1'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_tb_1&sc_apl_menu=search&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-search",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_tb_1",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => false,
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["languages"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["languages"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Idiomas";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data_tb']['itens']['item_tb_2'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_tb_2&sc_apl_menu=languages&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-globe",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_tb_2",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => false,
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["themes"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["themes"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Temas";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data_tb']['itens']['item_tb_3'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_tb_3&sc_apl_menu=themes&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-paint-roller",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_tb_3",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => false,
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["shortcuts"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["shortcuts"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Atalhos";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data_tb']['itens']['item_tb_4'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_tb_4&sc_apl_menu=shortcuts&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-grip-vertical",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_tb_4",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => false,
+                                                  'itens'    => [],
+                                                  );
+$str_disabled = 'N';
+if (!isset($_SESSION['scriptcase']['sc_apl_seg']["notification"]) || strtolower($_SESSION['scriptcase']['sc_apl_seg']["notification"]) != "on")
+{
+    $str_link = "#";
+    $str_disabled = 'Y';
+}
+$str_label = "Notificações";
+$str_hint = "";
+if ($_SESSION['scriptcase']['charset'] != "UTF-8" && !NM_is_utf8($str_label))
+{
+    $str_label = sc_convert_encoding($str_label, "UTF-8", $_SESSION['scriptcase']['charset']);
+    $str_hint = sc_convert_encoding($str_hint, "UTF-8", $_SESSION['scriptcase']['charset']);
+}
+$GerenciadorFinanceiro_Mnu_menuData['data_tb']['itens']['item_tb_5'] = array(
+                                                  'label'       => $str_label,
+                                                  'link'        => "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=item_tb_5&sc_apl_menu=notification&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "",
+                                                  'hint'        => $str_hint,
+                                                  'icon_fa'     => "fas fa-bell",
+                                                  'link_target'     => "self",
+                                                  'fav_check'     => "N",
+                                                  'mega_check'     => "N",
+                                                  'icon_check'     => "S",
+                                                  'id'     => "item_tb_5",
+                                                  'target'      => $this->GerenciadorFinanceiro_Mnu_target('_self'),
+                                                  'disabled'    => $str_disabled,
+                                                  'parent_list'    => false,
+                                                  'itens'    => [],
+                                                  );
+
+if (isset($_SESSION['scriptcase']['sc_def_menu']['GerenciadorFinanceiro_Mnu']))
+{
+    $GerenciadorFinanceiro_Mnu_menuData['data']['itens'] = $_SESSION['scriptcase']['sc_def_menu']['GerenciadorFinanceiro_Mnu'];
+}
+if (isset($_SESSION['scriptcase']['sc_usermenu']['GerenciadorFinanceiro_Mnu']))
+{
+    $GerenciadorFinanceiro_Mnu_menuData['data_user']['itens'] = $_SESSION['scriptcase']['sc_usermenu']['GerenciadorFinanceiro_Mnu'];
+}
+if (isset($_SESSION['scriptcase']['sc_def_shortcuts']['GerenciadorFinanceiro_Mnu']) && !empty($_SESSION['scriptcase']['sc_def_shortcuts']['GerenciadorFinanceiro_Mnu']))
+{
+    $GerenciadorFinanceiro_Mnu_menuData['shortcuts'] = $_SESSION['scriptcase']['sc_def_shortcuts']['GerenciadorFinanceiro_Mnu'];
+}
+if (is_file("GerenciadorFinanceiro_Mnu_help.txt"))
+{
+    $Arq_WebHelp = file("GerenciadorFinanceiro_Mnu_help.txt"); 
+    if (isset($Arq_WebHelp[0]) && !empty($Arq_WebHelp[0]))
+    {
+        $Arq_WebHelp[0] = str_replace("\r\n" , "", trim($Arq_WebHelp[0]));
+        $Tmp = explode(";", $Arq_WebHelp[0]); 
+        foreach ($Tmp as $Cada_help)
+        {
+            $Tmp1 = explode(":", $Cada_help); 
+            if (!empty($Tmp1[0]) && isset($Tmp1[1]) && !empty($Tmp1[1]) && $Tmp1[0] == "menu" && is_file($str_root . $path_help . $Tmp1[1]))
+            {
+                $str_disabled = "N";
+                $str_link = "" . $path_help . $Tmp1[1] . "";
+                $str_icon = "";
+                $icon_aba = "";
+                $icon_aba_inactive = "";
+                if(empty($icon_aba) && isset($arr_menuicons['']['active']))
+                {
+                    $icon_aba = $arr_menuicons['']['active'];
+                }
+                if(empty($icon_aba_inactive) && isset($arr_menuicons['']['inactive']))
+                {
+                    $icon_aba_inactive = $arr_menuicons['']['inactive'];
+                }
+                $GerenciadorFinanceiro_Mnu_menuData['data'][] = array(
+                    'label'    => "" . $this->Nm_lang['lang_btns_help_hint'] . "",
+                    'level'    => "0",
+                    'link'     => $str_link,
+                    'hint'     => "" . $this->Nm_lang['lang_btns_help_hint'] . "",
+                    'id'       => "item_Help",
+                    'icon'     => $str_icon,
+                    'icon_aba' => $icon_aba,
+                    'icon_aba_inactive' => $icon_aba_inactive,
+                    'target'   => "" . $this->GerenciadorFinanceiro_Mnu_target('_blank') . "",
+                    'sc_id'    => "item_Help",
+                    'disabled' => $str_disabled,
+                    'display'     => "text",
+                    'display_position'=> "",
+                    'icon_fa'     => "",
+                    'icon_color'     => "",
+                    'icon_color_hover'     => "",
+                    'icon_color_disabled'     => "",
+                );
+            }
+        }
+    }
+}
+
+if (isset($_SESSION['scriptcase']['sc_menu_del']['GerenciadorFinanceiro_Mnu']) && !empty($_SESSION['scriptcase']['sc_menu_del']['GerenciadorFinanceiro_Mnu']))
+{
+    sc_menu_delete($GerenciadorFinanceiro_Mnu_menuData['data'], $_SESSION['scriptcase']['sc_menu_del']['GerenciadorFinanceiro_Mnu']);
+    sc_menu_delete($GerenciadorFinanceiro_Mnu_menuData['data_user'], $_SESSION['scriptcase']['sc_menu_del']['GerenciadorFinanceiro_Mnu']);
+}
+if (isset($_SESSION['scriptcase']['sc_menu_disable']['GerenciadorFinanceiro_Mnu']) && !empty($_SESSION['scriptcase']['sc_menu_disable']['GerenciadorFinanceiro_Mnu']))
+{
+    sc_menu_disable($GerenciadorFinanceiro_Mnu_menuData['data'], $_SESSION['scriptcase']['sc_menu_disable']['GerenciadorFinanceiro_Mnu']);
+    sc_menu_disable($GerenciadorFinanceiro_Mnu_menuData['data_user'], $_SESSION['scriptcase']['sc_menu_disable']['GerenciadorFinanceiro_Mnu']);
+}
+
+/* Cabeçalho HTML */
+    header("X-XSS-Protection: 1; mode=block");
+    header("X-Frame-Options: SAMEORIGIN");
+?>
+<!DOCTYPE html>
+
+<html class='ae' <?php echo $_SESSION['scriptcase']['reg_conf']['html_dir'] ?> style="height: 100%">
+<head>
+ <title>GerenciadorFinanceiro_Mnu</title>
+ <META http-equiv="Content-Type" content="text/html; charset=<?php echo $_SESSION['scriptcase']['charset_html'] ?>" />
+ <?php
+ if ($_SESSION['scriptcase']['device_mobile'] && $_SESSION['scriptcase']['display_mobile'])
+ {
+  ?>
+   <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
+  <?php
+ }
+ ?>
+ <link rel="shortcut icon" href="../_lib/img/scriptcase__NM__ico__NM__favicon.ico">
+ <META http-equiv="Expires" content="Fri, Jan 01 1900 00:00:00 GMT" />
+ <META http-equiv="Last-Modified" content="<?php echo gmdate('D, d M Y H:i:s') ?> GMT" />
+ <META http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+ <META http-equiv="Pragma" content="no-cache" />
+ <?php 
+ if(isset($str_google_fonts) && !empty($str_google_fonts)) 
+ { 
+     ?> 
+     <link rel="stylesheet" type="text/css" href="<?php echo $str_google_fonts ?>" /> 
+     <?php 
+ } 
+ ?> 
+ <link rel="stylesheet" href="<?php echo $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod']; ?>/third/font-awesome/6/css/all.min.css" type="text/css" media="screen" />
+<style>
+   .scTabText {
+   }    <?php
+        if(isset($_SESSION['scriptcase']['sc_def_menu']) && !empty($_SESSION['scriptcase']['sc_def_menu']))
+        {
+            foreach($_SESSION['scriptcase']['sc_def_menu'] as $arr_menus)
+            {
+              foreach($arr_menus as $id => $arr_item)
+              {
+                  if(isset($arr_item['icon_color']) && !empty($arr_item['icon_color']))
+                  {
+                      echo "   #" . $id . " .icon_fa{ color: ". $arr_item['icon_color'] ."  !important}
+";
+                      if(isset($menu_parms1['icons_inherit_style']) && $menu_parms1['icons_inherit_style'] == 'S')
+                      {
+                          echo "   #aba_td_" . $id . " i{ color:". $arr_item['icon_color'] ."  !important}
+";
+                      }
+                  }
+                  if(isset($arr_item['icon_color_hover']) && !empty($arr_item['icon_color_hover']))
+                  {
+                      echo "   #" . $id . ":hover .icon_fa{ color: ". $arr_item['icon_color_hover'] ."  !important}
+";
+                      if(isset($menu_parms1['icons_inherit_style']) && $menu_parms1['icons_inherit_style'] == 'S')
+                      {
+                          echo "   #aba_td_" . $id . ":hover i{ color:". $arr_item['icon_color_hover'] ."  !important}
+";
+                      }
+                  }
+                  if(isset($arr_item['icon_color_disabled']) && !empty($arr_item['icon_color_disabled']))
+                  {
+                      echo "   #" . $id . ".scdisabledmain .icon_fa{ color: ". $arr_item['icon_color_disabled'] ."  !important}
+";
+                      echo "   #" . $id . ".scdisabledsub .icon_fa{ color: ". $arr_item['icon_color_disabled'] ."  !important}
+";
+                      if(isset($menu_parms1['icons_inherit_style']) && $menu_parms1['icons_inherit_style'] == 'S')
+                      {
+                          echo "   #aba_td_" . $id . ".scTabInactive i{ color:". $arr_item['icon_color_disabled'] ."  !important}
+";
+                      }
+                  }
+              }
+            }
+        }
+    ?>
+</style>
+<script type="text/javascript">
+ var is_menu_vertical = false;
+ function sc_session_redir(url_redir)
+ {
+     if (window.parent && window.parent.document != window.document && typeof window.parent.sc_session_redir === 'function')
+     {
+         window.parent.sc_session_redir(url_redir);
+     }
+     else
+     {
+         if (window.opener && typeof window.opener.sc_session_redir === 'function')
+         {
+             window.close();
+             window.opener.sc_session_redir(url_redir);
+         }
+         else
+         {
+             window.location = url_redir;
+         }
+     }
+ }
+</script>
+</head>
+<body style="height: 100%" scroll="no" class='scMenuHPage'>
+<?php
+
+if ('' != $sOutputBuffer)
+{
+    echo $sOutputBuffer;
+}
+
+    $NM_scr_iframe = (isset($_POST['hid_scr_iframe'])) ? $_POST['hid_scr_iframe'] : "";   
+
+/* Arquivos JS */
+?>
+<script type="text/javascript" src="<?php echo $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod']; ?>/third/jquery/js/jquery.js"></script>
+ <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod']; ?>/third/lineicons/web-font-files/lineicons.css" /> 
+<script type="text/javascript" src="<?php echo $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod']; ?>/third/Fuse/dist/fuse.min.js"></script>
+<script type="text/javascript" src="<?php echo $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod']; ?>/third/sweetalert/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="<?php echo $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_prod']; ?>/third/sweetalert/polyfill.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->str_schema_all ?>_sweetalert.css" />
+<?php
+$confirmButtonClass = '';
+$cancelButtonClass  = '';
+$confirmButtonText  = $this->Nm_lang['lang_btns_cfrm'];
+$cancelButtonText   = $this->Nm_lang['lang_btns_cncl'];
+$confirmButtonFA    = '';
+$cancelButtonFA     = '';
+$confirmButtonFAPos = '';
+$cancelButtonFAPos  = '';
+if (isset($this->arr_buttons['bsweetalert_ok']) && isset($this->arr_buttons['bsweetalert_ok']['style']) && '' != $this->arr_buttons['bsweetalert_ok']['style']) {
+    $confirmButtonClass = 'scButton_' . $this->arr_buttons['bsweetalert_ok']['style'];
+}
+if (isset($this->arr_buttons['bsweetalert_cancel']) && isset($this->arr_buttons['bsweetalert_cancel']['style']) && '' != $this->arr_buttons['bsweetalert_cancel']['style']) {
+    $cancelButtonClass = 'scButton_' . $this->arr_buttons['bsweetalert_cancel']['style'];
+}
+if (isset($this->arr_buttons['bsweetalert_ok']) && isset($this->arr_buttons['bsweetalert_ok']['value']) && '' != $this->arr_buttons['bsweetalert_ok']['value']) {
+    $confirmButtonText = $this->arr_buttons['bsweetalert_ok']['value'];
+}
+if (isset($this->arr_buttons['bsweetalert_cancel']) && isset($this->arr_buttons['bsweetalert_cancel']['value']) && '' != $this->arr_buttons['bsweetalert_cancel']['value']) {
+    $cancelButtonText = $this->arr_buttons['bsweetalert_cancel']['value'];
+}
+if (isset($this->arr_buttons['bsweetalert_ok']) && isset($this->arr_buttons['bsweetalert_ok']['fontawesomeicon']) && '' != $this->arr_buttons['bsweetalert_ok']['fontawesomeicon']) {
+    $confirmButtonFA = $this->arr_buttons['bsweetalert_ok']['fontawesomeicon'];
+}
+if (isset($this->arr_buttons['bsweetalert_cancel']) && isset($this->arr_buttons['bsweetalert_cancel']['fontawesomeicon']) && '' != $this->arr_buttons['bsweetalert_cancel']['fontawesomeicon']) {
+    $cancelButtonFA = $this->arr_buttons['bsweetalert_cancel']['fontawesomeicon'];
+}
+if (isset($this->arr_buttons['bsweetalert_ok']) && isset($this->arr_buttons['bsweetalert_ok']['display_position']) && 'img_right' != $this->arr_buttons['bsweetalert_ok']['display_position']) {
+    $confirmButtonFAPos = 'text_right';
+}
+if (isset($this->arr_buttons['bsweetalert_cancel']) && isset($this->arr_buttons['bsweetalert_cancel']['display_position']) && 'img_right' != $this->arr_buttons['bsweetalert_cancel']['display_position']) {
+    $cancelButtonFAPos = 'text_right';
+}
+?>
+<script type="text/javascript">
+  var scSweetAlertConfirmButton = "<?php echo $confirmButtonClass ?>";
+  var scSweetAlertCancelButton = "<?php echo $cancelButtonClass ?>";
+  var scSweetAlertConfirmButtonText = "<?php echo $confirmButtonText ?>";
+  var scSweetAlertCancelButtonText = "<?php echo $cancelButtonText ?>";
+  var scSweetAlertConfirmButtonFA = "<?php echo $confirmButtonFA ?>";
+  var scSweetAlertCancelButtonFA = "<?php echo $cancelButtonFA ?>";
+  var scSweetAlertConfirmButtonFAPos = "<?php echo $confirmButtonFAPos ?>";
+  var scSweetAlertCancelButtonFAPos = "<?php echo $cancelButtonFAPos ?>";
+</script>
+<script type="text/javascript" src="GerenciadorFinanceiro_Mnu_message.js"></script>
+<script type="text/javascript" src="../_lib/lib/js/frameControl.js"></script>
+<script type="text/javascript" src="../_lib/lib/js/toastr.js"></script>
+<link rel="stylesheet" type="text/css"  href="../_lib/lib/css/toastr.css" />
+<script type="text/javascript">
+$(function() {
+<?php
+if (isset($this->nm_mens_alert) && count($this->nm_mens_alert)) {
+   if (isset($this->Ini->nm_mens_alert) && !empty($this->Ini->nm_mens_alert))
+   {
+       if (isset($this->nm_mens_alert) && !empty($this->nm_mens_alert))
+       {
+           $this->nm_mens_alert   = array_merge($this->Ini->nm_mens_alert, $this->nm_mens_alert);
+           $this->nm_params_alert = array_merge($this->Ini->nm_params_alert, $this->nm_params_alert);
+       }
+       else
+       {
+           $this->nm_mens_alert   = $this->Ini->nm_mens_alert;
+           $this->nm_params_alert = $this->Ini->nm_params_alert;
+       }
+   }
+   if (isset($this->nm_mens_alert) && !empty($this->nm_mens_alert))
+   {
+       foreach ($this->nm_mens_alert as $i_alert => $mensagem)
+       {
+           $alertParams = array();
+           if (isset($this->nm_params_alert[$i_alert]))
+           {
+               foreach ($this->nm_params_alert[$i_alert] as $paramName => $paramValue)
+               {
+                   if (in_array($paramName, array('title', 'timer', 'confirmButtonText', 'confirmButtonFA', 'confirmButtonFAPos', 'cancelButtonText', 'cancelButtonFA', 'cancelButtonFAPos', 'footer', 'width', 'padding')))
+                   {
+                       $alertParams[$paramName] = NM_charset_to_utf8($paramValue);
+                   }
+                   elseif (in_array($paramName, array('showConfirmButton', 'showCancelButton', 'toast')) && in_array($paramValue, array(true, false)))
+                   {
+                       $alertParams[$paramName] = NM_charset_to_utf8($paramValue);
+                   }
+                   elseif ('position' == $paramName && in_array($paramValue, array('top', 'top-start', 'top-end', 'center', 'center-start', 'center-end', 'bottom', 'bottom-start', 'bottom-end')))
+                   {
+                       $alertParams[$paramName] = NM_charset_to_utf8($paramValue);
+                   }
+                   elseif ('type' == $paramName && in_array($paramValue, array('warning', 'error', 'success', 'info', 'question')))
+                   {
+                       $alertParams[$paramName] = NM_charset_to_utf8($paramValue);
+                   }
+                   elseif ('background' == $paramName)
+                   {
+                       $image_param = $paramValue;
+                       preg_match_all('/url\(([\s])?(["|\'])?(.*?)(["|\'])?([\s])?\)/i', $paramValue, $matches, PREG_PATTERN_ORDER);
+                       if (isset($matches[3])) {
+                           foreach ($matches[3] as $match) {
+                               if ('http:' != substr($match, 0, 5) && 'https:' != substr($match, 0, 6) && '/' != substr($match, 0, 1)) {
+                                   $image_param = str_replace($match, "{$this->Ini->path_img_global}/{$match}", $image_param);
+                               }
+                           }
+                       }
+                       $paramValue = $image_param;
+                       $alertParams[$paramName] = NM_charset_to_utf8($paramValue);
+                   }
+               }
+           }
+           $jsonParams = json_encode($alertParams);
+?>
+       scJs_alert('<?php echo $mensagem ?>', <?php echo $jsonParams ?>);
+<?php
+       }
+   }
+}
+?>
+});
+</script>
+<?php
+$_SESSION['scriptcase']['sc_tab_meses']['int'] = array(
+                                  $this->Nm_lang['lang_mnth_janu'],
+                                  $this->Nm_lang['lang_mnth_febr'],
+                                  $this->Nm_lang['lang_mnth_marc'],
+                                  $this->Nm_lang['lang_mnth_apri'],
+                                  $this->Nm_lang['lang_mnth_mayy'],
+                                  $this->Nm_lang['lang_mnth_june'],
+                                  $this->Nm_lang['lang_mnth_july'],
+                                  $this->Nm_lang['lang_mnth_augu'],
+                                  $this->Nm_lang['lang_mnth_sept'],
+                                  $this->Nm_lang['lang_mnth_octo'],
+                                  $this->Nm_lang['lang_mnth_nove'],
+                                  $this->Nm_lang['lang_mnth_dece']);
+$_SESSION['scriptcase']['sc_tab_meses']['abr'] = array(
+                                  $this->Nm_lang['lang_shrt_mnth_janu'],
+                                  $this->Nm_lang['lang_shrt_mnth_febr'],
+                                  $this->Nm_lang['lang_shrt_mnth_marc'],
+                                  $this->Nm_lang['lang_shrt_mnth_apri'],
+                                  $this->Nm_lang['lang_shrt_mnth_mayy'],
+                                  $this->Nm_lang['lang_shrt_mnth_june'],
+                                  $this->Nm_lang['lang_shrt_mnth_july'],
+                                  $this->Nm_lang['lang_shrt_mnth_augu'],
+                                  $this->Nm_lang['lang_shrt_mnth_sept'],
+                                  $this->Nm_lang['lang_shrt_mnth_octo'],
+                                  $this->Nm_lang['lang_shrt_mnth_nove'],
+                                  $this->Nm_lang['lang_shrt_mnth_dece']);
+$_SESSION['scriptcase']['sc_tab_dias']['int'] = array(
+                                  $this->Nm_lang['lang_days_sund'],
+                                  $this->Nm_lang['lang_days_mond'],
+                                  $this->Nm_lang['lang_days_tued'],
+                                  $this->Nm_lang['lang_days_wend'],
+                                  $this->Nm_lang['lang_days_thud'],
+                                  $this->Nm_lang['lang_days_frid'],
+                                  $this->Nm_lang['lang_days_satd']);
+$_SESSION['scriptcase']['sc_tab_dias']['abr'] = array(
+                                  $this->Nm_lang['lang_shrt_days_sund'],
+                                  $this->Nm_lang['lang_shrt_days_mond'],
+                                  $this->Nm_lang['lang_shrt_days_tued'],
+                                  $this->Nm_lang['lang_shrt_days_wend'],
+                                  $this->Nm_lang['lang_shrt_days_thud'],
+                                  $this->Nm_lang['lang_shrt_days_frid'],
+                                  $this->Nm_lang['lang_shrt_days_satd']);
+$Str_date = strtolower($_SESSION['scriptcase']['reg_conf']['date_format']);
+$Lim   = strlen($Str_date);
+$Ult   = "";
+$Arr_D = array();
+for ($I = 0; $I < $Lim; $I++)
+{
+    $Char = substr($Str_date, $I, 1);
+    if ($Char != $Ult)
+    {
+        $Arr_D[] = $Char;
+    }
+    $Ult = $Char;
+}
+$Prim = true;
+$Str  = "";
+foreach ($Arr_D as $Cada_d)
+{
+    $Str .= (!$Prim) ? $_SESSION['scriptcase']['reg_conf']['date_sep'] : "";
+    $Str .= $Cada_d;
+    $Prim = false;
+}
+$Str = str_replace("a", "Y", $Str);
+$Str = str_replace("y", "Y", $Str);
+$nm_data_fixa = date($Str); 
+?>
+<?php
+$larg_table = "100%";
+$col_span   = "";
+$strAlign = 'align=\'left\'';
+?>
+<script>
+Iframe_atual = "GerenciadorFinanceiro_Mnu_iframe";
+Aba_atual = 'nm_frame_app';
+function writeFastMenu(arr_link)
+{
+  return false;
+}
+function clearFastMenu(arr_link)
+{
+  return false;
+}
+        function checkSubMenuPosition(str_id)
+        {
+            submenu = $('#' + str_id + '.menu__link').next('ul');
+            if(submenu.length)
+            {
+                if(submenu.offset().left + submenu.outerWidth() > $('#main_menu_table').width())
+                {
+                    submenu.css('margin-left', ( $('#main_menu_table').width() - submenu.offset().left - submenu.outerWidth() - 10 ));
+                }
+           }
+        }function openMenuItem(str_id)
+{
+  if (str_id != "iframe_GerenciadorFinanceiro_Mnu")
+  {
+      str_id        = str_id.replace("GerenciadorFinanceiro_Mnu_","");
+  }
+    if($('#Iframe_control').length && $('#' + str_id).parent().length < 0)
+    {
+        $('#Iframe_control').append('<iframe id="iframe_btn_1" name="menu_btn_1_iframe" frameborder="0" class="scMenuIframe" style="display: none;" src=""></iframe>');
+    }
+  if($('#' + str_id).parent().length)
+  {
+      if(!$('#' + str_id).parent().hasClass('menu__item--active'))
+      {
+        $('#' + str_id).closest('ul').find('li').removeClass('menu__item--active');
+      }
+       $('#' + str_id).parent().toggleClass('menu__item--active');
+  }
+  str_link   = $('#' + str_id).attr('item-href');
+  str_target = $('#' + str_id).attr('item-target');
+  if (typeof str_link !== typeof undefined && str_link !== false) {
+    str_id = str_id.replace('iframe_GerenciadorFinanceiro_Mnu', 'GerenciadorFinanceiro_Mnu');
+    //test link type
+    if (str_link != '' && str_link != '#' && str_link != 'javascript:')
+    {
+        if (str_link.substring(0, 11) == 'javascript:')
+        {
+            eval(str_link.substring(11));
+        }
+        else if (str_link != '#' && str_target != '_parent')
+        {
+            window.open(str_link, str_target);
+        }
+        else if (str_link != '#' && str_target == '_parent')
+        {
+            document.location = str_link;
+        }
+        <?php
+        if ($menu_mobile_hide == 'S' && $menu_mobile_hide_onclick == 'S')
+        {
+        ?>
+            HideMenu();
+        <?php
+        }
+        ?>
+    }
+    if(str_target != '_blank' && $('#iframe_GerenciadorFinanceiro_Mnu').length)
+        $('#iframe_GerenciadorFinanceiro_Mnu')[0].contentWindow.focus();
+  }
+}
+</script>
+<div id='main_menu_table' class='scMenuHMoldura'>
+    <?php echo $this->GerenciadorFinanceiro_Mnu_MenuH($GerenciadorFinanceiro_Mnu_menuData, $path_imag_cab, $strAlign); ?>
+    <div id='idMenuDown'>
+        <div id='idMenuRightSide'>
+    <div id="Iframe_control" style=''>
+<?php
+$SCR  = "";
+$link_default = " onclick=\"openMenuItem('iframe_GerenciadorFinanceiro_Mnu');\" item-href=\"GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=GerenciadorFinanceiro_Mnu&sc_apl_menu=FluxoCaixaAnoBase_Ctr&sc_apl_link=" . urlencode($GerenciadorFinanceiro_Mnu_menuData['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'] . "\"  item-target=\"GerenciadorFinanceiro_Mnu_iframe\"";
+?>
+      <iframe id="iframe_GerenciadorFinanceiro_Mnu" name="GerenciadorFinanceiro_Mnu_iframe" frameborder="0" class="scMenuIframe" style="width: 100%; height: ;"  src="<?php echo $SCR; ?>" <?php echo $link_default ?>></iframe>
+             </div id='Iframe_controlClose'>
+        </div id='idMenuRightSideClose'>
+    </div id='idMenuDownClose'>
+</div>
+
+    <script>
+    $(document).ready(function() {
+        $('.menu .menu__toggle').click(function(e){
+            e.preventDefault();
+            $(this).toggleClass('menu__toggle--active');
+            $(this).parent().toggleClass('menu--active');
+        });
+        if($('#idMenuFooter').length)
+        {
+            $('#idMenuDown').css('height', "calc(100% - "+ $('#idMenuFooter').height() +")");
+
+            if($('#idMenuVertical').length)
+            {
+                $('#idMenuVertical').css('height', "calc(100% - "+ $('#idMenuFooter').height() +")");
+            }
+        }
+    });
+    </script>
+</body>
+</html><?php
+}
+function GerenciadorFinanceiro_Mnu_Header()
+{
+?>
+    
+<?php
+}function GerenciadorFinanceiro_Mnu_MenuH($GerenciadorFinanceiro_Mnu_menuData, $path_imag_cab, $strAlign)
+{
+?>
+    <div id='idMenuLine' class='scMenuArea'>
+        <?php echo $this->GerenciadorFinanceiro_Mnu_escreveMenu($GerenciadorFinanceiro_Mnu_menuData, $path_imag_cab, $strAlign); ?>
+    </div>
+<?php
+}
+function GerenciadorFinanceiro_Mnu_Footer()
+{
+?>
+    
+<?php
+}
+function GerenciadorFinanceiro_Mnu_escreveMenuRec($arr_menu, $arr_menu_apl, $path_imag_cab = '')
+{
+    if (!defined('JSON_INVALID_UTF8_SUBSTITUTE')) {
+        define('JSON_INVALID_UTF8_SUBSTITUTE', 0);
+    }
+    $menu_itens = (isset($arr_menu['itens']) && !empty($arr_menu['itens'])) ? json_encode(array_values($arr_menu['itens']), JSON_INVALID_UTF8_SUBSTITUTE) : '[]';
+    $user_itens = (isset($arr_menu_apl['data_user']['itens']) && !empty($arr_menu_apl['data_user']['itens'])) ? json_encode(array_values($arr_menu_apl['data_user']['itens']), JSON_INVALID_UTF8_SUBSTITUTE) : '[]';
+    $menu_data = json_decode('{"theme":"light-gray","layout":"V","header_string":"\" . $_SESSION[\'varDescricao\'] . \"","header_string_pos":"H","check_split":"S","check_toolbar":"N","check_show_search_path":"S","check_shortcut_label":"N","check_start_expanded":"S","check_use_loader":"S","should_reload":"S","layout_usr_pos":"out","usercheck":"N","username":"","userimage":"","userdesc":"","logo":"","logo_compact":"","pick_themes":[],"shortcuts":[],"items":[{"text":"Escolher Conta Caixa e Ano Base","app":"FluxoCaixaAnoBase_Ctr","hint":"","icon":"far fa-calendar-check","icon_check":"S","id":"item_16","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":" Aberturas & Fechamentos","app":"ContaCaixaRegistro_Lst","hint":"","icon":"far fa-folder-open","icon_check":"S","id":"item_22","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Extrato Mensal","app":"","hint":"","icon":"fas fa-list","icon_check":"S","id":"item_20","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"children":[{"text":"Janeiro","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_17","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Fevereiro","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_4","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Mar\u00e7o","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_5","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Abril","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_6","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Maio","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_7","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Junho","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_8","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Julho","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_9","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Agosto","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_10","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Setembro","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_11","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Outubro","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_12","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Novembro","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_13","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Dezembro","app":"ExtratoMensal_Lst","hint":"","icon":"far fa-calendar-minus","icon_check":"S","id":"item_14","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"}],"target":"_self","mega_check":"N"},{"text":"Anual","app":"","hint":"","icon":"fas fa-cog","icon_check":"S","id":"item_2","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"children":[{"text":"Fluxo de Caixa Resumido","app":"FluxoCaixaResumido_Lst","hint":"","icon":"fas fa-list","icon_check":"S","id":"item_19","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Contas a Receber Anual","app":"","hint":"","icon":"fas fa-list","icon_check":"S","id":"item_18","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"},{"text":"Contas a Pagar Anual","app":"","hint":"","icon":"fas fa-list","icon_check":"S","id":"item_1","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"}],"target":"_self","mega_check":"N"},{"text":"DRE","app":"FluxoCaixa_AnoEmpresa_Ctr","hint":"","icon":"fas fa-dollar-sign","icon_check":"S","id":"item_23","link_target":"self","fav_check":"N","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","mega_check":"N"}],"user_items":[],"tb_items":[{"text":"Filtro","app":"search","icon":"fas fa-search","icon_check":"S","display":"N","id":"item_tb_1","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","hint":"","fav_check":"N","mega_check":"N","link_target":"self"},{"text":"Idiomas","app":"languages","icon":"fas fa-globe","icon_check":"S","display":"N","id":"item_tb_2","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","hint":"","fav_check":"N","mega_check":"N","link_target":"self"},{"text":"Temas","app":"themes","icon":"fas fa-paint-roller","icon_check":"S","display":"N","id":"item_tb_3","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","hint":"","fav_check":"N","mega_check":"N","link_target":"self"},{"text":"Atalhos","app":"shortcuts","icon":"fas fa-grip-vertical","icon_check":"S","display":"N","id":"item_tb_4","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","hint":"","fav_check":"N","mega_check":"N","link_target":"self"},{"text":"Notifica\u00e7\u00f5es","app":"notification","icon":"fas fa-bell","icon_check":"S","display":"N","id":"item_tb_5","itree":{"a":{"attributes":[]},"icon":false,"li":{"attributes":[]}},"target":"_self","hint":"","fav_check":"N","mega_check":"N","link_target":"self"}],"font_string":"Open Sans","notif_login_var":"\" . $_SESSION[\'usr_login\'] . \"","notif_data":{"notif_table":"notif_notifications","notif_id":"notif_id","notif_title":"notif_title","notif_message":"notif_message","notif_dtexpire":"notif_dtexpire","notif_login_sender":"notif_login_sender","notif_categ":"notif_categ","notif_type":"notif_type","notif_link":"notif_link","inbox_table":"notif_inbox","inbox_field_notif_id":"notif_id","inbox_field_ontop":"notif_ontop","inbox_field_userid":"login","inbox_field_isread":"notif_isread","inbox_field_read_date":"notif_dtread","inbox_field_sent_date":"notif_dtsent","inbox_field_tag":"notif_tags","inbox_field_important":"notif_important","user_table":"sec_users","user_login":"login","user_fullname":"name","user_image":"picture","notif_connection":""},"notif_open_all_app":"","notif_refresh_interval":"10000","notif_limit":"10","open_itens_tab":"N"}', true);
+    $var_themes_list = json_decode('{"dark-cobalt":{"name":"Dark Cobalt","scope":"scriptcase","p":"#0A083A","s":"#3E3B87","a":"#3E3B87","m":"#B3B2D4","t":"#DDDEE9","b":"rgba(0, 0, 0, 0.5)","n":"#ff4c51"},"dark-coffee":{"name":"Dark Coffee","scope":"scriptcase","p":"#6C3B06","s":"#311a01","a":"#311a01","m":"#FFEDD9","t":"#FDDAC0","b":"rgba(0, 0, 0, 0.5)","n":"#ff4c51"},"dark-sunset":{"name":"Dark Sunset","scope":"scriptcase","p":"#451952","s":"#662549","a":"#662549","m":"#dab0a7","t":"#DDDEE9","b":"rgba(0, 0, 0, 0.5)","n":"#ff4c51"},"dark-rhino":{"name":"Dark Rhino","scope":"scriptcase","p":"#27374D","s":"#526D82","a":"#526D82","m":"#DDE6ED","t":"#DDDEE9","b":"rgba(0, 0, 0, 0.5)","n":"#ff4c51"},"dark-pink":{"name":"Dark Pink","scope":"scriptcase","p":"#4C0033","s":"#790252","a":"#b81470","m":"#DF9AC7","t":"#DDDEE9","b":"rgba(0, 0, 0, 0.5)","n":"#ff4c51"},"dark-hyper-space":{"name":"Dark Hyper Space","scope":"scriptcase","p":"#313866","s":"#504099","a":"#b82d9e","m":"#E7C2FD","t":"#DDDEE9","b":"rgba(0, 0, 0, 0.5)","n":"#ff4c51"},"dark-midnight":{"name":"Dark Midnight","scope":"scriptcase","p":"#37404a","s":"#727cf5","a":"#727cf5","m":"#cbdcec","t":"#DDDEE9","b":"rgba(0, 0, 0, 0.5)","n":"#ff4c51"},"light-gray":{"name":"Light Gray","scope":"scriptcase","p":"#ffffff","s":"#f0f0f0","a":"#dadada","m":"rgba(47, 43, 61, 0.6784313725)","t":"rgba(47, 43, 61, 0.6784313725)","b":"rgba(0, 0, 0, 0.15)","n":"#ff4c51"},"monochromatic-blue":{"name":"Monochromatic Blue","scope":"scriptcase","p":"#3498DB","s":"#5BAFEC","a":"#216A96","m":"#A9DFF5","t":"#FFFFFF","b":"#216A96","n":"#FF4C51"},"monochromatic-blue-berry":{"name":"Monochromatic Blue Berry","scope":"scriptcase","p":"#61678C","s":"#7A7FA1","a":"#434D6B","m":"#A9AECF","t":"#FFFFFF","b":"#2C3045","n":"#FF4C51"},"monochromatic-navy":{"name":"Monochromatic Navy","scope":"scriptcase","p":"#2C3E50","s":"#3E5062","a":"#1F2D3C","m":"#A9B7C4","t":"#FFFFFF","b":"#1C2A35","n":"#FF4C51"},"monochromatic-green":{"name":"Monochromatic Green","scope":"scriptcase","p":"#27AE60","s":"#51C07C","a":"#1A7844","m":"#A2E2BB","t":"#FFFFFF","b":"#1B7942","n":"#FF4C51"},"monochromatic-lemon":{"name":"Monochromatic Lemon","scope":"scriptcase","p":"#247159","s":"#3A8A70","a":"#1A5A3D","m":"#87C9A2","t":"#FFFFFF","b":"#10352B","n":"#FF4C51"},"monochromatic-yellow":{"name":"Monochromatic Yellow","scope":"scriptcase","p":"#FAD02E","s":"#FDE059","a":"#B7950B","m":"#F8E99A","t":"#FFFFFF","b":"#B59A1F","n":"#FF4C51"},"monochromatic-orange":{"name":"Monochromatic Orange","scope":"scriptcase","p":"#FF5733","s":"#FF7A59","a":"#A3470C","m":"#F7C79A","t":"#FFFFFF","b":"#B33F24","n":"#FFE8E0"},"monochromatic-dark-orange":{"name":"Monochromatic Dark Orange","scope":"scriptcase","p":"#D35400","s":"#DC7133","a":"#A14000","m":"#F1B088","t":"#FFFFFF","b":"#963900","n":"#F8E0D3"},"monochromatic-red":{"name":"Monochromatic Red","scope":"scriptcase","p":"#E74C3C","s":"#E98B81","a":"#992C1F","m":"#F7A8A1","t":"#FFFFFF","b":"#7B241C","n":"#FADBD8"},"monochromatic-guava":{"name":"Monochromatic Guava","scope":"scriptcase","p":"#E55151","s":"#F07B7B","a":"#A12727","m":"#F5B5B5","t":"#FFFFFF","b":"#732525","n":"#F3A1A1"},"monochromatic-purple":{"name":"Monochromatic Purple","scope":"scriptcase","p":"#9B59B6","s":"#BB8FCE","a":"#6C3483","m":"#D4A6E0","t":"#FFFFFF","b":"#4A235A","n":"#FF4C51"},"monochromatic-pink":{"name":"Monochromatic Pink","scope":"scriptcase","p":"#F78FB3","s":"#FBBCCB","a":"#E75480","m":"#FDE2E6","t":"#FFFFFF","b":"#8C003263","n":"#FDE2E6"},"monochromatic-coral":{"name":"Monochromatic Coral","scope":"scriptcase","p":"#FF6F61","s":"#FF8B80","a":"#E54A44","m":"#FFD1D1","t":"#FFFFFF","b":"#B34F47","n":"#FFEDEA"},"monochromatic-beige":{"name":"Monochromatic Beige","scope":"scriptcase","p":"#D2B48C","s":"#E3C9A6","a":"#8B5E3C","m":"#F0DFBC","t":"#FFFFFF","b":"#7D5A3A","n":"#FF4C51"},"monochromatic-leather":{"name":"Monochromatic Leather","scope":"scriptcase","p":"#A0522D","s":"#C0805A","a":"#5A2C0F","m":"#D8B7A1","t":"#FFFFFF","b":"#4E2509","n":"#FF4C51"},"monochromatic-gray":{"name":"Monochromatic Gray","scope":"scriptcase","p":"#4A4A4A","s":"#646464","a":"#4A5354","m":"#CCD1D1","t":"#FFFFFF","b":"#2E2E2E","n":"#FF4C51"},"monochromatic-black":{"name":"Monochromatic Black","scope":"scriptcase","p":"#0A0A0A","s":"#1D1D1D","a":"#3f3f3f","m":"#909090","t":"#FFFFFF","b":"#000000","n":"#FF4C51"},"navy-energy":{"name":"Navy Energy","scope":"scriptcase","p":"#2C3E50","s":"#34495E","a":"#E74C3C","m":"#95A5A6","t":"#ECF0F1","b":"#7F8C8D","n":"#3498DB"},"organic-nature":{"name":"Organic Nature","scope":"scriptcase","p":"#27AE60","s":"#2ECC71","a":"#0B5032","m":"#A2E2BB","t":"#FFFFFF","b":"#7F8C8D","n":"#FF4C51"},"tropical":{"name":"Tropical","scope":"scriptcase","p":"#FF6F61","s":"#FFBC42","a":"#3AA17E","m":"#F4E8C1","t":"#252D39","b":"#3AA17E","n":"#67A4E5"},"vibrant-modern":{"name":"Vibrant Modern","scope":"scriptcase","p":"#FF5733","s":"#C70039","a":"#C4411B","m":"#FFC8B2","t":"#FFC300","b":"#900C3F","n":"#DAF7A6"},"autumn-days":{"name":"Autumn Days","scope":"scriptcase","p":"#D35400","s":"#E67E22","a":"#873600","m":"#F7C79A","t":"#FFFFFF","b":"#7B241C","n":"#873600"},"tech-future":{"name":"Tech Future","scope":"scriptcase","p":"#0A0A0A","s":"#2C2C2C","a":"#E74C3C","m":"#BDC3C7","t":"#ECF0F1","b":"#7F8C8D","n":"#3498DB"},"luxury":{"name":"Luxury","scope":"scriptcase","p":"#2E2B2B","s":"#4A4747","a":"#D4AF37","m":"#5E5B5B","t":"#FFFFFF","b":"#1A1717","n":"#C8B27D"},"midnight":{"name":"Midnight","scope":"scriptcase","p":"#37404A","s":"#3C4858","a":"#7b858f","m":"#464f5b","t":"#FFFFFF","b":"#37404A","n":"#F84D70"}}', true);
+    $var_targets = '{"blank":"_blank","_blank":"_blank","self":"nm_frame_app","_self":"nm_frame_app","window":"_window","parente":"_self","_parent":"_self"}';
+    $apl_link_build = "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=notif_app_link&sc_apl_menu=###APPNAME###&sc_apl_link=" . urlencode($arr_menu_apl['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'];
+
+    $apl_default          = 'FluxoCaixaAnoBase_Ctr';
+    $apl_default_location = 'N';
+    $apl_name_ref_sc = 'GerenciadorFinanceiro_Mnu';
+    if (strtolower(substr($apl_default, 0, 7)) == "http://" || strtolower(substr($apl_default, 0, 8)) == "https://" || strtolower(substr($apl_default, 0, 3)) == "../" || strtolower(substr($apl_default, 0, 1)) == "/")
+    {}
+    elseif(!empty($apl_default))
+    {
+        $apl_default = "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=GerenciadorFinanceiro_Mnu&sc_apl_menu=" . $apl_default . "&sc_apl_link=" . urlencode($arr_menu_apl['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'];
+    }
+    if (isset($menu_data['notif_open_all_app']) && !empty($menu_data['notif_open_all_app']))
+    {
+        $menu_data['notif_open_all_app'] = "GerenciadorFinanceiro_Mnu_form_php.php?sc_item_menu=notif_see_all&sc_apl_menu=" . $menu_data['notif_open_all_app'] . "&sc_apl_link=" . urlencode($arr_menu_apl['url']['link']) . "&sc_usa_grupo=" . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_usa_grupo'];
+    }
+    
+    if(isset($arr_menu_apl['shortcuts']) && !empty($arr_menu_apl['shortcuts']))
+    {
+        $menu_data['shortcuts'] = $arr_menu_apl['shortcuts'];
+    }
+    ?>
+    <style>
+        
+        @charset "UTF-8";
+
+*[data-aetheme] {
+    --theme-menubar-global-scrollbarTrack-color: var(--theme-color-text);
+    --theme-menubar-global-boxShadowColor: var(--theme-box-shadow);
+    --theme-menubar-global-color-text: var(--theme-color-text);
+    --theme-menubar-nav-menuitem-color: var(--theme-color-text);
+    --theme-menubar-nav-menuitem-color\:hover: var(--theme-color-text);
+    --theme-menubar-nav-menuitem-backgroundColor: var(--theme-color-accent);
+    --theme-menubar-nav-submenu-backgroundColor\:hover: var(--theme-color-secondary);
+    --theme-menubar-nav-submenu-menuitem-color: var(--theme-color-text);
+    --theme-menubar-nav-submenu-menuitem-color\:hover: var(--theme-color-text);
+    --theme-menubar-nav-submenu-menuitem-borderColor\:active: var(--theme-color-text);
+    --theme-menubar-mobile-icon-color: var(--theme-color-text);
+    --theme-menubar-mobile-icon-color\:hover: var(--theme-color-text);
+    --theme-menubar-mobile-icon-backgroundColor: var(--theme-color-accent);
+    --theme-menubar-mobile-menu-backgroundColor: var(--theme-color-primary);
+    --theme-menubar-toolbar-item-color: var(--theme-color-muted);
+    --theme-menubar-toolbar-item-color\:hover: var(--theme-color-text);
+    --theme-menubar-toolbar-item-backgroundColor\:hover: var(--theme-color-accent);
+    --theme-menubar-user-menu-button-color: var(--theme-color-muted);
+    --theme-menubar-user-menu-button-color\:hover: var(--theme-color-text);
+    --theme-menubar-user-menu-panel-backgroundColor: var(--theme-color-primary);
+    --theme-menubar-panel-borderColor: var(--theme-color-secondary);
+    --theme-menubar-divider-borderColor: var(--theme-color-secondary);
+}
+
+.ae-menu-mobile {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    padding: 8px 16px;
+    padding-top: 2em;
+    padding-right: 0;
+    background: var(--theme-menubar-mobile-menu-backgroundColor);
+    display: none;
+}
+
+.ae-menu-mobile .main-navigation-mobile {
+    height: 100%;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+
+.ae-menu-mobile .main-navigation-mobile::-webkit-scrollbar {
+    width: 4px;
+}
+
+.ae-menu-mobile .main-navigation-mobile::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.ae-menu-mobile .main-navigation-mobile::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.ae-menubar-accordion {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    transition: all 250ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.ae-menubar-accordion > [role=menubar] {
+    position: relative;
+    width: 100%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    column-gap: 0;
+    row-gap: 0.5em;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar-accordion > [role=menubar] .navigation-group {
+    position: relative;
+    width: 100%;
+    margin-top: 1.25rem;
+    color: var(--theme-menubar-nav-menuitem-color);
+    font-size: 0.75em;
+    font-weight: 700;
+    text-rendering: optimizeLegibility;
+    text-transform: uppercase;
+    opacity: 0.5;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar-accordion > [role=menubar] .navigation-group:nth-child(1) {
+    margin-top: 0;
+}
+
+.ae-menubar-accordion > [role=menubar] .wrapper {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+}
+
+.ae-menubar-accordion > [role=menubar] .wrapper > [role=menuitem] {
+    min-height: 38px;
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem] {
+    position: relative;
+    padding: 0.5em;
+    color: var(--theme-menubar-nav-menuitem-color);
+    font-size: 0.875rem;
+    font-weight: 400;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.5em;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    cursor: pointer;
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem]:hover, .ae-menubar-accordion > [role=menubar] [role=menuitem][data-active=true] {
+    border-radius: 4px;
+    color: var(--theme-menubar-nav-menuitem-color\:hover);
+    background: var(--theme-menubar-nav-menuitem-backgroundColor);
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem][aria-haspopup=true]::after {
+    content: "\f078";
+    position: absolute;
+    top: 50%;
+    right: calc(0.5em + 0.4375rem);
+    transform-origin: center center;
+    transform: translateY(-50%) rotate(-90deg);
+    font: normal normal 900 1em/140% "Font Awesome 6 Free";
+    font-size: 0.5em;
+    transition: transform 250ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem][aria-expanded=true]::after,
+.submenu[role=menu].container [role=menuitem][aria-expanded=true]::after {
+    transform: translateY(-50%) rotate(0deg);
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem] .label {
+    padding-right: 0.75rem;
+    word-break: break-word;
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem] .mb_icon {
+    width: 1.15em;
+    aspect-ratio: 1/1;
+    font-size: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem] ~ .wrapper {
+    position: relative;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem] ~ .wrapper .submenu[role=menu] {
+    margin-top: 0.5em;
+    padding-left: 0.5em;
+    overflow: hidden;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    column-gap: 0;
+    row-gap: 0.5em;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem] ~ .wrapper .submenu[role=menu] [role=menuitem] {
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+    border-radius: 4px;
+    color: var(--theme-menubar-nav-submenu-menuitem-color);
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem] ~ .wrapper .submenu[role=menu] [role=menuitem]:hover {
+    color: var(--theme-menubar-nav-submenu-menuitem-color\:hover);
+    background: var(--theme-menubar-nav-submenu-backgroundColor\:hover);
+}
+
+.ae-menubar-accordion > [role=menubar] [role=menuitem] ~ .wrapper .submenu[role=menu] [role=menuitem][data-active=true] {
+    outline: none;
+    border-radius: 4px;
+    color: var(--theme-menubar-nav-submenu-menuitem-color\:hover);
+    background: var(--theme-menubar-nav-submenu-backgroundColor\:hover);
+}
+
+.ae-menubar[aria-orientation=vertical].collapsed .ae-menubar-accordion > [role=menubar] [role=menuitem][aria-haspopup=true]::after {
+    display: none;
+}
+
+@media screen and (min-width: 768px) {
+    .ae-menu-mobile {
+        width: 260px;
+    }
+}
+
+.slide-top-bouncy {
+    animation: slide-top-bouncy 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+@keyframes slide-top-bouncy {
+    0% {
+        transform: translateY(-120%);
+        transform-origin: 50% 0%;
+    }
+    50% {
+        transform: translateY(5%);
+        transform-origin: 50% 0%;
+    }
+    100% {
+        transform: translateY(0%);
+        transform-origin: 50% 100%;
+    }
+}
+
+.slide-right-bouncy {
+    animation: slide-right-bouncy 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+@keyframes slide-right-bouncy {
+    0% {
+        transform: translateX(120%);
+        transform-origin: 50% 0%;
+    }
+    50% {
+        transform: translateX(-5%);
+        transform-origin: 50% 0%;
+    }
+    100% {
+        transform: translateX(0%);
+        transform-origin: 50% 100%;
+    }
+}
+
+.slide-bottom-bouncy {
+    animation: slide-bottom-bouncy 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+@keyframes slide-bottom-bouncy {
+    0% {
+        transform: translateY(120%);
+        transform-origin: 50% 0%;
+    }
+    50% {
+        transform: translateY(-5%);
+        transform-origin: 50% 0%;
+    }
+    100% {
+        transform: translateY(0%);
+        transform-origin: 50% 100%;
+    }
+}
+
+.slide-left-bouncy {
+    animation: slide-left-bouncy 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+@keyframes slide-left-bouncy {
+    0% {
+        transform: translateX(-120%);
+        transform-origin: 50% 0%;
+    }
+    50% {
+        transform: translateX(5%);
+        transform-origin: 50% 0%;
+    }
+    100% {
+        transform: translateX(0%);
+        transform-origin: 50% 100%;
+    }
+}
+
+.slide-top {
+    animation: slide-top 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+@keyframes slide-top {
+    0% {
+        transform: translateY(-120%);
+        transform-origin: 100% 0%;
+    }
+    100% {
+        transform: translateY(0);
+        transform-origin: 0% 50%;
+    }
+}
+
+.slide-right {
+    animation: slide-right 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+@keyframes slide-right {
+    0% {
+        transform: translateX(120%);
+        transform-origin: 100% 0%;
+    }
+    100% {
+        transform: translateX(0);
+        transform-origin: 0% 50%;
+    }
+}
+
+.slide-bottom {
+    animation: slide-bottom 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+@keyframes slide-bottom {
+    0% {
+        transform: translateY(120%);
+        transform-origin: 100% 0%;
+    }
+    100% {
+        transform: translateY(0);
+        transform-origin: 0% 50%;
+    }
+}
+
+.slide-left {
+    animation: slide-left 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+@keyframes slide-left {
+    0% {
+        transform: translateX(-100%);
+        transform-origin: 100% 0%;
+    }
+    100% {
+        transform: translateX(0);
+        transform-origin: 0% 50%;
+    }
+}
+
+.reveal-opacity {
+    animation: reveal-opacity 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+@keyframes reveal-opacity {
+    0% {
+        filter: opacity(0);
+    }
+    100% {
+        filter: opacity(1);
+    }
+}
+
+.reveal-blur {
+    animation: reveal-blur 0.5s linear both;
+}
+
+@keyframes reveal-blur {
+    0% {
+        filter: blur(100px);
+    }
+    100% {
+        filter: blur(0px);
+    }
+}
+
+.ae-menubar {
+    position: relative;
+    outline: none !important;
+    font-size: 16px;
+    background: var(--theme-color-primary);
+    overflow: visible;
+    display: flex;
+}
+
+.ae-menubar[aria-orientation=horizontal] {
+    position: relative;
+    top: 0;
+    padding: 8px 16px;
+    width: 100%;
+    height: 64px;
+    justify-content: space-between;
+    box-shadow: 0 2px 6px var(--theme-menubar-global-boxShadowColor);
+    z-index: 900;
+}
+
+.ae-menubar[aria-orientation=horizontal] > .container-row {
+    width: 100%;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    display: flex;
+}
+
+.ae-menubar[aria-orientation=horizontal] > .divider {
+    border-color: var(--theme-menubar-divider-borderColor);
+}
+
+.ae-menubar[aria-orientation=horizontal] > .container-row > .wrapper, .ae-menubar[aria-orientation=horizontal] > .wrapper {
+    width: auto;
+    grid-template-columns: repeat(2, auto);
+    grid-auto-flow: column;
+    grid-gap: 2.5rem;
+    justify-content: start;
+    align-items: center;
+    display: grid;
+}
+
+.ae-menubar[aria-orientation=horizontal] .logo {
+    min-width: max-content;
+}
+
+.ae-menubar[aria-orientation=horizontal] .main-navigation [role=menuitem],
+.submenu[role=menu].container [role=menuitem] {
+    white-space: nowrap;
+}
+
+.ae-menubar.menubar.split {
+    height: auto;
+    min-height: 128px;
+    flex-flow: column nowrap;
+    row-gap: 0.5rem;
+}
+
+.ae-menubar[aria-orientation=vertical] {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 16px;
+    padding-right: 0;
+    width: 260px;
+    height: 100vh;
+    box-shadow: 2px 0 6px var(--theme-menubar-global-boxShadowColor);
+    transition: width 150ms ease-out;
+    flex-flow: column nowrap;
+    row-gap: 2rem;
+    overflow: hidden;
+    z-index: 1001;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-header {
+    padding-right: 16px;
+    color: var(--theme-menubar-global-color-text);
+    height: 48px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 0.5rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-header #switch-menu-position {
+    cursor: pointer;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-user {
+    position: relative;
+    width: 100%;
+    color: var(--theme-menubar-global-color-text);
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info {
+    position: relative;
+    padding-right: 16px;
+    font-size: 0.875em;
+    cursor: pointer;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.5rem;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info .user.action-button {
+    width: 35px;
+    min-width: 35px;
+    height: 35px;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info .user-name {
+    font-size: 1.25em;
+    font-weight: 700;
+    line-height: 1em;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info .user-profile {
+    font-size: 0.875em;
+    font-weight: 400;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info[aria-expanded]::after {
+    content: "\f078";
+    position: absolute;
+    top: 50%;
+    right: 3em;
+    transform-origin: center center;
+    transform: translateY(-50%) rotate(-90deg);
+    font: normal normal 900 1em/140% "Font Awesome 6 Free";
+    font-size: 0.5em;
+    transition: transform 250ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info[aria-expanded=true]::after {
+    transform: translateY(-50%) rotate(0deg);
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-menu > .wrapper {
+    height: 0px;
+    overflow: hidden;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-menu .section.logout .button {
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-navigation {
+    padding-right: 16px;
+    padding-bottom: 16px;
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-navigation::-webkit-scrollbar {
+    width: 4px;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-navigation::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-navigation::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.ae-menubar.toolbar {
+    width: -webkit-fill-available;
+    width: -moz-available;
+    width: fill-available;
+    margin: 0.5rem;
+    border-radius: 4px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar.toolbar.compact > .wrapper {
+    grid-template-columns: auto;
+}
+
+.ae-menubar .logo {
+    position: relative;
+    height: 100%;
+    align-items: center;
+    display: flex;
+}
+
+.ae-menubar .menu-mobile-control {
+    width: 3rem;
+    aspect-ratio: 1/1;
+    font-size: 1.5rem;
+    place-items: center;
+    display: none;
+}
+
+.ae-menubar .menu-mobile-control:hover, .ae-menubar .menu-mobile-control[aria-pressed=true] {
+    background: var(--theme-menubar-mobile-icon-backgroundColor);
+    border-radius: 4px;
+}
+
+.ae-menubar .mb_icon-custom {
+    position: relative;
+    width: 1em;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    flex-direction: column;
+    display: flex;
+}
+
+.ae-menubar .mb_icon-custom.hamburger-menu > label {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    display: flex;
+}
+
+.ae-menubar .mb_icon-custom.hamburger-menu input[type=checkbox] {
+    display: none;
+}
+
+.ae-menubar .mb_icon-custom.hamburger-menu span {
+    width: 100%;
+    height: 20%;
+    border-radius: 4px;
+    background: var(--theme-menubar-mobile-icon-color);
+    transition: all 250ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.ae-menubar .mb_icon-custom.hamburger-menu input[type=checkbox]:checked ~ span:nth-of-type(1) {
+    transform: rotate(45deg);
+    transform-origin: 0% 150%;
+}
+
+.ae-menubar .mb_icon-custom.hamburger-menu input[type=checkbox]:checked ~ span:nth-of-type(2) {
+    transform: rotate(-45deg);
+}
+
+.ae-menubar .mb_icon-custom.hamburger-menu input[type=checkbox]:checked ~ span:nth-of-type(3) {
+    transform: translateY(1em);
+}
+
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] {
+    position: absolute;
+    top: 100%;
+    left: -0.5em;
+    width: max-content;
+    padding: 0.5em;
+    background: var(--theme-color-primary);
+    border-radius: 4px;
+    box-shadow: 0 2px 6px var(--theme-menubar-global-boxShadowColor);
+    display: none;
+}
+
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] .wrapper {
+    margin-bottom: 0.5em;
+}
+
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] .wrapper:last-child {
+    margin-bottom: 0;
+}
+
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] [role=menuitem],
+.submenu[role=menu].container .submenu_row [role=menuitem] {
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+    color: var(--theme-menubar-nav-submenu-menuitem-color);
+}
+
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] [role=menuitem]:hover,
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] [role=menuitem]:focus-visible,
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] [role=menuitem][data-active=true],
+.submenu[role=menu].container [role=menuitem]:hover,
+.submenu[role=menu].container [role=menuitem]:focus-visible,
+.submenu[role=menu].container [role=menuitem][data-active=true] {
+    outline: none;
+    border-radius: 4px;
+    color: var(--theme-menubar-nav-submenu-menuitem-color\:hover);
+    background: var(--theme-menubar-nav-submenu-backgroundColor\:hover);
+}
+
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] [role=menuitem][aria-haspopup=true]::after {
+    position: absolute;
+    top: 50%;
+    right: 0.5em;
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] [role=menuitem][aria-haspopup=true] > .label {
+    margin-right: calc(0.5em + 4px);
+}
+
+.ae-menubar .main-navigation {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 0;
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar .main-navigation [role=menubar] {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 1em;
+    row-gap: 1em;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar .main-navigation [role=menubar] .wrapper {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+}
+
+.ae-menubar .main-navigation [role=menuitem],
+.submenu[role=menu].container [role=menuitem] {
+    position: relative;
+    padding: 0.5em;
+    color: var(--theme-menubar-nav-menuitem-color);
+    font-size: 0.875rem;
+    font-weight: 400;
+    cursor: pointer;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.5em;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar .main-navigation [role=menuitem]:hover,
+.ae-menubar .main-navigation [role=menuitem][data-active=true],
+.ae-menubar .main-navigation [role=menuitem]:focus-visible {
+    outline: none;
+    border-radius: 4px;
+    color: var(--theme-menubar-nav-menuitem-color\:hover);
+    background: var(--theme-menubar-nav-menuitem-backgroundColor);
+}
+
+.ae-menubar .main-navigation [role=menuitem][aria-haspopup=true]::after {
+    content: "\f078";
+    position: relative;
+    font: normal normal 900 1em/140% "Font Awesome 6 Free";
+    font-size: 0.5em;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar .main-navigation [role=menuitem] .mb_icon {
+    width: 1.15em;
+    aspect-ratio: 1/1;
+    font-size: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.ae-menubar .main-navigation [role=menuitem]:hover > .submenu {
+    display: block;
+}
+
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] .submenu[role=menu] {
+    top: -0.5em;
+    left: 100%;
+}
+
+.ae-menubar .toolbar {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    font-size: 1.5em;
+    color: var(--theme-menubar-toolbar-item-color);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 0;
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar .toolbar .group {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 8px;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar .toolbar #notification-dot {
+  position: absolute;
+  top: auto;
+  left: 100%;
+  min-width: 15px;
+  min-height: 15px;
+  padding: 0.2rem 0.4rem;
+  border-radius: 50rem;
+  color: white;
+  font-family: "Public Sans", sans-serif;
+  font-size: 0.75rem;
+  line-height: 0.875rem;
+  text-align: center;
+  transform: translate(-92%, -31%);
+}
+
+.ae-menubar .ae-menu-mobile .toolbar {
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+.ae-menubar .ae-menu-mobile .toolbar .group {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.ae-menubar .user {
+    position: relative;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    border: 2px solid var(--theme-menubar-user-menu-button-color);
+    border-radius: 50%;
+    color: var(--theme-menubar-user-menu-button-color);
+    background: transparent;
+    overflow: hidden;
+}
+
+.ae-menubar .user > .image {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.ae-menubar .user > .mb_icon {
+    position: relative;
+    top: 0;
+    font-size: 2.15em;
+    text-align: center;
+    transition: top 250ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.ae-menubar .user > .mb_icon::before {
+    vertical-align: sub;
+    display: inline-block;
+}
+
+.ae-menubar .user:hover:not(#user-avatar), .ae-menubar .user:focus-visible, .ae-menubar .user[aria-expanded=true] {
+    outline: none;
+    color: var(--theme-menubar-user-menu-button-color\:hover);
+}
+
+.ae-menubar .user:hover:not(#user-avatar) > .mb_icon, .ae-menubar .user:focus-visible > .mb_icon, .ae-menubar .user[aria-expanded=true] > .mb_icon {
+    top: -4px;
+}
+
+.ae-menubar .mb_icon {
+    display: block;
+}
+
+.ae-menubar .panel::-webkit-scrollbar,
+.ae-menubar .section::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ae-menubar .panel::-webkit-scrollbar-track,
+.ae-menubar .section::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.ae-menubar .panel::-webkit-scrollbar-thumb,
+.ae-menubar .section::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.ae-menubar .panel {
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    border: 1px solid var(--theme-menubar-panel-borderColor);
+    border-radius: 4px;
+    color: var(--theme-menubar-nav-menuitem-color);
+    background: var(--theme-menubar-user-menu-panel-backgroundColor);
+    box-shadow: 0 2px 6px var(--theme-menubar-global-boxShadowColor);
+    visibility: hidden;
+}
+
+.ae-menubar .panel::-webkit-scrollbar {
+    width: 4px;
+}
+
+.ae-menubar .panel::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.ae-menubar .panel::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.ae-menubar .panel.slide-right-top {
+    animation: slide-right-top 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+    transform-origin: 100% 0;
+}
+
+.ae-menubar .panel > .section {
+    padding: 0.5rem 0.75rem;
+}
+
+.ae-menubar .panel > .section .title {
+  font-size: 1.125rem;
+}
+
+.ae-menubar .panel > .section .button {
+    width: 100%;
+    padding: 0.5em;
+    border-radius: 4px;
+    color: var(--theme-menubar-nav-menuitem-color);
+    font-size: 0.875em;
+    font-weight: 400;
+    text-align: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0.5em;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    cursor: pointer;
+}
+
+.ae-menubar .panel > .section .button:hover {
+    color: var(--theme-menubar-nav-menuitem-color\:hover);
+    background: var(--theme-menubar-nav-menuitem-backgroundColor);
+}
+
+@keyframes slide-right-top {
+    0% {
+        transform: scale(0.5);
+        filter: opacity(0);
+    }
+    100% {
+        transform: scale(1);
+        filter: opacity(1);
+    }
+}
+
+.ae-menubar #user-panel {
+    min-width: 200px;
+}
+
+.ae-menubar #user-panel .user-info {
+    margin-left: 0;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.5em;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar #user-panel .user-info .user-name {
+    font-size: 1.25em;
+    font-weight: 700;
+}
+
+.ae-menubar #user-panel .user-info .user-profile {
+    font-size: 0.875em;
+    font-weight: 400;
+}
+
+.ae-menubar #user-panel [role=menubar] {
+    row-gap: 0;
+    flex-direction: column;
+}
+
+.ae-menubar #themes-panel,
+.ae-menubar #shortcuts-panel {
+    max-height: 360px;
+    overflow: auto;
+}
+
+.ae-menubar #themes-panel #themes-list > .theme-name a,
+.ae-menubar #shortcuts-panel #themes-list > .theme-name a {
+    padding: 0.875em;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0.5em;
+    row-gap: 0;
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: flex;
+}
+.ae-menubar #themes-panel #themes-list > .theme-name.button,
+.ae-menubar #shortcuts-panel #themes-list > .theme-name.button {
+    padding: 0;
+}
+
+.ae-menubar #themes-panel #themes-list > .theme-name a .group,
+.ae-menubar #shortcuts-panel #themes-list > .theme-name a .group {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1px;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+}
+
+.ae-menubar #themes-panel #themes-list > .theme-name a .group span,
+.ae-menubar #shortcuts-panel #themes-list > .theme-name a .group span {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 1px;
+    border: 2px solid var(--theme-menubar-panel-borderColor);
+    border-radius: 50%;
+    background: white;
+}
+
+.ae-menubar #themes-panel #themes-list > .theme-name a .group span:nth-child(1),
+.ae-menubar #shortcuts-panel #themes-list > .theme-name a .group span:nth-child(1) {
+    z-index: 4;
+}
+
+.ae-menubar #themes-panel #themes-list > .theme-name a .group span:nth-child(2),
+.ae-menubar #shortcuts-panel #themes-list > .theme-name a .group span:nth-child(2) {
+    z-index: 3;
+}
+
+.ae-menubar #themes-panel #themes-list > .theme-name a .group span:nth-child(3),
+.ae-menubar #shortcuts-panel #themes-list > .theme-name a .group span:nth-child(3) {
+    z-index: 2;
+}
+
+.ae-menubar #shortcuts-panel #shortcuts-list {
+    min-width: 250px;
+    max-width: 390px;
+}
+
+.ae-menubar #shortcuts-panel #shortcuts-list > .list-item {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    border-radius: 0.25rem;
+    color: var(--theme-menubar-nav-submenu-menuitem-color\:hover);
+    background: var(--theme-menubar-nav-submenu-backgroundColor\:hover);
+}
+
+.ae-menubar #shortcuts-panel #shortcuts-list > .list-item:last-child {
+    margin-bottom: 0;
+}
+
+.ae-menubar #shortcuts-panel #shortcuts-list > .list-item:hover {
+    background: var(--theme-menubar-nav-menuitem-backgroundColor);
+}
+
+.ae-menubar #shortcuts-panel #shortcuts-list > .list-item > a {
+    padding: 0.75rem;
+    color: inherit;
+    display: block;
+}
+
+.ae-menubar #shortcuts-panel #shortcuts-list > .list-item .shortcut-title {
+    font-size: 1rem;
+}
+
+.ae-menubar #shortcuts-panel #shortcuts-list > .list-item .shortcut-description {
+    font-size: 0.75rem;
+}
+
+.ae-menubar #shortcuts-panel #shortcuts-list > .list-item .shortcut-title,
+.ae-menubar #shortcuts-panel #shortcuts-list > .list-item .shortcut-description {
+    word-break: break-all;
+}
+
+.ae-menubar #shortcuts-panel #shortcuts-list.column {
+    flex-flow: row wrap;
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
+    display: flex;
+}
+
+.ae-menubar #shortcuts-panel #shortcuts-list.column > .list-item {
+    width: 48%;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.ae-menubar #search-panel {
+    width: 600px;
+    height: fit-content;
+    max-height: 550px;
+    overflow: auto;
+}
+
+.ae-menubar #search-panel > #search {
+    position: sticky;
+    top: 0;
+    left: 0;
+    font-size: 1.15rem;
+    background: var(--theme-menubar-user-menu-panel-backgroundColor);
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    z-index: 1;
+}
+
+.ae-menubar #search-panel > #search input[type=text] {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--theme-menubar-divider-borderColor);
+    color: var(--theme-menubar-global-color-text);
+    background: transparent;
+}
+
+.ae-menubar #search-panel > #search input[type=text]:focus-visible {
+    outline-style: none;
+}
+
+.ae-menubar #search-panel > #search > a[data-close] {
+    position: relative;
+    top: -14px;
+    color: inherit;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 0.5rem;
+    display: flex;
+}
+
+.ae-menubar #search-panel > #search > a[data-close] > .text {
+    font-size: 0.75rem;
+    opacity: 0.5;
+}
+
+.ae-menubar #search-panel > #search-result {
+    padding-left: 2rem;
+}
+
+.ae-menubar #search-panel > #search-result .result-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.ae-menubar #search-panel > #search-result .result-links {
+    color: var(--theme-menubar-global-color-text);
+}
+
+.ae-menubar #search-panel > #search-result .result-links > .result-item {
+    width: 100%;
+    border-radius: 0.25rem;
+    transition: padding 250ms ease-out;
+}
+
+.ae-menubar #search-panel > #search-result .result-links > .result-item:hover {
+    padding-left: 0.5rem;
+    background: var(--theme-menubar-nav-menuitem-backgroundColor);
+}
+
+.ae-menubar #search-panel > #search-result .result-links > .result-item:hover i:last-child {
+    visibility: visible;
+}
+
+.ae-menubar #search-panel > #search-result .result-links > .result-item a {
+    width: 100%;
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    color: inherit;
+    word-break: break-all;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.5rem;
+    display: flex;
+}
+
+.ae-menubar #notification-panel {
+  width: 22rem;
+}
+
+.ae-menubar #notification-panel a {
+  color: var(--theme-menubar-global-color-text);
+}
+
+.ae-menubar #notification-header {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 0;
+  row-gap: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+}
+
+.ae-menubar #notification-content {
+  max-height: 24.08rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.ae-menubar #notification-content .notification-item:not(:first-child) {
+  border-top: 1px solid var(--theme-box-shadow);
+}
+
+.ae-menubar #notification-content .notification-item {
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  column-gap: 0;
+  row-gap: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  cursor: pointer;
+}
+
+.ae-menubar #notification-content .notification-item:hover {
+  background-color: var(--theme-color-secondary);
+}
+
+.ae-menubar #notification-content .notification-item .content {
+  flex-grow: 1;
+}
+
+.ae-menubar #notification-content .notification-item .read-sign {
+  margin: 0;
+  padding: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--theme-color-accent);
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.ae-menubar #notification-content .notification-item .notification-close {
+  position: absolute;
+  top: 50%;
+  left: 93%;
+  opacity: 0;
+}
+
+.ae-menubar #notification-content .notification-item:hover .notification-close {
+  opacity: 1;
+}
+
+.ae-menubar #notification-content .notification-item[data-read=true] .read-sign {
+  opacity: 0;
+}
+
+.ae-menubar #notification-content .title,
+.ae-menubar #notification-content .body {
+  font-size: 0.9375rem;
+  overflow-wrap: break-word;
+  white-space: break-spaces;
+}
+
+.ae-menubar #notification-content .time {
+  opacity: 0.5;
+}
+
+.ae-menubar #notification-footer {
+  border-top: 1px solid var(--theme-box-shadow);
+  text-align: center;
+}
+
+.ae-menubar #notification-footer a {
+  width: calc(100% - 1rem);
+  margin: 0.25rem 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.ae-menubar #notification-footer a:hover {
+  background-color: var(--theme-color-secondary);
+}
+
+@media only screen and (max-width: 1188px) {
+    .ae-menubar .panel:not(#themes-panel, #user-panel) {
+        width: 100% !important;
+        max-width: 100% !important;
+        left: 0 !important;
+        border-radius: 0 !important;
+    }
+    .ae-menubar #shortcuts-list {
+        max-width: 100% !important;
+    }
+}
+
+.ae-menubar .button {
+    padding: 0.5em;
+    border-radius: 4px;
+    color: var(--theme-menubar-nav-menuitem-color);
+    font-size: 0.875em;
+    font-weight: 400;
+    text-align: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0.5em;
+    row-gap: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    cursor: pointer;
+}
+
+.ae-menubar .button a {
+    color: inherit;
+}
+
+.ae-menubar .button.text-left {
+    justify-content: flex-start;
+}
+
+.ae-menubar .button:hover, .ae-menubar .button[aria-expanded=true], .ae-menubar .button:focus-visible, .ae-menubar .button.active {
+    outline: none;
+    color: var(--theme-menubar-nav-menuitem-color\:hover);
+    background: var(--theme-menubar-nav-menuitem-backgroundColor);
+}
+
+.ae-menubar .divider-theme-color {
+    border-color: var(--theme-menubar-divider-borderColor);
+}
+
+.avatar {
+  width: 2.375rem;
+  height: 2.375rem;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: 0;
+  row-gap: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+}
+
+html[dir=RTL] .ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] .submenu[role=menu] {
+    top: -0.5em;
+    left: auto;
+    right: 100%;
+}
+
+html[dir=RTL] .ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] [role=menuitem][aria-haspopup=true]::after {
+    position: relative;
+    top: auto;
+    transform: translateY(3%) rotate(90deg);
+}
+
+html[dir=RTL] .ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] [role=menuitem][aria-haspopup=true] > .label {
+    margin-right: 0;
+}
+
+html[dir=RTL] .ae-menubar .ae-menubar-accordion > [role=menubar] [role=menuitem][aria-haspopup=true]::after {
+    position: relative;
+    top: auto;
+    transform: translateY(0%) rotate(90deg);
+}
+
+html[dir=RTL] .ae-menubar .ae-menubar-accordion > [role=menubar] [role=menuitem][aria-expanded=true]::after {
+    transform: translateY(0%) rotate(0deg);
+}
+
+html[dir=RTL] .ae-menubar[aria-orientation=vertical],
+html[dir=RTL] .ae-menubar .ae-menu-mobile {
+    right: 0;
+    left: auto;
+}
+
+html[dir=RTL] .ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info[aria-expanded=false]::after,
+html[dir=RTL] .ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info[aria-expanded=true]::after {
+    position: relative;
+}
+
+html[dir=RTL] .ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info[aria-expanded=false]::after {
+    transform: translateY(-50%) rotate(90deg);
+}
+
+html[dir=RTL] .ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info[aria-expanded=true]::after {
+    transform: translateY(-50%) rotate(0deg);
+}
+
+/**
+ * * Expande o CSS Remedy (reset CSS) da Jen Simmons.
+ * * Versão: 1.0.0
+ * * Atualizado em: 23/03/2023
+ * * Autor: Black thiago@netmake.com.br
+ * * URL: https://github.com/jensimmons/cssremedy
+ * * Ferramentas de apoio:
+ * *     - Contrast checker: https://contrastchecker.com/
+ * *     - Shade generator: https://maketintsandshades.com/
+ * */
+/* @docs
+label: Core Remedies
+version: 0.1.0-beta.2
+
+note: |
+  These remedies are recommended
+  as a starter for any project.
+
+category: file
+*/
+/* @docs
+label: Box Sizing
+
+note: |
+  Use border-box by default, globally.
+
+category: global
+*/
+*, ::before, ::after { box-sizing: border-box; }
+/* @docs
+label: Line Sizing
+
+note: |
+  Consistent line-spacing,
+  even when inline elements have different line-heights.
+
+links:
+  - https://drafts.csswg.org/css-inline-3/#line-sizing-property
+
+category: global
+*/
+html { line-sizing: normal; }
+/* @docs
+label: Body Margins
+
+note: |
+  Remove the tiny space around the edge of the page.
+
+category: global
+*/
+body { margin: 0; }
+/* @docs
+label: Heading Sizes
+
+note: |
+  Switch to rem units for headings
+
+category: typography
+*/
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.17rem; }
+h4 { font-size: 1.00rem; }
+h5 { font-size: 0.83rem; }
+h6 { font-size: 0.67rem; }
+/* @docs
+label: H1 Margins
+
+note: |
+  Keep h1 margins consistent, even when nested.
+
+category: typography
+*/
+h1 { margin: 0.67em 0; }
+/* @docs
+label: Pre Wrapping
+
+note: |
+  Overflow by default is bad...
+
+category: typography
+*/
+pre { white-space: pre-wrap; }
+/* @docs
+label: Horizontal Rule
+
+note: |
+  1. Solid, thin horizontal rules
+  2. Remove Firefox `color: gray`
+  3. Remove default `1px` height, and common `overflow: hidden`
+
+category: typography
+*/
+hr {
+    border-style: solid;
+    border-width: 1px 0 0;
+    color: inherit;
+    height: 0;
+    overflow: visible;
+}
+/* @docs
+label: Responsive Embeds
+
+note: |
+  1. Block display is usually what we want
+  2. Remove strange space-below when inline
+  3. Responsive by default
+
+category: embedded elements
+*/
+img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+    max-width: 100%;
+}
+/* @docs
+label: Aspect Ratios
+
+note: |
+  Maintain intrinsic aspect ratios when `max-width` is applied.
+  `iframe`, `embed`, and `object` are also embedded,
+  but have no intrinsic ratio,
+  so their `height` needs to be set explicitly.
+
+category: embedded elements
+*/
+img, svg, video, canvas {
+    height: auto;
+}
+/* @docs
+label: Audio Width
+
+note: |
+  There is no good reason elements default to 300px,
+  and audio files are unlikely to come with a width attribute.
+
+category: embedded elements
+*/
+audio { width: 100%; }
+/* @docs
+label: Image Borders
+
+note: |
+  Remove the border on images inside links in IE 10 and earlier.
+
+category: legacy browsers
+*/
+img { border-style: none; }
+/* @docs
+label: SVG Overflow
+
+note: |
+  Hide the overflow in IE 10 and earlier.
+
+category: legacy browsers
+*/
+svg { overflow: hidden; }
+/* @docs
+label: HTML5 Elements
+
+note: |
+  Default block display on HTML5 elements
+
+category: legacy browsers
+*/
+article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
+    display: block;
+}
+/* @docs
+label: Checkbox & Radio Inputs
+
+note: |
+  1. Add the correct box sizing in IE 10
+  2. Remove the padding in IE 10
+
+category: legacy browsers
+*/
+[type='checkbox'],
+[type='radio'] {
+    box-sizing: border-box;
+    padding: 0;
+}
+/* @docs
+label: Reminders
+version: 0.1.0-beta.2
+
+note: |
+  All the remedies in this file are commented out by default,
+  because they could cause harm as general defaults.
+  These should be used as reminders
+  to handle common styling issues
+  in a way that will work for your project and users.
+  Read, explore, uncomment, and edit as needed.
+
+category: file
+*/
+/* @docs
+label: List Style
+
+note: |
+  List styling is not usually desired in navigation,
+  but this also removes list-semantics for screen-readers
+
+links:
+  - https://github.com/mozdevs/cssremedy/issues/15
+
+category: navigation
+*/
+nav ul {
+    list-style: none;
+}
+/* @docs
+label: List Voiceover
+
+note: |
+  1. Add zero-width-space to prevent VoiceOver disable
+  2. Absolute position ensures no extra space
+
+links:
+  - https://unfetteredthoughts.net/2017/09/26/voiceover-and-list-style-type-none/
+
+category: navigation
+*/
+nav li:before {
+    content: "\200B";
+    position: absolute;
+}
+/* @docs
+label: Reduced Motion
+
+note: |
+  1. Immediately jump any animation to the end point
+  2. Remove transitions & fixed background attachment
+
+links:
+  - https://github.com/mozdevs/cssremedy/issues/11
+
+category: accessibility
+*/
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-delay: -1s !important;
+        animation-duration: 1s !important;
+        animation-iteration-count: 1 !important;
+        background-attachment: initial !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+    }
+}
+/* @docs
+label: Line Heights
+
+note: |
+  The default `normal` line-height is tightly spaced,
+  but takes font-metrics into account,
+  which is important for many fonts.
+  Looser spacing may improve readability in latin type,
+  but may cause problems in some scripts --
+  from cusrive/fantasy fonts to
+  [Javanese](https://jsbin.com/bezasax/1/edit?html,css,output),
+  [Persian](https://jsbin.com/qurecom/edit?html,css,output),
+  and CJK languages.
+
+links:
+  - https://github.com/mozdevs/cssremedy/issues/7
+  - https://jsbin.com/bezasax/1/edit?html,css,output
+  - https://jsbin.com/qurecom/edit?html,css,output
+
+todo: |
+  - Use `:lang(language-code)` selectors?
+  - Add typography remedies for other scripts & languages...
+
+category: typography
+*/
+html { line-height: 1.5; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.25; }
+caption, figcaption, label, legend { line-height: 1.375; }
+/* @docs
+label: Quotes
+version: 0.1.0-beta.2
+
+note: |
+  This is what user agents are supposed to be doing for quotes,
+  according to https://html.spec.whatwg.org/multipage/rendering.html#quotes
+
+links:
+  - https://html.spec.whatwg.org/multipage/rendering.html#quotes
+
+todo: |
+  I believe
+
+  ```css
+  :root:lang(af),       :not(:lang(af)) > :lang(af)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+  :root:lang(ak),       :not(:lang(ak)) > :lang(ak)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+  :root:lang(asa),      :not(:lang(asa)) > :lang(asa)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+  ```
+
+  can be replaced by
+
+  ```css
+  :root:lang(af, ak, asa), [lang]:lang(af, ak, asa)       			{ quotes: '\201c' '\201d' '\2018' '\2019' }
+  ```
+
+category: file
+*/
+:root                                                         { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(af),       :not(:lang(af)) > :lang(af)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ak),       :not(:lang(ak)) > :lang(ak)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(asa),      :not(:lang(asa)) > :lang(asa)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(az),       :not(:lang(az)) > :lang(az)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(bem),      :not(:lang(bem)) > :lang(bem)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(bez),      :not(:lang(bez)) > :lang(bez)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(bn),       :not(:lang(bn)) > :lang(bn)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(brx),      :not(:lang(brx)) > :lang(brx)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(cgg),      :not(:lang(cgg)) > :lang(cgg)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(chr),      :not(:lang(chr)) > :lang(chr)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(cy),       :not(:lang(cy)) > :lang(cy)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(da),       :not(:lang(da)) > :lang(da)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(dav),      :not(:lang(dav)) > :lang(dav)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(dje),      :not(:lang(dje)) > :lang(dje)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(dz),       :not(:lang(dz)) > :lang(dz)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ebu),      :not(:lang(ebu)) > :lang(ebu)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ee),       :not(:lang(ee)) > :lang(ee)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(en),       :not(:lang(en)) > :lang(en)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(fil),      :not(:lang(fil)) > :lang(fil)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(fo),       :not(:lang(fo)) > :lang(fo)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ga),       :not(:lang(ga)) > :lang(ga)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(gd),       :not(:lang(gd)) > :lang(gd)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(gl),       :not(:lang(gl)) > :lang(gl)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(gu),       :not(:lang(gu)) > :lang(gu)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(guz),      :not(:lang(guz)) > :lang(guz)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ha),       :not(:lang(ha)) > :lang(ha)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(hi),       :not(:lang(hi)) > :lang(hi)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(id),       :not(:lang(id)) > :lang(id)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ig),       :not(:lang(ig)) > :lang(ig)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(jmc),      :not(:lang(jmc)) > :lang(jmc)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(kam),      :not(:lang(kam)) > :lang(kam)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(kde),      :not(:lang(kde)) > :lang(kde)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(kea),      :not(:lang(kea)) > :lang(kea)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(khq),      :not(:lang(khq)) > :lang(khq)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ki),       :not(:lang(ki)) > :lang(ki)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(kln),      :not(:lang(kln)) > :lang(kln)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(km),       :not(:lang(km)) > :lang(km)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(kn),       :not(:lang(kn)) > :lang(kn)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ko),       :not(:lang(ko)) > :lang(ko)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ksb),      :not(:lang(ksb)) > :lang(ksb)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(lg),       :not(:lang(lg)) > :lang(lg)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ln),       :not(:lang(ln)) > :lang(ln)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(lo),       :not(:lang(lo)) > :lang(lo)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(lrc),      :not(:lang(lrc)) > :lang(lrc)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(lu),       :not(:lang(lu)) > :lang(lu)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(luo),      :not(:lang(luo)) > :lang(luo)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(lv),       :not(:lang(lv)) > :lang(lv)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(mas),      :not(:lang(mas)) > :lang(mas)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(mer),      :not(:lang(mer)) > :lang(mer)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(mfe),      :not(:lang(mfe)) > :lang(mfe)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(mgo),      :not(:lang(mgo)) > :lang(mgo)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ml),       :not(:lang(ml)) > :lang(ml)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(mn),       :not(:lang(mn)) > :lang(mn)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(mr),       :not(:lang(mr)) > :lang(mr)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ms),       :not(:lang(ms)) > :lang(ms)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(mt),       :not(:lang(mt)) > :lang(mt)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(my),       :not(:lang(my)) > :lang(my)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(naq),      :not(:lang(naq)) > :lang(naq)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(nd),       :not(:lang(nd)) > :lang(nd)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ne),       :not(:lang(ne)) > :lang(ne)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(nus),      :not(:lang(nus)) > :lang(nus)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(nyn),      :not(:lang(nyn)) > :lang(nyn)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(pa),       :not(:lang(pa)) > :lang(pa)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(pt),       :not(:lang(pt)) > :lang(pt)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(rof),      :not(:lang(rof)) > :lang(rof)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(rwk),      :not(:lang(rwk)) > :lang(rwk)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(saq),      :not(:lang(saq)) > :lang(saq)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(sbp),      :not(:lang(sbp)) > :lang(sbp)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(seh),      :not(:lang(seh)) > :lang(seh)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ses),      :not(:lang(ses)) > :lang(ses)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(si),       :not(:lang(si)) > :lang(si)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(so),       :not(:lang(so)) > :lang(so)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(sw),       :not(:lang(sw)) > :lang(sw)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(ta),       :not(:lang(ta)) > :lang(ta)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(te),       :not(:lang(te)) > :lang(te)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(teo),      :not(:lang(teo)) > :lang(teo)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(th),       :not(:lang(th)) > :lang(th)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(to),       :not(:lang(to)) > :lang(to)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(tr),       :not(:lang(tr)) > :lang(tr)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(twq),      :not(:lang(twq)) > :lang(twq)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(tzm),      :not(:lang(tzm)) > :lang(tzm)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(uz-Cyrl),  :not(:lang(uz-Cyrl)) > :lang(uz-Cyrl)   { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(vai),      :not(:lang(vai)) > :lang(vai)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(vai-Latn), :not(:lang(vai-Latn)) > :lang(vai-Latn) { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(vi),       :not(:lang(vi)) > :lang(vi)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(vun),      :not(:lang(vun)) > :lang(vun)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(xog),      :not(:lang(xog)) > :lang(xog)           { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(yo),       :not(:lang(yo)) > :lang(yo)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(yue-Hans), :not(:lang(yue-Hans)) > :lang(yue-Hans) { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(zh),       :not(:lang(zh)) > :lang(zh)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(zu),       :not(:lang(zu)) > :lang(zu)             { quotes: '\201c' '\201d' '\2018' '\2019' }
+/* “ ” ‘ ’ */
+:root:lang(uz),       :not(:lang(uz)) > :lang(uz)             { quotes: '\201c' '\201d' '\2019' '\2018' }
+/* “ ” ’ ‘ */
+:root:lang(eu),       :not(:lang(eu)) > :lang(eu)             { quotes: '\201c' '\201d' '\201c' '\201d' }
+/* “ ” “ ” */
+:root:lang(tk),       :not(:lang(tk)) > :lang(tk)             { quotes: '\201c' '\201d' '\201c' '\201d' }
+/* “ ” “ ” */
+:root:lang(ar),       :not(:lang(ar)) > :lang(ar)             { quotes: '\201d' '\201c' '\2019' '\2018' }
+/* ” “ ’ ‘ */
+:root:lang(ur),       :not(:lang(ur)) > :lang(ur)             { quotes: '\201d' '\201c' '\2019' '\2018' }
+/* ” “ ’ ‘ */
+:root:lang(fi),       :not(:lang(fi)) > :lang(fi)             { quotes: '\201d' '\201d' '\2019' '\2019' }
+/* ” ” ’ ’ */
+:root:lang(he),       :not(:lang(he)) > :lang(he)             { quotes: '\201d' '\201d' '\2019' '\2019' }
+/* ” ” ’ ’ */
+:root:lang(lag),      :not(:lang(lag)) > :lang(lag)           { quotes: '\201d' '\201d' '\2019' '\2019' }
+/* ” ” ’ ’ */
+:root:lang(rn),       :not(:lang(rn)) > :lang(rn)             { quotes: '\201d' '\201d' '\2019' '\2019' }
+/* ” ” ’ ’ */
+:root:lang(sn),       :not(:lang(sn)) > :lang(sn)             { quotes: '\201d' '\201d' '\2019' '\2019' }
+/* ” ” ’ ’ */
+:root:lang(sv),       :not(:lang(sv)) > :lang(sv)             { quotes: '\201d' '\201d' '\2019' '\2019' }
+/* ” ” ’ ’ */
+:root:lang(sr),       :not(:lang(sr)) > :lang(sr)             { quotes: '\201e' '\201c' '\2018' '\2018' }
+/* „ “ ‘ ‘ */
+:root:lang(sr-Latn),  :not(:lang(sr-Latn)) > :lang(sr-Latn)   { quotes: '\201e' '\201c' '\2018' '\2018' }
+/* „ “ ‘ ‘ */
+:root:lang(bg),       :not(:lang(bg)) > :lang(bg)             { quotes: '\201e' '\201c' '\201e' '\201c' }
+/* „ “ „ “ */
+:root:lang(lt),       :not(:lang(lt)) > :lang(lt)             { quotes: '\201e' '\201c' '\201e' '\201c' }
+/* „ “ „ “ */
+:root:lang(bs-Cyrl),  :not(:lang(bs-Cyrl)) > :lang(bs-Cyrl)   { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(cs),       :not(:lang(cs)) > :lang(cs)             { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(cs),       :not(:lang(cs)) > :lang(cs)             { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(de),       :not(:lang(de)) > :lang(de)             { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(dsb),      :not(:lang(dsb)) > :lang(dsb)           { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(et),       :not(:lang(et)) > :lang(et)             { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(hr),       :not(:lang(hr)) > :lang(hr)             { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(hsb),      :not(:lang(hsb)) > :lang(hsb)           { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(is),       :not(:lang(is)) > :lang(is)             { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(lb),       :not(:lang(lb)) > :lang(lb)             { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(luy),      :not(:lang(luy)) > :lang(luy)           { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(mk),       :not(:lang(mk)) > :lang(mk)             { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(sk),       :not(:lang(sk)) > :lang(sk)             { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(sl),       :not(:lang(sl)) > :lang(sl)             { quotes: '\201e' '\201c' '\201a' '\2018' }
+/* „ “ ‚ ‘ */
+:root:lang(ka),       :not(:lang(ka)) > :lang(ka)             { quotes: '\201e' '\201c' '\00ab' '\00bb' }
+/* „ “ « » */
+:root:lang(bs),       :not(:lang(bs)) > :lang(bs)             { quotes: '\201e' '\201d' '\2018' '\2019' }
+/* „ ” ‘ ’ */
+:root:lang(agq),      :not(:lang(agq)) > :lang(agq)           { quotes: '\201e' '\201d' '\201a' '\2019' }
+/* „ ” ‚ ’ */
+:root:lang(ff),       :not(:lang(ff)) > :lang(ff)             { quotes: '\201e' '\201d' '\201a' '\2019' }
+/* „ ” ‚ ’ */
+:root:lang(nmg),      :not(:lang(nmg)) > :lang(nmg)           { quotes: '\201e' '\201d' '\00ab' '\00bb' }
+/* „ ” « » */
+:root:lang(ro),       :not(:lang(ro)) > :lang(ro)             { quotes: '\201e' '\201d' '\00ab' '\00bb' }
+/* „ ” « » */
+:root:lang(pl),       :not(:lang(pl)) > :lang(pl)             { quotes: '\201e' '\201d' '\00ab' '\00bb' }
+/* „ ” « » */
+:root:lang(hu),       :not(:lang(hu)) > :lang(hu)             { quotes: '\201e' '\201d' '\00bb' '\00ab' }
+/* „ ” » « */
+:root:lang(nl),       :not(:lang(nl)) > :lang(nl)             { quotes: '\2018' '\2019' '\201c' '\201d' }
+/* ‘ ’ “ ” */
+:root:lang(ti-ER),    :not(:lang(ti-ER)) > :lang(ti-ER)       { quotes: '\2018' '\2019' '\201c' '\201d' }
+/* ‘ ’ “ ” */
+:root:lang(dua),      :not(:lang(dua)) > :lang(dua)           { quotes: '\00ab' '\00bb' '\2018' '\2019' }
+/* « » ‘ ’ */
+:root:lang(ksf),      :not(:lang(ksf)) > :lang(ksf)           { quotes: '\00ab' '\00bb' '\2018' '\2019' }
+/* « » ‘ ’ */
+:root:lang(rw),       :not(:lang(rw)) > :lang(rw)             { quotes: '\00ab' '\00bb' '\2018' '\2019' }
+/* « » ‘ ’ */
+:root:lang(nn),       :not(:lang(nn)) > :lang(nn)             { quotes: '\00ab' '\00bb' '\2018' '\2019' }
+/* « » ‘ ’ */
+:root:lang(nb),       :not(:lang(nb)) > :lang(nb)             { quotes: '\00ab' '\00bb' '\2018' '\2019' }
+/* « » ‘ ’ */
+:root:lang(ast),      :not(:lang(ast)) > :lang(ast)           { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(bm),       :not(:lang(bm)) > :lang(bm)             { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(br),       :not(:lang(br)) > :lang(br)             { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(ca),       :not(:lang(ca)) > :lang(ca)             { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(dyo),      :not(:lang(dyo)) > :lang(dyo)           { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(el),       :not(:lang(el)) > :lang(el)             { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(es),       :not(:lang(es)) > :lang(es)             { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(ewo),      :not(:lang(ewo)) > :lang(ewo)           { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(mg),       :not(:lang(mg)) > :lang(mg)             { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(mua),      :not(:lang(mua)) > :lang(mua)           { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(sg),       :not(:lang(sg)) > :lang(sg)             { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(it),       :not(:lang(it)) > :lang(it)             { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(kab),      :not(:lang(kab)) > :lang(kab)           { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(kk),       :not(:lang(kk)) > :lang(kk)             { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(pt-PT),    :not(:lang(pt-PT)) > :lang(pt-PT)       { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(nnh),      :not(:lang(nnh)) > :lang(nnh)           { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(sq),       :not(:lang(sq)) > :lang(sq)             { quotes: '\00ab' '\00bb' '\201c' '\201d' }
+/* « » “ ” */
+:root:lang(bas),      :not(:lang(bas)) > :lang(bas)           { quotes: '\00ab' '\00bb' '\201e' '\201c' }
+/* « » „ “ */
+:root:lang(be),       :not(:lang(be)) > :lang(be)             { quotes: '\00ab' '\00bb' '\201e' '\201c' }
+/* « » „ “ */
+:root:lang(ky),       :not(:lang(ky)) > :lang(ky)             { quotes: '\00ab' '\00bb' '\201e' '\201c' }
+/* « » „ “ */
+:root:lang(sah),      :not(:lang(sah)) > :lang(sah)           { quotes: '\00ab' '\00bb' '\201e' '\201c' }
+/* « » „ “ */
+:root:lang(ru),       :not(:lang(ru)) > :lang(ru)             { quotes: '\00ab' '\00bb' '\201e' '\201c' }
+/* « » „ “ */
+:root:lang(uk),       :not(:lang(uk)) > :lang(uk)             { quotes: '\00ab' '\00bb' '\201e' '\201c' }
+/* « » „ “ */
+:root:lang(zgh),      :not(:lang(zgh)) > :lang(zgh)           { quotes: '\00ab' '\00bb' '\201e' '\201d' }
+/* « » „ ” */
+:root:lang(shi),      :not(:lang(shi)) > :lang(shi)           { quotes: '\00ab' '\00bb' '\201e' '\201d' }
+/* « » „ ” */
+:root:lang(shi-Latn), :not(:lang(shi-Latn)) > :lang(shi-Latn) { quotes: '\00ab' '\00bb' '\201e' '\201d' }
+/* « » „ ” */
+:root:lang(am),       :not(:lang(am)) > :lang(am)             { quotes: '\00ab' '\00bb' '\2039' '\203a' }
+/* « » ‹ › */
+:root:lang(az-Cyrl),  :not(:lang(az-Cyrl)) > :lang(az-Cyrl)   { quotes: '\00ab' '\00bb' '\2039' '\203a' }
+/* « » ‹ › */
+:root:lang(fa),       :not(:lang(fa)) > :lang(fa)             { quotes: '\00ab' '\00bb' '\2039' '\203a' }
+/* « » ‹ › */
+:root:lang(fr-CH),    :not(:lang(fr-CH)) > :lang(fr-CH)       { quotes: '\00ab' '\00bb' '\2039' '\203a' }
+/* « » ‹ › */
+:root:lang(gsw),      :not(:lang(gsw)) > :lang(gsw)           { quotes: '\00ab' '\00bb' '\2039' '\203a' }
+/* « » ‹ › */
+:root:lang(jgo),      :not(:lang(jgo)) > :lang(jgo)           { quotes: '\00ab' '\00bb' '\2039' '\203a' }
+/* « » ‹ › */
+:root:lang(kkj),      :not(:lang(kkj)) > :lang(kkj)           { quotes: '\00ab' '\00bb' '\2039' '\203a' }
+/* « » ‹ › */
+:root:lang(mzn),      :not(:lang(mzn)) > :lang(mzn)           { quotes: '\00ab' '\00bb' '\2039' '\203a' }
+/* « » ‹ › */
+:root:lang(fr),       :not(:lang(fr)) > :lang(fr)             { quotes: '\00ab' '\00bb' '\00ab' '\00bb' }
+/* « » « » */
+:root:lang(hy),       :not(:lang(hy)) > :lang(hy)             { quotes: '\00ab' '\00bb' '\00ab' '\00bb' }
+/* « » « » */
+:root:lang(yav),      :not(:lang(yav)) > :lang(yav)           { quotes: '\00ab' '\00bb' '\00ab' '\00bb' }
+/* « » « » */
+:root:lang(ja),       :not(:lang(ja)) > :lang(ja)             { quotes: '\300c' '\300d' '\300e' '\300f' }
+/* 「 」 『 』 */
+:root:lang(yue),      :not(:lang(yue)) > :lang(yue)           { quotes: '\300c' '\300d' '\300e' '\300f' }
+/* 「 」 『 』 */
+:root:lang(zh-Hant),  :not(:lang(zh-Hant)) > :lang(zh-Hant)   { quotes: '\300c' '\300d' '\300e' '\300f' }
+/* 「 」 『 』 */
+/**
+ * * Visual
+ * * - Corrige o text-decoration padrão no Chrome, Edge e Safari
+ * */
+abbr:where([title]) {
+    text-decoration: underline dotted;
+}
+/**
+ * * Visual
+ * * - Limpa estilização de links para otimizara customização
+ * */
+a {
+    text-decoration: none;
+}
+/**
+ * * Visual
+ * * - Corrige o font-weight no Edge e Safari
+ * */
+b,
+strong {
+    /*font-weight: bolder;*/
+}
+/**
+ * * Visual
+ * * - Aplica fonte monoespaçada do tema e corrige o font-size
+ * */
+code,
+kbd,
+samp,
+pre {
+    font-family: "Red Hat Mono", monospace;
+    font-size: 1em;
+}
+/**
+ * * Visual
+ * * - Corrige font-size em todos os navegadores
+ * */
+small {
+    font-size: 80%;
+}
+/**
+ * * Visual
+ * * - Previne que elementos com as propriedades 'sup' e 'sub' afetem o line-height
+ * */
+sub,
+sup {
+    position: relative;
+    font-size: 75%;
+    line-height: 0;
+    vertical-align: baseline;
+}
+sub {
+    bottom: -0.25em;
+}
+sup {
+    top: -0.5em;
+}
+/**
+ * * Visual
+ * * - Corrige problema de identação de conteúdo de texto em tabelas no Chrome e Safari
+ * * - Corrige herança de cor da borda
+ * * - Padroniza bordas colapsadas
+ * */
+table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+}
+/**
+ * * Usabilidade / Visual
+ * * - Padroniza estilos tipográficos
+ * * - Remove a margem no Firefox e Safari
+ * * - Remove o preenchimento
+ * */
+button,
+input,
+optgroup,
+select,
+textarea {
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+}
+/**
+ * * Usabilidade
+ * * - Garante que elementos desabilitados não possuam indicação de interatividade
+ * */
+:disabled {
+    cursor: default;
+}
+/**
+ * * Visual
+ * * - Corrige a herança da propriedade text-transform no Firefox e Edge
+ * */
+button,
+select {
+    text-transform: none;
+}
+/**
+ * * Usabilidade / Visual
+ * * - Remove estilos padrões de botões
+ * * - Corrige a impossibilidade de estilizar elementos clicáveis no IOS e Safari
+ * * - Padroniza cursor pointer
+ * */
+button,
+[type=button],
+[type=reset],
+[type=submit],
+[role=button] {
+    border: none;
+    -webkit-appearance: button;
+    background: transparent;
+    background-image: none;
+    cursor: pointer;
+}
+/**
+ * * Acessibilidade
+ * * WCAG 2.2: critérios 2.4.11, 2.4.7 atendidos
+ * * - Padroniza o estilo de elementos no estado "focus"
+ * */
+:focus-visible {
+    outline: 1px solid;
+    border-radius: 4px;
+}
+/**
+ * * Visual
+ * * - Remove estilo padrão para elementos inválidos (:invalid) no Firefox (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+ * */
+:-moz-ui-invalid {
+    box-shadow: none;
+}
+/**
+ * * Visual
+ * * - Corrige alinhamento vertical no Chrome e Firefox
+ * */
+progress {
+    vertical-align: baseline;
+}
+/**
+ * * Usabilidade / Visual
+ * * - Corrige o cursor dos botões de incremento e decremento no Safari
+ * */
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+    height: auto;
+}
+/**
+ * * Usabilidade / Visual
+ * * - Corrige aparência estranha no Chrome e Safari
+ * * - Corrige a outline no Safari
+ * */
+[type=search] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+}
+/**
+ * * Visual
+ * * - Remove preenchimento interno no Chrome, Safari e macOS
+ * */
+::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+/**
+ * * Usabilidade / Visual *
+ * * - Corrige a impossibilidade de estilizar elementos clicáveis no IOS e Safari
+ * * - Padroniza fonte herdada para o Safari
+ * */
+::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit;
+}
+/**
+ * * Visual
+ * * Corrige o display no Chrome e no Safari
+ * */
+summary {
+    display: list-item;
+}
+/**
+ * * Visual
+ * * Remove o espaçamento padrão dos elementos
+ * */
+[data-aetheme] blockquote,
+[data-aetheme] dl,
+[data-aetheme] dd,
+[data-aetheme] h1,
+[data-aetheme] h2,
+[data-aetheme] h3,
+[data-aetheme] h4,
+[data-aetheme] h5,
+[data-aetheme] h6,
+[data-aetheme] hr,
+[data-aetheme] figure,
+[data-aetheme] p,
+[data-aetheme] pre {
+    margin: 0;
+}
+fieldset {
+    margin: 0;
+    padding: 0;
+}
+legend {
+    padding: 0;
+}
+[data-aetheme] ol,
+[data-aetheme] ul,
+[data-aetheme] menu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+/**
+ * * Usabilidade / Visual
+ * * - Impede redimensionar o elemento textarea horizontalmente
+ * */
+textarea {
+    resize: vertical;
+}
+/**
+ * * Acessibilidade / Visual
+ * * WCAG 2.0: Critério 1.4.3 [AA] atendido parcialmente (contraste mínimo para fontes entre 18pt e 14pt)
+ * * - Reconfigura a opacidade padrão do placeholder no Firefox
+ * * - Configura a cor padrão de acordo com o tema
+ * */
+::placeholder {
+    opacity: 1;
+    color: #6b7280;
+}
+/**
+ * * Visual
+ * * - Altera o padrão do tipo de display dos elementos HTML do tipo "substituído" para "block"
+ * * - Ajusta o alinhamento vertical
+ * */
+[data-aetheme] img,
+[data-aetheme] svg,
+[data-aetheme] video,
+[data-aetheme] canvas,
+[data-aetheme] audio,
+[data-aetheme] iframe,
+[data-aetheme] embed,
+[data-aetheme] object {
+    vertical-align: middle;
+    display: block;
+}
+/**
+ * * Visual
+ * * - Restringe imagens e videos para a largura total do seu elemento pai, e preserva seu aspect-ratio
+ * */
+[data-aetheme] img,
+[data-aetheme] video {
+    width: 100%;
+    height: auto;
+}
+/**
+ * * Usabilidade / Visual
+ * * - Garante que elementos com o atributo "hidden" não sejam renderizados
+ * */
+[hidden] {
+    display: none;
+}
+.ae .m-0 {
+    margin: 0px;
+}
+.ae .mx-0 {
+    margin-inline: 0px;
+}
+.ae .my-0 {
+    margin-block: 0px;
+}
+.ae .m-top-0 {
+    margin-top: 0px;
+}
+.ae .m-right-0 {
+    margin-right: 0px;
+}
+.ae .m-bottom-0 {
+    margin-bottom: 0px;
+}
+.ae .m-left-0 {
+    margin-left: 0px;
+}
+.ae .m-px {
+    margin: 1px;
+}
+.ae .mx-px {
+    margin-inline: 1px;
+}
+.ae .my-px {
+    margin-block: 1px;
+}
+.ae .m-top-px {
+    margin-top: 1px;
+}
+.ae .m-right-px {
+    margin-right: 1px;
+}
+.ae .m-bottom-px {
+    margin-bottom: 1px;
+}
+.ae .m-left-px {
+    margin-left: 1px;
+}
+.ae .m-0\.5 {
+    margin: 0.125rem;
+}
+.ae .mx-0\.5 {
+    margin-inline: 0.125rem;
+}
+.ae .my-0\.5 {
+    margin-block: 0.125rem;
+}
+.ae .m-top-0\.5 {
+    margin-top: 0.125rem;
+}
+.ae .m-right-0\.5 {
+    margin-right: 0.125rem;
+}
+.ae .m-bottom-0\.5 {
+    margin-bottom: 0.125rem;
+}
+.ae .m-left-0\.5 {
+    margin-left: 0.125rem;
+}
+.ae .m-1 {
+    margin: 0.25rem;
+}
+.ae .mx-1 {
+    margin-inline: 0.25rem;
+}
+.ae .my-1 {
+    margin-block: 0.25rem;
+}
+.ae .m-top-1 {
+    margin-top: 0.25rem;
+}
+.ae .m-right-1 {
+    margin-right: 0.25rem;
+}
+.ae .m-bottom-1 {
+    margin-bottom: 0.25rem;
+}
+.ae .m-left-1 {
+    margin-left: 0.25rem;
+}
+.ae .m-1\.5 {
+    margin: 0.375rem;
+}
+.ae .mx-1\.5 {
+    margin-inline: 0.375rem;
+}
+.ae .my-1\.5 {
+    margin-block: 0.375rem;
+}
+.ae .m-top-1\.5 {
+    margin-top: 0.375rem;
+}
+.ae .m-right-1\.5 {
+    margin-right: 0.375rem;
+}
+.ae .m-bottom-1\.5 {
+    margin-bottom: 0.375rem;
+}
+.ae .m-left-1\.5 {
+    margin-left: 0.375rem;
+}
+.ae .m-2 {
+    margin: 0.5rem;
+}
+.ae .mx-2 {
+    margin-inline: 0.5rem;
+}
+.ae .my-2 {
+    margin-block: 0.5rem;
+}
+.ae .m-top-2 {
+    margin-top: 0.5rem;
+}
+.ae .m-right-2 {
+    margin-right: 0.5rem;
+}
+.ae .m-bottom-2 {
+    margin-bottom: 0.5rem;
+}
+.ae .m-left-2 {
+    margin-left: 0.5rem;
+}
+.ae .m-2\.5 {
+    margin: 0.625rem;
+}
+.ae .mx-2\.5 {
+    margin-inline: 0.625rem;
+}
+.ae .my-2\.5 {
+    margin-block: 0.625rem;
+}
+.ae .m-top-2\.5 {
+    margin-top: 0.625rem;
+}
+.ae .m-right-2\.5 {
+    margin-right: 0.625rem;
+}
+.ae .m-bottom-2\.5 {
+    margin-bottom: 0.625rem;
+}
+.ae .m-left-2\.5 {
+    margin-left: 0.625rem;
+}
+.ae .m-3 {
+    margin: 0.75rem;
+}
+.ae .mx-3 {
+    margin-inline: 0.75rem;
+}
+.ae .my-3 {
+    margin-block: 0.75rem;
+}
+.ae .m-top-3 {
+    margin-top: 0.75rem;
+}
+.ae .m-right-3 {
+    margin-right: 0.75rem;
+}
+.ae .m-bottom-3 {
+    margin-bottom: 0.75rem;
+}
+.ae .m-left-3 {
+    margin-left: 0.75rem;
+}
+.ae .m-3\.5 {
+    margin: 0.875rem;
+}
+.ae .mx-3\.5 {
+    margin-inline: 0.875rem;
+}
+.ae .my-3\.5 {
+    margin-block: 0.875rem;
+}
+.ae .m-top-3\.5 {
+    margin-top: 0.875rem;
+}
+.ae .m-right-3\.5 {
+    margin-right: 0.875rem;
+}
+.ae .m-bottom-3\.5 {
+    margin-bottom: 0.875rem;
+}
+.ae .m-left-3\.5 {
+    margin-left: 0.875rem;
+}
+.ae .m-4 {
+    margin: 1rem;
+}
+.ae .mx-4 {
+    margin-inline: 1rem;
+}
+.ae .my-4 {
+    margin-block: 1rem;
+}
+.ae .m-top-4 {
+    margin-top: 1rem;
+}
+.ae .m-right-4 {
+    margin-right: 1rem;
+}
+.ae .m-bottom-4 {
+    margin-bottom: 1rem;
+}
+.ae .m-left-4 {
+    margin-left: 1rem;
+}
+.ae .m-5 {
+    margin: 1.25rem;
+}
+.ae .mx-5 {
+    margin-inline: 1.25rem;
+}
+.ae .my-5 {
+    margin-block: 1.25rem;
+}
+.ae .m-top-5 {
+    margin-top: 1.25rem;
+}
+.ae .m-right-5 {
+    margin-right: 1.25rem;
+}
+.ae .m-bottom-5 {
+    margin-bottom: 1.25rem;
+}
+.ae .m-left-5 {
+    margin-left: 1.25rem;
+}
+.ae .m-6 {
+    margin: 1.5rem;
+}
+.ae .mx-6 {
+    margin-inline: 1.5rem;
+}
+.ae .my-6 {
+    margin-block: 1.5rem;
+}
+.ae .m-top-6 {
+    margin-top: 1.5rem;
+}
+.ae .m-right-6 {
+    margin-right: 1.5rem;
+}
+.ae .m-bottom-6 {
+    margin-bottom: 1.5rem;
+}
+.ae .m-left-6 {
+    margin-left: 1.5rem;
+}
+.ae .m-7 {
+    margin: 1.75rem;
+}
+.ae .mx-7 {
+    margin-inline: 1.75rem;
+}
+.ae .my-7 {
+    margin-block: 1.75rem;
+}
+.ae .m-top-7 {
+    margin-top: 1.75rem;
+}
+.ae .m-right-7 {
+    margin-right: 1.75rem;
+}
+.ae .m-bottom-7 {
+    margin-bottom: 1.75rem;
+}
+.ae .m-left-7 {
+    margin-left: 1.75rem;
+}
+.ae .m-8 {
+    margin: 2rem;
+}
+.ae .mx-8 {
+    margin-inline: 2rem;
+}
+.ae .my-8 {
+    margin-block: 2rem;
+}
+.ae .m-top-8 {
+    margin-top: 2rem;
+}
+.ae .m-right-8 {
+    margin-right: 2rem;
+}
+.ae .m-bottom-8 {
+    margin-bottom: 2rem;
+}
+.ae .m-left-8 {
+    margin-left: 2rem;
+}
+.ae .m-9 {
+    margin: 2.25rem;
+}
+.ae .mx-9 {
+    margin-inline: 2.25rem;
+}
+.ae .my-9 {
+    margin-block: 2.25rem;
+}
+.ae .m-top-9 {
+    margin-top: 2.25rem;
+}
+.ae .m-right-9 {
+    margin-right: 2.25rem;
+}
+.ae .m-bottom-9 {
+    margin-bottom: 2.25rem;
+}
+.ae .m-left-9 {
+    margin-left: 2.25rem;
+}
+.ae .m-10 {
+    margin: 2.5rem;
+}
+.ae .mx-10 {
+    margin-inline: 2.5rem;
+}
+.ae .my-10 {
+    margin-block: 2.5rem;
+}
+.ae .m-top-10 {
+    margin-top: 2.5rem;
+}
+.ae .m-right-10 {
+    margin-right: 2.5rem;
+}
+.ae .m-bottom-10 {
+    margin-bottom: 2.5rem;
+}
+.ae .m-left-10 {
+    margin-left: 2.5rem;
+}
+.ae .m-11 {
+    margin: 2.75rem;
+}
+.ae .mx-11 {
+    margin-inline: 2.75rem;
+}
+.ae .my-11 {
+    margin-block: 2.75rem;
+}
+.ae .m-top-11 {
+    margin-top: 2.75rem;
+}
+.ae .m-right-11 {
+    margin-right: 2.75rem;
+}
+.ae .m-bottom-11 {
+    margin-bottom: 2.75rem;
+}
+.ae .m-left-11 {
+    margin-left: 2.75rem;
+}
+.ae .m-12 {
+    margin: 3rem;
+}
+.ae .mx-12 {
+    margin-inline: 3rem;
+}
+.ae .my-12 {
+    margin-block: 3rem;
+}
+.ae .m-top-12 {
+    margin-top: 3rem;
+}
+.ae .m-right-12 {
+    margin-right: 3rem;
+}
+.ae .m-bottom-12 {
+    margin-bottom: 3rem;
+}
+.ae .m-left-12 {
+    margin-left: 3rem;
+}
+.ae .m-14 {
+    margin: 3.5rem;
+}
+.ae .mx-14 {
+    margin-inline: 3.5rem;
+}
+.ae .my-14 {
+    margin-block: 3.5rem;
+}
+.ae .m-top-14 {
+    margin-top: 3.5rem;
+}
+.ae .m-right-14 {
+    margin-right: 3.5rem;
+}
+.ae .m-bottom-14 {
+    margin-bottom: 3.5rem;
+}
+.ae .m-left-14 {
+    margin-left: 3.5rem;
+}
+.ae .m-16 {
+    margin: 4rem;
+}
+.ae .mx-16 {
+    margin-inline: 4rem;
+}
+.ae .my-16 {
+    margin-block: 4rem;
+}
+.ae .m-top-16 {
+    margin-top: 4rem;
+}
+.ae .m-right-16 {
+    margin-right: 4rem;
+}
+.ae .m-bottom-16 {
+    margin-bottom: 4rem;
+}
+.ae .m-left-16 {
+    margin-left: 4rem;
+}
+.ae .m-20 {
+    margin: 5rem;
+}
+.ae .mx-20 {
+    margin-inline: 5rem;
+}
+.ae .my-20 {
+    margin-block: 5rem;
+}
+.ae .m-top-20 {
+    margin-top: 5rem;
+}
+.ae .m-right-20 {
+    margin-right: 5rem;
+}
+.ae .m-bottom-20 {
+    margin-bottom: 5rem;
+}
+.ae .m-left-20 {
+    margin-left: 5rem;
+}
+.ae .m-24 {
+    margin: 6rem;
+}
+.ae .mx-24 {
+    margin-inline: 6rem;
+}
+.ae .my-24 {
+    margin-block: 6rem;
+}
+.ae .m-top-24 {
+    margin-top: 6rem;
+}
+.ae .m-right-24 {
+    margin-right: 6rem;
+}
+.ae .m-bottom-24 {
+    margin-bottom: 6rem;
+}
+.ae .m-left-24 {
+    margin-left: 6rem;
+}
+.ae .m-28 {
+    margin: 7rem;
+}
+.ae .mx-28 {
+    margin-inline: 7rem;
+}
+.ae .my-28 {
+    margin-block: 7rem;
+}
+.ae .m-top-28 {
+    margin-top: 7rem;
+}
+.ae .m-right-28 {
+    margin-right: 7rem;
+}
+.ae .m-bottom-28 {
+    margin-bottom: 7rem;
+}
+.ae .m-left-28 {
+    margin-left: 7rem;
+}
+.ae .m-32 {
+    margin: 8rem;
+}
+.ae .mx-32 {
+    margin-inline: 8rem;
+}
+.ae .my-32 {
+    margin-block: 8rem;
+}
+.ae .m-top-32 {
+    margin-top: 8rem;
+}
+.ae .m-right-32 {
+    margin-right: 8rem;
+}
+.ae .m-bottom-32 {
+    margin-bottom: 8rem;
+}
+.ae .m-left-32 {
+    margin-left: 8rem;
+}
+.ae .m-36 {
+    margin: 9rem;
+}
+.ae .mx-36 {
+    margin-inline: 9rem;
+}
+.ae .my-36 {
+    margin-block: 9rem;
+}
+.ae .m-top-36 {
+    margin-top: 9rem;
+}
+.ae .m-right-36 {
+    margin-right: 9rem;
+}
+.ae .m-bottom-36 {
+    margin-bottom: 9rem;
+}
+.ae .m-left-36 {
+    margin-left: 9rem;
+}
+.ae .m-40 {
+    margin: 10rem;
+}
+.ae .mx-40 {
+    margin-inline: 10rem;
+}
+.ae .my-40 {
+    margin-block: 10rem;
+}
+.ae .m-top-40 {
+    margin-top: 10rem;
+}
+.ae .m-right-40 {
+    margin-right: 10rem;
+}
+.ae .m-bottom-40 {
+    margin-bottom: 10rem;
+}
+.ae .m-left-40 {
+    margin-left: 10rem;
+}
+.ae .m-44 {
+    margin: 11rem;
+}
+.ae .mx-44 {
+    margin-inline: 11rem;
+}
+.ae .my-44 {
+    margin-block: 11rem;
+}
+.ae .m-top-44 {
+    margin-top: 11rem;
+}
+.ae .m-right-44 {
+    margin-right: 11rem;
+}
+.ae .m-bottom-44 {
+    margin-bottom: 11rem;
+}
+.ae .m-left-44 {
+    margin-left: 11rem;
+}
+.ae .m-48 {
+    margin: 12rem;
+}
+.ae .mx-48 {
+    margin-inline: 12rem;
+}
+.ae .my-48 {
+    margin-block: 12rem;
+}
+.ae .m-top-48 {
+    margin-top: 12rem;
+}
+.ae .m-right-48 {
+    margin-right: 12rem;
+}
+.ae .m-bottom-48 {
+    margin-bottom: 12rem;
+}
+.ae .m-left-48 {
+    margin-left: 12rem;
+}
+.ae .m-56 {
+    margin: 14rem;
+}
+.ae .mx-56 {
+    margin-inline: 14rem;
+}
+.ae .my-56 {
+    margin-block: 14rem;
+}
+.ae .m-top-56 {
+    margin-top: 14rem;
+}
+.ae .m-right-56 {
+    margin-right: 14rem;
+}
+.ae .m-bottom-56 {
+    margin-bottom: 14rem;
+}
+.ae .m-left-56 {
+    margin-left: 14rem;
+}
+.ae .m-64 {
+    margin: 16rem;
+}
+.ae .mx-64 {
+    margin-inline: 16rem;
+}
+.ae .my-64 {
+    margin-block: 16rem;
+}
+.ae .m-top-64 {
+    margin-top: 16rem;
+}
+.ae .m-right-64 {
+    margin-right: 16rem;
+}
+.ae .m-bottom-64 {
+    margin-bottom: 16rem;
+}
+.ae .m-left-64 {
+    margin-left: 16rem;
+}
+.ae .m-72 {
+    margin: 18rem;
+}
+.ae .mx-72 {
+    margin-inline: 18rem;
+}
+.ae .my-72 {
+    margin-block: 18rem;
+}
+.ae .m-top-72 {
+    margin-top: 18rem;
+}
+.ae .m-right-72 {
+    margin-right: 18rem;
+}
+.ae .m-bottom-72 {
+    margin-bottom: 18rem;
+}
+.ae .m-left-72 {
+    margin-left: 18rem;
+}
+.ae .m-80 {
+    margin: 20rem;
+}
+.ae .mx-80 {
+    margin-inline: 20rem;
+}
+.ae .my-80 {
+    margin-block: 20rem;
+}
+.ae .m-top-80 {
+    margin-top: 20rem;
+}
+.ae .m-right-80 {
+    margin-right: 20rem;
+}
+.ae .m-bottom-80 {
+    margin-bottom: 20rem;
+}
+.ae .m-left-80 {
+    margin-left: 20rem;
+}
+.ae .m-96 {
+    margin: 24rem;
+}
+.ae .mx-96 {
+    margin-inline: 24rem;
+}
+.ae .my-96 {
+    margin-block: 24rem;
+}
+.ae .m-top-96 {
+    margin-top: 24rem;
+}
+.ae .m-right-96 {
+    margin-right: 24rem;
+}
+.ae .m-bottom-96 {
+    margin-bottom: 24rem;
+}
+.ae .m-left-96 {
+    margin-left: 24rem;
+}
+.ae .p-0 {
+  padding: 0px !important;
+}
+.ae .px-0 {
+    padding-inline: 0px;
+}
+.ae .py-0 {
+    padding-block: 0px;
+}
+.ae .p-top-0 {
+    padding-top: 0px;
+}
+.ae .p-right-0 {
+    padding-right: 0px;
+}
+.ae .p-bottom-0 {
+    padding-bottom: 0px;
+}
+.ae .p-left-0 {
+    padding-left: 0px;
+}
+.ae .p-px {
+    padding: 1px;
+}
+.ae .px-px {
+    padding-inline: 1px;
+}
+.ae .py-px {
+    padding-block: 1px;
+}
+.ae .p-top-px {
+    padding-top: 1px;
+}
+.ae .p-right-px {
+    padding-right: 1px;
+}
+.ae .p-bottom-px {
+    padding-bottom: 1px;
+}
+.ae .p-left-px {
+    padding-left: 1px;
+}
+.ae .p-0\.5 {
+    padding: 0.125rem;
+}
+.ae .px-0\.5 {
+    padding-inline: 0.125rem;
+}
+.ae .py-0\.5 {
+    padding-block: 0.125rem;
+}
+.ae .p-top-0\.5 {
+    padding-top: 0.125rem;
+}
+.ae .p-right-0\.5 {
+    padding-right: 0.125rem;
+}
+.ae .p-bottom-0\.5 {
+    padding-bottom: 0.125rem;
+}
+.ae .p-left-0\.5 {
+    padding-left: 0.125rem;
+}
+.ae .p-1 {
+    padding: 0.25rem;
+}
+.ae .px-1 {
+    padding-inline: 0.25rem;
+}
+.ae .py-1 {
+    padding-block: 0.25rem;
+}
+.ae .p-top-1 {
+    padding-top: 0.25rem;
+}
+.ae .p-right-1 {
+    padding-right: 0.25rem;
+}
+.ae .p-bottom-1 {
+    padding-bottom: 0.25rem;
+}
+.ae .p-left-1 {
+    padding-left: 0.25rem;
+}
+.ae .p-1\.5 {
+    padding: 0.375rem;
+}
+.ae .px-1\.5 {
+    padding-inline: 0.375rem;
+}
+.ae .py-1\.5 {
+    padding-block: 0.375rem;
+}
+.ae .p-top-1\.5 {
+    padding-top: 0.375rem;
+}
+.ae .p-right-1\.5 {
+    padding-right: 0.375rem;
+}
+.ae .p-bottom-1\.5 {
+    padding-bottom: 0.375rem;
+}
+.ae .p-left-1\.5 {
+    padding-left: 0.375rem;
+}
+.ae .p-2 {
+    padding: 0.5rem;
+}
+.ae .px-2 {
+    padding-inline: 0.5rem;
+}
+.ae .py-2 {
+    padding-block: 0.5rem;
+}
+.ae .p-top-2 {
+    padding-top: 0.5rem;
+}
+.ae .p-right-2 {
+    padding-right: 0.5rem;
+}
+.ae .p-bottom-2 {
+    padding-bottom: 0.5rem;
+}
+.ae .p-left-2 {
+    padding-left: 0.5rem;
+}
+.ae .p-2\.5 {
+    padding: 0.625rem;
+}
+.ae .px-2\.5 {
+    padding-inline: 0.625rem;
+}
+.ae .py-2\.5 {
+    padding-block: 0.625rem;
+}
+.ae .p-top-2\.5 {
+    padding-top: 0.625rem;
+}
+.ae .p-right-2\.5 {
+    padding-right: 0.625rem;
+}
+.ae .p-bottom-2\.5 {
+    padding-bottom: 0.625rem;
+}
+.ae .p-left-2\.5 {
+    padding-left: 0.625rem;
+}
+.ae .p-3 {
+    padding: 0.75rem;
+}
+.ae .px-3 {
+    padding-inline: 0.75rem;
+}
+.ae .py-3 {
+    padding-block: 0.75rem;
+}
+.ae .p-top-3 {
+    padding-top: 0.75rem;
+}
+.ae .p-right-3 {
+    padding-right: 0.75rem;
+}
+.ae .p-bottom-3 {
+    padding-bottom: 0.75rem;
+}
+.ae .p-left-3 {
+    padding-left: 0.75rem;
+}
+.ae .p-3\.5 {
+    padding: 0.875rem;
+}
+.ae .px-3\.5 {
+    padding-inline: 0.875rem;
+}
+.ae .py-3\.5 {
+    padding-block: 0.875rem;
+}
+.ae .p-top-3\.5 {
+    padding-top: 0.875rem;
+}
+.ae .p-right-3\.5 {
+    padding-right: 0.875rem;
+}
+.ae .p-bottom-3\.5 {
+    padding-bottom: 0.875rem;
+}
+.ae .p-left-3\.5 {
+    padding-left: 0.875rem;
+}
+.ae .p-4 {
+    padding: 1rem;
+}
+.ae .px-4 {
+    padding-inline: 1rem;
+}
+.ae .py-4 {
+    padding-block: 1rem;
+}
+.ae .p-top-4 {
+    padding-top: 1rem;
+}
+.ae .p-right-4 {
+    padding-right: 1rem;
+}
+.ae .p-bottom-4 {
+    padding-bottom: 1rem;
+}
+.ae .p-left-4 {
+    padding-left: 1rem;
+}
+.ae .p-5 {
+    padding: 1.25rem;
+}
+.ae .px-5 {
+    padding-inline: 1.25rem;
+}
+.ae .py-5 {
+    padding-block: 1.25rem;
+}
+.ae .p-top-5 {
+    padding-top: 1.25rem;
+}
+.ae .p-right-5 {
+    padding-right: 1.25rem;
+}
+.ae .p-bottom-5 {
+    padding-bottom: 1.25rem;
+}
+.ae .p-left-5 {
+    padding-left: 1.25rem;
+}
+.ae .p-6 {
+    padding: 1.5rem;
+}
+.ae .px-6 {
+    padding-inline: 1.5rem;
+}
+.ae .py-6 {
+    padding-block: 1.5rem;
+}
+.ae .p-top-6 {
+    padding-top: 1.5rem;
+}
+.ae .p-right-6 {
+    padding-right: 1.5rem;
+}
+.ae .p-bottom-6 {
+    padding-bottom: 1.5rem;
+}
+.ae .p-left-6 {
+    padding-left: 1.5rem;
+}
+.ae .p-7 {
+    padding: 1.75rem;
+}
+.ae .px-7 {
+    padding-inline: 1.75rem;
+}
+.ae .py-7 {
+    padding-block: 1.75rem;
+}
+.ae .p-top-7 {
+    padding-top: 1.75rem;
+}
+.ae .p-right-7 {
+    padding-right: 1.75rem;
+}
+.ae .p-bottom-7 {
+    padding-bottom: 1.75rem;
+}
+.ae .p-left-7 {
+    padding-left: 1.75rem;
+}
+.ae .p-8 {
+    padding: 2rem;
+}
+.ae .px-8 {
+    padding-inline: 2rem;
+}
+.ae .py-8 {
+    padding-block: 2rem;
+}
+.ae .p-top-8 {
+    padding-top: 2rem;
+}
+.ae .p-right-8 {
+    padding-right: 2rem;
+}
+.ae .p-bottom-8 {
+    padding-bottom: 2rem;
+}
+.ae .p-left-8 {
+    padding-left: 2rem;
+}
+.ae .p-9 {
+    padding: 2.25rem;
+}
+.ae .px-9 {
+    padding-inline: 2.25rem;
+}
+.ae .py-9 {
+    padding-block: 2.25rem;
+}
+.ae .p-top-9 {
+    padding-top: 2.25rem;
+}
+.ae .p-right-9 {
+    padding-right: 2.25rem;
+}
+.ae .p-bottom-9 {
+    padding-bottom: 2.25rem;
+}
+.ae .p-left-9 {
+    padding-left: 2.25rem;
+}
+.ae .p-10 {
+    padding: 2.5rem;
+}
+.ae .px-10 {
+    padding-inline: 2.5rem;
+}
+.ae .py-10 {
+    padding-block: 2.5rem;
+}
+.ae .p-top-10 {
+    padding-top: 2.5rem;
+}
+.ae .p-right-10 {
+    padding-right: 2.5rem;
+}
+.ae .p-bottom-10 {
+    padding-bottom: 2.5rem;
+}
+.ae .p-left-10 {
+    padding-left: 2.5rem;
+}
+.ae .p-11 {
+    padding: 2.75rem;
+}
+.ae .px-11 {
+    padding-inline: 2.75rem;
+}
+.ae .py-11 {
+    padding-block: 2.75rem;
+}
+.ae .p-top-11 {
+    padding-top: 2.75rem;
+}
+.ae .p-right-11 {
+    padding-right: 2.75rem;
+}
+.ae .p-bottom-11 {
+    padding-bottom: 2.75rem;
+}
+.ae .p-left-11 {
+    padding-left: 2.75rem;
+}
+.ae .p-12 {
+    padding: 3rem;
+}
+.ae .px-12 {
+    padding-inline: 3rem;
+}
+.ae .py-12 {
+    padding-block: 3rem;
+}
+.ae .p-top-12 {
+    padding-top: 3rem;
+}
+.ae .p-right-12 {
+    padding-right: 3rem;
+}
+.ae .p-bottom-12 {
+    padding-bottom: 3rem;
+}
+.ae .p-left-12 {
+    padding-left: 3rem;
+}
+.ae .p-14 {
+    padding: 3.5rem;
+}
+.ae .px-14 {
+    padding-inline: 3.5rem;
+}
+.ae .py-14 {
+    padding-block: 3.5rem;
+}
+.ae .p-top-14 {
+    padding-top: 3.5rem;
+}
+.ae .p-right-14 {
+    padding-right: 3.5rem;
+}
+.ae .p-bottom-14 {
+    padding-bottom: 3.5rem;
+}
+.ae .p-left-14 {
+    padding-left: 3.5rem;
+}
+.ae .p-16 {
+    padding: 4rem;
+}
+.ae .px-16 {
+    padding-inline: 4rem;
+}
+.ae .py-16 {
+    padding-block: 4rem;
+}
+.ae .p-top-16 {
+    padding-top: 4rem;
+}
+.ae .p-right-16 {
+    padding-right: 4rem;
+}
+.ae .p-bottom-16 {
+    padding-bottom: 4rem;
+}
+.ae .p-left-16 {
+    padding-left: 4rem;
+}
+.ae .p-20 {
+    padding: 5rem;
+}
+.ae .px-20 {
+    padding-inline: 5rem;
+}
+.ae .py-20 {
+    padding-block: 5rem;
+}
+.ae .p-top-20 {
+    padding-top: 5rem;
+}
+.ae .p-right-20 {
+    padding-right: 5rem;
+}
+.ae .p-bottom-20 {
+    padding-bottom: 5rem;
+}
+.ae .p-left-20 {
+    padding-left: 5rem;
+}
+.ae .p-24 {
+    padding: 6rem;
+}
+.ae .px-24 {
+    padding-inline: 6rem;
+}
+.ae .py-24 {
+    padding-block: 6rem;
+}
+.ae .p-top-24 {
+    padding-top: 6rem;
+}
+.ae .p-right-24 {
+    padding-right: 6rem;
+}
+.ae .p-bottom-24 {
+    padding-bottom: 6rem;
+}
+.ae .p-left-24 {
+    padding-left: 6rem;
+}
+.ae .p-28 {
+    padding: 7rem;
+}
+.ae .px-28 {
+    padding-inline: 7rem;
+}
+.ae .py-28 {
+    padding-block: 7rem;
+}
+.ae .p-top-28 {
+    padding-top: 7rem;
+}
+.ae .p-right-28 {
+    padding-right: 7rem;
+}
+.ae .p-bottom-28 {
+    padding-bottom: 7rem;
+}
+.ae .p-left-28 {
+    padding-left: 7rem;
+}
+.ae .p-32 {
+    padding: 8rem;
+}
+.ae .px-32 {
+    padding-inline: 8rem;
+}
+.ae .py-32 {
+    padding-block: 8rem;
+}
+.ae .p-top-32 {
+    padding-top: 8rem;
+}
+.ae .p-right-32 {
+    padding-right: 8rem;
+}
+.ae .p-bottom-32 {
+    padding-bottom: 8rem;
+}
+.ae .p-left-32 {
+    padding-left: 8rem;
+}
+.ae .p-36 {
+    padding: 9rem;
+}
+.ae .px-36 {
+    padding-inline: 9rem;
+}
+.ae .py-36 {
+    padding-block: 9rem;
+}
+.ae .p-top-36 {
+    padding-top: 9rem;
+}
+.ae .p-right-36 {
+    padding-right: 9rem;
+}
+.ae .p-bottom-36 {
+    padding-bottom: 9rem;
+}
+.ae .p-left-36 {
+    padding-left: 9rem;
+}
+.ae .p-40 {
+    padding: 10rem;
+}
+.ae .px-40 {
+    padding-inline: 10rem;
+}
+.ae .py-40 {
+    padding-block: 10rem;
+}
+.ae .p-top-40 {
+    padding-top: 10rem;
+}
+.ae .p-right-40 {
+    padding-right: 10rem;
+}
+.ae .p-bottom-40 {
+    padding-bottom: 10rem;
+}
+.ae .p-left-40 {
+    padding-left: 10rem;
+}
+.ae .p-44 {
+    padding: 11rem;
+}
+.ae .px-44 {
+    padding-inline: 11rem;
+}
+.ae .py-44 {
+    padding-block: 11rem;
+}
+.ae .p-top-44 {
+    padding-top: 11rem;
+}
+.ae .p-right-44 {
+    padding-right: 11rem;
+}
+.ae .p-bottom-44 {
+    padding-bottom: 11rem;
+}
+.ae .p-left-44 {
+    padding-left: 11rem;
+}
+.ae .p-48 {
+    padding: 12rem;
+}
+.ae .px-48 {
+    padding-inline: 12rem;
+}
+.ae .py-48 {
+    padding-block: 12rem;
+}
+.ae .p-top-48 {
+    padding-top: 12rem;
+}
+.ae .p-right-48 {
+    padding-right: 12rem;
+}
+.ae .p-bottom-48 {
+    padding-bottom: 12rem;
+}
+.ae .p-left-48 {
+    padding-left: 12rem;
+}
+.ae .p-56 {
+    padding: 14rem;
+}
+.ae .px-56 {
+    padding-inline: 14rem;
+}
+.ae .py-56 {
+    padding-block: 14rem;
+}
+.ae .p-top-56 {
+    padding-top: 14rem;
+}
+.ae .p-right-56 {
+    padding-right: 14rem;
+}
+.ae .p-bottom-56 {
+    padding-bottom: 14rem;
+}
+.ae .p-left-56 {
+    padding-left: 14rem;
+}
+.ae .p-64 {
+    padding: 16rem;
+}
+.ae .px-64 {
+    padding-inline: 16rem;
+}
+.ae .py-64 {
+    padding-block: 16rem;
+}
+.ae .p-top-64 {
+    padding-top: 16rem;
+}
+.ae .p-right-64 {
+    padding-right: 16rem;
+}
+.ae .p-bottom-64 {
+    padding-bottom: 16rem;
+}
+.ae .p-left-64 {
+    padding-left: 16rem;
+}
+.ae .p-72 {
+    padding: 18rem;
+}
+.ae .px-72 {
+    padding-inline: 18rem;
+}
+.ae .py-72 {
+    padding-block: 18rem;
+}
+.ae .p-top-72 {
+    padding-top: 18rem;
+}
+.ae .p-right-72 {
+    padding-right: 18rem;
+}
+.ae .p-bottom-72 {
+    padding-bottom: 18rem;
+}
+.ae .p-left-72 {
+    padding-left: 18rem;
+}
+.ae .p-80 {
+    padding: 20rem;
+}
+.ae .px-80 {
+    padding-inline: 20rem;
+}
+.ae .py-80 {
+    padding-block: 20rem;
+}
+.ae .p-top-80 {
+    padding-top: 20rem;
+}
+.ae .p-right-80 {
+    padding-right: 20rem;
+}
+.ae .p-bottom-80 {
+    padding-bottom: 20rem;
+}
+.ae .p-left-80 {
+    padding-left: 20rem;
+}
+.ae .p-96 {
+    padding: 24rem;
+}
+.ae .px-96 {
+    padding-inline: 24rem;
+}
+.ae .py-96 {
+    padding-block: 24rem;
+}
+.ae .p-top-96 {
+    padding-top: 24rem;
+}
+.ae .p-right-96 {
+    padding-right: 24rem;
+}
+.ae .p-bottom-96 {
+    padding-bottom: 24rem;
+}
+.ae .p-left-96 {
+    padding-left: 24rem;
+}
+.ae .bg-white {
+  background-color: #ffffff;
+}
+.ae .bg-neutral-50 {
+  background-color: #fafafa;
+}
+.ae .bg-neutral-100 {
+  background-color: #f5f5f5;
+}
+.ae .bg-neutral-200 {
+  background-color: #e5e5e5;
+}
+.ae .bg-neutral-300 {
+  background-color: #d4d4d4;
+}
+.ae .bg-neutral-400 {
+  background-color: #a3a3a3;
+}
+.ae .bg-neutral-500 {
+  background-color: #737373;
+}
+.ae .bg-neutral-600 {
+  background-color: #525252;
+}
+.ae .bg-neutral-700 {
+  background-color: #404040;
+}
+.ae .bg-neutral-800 {
+  background-color: #262626;
+}
+.ae .bg-neutral-900 {
+  background-color: #171717;
+}
+.ae .bg-neutral-950 {
+  background-color: #0a0a0a;
+}
+.ae .bg-black {
+  background-color: #000000;
+}
+.ae .bg-gray-50 {
+  background-color: #f9fafb;
+}
+.ae .bg-gray-100 {
+  background-color: #f3f4f6;
+}
+.ae .bg-gray-200 {
+  background-color: #e5e7eb;
+}
+.ae .bg-gray-300 {
+  background-color: #d1d5db;
+}
+.ae .bg-gray-400 {
+  background-color: #9ca3af;
+}
+.ae .bg-gray-500 {
+  background-color: #6b7280;
+}
+.ae .bg-gray-600 {
+  background-color: #4b5563;
+}
+.ae .bg-gray-700 {
+  background-color: #374151;
+}
+.ae .bg-gray-800 {
+  background-color: #1f2937;
+}
+.ae .bg-gray-900 {
+  background-color: #111827;
+}
+.ae .bg-gray-950 {
+  background-color: #030712;
+}
+.ae .bg-slate-50 {
+  background-color: #f8fafc;
+}
+.ae .bg-slate-100 {
+  background-color: #f1f5f9;
+}
+.ae .bg-slate-200 {
+  background-color: #e2e8f0;
+}
+.ae .bg-slate-300 {
+  background-color: #cbd5e1;
+}
+.ae .bg-slate-400 {
+  background-color: #94a3b8;
+}
+.ae .bg-slate-500 {
+  background-color: #64748b;
+}
+.ae .bg-slate-600 {
+  background-color: #475569;
+}
+.ae .bg-slate-700 {
+  background-color: #334155;
+}
+.ae .bg-slate-800 {
+  background-color: #1e293b;
+}
+.ae .bg-slate-900 {
+  background-color: #0f172a;
+}
+.ae .bg-slate-950 {
+  background-color: #020617;
+}
+.ae .bg-zinc-50 {
+  background-color: #fafafa;
+}
+.ae .bg-zinc-100 {
+  background-color: #f4f4f5;
+}
+.ae .bg-zinc-200 {
+  background-color: #e4e4e7;
+}
+.ae .bg-zinc-300 {
+  background-color: #d4d4d8;
+}
+.ae .bg-zinc-400 {
+  background-color: #a1a1aa;
+}
+.ae .bg-zinc-500 {
+  background-color: #71717a;
+}
+.ae .bg-zinc-600 {
+  background-color: #52525b;
+}
+.ae .bg-zinc-700 {
+  background-color: #3f3f46;
+}
+.ae .bg-zinc-800 {
+  background-color: #27272a;
+}
+.ae .bg-zinc-900 {
+  background-color: #18181b;
+}
+.ae .bg-zinc-950 {
+  background-color: #09090b;
+}
+.ae .bg-stone-50 {
+  background-color: #fafaf9;
+}
+.ae .bg-stone-100 {
+  background-color: #f5f5f4;
+}
+.ae .bg-stone-200 {
+  background-color: #e7e5e4;
+}
+.ae .bg-stone-300 {
+  background-color: #d6d3d1;
+}
+.ae .bg-stone-400 {
+  background-color: #a8a29e;
+}
+.ae .bg-stone-500 {
+  background-color: #78716c;
+}
+.ae .bg-stone-600 {
+  background-color: #57534e;
+}
+.ae .bg-stone-700 {
+  background-color: #44403c;
+}
+.ae .bg-stone-800 {
+  background-color: #292524;
+}
+.ae .bg-stone-900 {
+  background-color: #1c1917;
+}
+.ae .bg-stone-950 {
+  background-color: #0c0a09;
+}
+.ae .bg-red-50 {
+  background-color: #fef2f2;
+}
+.ae .bg-red-100 {
+  background-color: #fee2e2;
+}
+.ae .bg-red-200 {
+  background-color: #fecaca;
+}
+.ae .bg-red-300 {
+  background-color: #fca5a5;
+}
+.ae .bg-red-400 {
+  background-color: #f87171;
+}
+.ae .bg-red-500 {
+  background-color: #ef4444;
+}
+.ae .bg-red-600 {
+  background-color: #dc2626;
+}
+.ae .bg-red-700 {
+  background-color: #b91c1c;
+}
+.ae .bg-red-800 {
+  background-color: #991b1b;
+}
+.ae .bg-red-900 {
+  background-color: #7f1d1d;
+}
+.ae .bg-red-950 {
+  background-color: #450a0a;
+}
+.ae .bg-orange-50 {
+  background-color: #fff7ed;
+}
+.ae .bg-orange-100 {
+  background-color: #ffedd5;
+}
+.ae .bg-orange-200 {
+  background-color: #fed7aa;
+}
+.ae .bg-orange-300 {
+  background-color: #fdba74;
+}
+.ae .bg-orange-400 {
+  background-color: #fb923c;
+}
+.ae .bg-orange-500 {
+  background-color: #f97316;
+}
+.ae .bg-orange-600 {
+  background-color: #ea580c;
+}
+.ae .bg-orange-700 {
+  background-color: #c2410c;
+}
+.ae .bg-orange-800 {
+  background-color: #9a3412;
+}
+.ae .bg-orange-900 {
+  background-color: #7c2d12;
+}
+.ae .bg-orange-950 {
+  background-color: #431407;
+}
+.ae .bg-amber-50 {
+  background-color: #fffbeb;
+}
+.ae .bg-amber-100 {
+  background-color: #fef3c7;
+}
+.ae .bg-amber-200 {
+  background-color: #fde68a;
+}
+.ae .bg-amber-300 {
+  background-color: #fcd34d;
+}
+.ae .bg-amber-400 {
+  background-color: #fbbf24;
+}
+.ae .bg-amber-500 {
+  background-color: #f59e0b;
+}
+.ae .bg-amber-600 {
+  background-color: #d97706;
+}
+.ae .bg-amber-700 {
+  background-color: #b45309;
+}
+.ae .bg-amber-800 {
+  background-color: #92400e;
+}
+.ae .bg-amber-900 {
+  background-color: #78350f;
+}
+.ae .bg-amber-950 {
+  background-color: #451a03;
+}
+.ae .bg-yellow-50 {
+  background-color: #fefce8;
+}
+.ae .bg-yellow-100 {
+  background-color: #fef9c3;
+}
+.ae .bg-yellow-200 {
+  background-color: #fef08a;
+}
+.ae .bg-yellow-300 {
+  background-color: #fde047;
+}
+.ae .bg-yellow-400 {
+  background-color: #facc15;
+}
+.ae .bg-yellow-500 {
+  background-color: #eab308;
+}
+.ae .bg-yellow-600 {
+  background-color: #ca8a04;
+}
+.ae .bg-yellow-700 {
+  background-color: #a16207;
+}
+.ae .bg-yellow-800 {
+  background-color: #854d0e;
+}
+.ae .bg-yellow-900 {
+  background-color: #713f12;
+}
+.ae .bg-yellow-950 {
+  background-color: #422006;
+}
+.ae .bg-lime-50 {
+  background-color: #f7fee7;
+}
+.ae .bg-lime-100 {
+  background-color: #ecfccb;
+}
+.ae .bg-lime-200 {
+  background-color: #d9f99d;
+}
+.ae .bg-lime-300 {
+  background-color: #bef264;
+}
+.ae .bg-lime-400 {
+  background-color: #a3e635;
+}
+.ae .bg-lime-500 {
+  background-color: #84cc16;
+}
+.ae .bg-lime-600 {
+  background-color: #65a30d;
+}
+.ae .bg-lime-700 {
+  background-color: #4d7c0f;
+}
+.ae .bg-lime-800 {
+  background-color: #3f6212;
+}
+.ae .bg-lime-900 {
+  background-color: #365314;
+}
+.ae .bg-lime-950 {
+  background-color: #1a2e05;
+}
+.ae .bg-green-50 {
+  background-color: #f0fdf4;
+}
+.ae .bg-green-100 {
+  background-color: #dcfce7;
+}
+.ae .bg-green-200 {
+  background-color: #bbf7d0;
+}
+.ae .bg-green-300 {
+  background-color: #86efac;
+}
+.ae .bg-green-400 {
+  background-color: #4ade80;
+}
+.ae .bg-green-500 {
+  background-color: #22c55e;
+}
+.ae .bg-green-600 {
+  background-color: #16a34a;
+}
+.ae .bg-green-700 {
+  background-color: #15803d;
+}
+.ae .bg-green-800 {
+  background-color: #166534;
+}
+.ae .bg-green-900 {
+  background-color: #14532d;
+}
+.ae .bg-green-950 {
+  background-color: #052e16;
+}
+.ae .bg-emerald-50 {
+  background-color: #ecfdf5;
+}
+.ae .bg-emerald-100 {
+  background-color: #d1fae5;
+}
+.ae .bg-emerald-200 {
+  background-color: #a7f3d0;
+}
+.ae .bg-emerald-300 {
+  background-color: #6ee7b7;
+}
+.ae .bg-emerald-400 {
+  background-color: #34d399;
+}
+.ae .bg-emerald-500 {
+  background-color: #10b981;
+}
+.ae .bg-emerald-600 {
+  background-color: #059669;
+}
+.ae .bg-emerald-700 {
+  background-color: #047857;
+}
+.ae .bg-emerald-800 {
+  background-color: #065f46;
+}
+.ae .bg-emerald-900 {
+  background-color: #064e3b;
+}
+.ae .bg-emerald-950 {
+  background-color: #022c22;
+}
+.ae .bg-teal-50 {
+  background-color: #f0fdfa;
+}
+.ae .bg-teal-100 {
+  background-color: #ccfbf1;
+}
+.ae .bg-teal-200 {
+  background-color: #99f6e4;
+}
+.ae .bg-teal-300 {
+  background-color: #5eead4;
+}
+.ae .bg-teal-400 {
+  background-color: #2dd4bf;
+}
+.ae .bg-teal-500 {
+  background-color: #14b8a6;
+}
+.ae .bg-teal-600 {
+  background-color: #0d9488;
+}
+.ae .bg-teal-700 {
+  background-color: #0f766e;
+}
+.ae .bg-teal-800 {
+  background-color: #115e59;
+}
+.ae .bg-teal-900 {
+  background-color: #134e4a;
+}
+.ae .bg-teal-950 {
+  background-color: #042f2e;
+}
+.ae .bg-cyan-50 {
+  background-color: #ecfeff;
+}
+.ae .bg-cyan-100 {
+  background-color: #cffafe;
+}
+.ae .bg-cyan-200 {
+  background-color: #a5f3fc;
+}
+.ae .bg-cyan-300 {
+  background-color: #67e8f9;
+}
+.ae .bg-cyan-400 {
+  background-color: #22d3ee;
+}
+.ae .bg-cyan-500 {
+  background-color: #06b6d4;
+}
+.ae .bg-cyan-600 {
+  background-color: #0891b2;
+}
+.ae .bg-cyan-700 {
+  background-color: #0e7490;
+}
+.ae .bg-cyan-800 {
+  background-color: #155e75;
+}
+.ae .bg-cyan-900 {
+  background-color: #164e63;
+}
+.ae .bg-cyan-950 {
+  background-color: #083344;
+}
+.ae .bg-sky-50 {
+  background-color: #f0f9ff;
+}
+.ae .bg-sky-100 {
+  background-color: #e0f2fe;
+}
+.ae .bg-sky-200 {
+  background-color: #bae6fd;
+}
+.ae .bg-sky-300 {
+  background-color: #7dd3fc;
+}
+.ae .bg-sky-400 {
+  background-color: #38bdf8;
+}
+.ae .bg-sky-500 {
+  background-color: #0ea5e9;
+}
+.ae .bg-sky-600 {
+  background-color: #0284c7;
+}
+.ae .bg-sky-700 {
+  background-color: #0369a1;
+}
+.ae .bg-sky-800 {
+  background-color: #075985;
+}
+.ae .bg-sky-900 {
+  background-color: #0c4a6e;
+}
+.ae .bg-sky-950 {
+  background-color: #082f49;
+}
+.ae .bg-blue-50 {
+  background-color: #eff6ff;
+}
+.ae .bg-blue-100 {
+  background-color: #dbeafe;
+}
+.ae .bg-blue-200 {
+  background-color: #bfdbfe;
+}
+.ae .bg-blue-300 {
+  background-color: #93c5fd;
+}
+.ae .bg-blue-400 {
+  background-color: #60a5fa;
+}
+.ae .bg-blue-500 {
+  background-color: #3b82f6;
+}
+.ae .bg-blue-600 {
+  background-color: #2563eb;
+}
+.ae .bg-blue-700 {
+  background-color: #1d4ed8;
+}
+.ae .bg-blue-800 {
+  background-color: #1e40af;
+}
+.ae .bg-blue-900 {
+  background-color: #1e3a8a;
+}
+.ae .bg-blue-950 {
+  background-color: #172554;
+}
+.ae .bg-indigo-50 {
+  background-color: #eef2ff;
+}
+.ae .bg-indigo-100 {
+  background-color: #e0e7ff;
+}
+.ae .bg-indigo-200 {
+  background-color: #c7d2fe;
+}
+.ae .bg-indigo-300 {
+  background-color: #a5b4fc;
+}
+.ae .bg-indigo-400 {
+  background-color: #818cf8;
+}
+.ae .bg-indigo-500 {
+  background-color: #6366f1;
+}
+.ae .bg-indigo-600 {
+  background-color: #4f46e5;
+}
+.ae .bg-indigo-700 {
+  background-color: #4338ca;
+}
+.ae .bg-indigo-800 {
+  background-color: #3730a3;
+}
+.ae .bg-indigo-900 {
+  background-color: #312e81;
+}
+.ae .bg-indigo-950 {
+  background-color: #1e1b4b;
+}
+.ae .bg-violet-50 {
+  background-color: #f5f3ff;
+}
+.ae .bg-violet-100 {
+  background-color: #ede9fe;
+}
+.ae .bg-violet-200 {
+  background-color: #ddd6fe;
+}
+.ae .bg-violet-300 {
+  background-color: #c4b5fd;
+}
+.ae .bg-violet-400 {
+  background-color: #a78bfa;
+}
+.ae .bg-violet-500 {
+  background-color: #8b5cf6;
+}
+.ae .bg-violet-600 {
+  background-color: #7c3aed;
+}
+.ae .bg-violet-700 {
+  background-color: #6d28d9;
+}
+.ae .bg-violet-800 {
+  background-color: #5b21b6;
+}
+.ae .bg-violet-900 {
+  background-color: #4c1d95;
+}
+.ae .bg-violet-950 {
+  background-color: #2e1065;
+}
+.ae .bg-purple-50 {
+  background-color: #faf5ff;
+}
+.ae .bg-purple-100 {
+  background-color: #f3e8ff;
+}
+.ae .bg-purple-200 {
+  background-color: #e9d5ff;
+}
+.ae .bg-purple-300 {
+  background-color: #d8b4fe;
+}
+.ae .bg-purple-400 {
+  background-color: #c084fc;
+}
+.ae .bg-purple-500 {
+  background-color: #a855f7;
+}
+.ae .bg-purple-600 {
+  background-color: #9333ea;
+}
+.ae .bg-purple-700 {
+  background-color: #7e22ce;
+}
+.ae .bg-purple-800 {
+  background-color: #6b21a8;
+}
+.ae .bg-purple-900 {
+  background-color: #581c87;
+}
+.ae .bg-purple-950 {
+  background-color: #3b0764;
+}
+.ae .bg-fuchsia-50 {
+  background-color: #fdf4ff;
+}
+.ae .bg-fuchsia-100 {
+  background-color: #fae8ff;
+}
+.ae .bg-fuchsia-200 {
+  background-color: #f5d0fe;
+}
+.ae .bg-fuchsia-300 {
+  background-color: #f0abfc;
+}
+.ae .bg-fuchsia-400 {
+  background-color: #e879f9;
+}
+.ae .bg-fuchsia-500 {
+  background-color: #d946ef;
+}
+.ae .bg-fuchsia-600 {
+  background-color: #c026d3;
+}
+.ae .bg-fuchsia-700 {
+  background-color: #a21caf;
+}
+.ae .bg-fuchsia-800 {
+  background-color: #86198f;
+}
+.ae .bg-fuchsia-900 {
+  background-color: #701a75;
+}
+.ae .bg-fuchsia-950 {
+  background-color: #4a044e;
+}
+.ae .bg-pink-50 {
+  background-color: #fdf2f8;
+}
+.ae .bg-pink-100 {
+  background-color: #fce7f3;
+}
+.ae .bg-pink-200 {
+  background-color: #fbcfe8;
+}
+.ae .bg-pink-300 {
+  background-color: #f9a8d4;
+}
+.ae .bg-pink-400 {
+  background-color: #f472b6;
+}
+.ae .bg-pink-500 {
+  background-color: #ec4899;
+}
+.ae .bg-pink-600 {
+  background-color: #db2777;
+}
+.ae .bg-pink-700 {
+  background-color: #be185d;
+}
+.ae .bg-pink-800 {
+  background-color: #9d174d;
+}
+.ae .bg-pink-900 {
+  background-color: #831843;
+}
+.ae .bg-pink-950 {
+  background-color: #500724;
+}
+.ae .bg-rose-50 {
+  background-color: #fff1f2;
+}
+.ae .bg-rose-100 {
+  background-color: #ffe4e6;
+}
+.ae .bg-rose-200 {
+  background-color: #fecdd3;
+}
+.ae .bg-rose-300 {
+  background-color: #fda4af;
+}
+.ae .bg-rose-400 {
+  background-color: #fb7185;
+}
+.ae .bg-rose-500 {
+  background-color: #f43f5e;
+}
+.ae .bg-rose-600 {
+  background-color: #e11d48;
+}
+.ae .bg-rose-700 {
+  background-color: #be123c;
+}
+.ae .bg-rose-800 {
+  background-color: #9f1239;
+}
+.ae .bg-rose-900 {
+  background-color: #881337;
+}
+.ae .bg-rose-950 {
+  background-color: #4c0519;
+}
+.ae .d-none {
+    display: none;
+}
+.ae .d-inline {
+    display: inline;
+}
+.ae .d-inline-block {
+    display: inline-block;
+}
+.ae .d-inline-flex {
+    display: inline-flex;
+}
+.ae .d-inline-grid {
+    display: inline-grid;
+}
+.ae .d-inline-table {
+    display: inline-table;
+}
+.ae .d-block {
+    display: block;
+}
+.ae .d-contents {
+    display: contents;
+}
+.ae .d-grid {
+    display: grid;
+}
+.ae .d-flex {
+    display: flex;
+}
+.ae .d-flow-root {
+    display: flow-root;
+}
+.ae .d-list-item {
+    display: list-item;
+}
+.ae .d-table {
+    display: table;
+}
+.ae .d-table-caption {
+    display: table-caption;
+}
+.ae .d-table-column-group {
+    display: table-column-group;
+}
+.ae .d-table-header-group {
+    display: table-header-group;
+}
+.ae .d-table-footer-group {
+    display: table-footer-group;
+}
+.ae .d-table-row-group {
+    display: table-row-group;
+}
+.ae .d-table-cell {
+    display: table-cell;
+}
+.ae .d-table-column {
+    display: table-column;
+}
+.ae .d-table-row {
+    display: table-row;
+}
+.ae .layer-auto {
+    z-index: auto;
+}
+.ae .layer-0 {
+    z-index: 0;
+}
+.ae .layer-10 {
+    z-index: 10;
+}
+.ae .layer-20 {
+    z-index: 20;
+}
+.ae .layer-30 {
+    z-index: 30;
+}
+.ae .layer-40 {
+    z-index: 40;
+}
+.ae .layer-50 {
+    z-index: 50;
+}
+.ae .layer-60 {
+    z-index: 60;
+}
+.ae .layer-70 {
+    z-index: 70;
+}
+.ae .layer-80 {
+    z-index: 80;
+}
+.ae .layer90 {
+    z-index: 90;
+}
+.ae .layer-100 {
+    z-index: 100;
+}
+.ae .layer-200 {
+    z-index: 200;
+}
+.ae .layer-300 {
+    z-index: 300;
+}
+.ae .layer-400 {
+    z-index: 400;
+}
+.ae .layer-500 {
+    z-index: 500;
+}
+.ae .layer-600 {
+    z-index: 600;
+}
+.ae .layer-700 {
+    z-index: 700;
+}
+.ae .layer-800 {
+    z-index: 800;
+}
+.ae .layer-900 {
+    z-index: 900;
+}
+.ae .\-layer-10 {
+    z-index: -10;
+}
+.ae .\-layer-20 {
+    z-index: -20;
+}
+.ae .\-layer-30 {
+    z-index: -30;
+}
+.ae .\-layer-40 {
+    z-index: -40;
+}
+.ae .\-layer-50 {
+    z-index: -50;
+}
+.ae .\-layer-60 {
+    z-index: -60;
+}
+.ae .\-layer-70 {
+    z-index: -70;
+}
+.ae .\-layer-80 {
+    z-index: -80;
+}
+.ae .\-layer-90 {
+    z-index: -90;
+}
+.ae .\-layer-100 {
+    z-index: -100;
+}
+.ae .\-layer-200 {
+    z-index: -200;
+}
+.ae .\-layer-300 {
+    z-index: -300;
+}
+.ae .\-layer-400 {
+    z-index: -400;
+}
+.ae .\-layer-500 {
+    z-index: -500;
+}
+.ae .\-layer-600 {
+    z-index: -600;
+}
+.ae .\-layer-700 {
+    z-index: -700;
+}
+.ae .\-layer-800 {
+    z-index: -800;
+}
+.ae .\-layer-900 {
+    z-index: -900;
+}
+.ae .only-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    clip: rect(1px 1px 1px 1px);
+    clip-path: inset(50%);
+    overflow: hidden;
+}
+.ae [class~=divider-x] {
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+}
+.ae .divider-x {
+    border-right-width: 0px;
+    border-left-width: 1px;
+}
+.ae .divider-x-2 {
+    border-right-width: 0px;
+    border-left-width: 2px;
+}
+.ae .divider-x-4 {
+    border-right-width: 0px;
+    border-left-width: 4px;
+}
+.ae .divider-x-8 {
+    border-right-width: 0px;
+    border-left-width: 8px;
+}
+.ae [class~=divider-y] {
+    border-left-width: 0px;
+    border-right-width: 0px;
+}
+.ae .divider-y {
+    border-bottom-width: 0px;
+    border-top-width: 1px;
+}
+.ae .divider-y-2 {
+    border-bottom-width: 0px;
+    border-top-width: 2px;
+}
+.ae .divider-y-4 {
+    border-bottom-width: 0px;
+    border-top-width: 4px;
+}
+.ae .divider-y-8 {
+    border-bottom-width: 0px;
+    border-top-width: 8px;
+}
+.ae .divider-solid {
+    border-style: solid;
+}
+.ae .divider-dotted {
+    border-style: dotted;
+}
+.ae .divider-dashed {
+    border-style: dashed;
+}
+.ae .divider-double {
+    border-style: double;
+}
+.ae .divider-groove {
+    border-style: groove;
+}
+.ae .divider-ridge {
+    border-style: ridge;
+}
+.ae .divider-inset {
+    border-style: inset;
+}
+.ae .divider-outset {
+    border-style: outset;
+}
+.ae .divider-white {
+    border-color: #ffffff;
+}
+.ae .divider-neutral-50 {
+    border-color: #fafafa;
+}
+.ae .divider-neutral-100 {
+    border-color: #f5f5f5;
+}
+.ae .divider-neutral-200 {
+    border-color: #e5e5e5;
+}
+.ae .divider-neutral-300 {
+    border-color: #d4d4d4;
+}
+.ae .divider-neutral-400 {
+    border-color: #a3a3a3;
+}
+.ae .divider-neutral-500 {
+    border-color: #737373;
+}
+.ae .divider-neutral-600 {
+    border-color: #525252;
+}
+.ae .divider-neutral-700 {
+    border-color: #404040;
+}
+.ae .divider-neutral-800 {
+    border-color: #262626;
+}
+.ae .divider-neutral-900 {
+    border-color: #171717;
+}
+.ae .divider-neutral-950 {
+    border-color: #0a0a0a;
+}
+.ae .divider-black {
+    border-color: #000000;
+}
+.ae .divider-gray-50 {
+    border-color: #f9fafb;
+}
+.ae .divider-gray-100 {
+    border-color: #f3f4f6;
+}
+.ae .divider-gray-200 {
+    border-color: #e5e7eb;
+}
+.ae .divider-gray-300 {
+    border-color: #d1d5db;
+}
+.ae .divider-gray-400 {
+    border-color: #9ca3af;
+}
+.ae .divider-gray-500 {
+    border-color: #6b7280;
+}
+.ae .divider-gray-600 {
+    border-color: #4b5563;
+}
+.ae .divider-gray-700 {
+    border-color: #374151;
+}
+.ae .divider-gray-800 {
+    border-color: #1f2937;
+}
+.ae .divider-gray-900 {
+    border-color: #111827;
+}
+.ae .divider-gray-950 {
+    border-color: #030712;
+}
+.ae .divider-slate-50 {
+    border-color: #f8fafc;
+}
+.ae .divider-slate-100 {
+    border-color: #f1f5f9;
+}
+.ae .divider-slate-200 {
+    border-color: #e2e8f0;
+}
+.ae .divider-slate-300 {
+    border-color: #cbd5e1;
+}
+.ae .divider-slate-400 {
+    border-color: #94a3b8;
+}
+.ae .divider-slate-500 {
+    border-color: #64748b;
+}
+.ae .divider-slate-600 {
+    border-color: #475569;
+}
+.ae .divider-slate-700 {
+    border-color: #334155;
+}
+.ae .divider-slate-800 {
+    border-color: #1e293b;
+}
+.ae .divider-slate-900 {
+    border-color: #0f172a;
+}
+.ae .divider-slate-950 {
+    border-color: #020617;
+}
+.ae .divider-zinc-50 {
+    border-color: #fafafa;
+}
+.ae .divider-zinc-100 {
+    border-color: #f4f4f5;
+}
+.ae .divider-zinc-200 {
+    border-color: #e4e4e7;
+}
+.ae .divider-zinc-300 {
+    border-color: #d4d4d8;
+}
+.ae .divider-zinc-400 {
+    border-color: #a1a1aa;
+}
+.ae .divider-zinc-500 {
+    border-color: #71717a;
+}
+.ae .divider-zinc-600 {
+    border-color: #52525b;
+}
+.ae .divider-zinc-700 {
+    border-color: #3f3f46;
+}
+.ae .divider-zinc-800 {
+    border-color: #27272a;
+}
+.ae .divider-zinc-900 {
+    border-color: #18181b;
+}
+.ae .divider-zinc-950 {
+    border-color: #09090b;
+}
+.ae .divider-stone-50 {
+    border-color: #fafaf9;
+}
+.ae .divider-stone-100 {
+    border-color: #f5f5f4;
+}
+.ae .divider-stone-200 {
+    border-color: #e7e5e4;
+}
+.ae .divider-stone-300 {
+    border-color: #d6d3d1;
+}
+.ae .divider-stone-400 {
+    border-color: #a8a29e;
+}
+.ae .divider-stone-500 {
+    border-color: #78716c;
+}
+.ae .divider-stone-600 {
+    border-color: #57534e;
+}
+.ae .divider-stone-700 {
+    border-color: #44403c;
+}
+.ae .divider-stone-800 {
+    border-color: #292524;
+}
+.ae .divider-stone-900 {
+    border-color: #1c1917;
+}
+.ae .divider-stone-950 {
+    border-color: #0c0a09;
+}
+.ae .divider-red-50 {
+    border-color: #fef2f2;
+}
+.ae .divider-red-100 {
+    border-color: #fee2e2;
+}
+.ae .divider-red-200 {
+    border-color: #fecaca;
+}
+.ae .divider-red-300 {
+    border-color: #fca5a5;
+}
+.ae .divider-red-400 {
+    border-color: #f87171;
+}
+.ae .divider-red-500 {
+    border-color: #ef4444;
+}
+.ae .divider-red-600 {
+    border-color: #dc2626;
+}
+.ae .divider-red-700 {
+    border-color: #b91c1c;
+}
+.ae .divider-red-800 {
+    border-color: #991b1b;
+}
+.ae .divider-red-900 {
+    border-color: #7f1d1d;
+}
+.ae .divider-red-950 {
+    border-color: #450a0a;
+}
+.ae .divider-orange-50 {
+    border-color: #fff7ed;
+}
+.ae .divider-orange-100 {
+    border-color: #ffedd5;
+}
+.ae .divider-orange-200 {
+    border-color: #fed7aa;
+}
+.ae .divider-orange-300 {
+    border-color: #fdba74;
+}
+.ae .divider-orange-400 {
+    border-color: #fb923c;
+}
+.ae .divider-orange-500 {
+    border-color: #f97316;
+}
+.ae .divider-orange-600 {
+    border-color: #ea580c;
+}
+.ae .divider-orange-700 {
+    border-color: #c2410c;
+}
+.ae .divider-orange-800 {
+    border-color: #9a3412;
+}
+.ae .divider-orange-900 {
+    border-color: #7c2d12;
+}
+.ae .divider-orange-950 {
+    border-color: #431407;
+}
+.ae .divider-amber-50 {
+    border-color: #fffbeb;
+}
+.ae .divider-amber-100 {
+    border-color: #fef3c7;
+}
+.ae .divider-amber-200 {
+    border-color: #fde68a;
+}
+.ae .divider-amber-300 {
+    border-color: #fcd34d;
+}
+.ae .divider-amber-400 {
+    border-color: #fbbf24;
+}
+.ae .divider-amber-500 {
+    border-color: #f59e0b;
+}
+.ae .divider-amber-600 {
+    border-color: #d97706;
+}
+.ae .divider-amber-700 {
+    border-color: #b45309;
+}
+.ae .divider-amber-800 {
+    border-color: #92400e;
+}
+.ae .divider-amber-900 {
+    border-color: #78350f;
+}
+.ae .divider-amber-950 {
+    border-color: #451a03;
+}
+.ae .divider-yellow-50 {
+    border-color: #fefce8;
+}
+.ae .divider-yellow-100 {
+    border-color: #fef9c3;
+}
+.ae .divider-yellow-200 {
+    border-color: #fef08a;
+}
+.ae .divider-yellow-300 {
+    border-color: #fde047;
+}
+.ae .divider-yellow-400 {
+    border-color: #facc15;
+}
+.ae .divider-yellow-500 {
+    border-color: #eab308;
+}
+.ae .divider-yellow-600 {
+    border-color: #ca8a04;
+}
+.ae .divider-yellow-700 {
+    border-color: #a16207;
+}
+.ae .divider-yellow-800 {
+    border-color: #854d0e;
+}
+.ae .divider-yellow-900 {
+    border-color: #713f12;
+}
+.ae .divider-yellow-950 {
+    border-color: #422006;
+}
+.ae .divider-lime-50 {
+    border-color: #f7fee7;
+}
+.ae .divider-lime-100 {
+    border-color: #ecfccb;
+}
+.ae .divider-lime-200 {
+    border-color: #d9f99d;
+}
+.ae .divider-lime-300 {
+    border-color: #bef264;
+}
+.ae .divider-lime-400 {
+    border-color: #a3e635;
+}
+.ae .divider-lime-500 {
+    border-color: #84cc16;
+}
+.ae .divider-lime-600 {
+    border-color: #65a30d;
+}
+.ae .divider-lime-700 {
+    border-color: #4d7c0f;
+}
+.ae .divider-lime-800 {
+    border-color: #3f6212;
+}
+.ae .divider-lime-900 {
+    border-color: #365314;
+}
+.ae .divider-lime-950 {
+    border-color: #1a2e05;
+}
+.ae .divider-green-50 {
+    border-color: #f0fdf4;
+}
+.ae .divider-green-100 {
+    border-color: #dcfce7;
+}
+.ae .divider-green-200 {
+    border-color: #bbf7d0;
+}
+.ae .divider-green-300 {
+    border-color: #86efac;
+}
+.ae .divider-green-400 {
+    border-color: #4ade80;
+}
+.ae .divider-green-500 {
+    border-color: #22c55e;
+}
+.ae .divider-green-600 {
+    border-color: #16a34a;
+}
+.ae .divider-green-700 {
+    border-color: #15803d;
+}
+.ae .divider-green-800 {
+    border-color: #166534;
+}
+.ae .divider-green-900 {
+    border-color: #14532d;
+}
+.ae .divider-green-950 {
+    border-color: #052e16;
+}
+.ae .divider-emerald-50 {
+    border-color: #ecfdf5;
+}
+.ae .divider-emerald-100 {
+    border-color: #d1fae5;
+}
+.ae .divider-emerald-200 {
+    border-color: #a7f3d0;
+}
+.ae .divider-emerald-300 {
+    border-color: #6ee7b7;
+}
+.ae .divider-emerald-400 {
+    border-color: #34d399;
+}
+.ae .divider-emerald-500 {
+    border-color: #10b981;
+}
+.ae .divider-emerald-600 {
+    border-color: #059669;
+}
+.ae .divider-emerald-700 {
+    border-color: #047857;
+}
+.ae .divider-emerald-800 {
+    border-color: #065f46;
+}
+.ae .divider-emerald-900 {
+    border-color: #064e3b;
+}
+.ae .divider-emerald-950 {
+    border-color: #022c22;
+}
+.ae .divider-teal-50 {
+    border-color: #f0fdfa;
+}
+.ae .divider-teal-100 {
+    border-color: #ccfbf1;
+}
+.ae .divider-teal-200 {
+    border-color: #99f6e4;
+}
+.ae .divider-teal-300 {
+    border-color: #5eead4;
+}
+.ae .divider-teal-400 {
+    border-color: #2dd4bf;
+}
+.ae .divider-teal-500 {
+    border-color: #14b8a6;
+}
+.ae .divider-teal-600 {
+    border-color: #0d9488;
+}
+.ae .divider-teal-700 {
+    border-color: #0f766e;
+}
+.ae .divider-teal-800 {
+    border-color: #115e59;
+}
+.ae .divider-teal-900 {
+    border-color: #134e4a;
+}
+.ae .divider-teal-950 {
+    border-color: #042f2e;
+}
+.ae .divider-cyan-50 {
+    border-color: #ecfeff;
+}
+.ae .divider-cyan-100 {
+    border-color: #cffafe;
+}
+.ae .divider-cyan-200 {
+    border-color: #a5f3fc;
+}
+.ae .divider-cyan-300 {
+    border-color: #67e8f9;
+}
+.ae .divider-cyan-400 {
+    border-color: #22d3ee;
+}
+.ae .divider-cyan-500 {
+    border-color: #06b6d4;
+}
+.ae .divider-cyan-600 {
+    border-color: #0891b2;
+}
+.ae .divider-cyan-700 {
+    border-color: #0e7490;
+}
+.ae .divider-cyan-800 {
+    border-color: #155e75;
+}
+.ae .divider-cyan-900 {
+    border-color: #164e63;
+}
+.ae .divider-cyan-950 {
+    border-color: #083344;
+}
+.ae .divider-sky-50 {
+    border-color: #f0f9ff;
+}
+.ae .divider-sky-100 {
+    border-color: #e0f2fe;
+}
+.ae .divider-sky-200 {
+    border-color: #bae6fd;
+}
+.ae .divider-sky-300 {
+    border-color: #7dd3fc;
+}
+.ae .divider-sky-400 {
+    border-color: #38bdf8;
+}
+.ae .divider-sky-500 {
+    border-color: #0ea5e9;
+}
+.ae .divider-sky-600 {
+    border-color: #0284c7;
+}
+.ae .divider-sky-700 {
+    border-color: #0369a1;
+}
+.ae .divider-sky-800 {
+    border-color: #075985;
+}
+.ae .divider-sky-900 {
+    border-color: #0c4a6e;
+}
+.ae .divider-sky-950 {
+    border-color: #082f49;
+}
+.ae .divider-blue-50 {
+    border-color: #eff6ff;
+}
+.ae .divider-blue-100 {
+    border-color: #dbeafe;
+}
+.ae .divider-blue-200 {
+    border-color: #bfdbfe;
+}
+.ae .divider-blue-300 {
+    border-color: #93c5fd;
+}
+.ae .divider-blue-400 {
+    border-color: #60a5fa;
+}
+.ae .divider-blue-500 {
+    border-color: #3b82f6;
+}
+.ae .divider-blue-600 {
+    border-color: #2563eb;
+}
+.ae .divider-blue-700 {
+    border-color: #1d4ed8;
+}
+.ae .divider-blue-800 {
+    border-color: #1e40af;
+}
+.ae .divider-blue-900 {
+    border-color: #1e3a8a;
+}
+.ae .divider-blue-950 {
+    border-color: #172554;
+}
+.ae .divider-indigo-50 {
+    border-color: #eef2ff;
+}
+.ae .divider-indigo-100 {
+    border-color: #e0e7ff;
+}
+.ae .divider-indigo-200 {
+    border-color: #c7d2fe;
+}
+.ae .divider-indigo-300 {
+    border-color: #a5b4fc;
+}
+.ae .divider-indigo-400 {
+    border-color: #818cf8;
+}
+.ae .divider-indigo-500 {
+    border-color: #6366f1;
+}
+.ae .divider-indigo-600 {
+    border-color: #4f46e5;
+}
+.ae .divider-indigo-700 {
+    border-color: #4338ca;
+}
+.ae .divider-indigo-800 {
+    border-color: #3730a3;
+}
+.ae .divider-indigo-900 {
+    border-color: #312e81;
+}
+.ae .divider-indigo-950 {
+    border-color: #1e1b4b;
+}
+.ae .divider-violet-50 {
+    border-color: #f5f3ff;
+}
+.ae .divider-violet-100 {
+    border-color: #ede9fe;
+}
+.ae .divider-violet-200 {
+    border-color: #ddd6fe;
+}
+.ae .divider-violet-300 {
+    border-color: #c4b5fd;
+}
+.ae .divider-violet-400 {
+    border-color: #a78bfa;
+}
+.ae .divider-violet-500 {
+    border-color: #8b5cf6;
+}
+.ae .divider-violet-600 {
+    border-color: #7c3aed;
+}
+.ae .divider-violet-700 {
+    border-color: #6d28d9;
+}
+.ae .divider-violet-800 {
+    border-color: #5b21b6;
+}
+.ae .divider-violet-900 {
+    border-color: #4c1d95;
+}
+.ae .divider-violet-950 {
+    border-color: #2e1065;
+}
+.ae .divider-purple-50 {
+    border-color: #faf5ff;
+}
+.ae .divider-purple-100 {
+    border-color: #f3e8ff;
+}
+.ae .divider-purple-200 {
+    border-color: #e9d5ff;
+}
+.ae .divider-purple-300 {
+    border-color: #d8b4fe;
+}
+.ae .divider-purple-400 {
+    border-color: #c084fc;
+}
+.ae .divider-purple-500 {
+    border-color: #a855f7;
+}
+.ae .divider-purple-600 {
+    border-color: #9333ea;
+}
+.ae .divider-purple-700 {
+    border-color: #7e22ce;
+}
+.ae .divider-purple-800 {
+    border-color: #6b21a8;
+}
+.ae .divider-purple-900 {
+    border-color: #581c87;
+}
+.ae .divider-purple-950 {
+    border-color: #3b0764;
+}
+.ae .divider-fuchsia-50 {
+    border-color: #fdf4ff;
+}
+.ae .divider-fuchsia-100 {
+    border-color: #fae8ff;
+}
+.ae .divider-fuchsia-200 {
+    border-color: #f5d0fe;
+}
+.ae .divider-fuchsia-300 {
+    border-color: #f0abfc;
+}
+.ae .divider-fuchsia-400 {
+    border-color: #e879f9;
+}
+.ae .divider-fuchsia-500 {
+    border-color: #d946ef;
+}
+.ae .divider-fuchsia-600 {
+    border-color: #c026d3;
+}
+.ae .divider-fuchsia-700 {
+    border-color: #a21caf;
+}
+.ae .divider-fuchsia-800 {
+    border-color: #86198f;
+}
+.ae .divider-fuchsia-900 {
+    border-color: #701a75;
+}
+.ae .divider-fuchsia-950 {
+    border-color: #4a044e;
+}
+.ae .divider-pink-50 {
+    border-color: #fdf2f8;
+}
+.ae .divider-pink-100 {
+    border-color: #fce7f3;
+}
+.ae .divider-pink-200 {
+    border-color: #fbcfe8;
+}
+.ae .divider-pink-300 {
+    border-color: #f9a8d4;
+}
+.ae .divider-pink-400 {
+    border-color: #f472b6;
+}
+.ae .divider-pink-500 {
+    border-color: #ec4899;
+}
+.ae .divider-pink-600 {
+    border-color: #db2777;
+}
+.ae .divider-pink-700 {
+    border-color: #be185d;
+}
+.ae .divider-pink-800 {
+    border-color: #9d174d;
+}
+.ae .divider-pink-900 {
+    border-color: #831843;
+}
+.ae .divider-pink-950 {
+    border-color: #500724;
+}
+.ae .divider-rose-50 {
+    border-color: #fff1f2;
+}
+.ae .divider-rose-100 {
+    border-color: #ffe4e6;
+}
+.ae .divider-rose-200 {
+    border-color: #fecdd3;
+}
+.ae .divider-rose-300 {
+    border-color: #fda4af;
+}
+.ae .divider-rose-400 {
+    border-color: #fb7185;
+}
+.ae .divider-rose-500 {
+    border-color: #f43f5e;
+}
+.ae .divider-rose-600 {
+    border-color: #e11d48;
+}
+.ae .divider-rose-700 {
+    border-color: #be123c;
+}
+.ae .divider-rose-800 {
+    border-color: #9f1239;
+}
+.ae .divider-rose-900 {
+    border-color: #881337;
+}
+.ae .divider-rose-950 {
+    border-color: #4c0519;
+}
+@media screen and (min-width: 360px) {
+    .ae .xs\:d-none {
+        display: none;
+    }
+    .ae .xs\:d-inline {
+        display: inline;
+    }
+    .ae .xs\:d-inline-block {
+        display: inline-block;
+    }
+    .ae .xs\:d-inline-flex {
+        display: inline-flex;
+    }
+    .ae .xs\:d-inline-grid {
+        display: inline-grid;
+    }
+    .ae .xs\:d-inline-table {
+        display: inline-table;
+    }
+    .ae .xs\:d-block {
+        display: block;
+    }
+    .ae .xs\:d-contents {
+        display: contents;
+    }
+    .ae .xs\:d-grid {
+        display: grid;
+    }
+    .ae .xs\:d-flex {
+        display: flex;
+    }
+    .ae .xs\:d-flow-root {
+        display: flow-root;
+    }
+    .ae .xs\:d-list-item {
+        display: list-item;
+    }
+    .ae .xs\:d-table {
+        display: table;
+    }
+    .ae .xs\:d-table-caption {
+        display: table-caption;
+    }
+    .ae .xs\:d-table-column-group {
+        display: table-column-group;
+    }
+    .ae .xs\:d-table-header-group {
+        display: table-header-group;
+    }
+    .ae .xs\:d-table-footer-group {
+        display: table-footer-group;
+    }
+    .ae .xs\:d-table-row-group {
+        display: table-row-group;
+    }
+    .ae .xs\:d-table-cell {
+        display: table-cell;
+    }
+    .ae .xs\:d-table-column {
+        display: table-column;
+    }
+    .ae .xs\:d-table-row {
+        display: table-row;
+    }
+}
+@media screen and (min-width: 640px) {
+    .ae .sm\:d-none {
+        display: none;
+    }
+    .ae .sm\:d-inline {
+        display: inline;
+    }
+    .ae .sm\:d-inline-block {
+        display: inline-block;
+    }
+    .ae .sm\:d-inline-flex {
+        display: inline-flex;
+    }
+    .ae .sm\:d-inline-grid {
+        display: inline-grid;
+    }
+    .ae .sm\:d-inline-table {
+        display: inline-table;
+    }
+    .ae .sm\:d-block {
+        display: block;
+    }
+    .ae .sm\:d-contents {
+        display: contents;
+    }
+    .ae .sm\:d-grid {
+        display: grid;
+    }
+    .ae .sm\:d-flex {
+        display: flex;
+    }
+    .ae .sm\:d-flow-root {
+        display: flow-root;
+    }
+    .ae .sm\:d-list-item {
+        display: list-item;
+    }
+    .ae .sm\:d-table {
+        display: table;
+    }
+    .ae .sm\:d-table-caption {
+        display: table-caption;
+    }
+    .ae .sm\:d-table-column-group {
+        display: table-column-group;
+    }
+    .ae .sm\:d-table-header-group {
+        display: table-header-group;
+    }
+    .ae .sm\:d-table-footer-group {
+        display: table-footer-group;
+    }
+    .ae .sm\:d-table-row-group {
+        display: table-row-group;
+    }
+    .ae .sm\:d-table-cell {
+        display: table-cell;
+    }
+    .ae .sm\:d-table-column {
+        display: table-column;
+    }
+    .ae .sm\:d-table-row {
+        display: table-row;
+    }
+}
+@media screen and (min-width: 768px) {
+    .ae .md\:d-none {
+        display: none;
+    }
+    .ae .md\:d-inline {
+        display: inline;
+    }
+    .ae .md\:d-inline-block {
+        display: inline-block;
+    }
+    .ae .md\:d-inline-flex {
+        display: inline-flex;
+    }
+    .ae .md\:d-inline-grid {
+        display: inline-grid;
+    }
+    .ae .md\:d-inline-table {
+        display: inline-table;
+    }
+    .ae .md\:d-block {
+        display: block;
+    }
+    .ae .md\:d-contents {
+        display: contents;
+    }
+    .ae .md\:d-grid {
+        display: grid;
+    }
+    .ae .md\:d-flex {
+        display: flex;
+    }
+    .ae .md\:d-flow-root {
+        display: flow-root;
+    }
+    .ae .md\:d-list-item {
+        display: list-item;
+    }
+    .ae .md\:d-table {
+        display: table;
+    }
+    .ae .md\:d-table-caption {
+        display: table-caption;
+    }
+    .ae .md\:d-table-column-group {
+        display: table-column-group;
+    }
+    .ae .md\:d-table-header-group {
+        display: table-header-group;
+    }
+    .ae .md\:d-table-footer-group {
+        display: table-footer-group;
+    }
+    .ae .md\:d-table-row-group {
+        display: table-row-group;
+    }
+    .ae .md\:d-table-cell {
+        display: table-cell;
+    }
+    .ae .md\:d-table-column {
+        display: table-column;
+    }
+    .ae .md\:d-table-row {
+        display: table-row;
+    }
+}
+@media screen and (min-width: 1024px) {
+    .ae .lg\:d-none {
+        display: none;
+    }
+    .ae .lg\:d-inline {
+        display: inline;
+    }
+    .ae .lg\:d-inline-block {
+        display: inline-block;
+    }
+    .ae .lg\:d-inline-flex {
+        display: inline-flex;
+    }
+    .ae .lg\:d-inline-grid {
+        display: inline-grid;
+    }
+    .ae .lg\:d-inline-table {
+        display: inline-table;
+    }
+    .ae .lg\:d-block {
+        display: block;
+    }
+    .ae .lg\:d-contents {
+        display: contents;
+    }
+    .ae .lg\:d-grid {
+        display: grid;
+    }
+    .ae .lg\:d-flex {
+        display: flex;
+    }
+    .ae .lg\:d-flow-root {
+        display: flow-root;
+    }
+    .ae .lg\:d-list-item {
+        display: list-item;
+    }
+    .ae .lg\:d-table {
+        display: table;
+    }
+    .ae .lg\:d-table-caption {
+        display: table-caption;
+    }
+    .ae .lg\:d-table-column-group {
+        display: table-column-group;
+    }
+    .ae .lg\:d-table-header-group {
+        display: table-header-group;
+    }
+    .ae .lg\:d-table-footer-group {
+        display: table-footer-group;
+    }
+    .ae .lg\:d-table-row-group {
+        display: table-row-group;
+    }
+    .ae .lg\:d-table-cell {
+        display: table-cell;
+    }
+    .ae .lg\:d-table-column {
+        display: table-column;
+    }
+    .ae .lg\:d-table-row {
+        display: table-row;
+    }
+}
+@media screen and (min-width: 1280px) {
+    .ae .xl\:d-none {
+        display: none;
+    }
+    .ae .xl\:d-inline {
+        display: inline;
+    }
+    .ae .xl\:d-inline-block {
+        display: inline-block;
+    }
+    .ae .xl\:d-inline-flex {
+        display: inline-flex;
+    }
+    .ae .xl\:d-inline-grid {
+        display: inline-grid;
+    }
+    .ae .xl\:d-inline-table {
+        display: inline-table;
+    }
+    .ae .xl\:d-block {
+        display: block;
+    }
+    .ae .xl\:d-contents {
+        display: contents;
+    }
+    .ae .xl\:d-grid {
+        display: grid;
+    }
+    .ae .xl\:d-flex {
+        display: flex;
+    }
+    .ae .xl\:d-flow-root {
+        display: flow-root;
+    }
+    .ae .xl\:d-list-item {
+        display: list-item;
+    }
+    .ae .xl\:d-table {
+        display: table;
+    }
+    .ae .xl\:d-table-caption {
+        display: table-caption;
+    }
+    .ae .xl\:d-table-column-group {
+        display: table-column-group;
+    }
+    .ae .xl\:d-table-header-group {
+        display: table-header-group;
+    }
+    .ae .xl\:d-table-footer-group {
+        display: table-footer-group;
+    }
+    .ae .xl\:d-table-row-group {
+        display: table-row-group;
+    }
+    .ae .xl\:d-table-cell {
+        display: table-cell;
+    }
+    .ae .xl\:d-table-column {
+        display: table-column;
+    }
+    .ae .xl\:d-table-row {
+        display: table-row;
+    }
+}
+@media screen and (min-width: 1536px) {
+    .ae .\32 xl\:d-none {
+        display: none;
+    }
+    .ae .\32 xl\:d-inline {
+        display: inline;
+    }
+    .ae .\32 xl\:d-inline-block {
+        display: inline-block;
+    }
+    .ae .\32 xl\:d-inline-flex {
+        display: inline-flex;
+    }
+    .ae .\32 xl\:d-inline-grid {
+        display: inline-grid;
+    }
+    .ae .\32 xl\:d-inline-table {
+        display: inline-table;
+    }
+    .ae .\32 xl\:d-block {
+        display: block;
+    }
+    .ae .\32 xl\:d-contents {
+        display: contents;
+    }
+    .ae .\32 xl\:d-grid {
+        display: grid;
+    }
+    .ae .\32 xl\:d-flex {
+        display: flex;
+    }
+    .ae .\32 xl\:d-flow-root {
+        display: flow-root;
+    }
+    .ae .\32 xl\:d-list-item {
+        display: list-item;
+    }
+    .ae .\32 xl\:d-table {
+        display: table;
+    }
+    .ae .\32 xl\:d-table-caption {
+        display: table-caption;
+    }
+    .ae .\32 xl\:d-table-column-group {
+        display: table-column-group;
+    }
+    .ae .\32 xl\:d-table-header-group {
+        display: table-header-group;
+    }
+    .ae .\32 xl\:d-table-footer-group {
+        display: table-footer-group;
+    }
+    .ae .\32 xl\:d-table-row-group {
+        display: table-row-group;
+    }
+    .ae .\32 xl\:d-table-cell {
+        display: table-cell;
+    }
+    .ae .\32 xl\:d-table-column {
+        display: table-column;
+    }
+    .ae .\32 xl\:d-table-row {
+        display: table-row;
+    }
+}
+@media screen and (min-width: 2048px) {
+    .ae .\32 k\:d-none {
+        display: none;
+    }
+    .ae .\32 k\:d-inline {
+        display: inline;
+    }
+    .ae .\32 k\:d-inline-block {
+        display: inline-block;
+    }
+    .ae .\32 k\:d-inline-flex {
+        display: inline-flex;
+    }
+    .ae .\32 k\:d-inline-grid {
+        display: inline-grid;
+    }
+    .ae .\32 k\:d-inline-table {
+        display: inline-table;
+    }
+    .ae .\32 k\:d-block {
+        display: block;
+    }
+    .ae .\32 k\:d-contents {
+        display: contents;
+    }
+    .ae .\32 k\:d-grid {
+        display: grid;
+    }
+    .ae .\32 k\:d-flex {
+        display: flex;
+    }
+    .ae .\32 k\:d-flow-root {
+        display: flow-root;
+    }
+    .ae .\32 k\:d-list-item {
+        display: list-item;
+    }
+    .ae .\32 k\:d-table {
+        display: table;
+    }
+    .ae .\32 k\:d-table-caption {
+        display: table-caption;
+    }
+    .ae .\32 k\:d-table-column-group {
+        display: table-column-group;
+    }
+    .ae .\32 k\:d-table-header-group {
+        display: table-header-group;
+    }
+    .ae .\32 k\:d-table-footer-group {
+        display: table-footer-group;
+    }
+    .ae .\32 k\:d-table-row-group {
+        display: table-row-group;
+    }
+    .ae .\32 k\:d-table-cell {
+        display: table-cell;
+    }
+    .ae .\32 k\:d-table-column {
+        display: table-column;
+    }
+    .ae .\32 k\:d-table-row {
+        display: table-row;
+    }
+}
+@media screen and (min-width: 3840px) {
+    .ae .\34 k\:d-none {
+        display: none;
+    }
+    .ae .\34 k\:d-inline {
+        display: inline;
+    }
+    .ae .\34 k\:d-inline-block {
+        display: inline-block;
+    }
+    .ae .\34 k\:d-inline-flex {
+        display: inline-flex;
+    }
+    .ae .\34 k\:d-inline-grid {
+        display: inline-grid;
+    }
+    .ae .\34 k\:d-inline-table {
+        display: inline-table;
+    }
+    .ae .\34 k\:d-block {
+        display: block;
+    }
+    .ae .\34 k\:d-contents {
+        display: contents;
+    }
+    .ae .\34 k\:d-grid {
+        display: grid;
+    }
+    .ae .\34 k\:d-flex {
+        display: flex;
+    }
+    .ae .\34 k\:d-flow-root {
+        display: flow-root;
+    }
+    .ae .\34 k\:d-list-item {
+        display: list-item;
+    }
+    .ae .\34 k\:d-table {
+        display: table;
+    }
+    .ae .\34 k\:d-table-caption {
+        display: table-caption;
+    }
+    .ae .\34 k\:d-table-column-group {
+        display: table-column-group;
+    }
+    .ae .\34 k\:d-table-header-group {
+        display: table-header-group;
+    }
+    .ae .\34 k\:d-table-footer-group {
+        display: table-footer-group;
+    }
+    .ae .\34 k\:d-table-row-group {
+        display: table-row-group;
+    }
+    .ae .\34 k\:d-table-cell {
+        display: table-cell;
+    }
+    .ae .\34 k\:d-table-column {
+        display: table-column;
+    }
+    .ae .\34 k\:d-table-row {
+        display: table-row;
+    }
+}
+
+*[data-aetheme=dark-cobalt] {
+    --theme-color-primary: #0A083A;
+    --theme-color-secondary: #3E3B87;
+    --theme-color-accent: #3E3B87;
+    --theme-color-muted: #B3B2D4;
+    --theme-color-text: #DDDEE9;
+    --theme-box-shadow: rgba(0, 0, 0, 0.5);
+    --theme-alert-color: #ff4c51;
+}
+
+*[data-aetheme=dark-coffee] {
+    --theme-color-primary: #6C3B06;
+    --theme-color-secondary: #311a01;
+    --theme-color-accent: #311a01;
+    --theme-color-muted: #FFEDD9;
+    --theme-color-text: #FDDAC0;
+    --theme-box-shadow: rgba(0, 0, 0, 0.5);
+    --theme-alert-color: #ff4c51;
+}
+
+*[data-aetheme=dark-sunset] {
+    --theme-color-primary: #451952;
+    --theme-color-secondary: #662549;
+    --theme-color-accent: #662549;
+    --theme-color-muted: #dab0a7;
+    --theme-color-text: #DDDEE9;
+    --theme-box-shadow: rgba(0, 0, 0, 0.5);
+    --theme-alert-color: #ff4c51;
+}
+
+*[data-aetheme=dark-rhino] {
+    --theme-color-primary: #27374D;
+    --theme-color-secondary: #526D82;
+    --theme-color-accent: #526D82;
+    --theme-color-muted: #DDE6ED;
+    --theme-color-text: #DDDEE9;
+    --theme-box-shadow: rgba(0, 0, 0, 0.5);
+    --theme-alert-color: #ff4c51;
+}
+
+*[data-aetheme=dark-pink] {
+    --theme-color-primary: #4C0033;
+    --theme-color-secondary: #790252;
+    --theme-color-accent: #b81470;
+    --theme-color-muted: #DF9AC7;
+    --theme-color-text: #DDDEE9;
+    --theme-box-shadow: rgba(0, 0, 0, 0.5);
+    --theme-alert-color: #ff4c51;
+}
+
+*[data-aetheme=dark-hyper-space] {
+    --theme-color-primary: #313866;
+    --theme-color-secondary: #504099;
+    --theme-color-accent: #b82d9e;
+    --theme-color-muted: #E7C2FD;
+    --theme-color-text: #DDDEE9;
+    --theme-box-shadow: rgba(0, 0, 0, 0.5);
+    --theme-alert-color: #ff4c51;
+}
+
+*[data-aetheme=dark-midnight] {
+    --theme-color-primary: #37404a;
+    --theme-color-secondary: #727cf5;
+    --theme-color-accent: #727cf5;
+    --theme-color-muted: #cbdcec;
+    --theme-color-text: #DDDEE9;
+    --theme-box-shadow: rgba(0, 0, 0, 0.5);
+    --theme-alert-color: #ff4c51;
+}
+
+*[data-aetheme=light-gray] {
+    --theme-color-primary: #ffffff;
+    --theme-color-secondary: #f0f0f0;
+    --theme-color-accent: #dadada;
+    --theme-color-muted: rgba(47, 43, 61, 0.6784313725);
+    --theme-color-text: rgba(47, 43, 61, 0.6784313725);
+    --theme-box-shadow: rgba(0, 0, 0, 0.15);
+    --theme-alert-color: #ff4c51;
+}
+
+*[data-aetheme=monochromatic-blue] {
+    --theme-color-primary: #3498DB;
+    --theme-color-secondary: #5BAFEC;
+    --theme-color-accent: #216A96;
+    --theme-color-muted: #A9DFF5;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #216A96;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=monochromatic-blue-berry] {
+    --theme-color-primary: #61678C;
+    --theme-color-secondary: #7A7FA1;
+    --theme-color-accent: #434D6B;
+    --theme-color-muted: #A9AECF;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #2C3045;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=monochromatic-navy] {
+    --theme-color-primary: #2C3E50;
+    --theme-color-secondary: #3E5062;
+    --theme-color-accent: #1F2D3C;
+    --theme-color-muted: #A9B7C4;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #1C2A35;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=monochromatic-green] {
+    --theme-color-primary: #27AE60;
+    --theme-color-secondary: #51C07C;
+    --theme-color-accent: #1A7844;
+    --theme-color-muted: #A2E2BB;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #1B7942;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=monochromatic-lemon] {
+    --theme-color-primary: #247159;
+    --theme-color-secondary: #3A8A70;
+    --theme-color-accent: #1A5A3D;
+    --theme-color-muted: #87C9A2;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #10352B;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=monochromatic-yellow] {
+    --theme-color-primary: #FAD02E;
+    --theme-color-secondary: #FDE059;
+    --theme-color-accent: #B7950B;
+    --theme-color-muted: #F8E99A;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #B59A1F;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=monochromatic-orange] {
+    --theme-color-primary: #FF5733;
+    --theme-color-secondary: #FF7A59;
+    --theme-color-accent: #A3470C;
+    --theme-color-muted: #F7C79A;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #B33F24;
+    --theme-alert-color: #FFE8E0;
+}
+
+*[data-aetheme=monochromatic-dark-orange] {
+    --theme-color-primary: #D35400;
+    --theme-color-secondary: #DC7133;
+    --theme-color-accent: #A14000;
+    --theme-color-muted: #F1B088;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #963900;
+    --theme-alert-color: #F8E0D3;
+}
+
+*[data-aetheme=monochromatic-red] {
+    --theme-color-primary: #E74C3C;
+    --theme-color-secondary: #E98B81;
+    --theme-color-accent: #992C1F;
+    --theme-color-muted: #F7A8A1;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #7B241C;
+    --theme-alert-color: #FADBD8;
+}
+
+*[data-aetheme=monochromatic-guava] {
+    --theme-color-primary: #E55151;
+    --theme-color-secondary: #F07B7B;
+    --theme-color-accent: #A12727;
+    --theme-color-muted: #F5B5B5;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #732525;
+    --theme-alert-color: #F3A1A1;
+}
+
+*[data-aetheme=monochromatic-purple] {
+    --theme-color-primary: #9B59B6;
+    --theme-color-secondary: #BB8FCE;
+    --theme-color-accent: #6C3483;
+    --theme-color-muted: #D4A6E0;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #4A235A;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=monochromatic-pink] {
+    --theme-color-primary: #F78FB3;
+    --theme-color-secondary: #FBBCCB;
+    --theme-color-accent: #E75480;
+    --theme-color-muted: #FDE2E6;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #8C003263;
+    --theme-alert-color: #FDE2E6;
+}
+
+*[data-aetheme=monochromatic-coral] {
+    --theme-color-primary: #FF6F61;
+    --theme-color-secondary: #FF8B80;
+    --theme-color-accent: #E54A44;
+    --theme-color-muted: #FFD1D1;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #B34F47;
+    --theme-alert-color: #FFEDEA;
+}
+
+*[data-aetheme=monochromatic-beige] {
+    --theme-color-primary: #D2B48C;
+    --theme-color-secondary: #E3C9A6;
+    --theme-color-accent: #8B5E3C;
+    --theme-color-muted: #F0DFBC;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #7D5A3A;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=monochromatic-leather] {
+    --theme-color-primary: #A0522D;
+    --theme-color-secondary: #C0805A;
+    --theme-color-accent: #5A2C0F;
+    --theme-color-muted: #D8B7A1;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #4E2509;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=monochromatic-gray] {
+    --theme-color-primary: #4A4A4A;
+    --theme-color-secondary: #646464;
+    --theme-color-accent: #4A5354;
+    --theme-color-muted: #CCD1D1;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #2E2E2E;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=monochromatic-black] {
+    --theme-color-primary: #0A0A0A;
+    --theme-color-secondary: #1D1D1D;
+    --theme-color-accent: #3f3f3f;
+    --theme-color-muted: #909090;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #000000;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=navy-energy] {
+    --theme-color-primary: #2C3E50;
+    --theme-color-secondary: #34495E;
+    --theme-color-accent: #E74C3C;
+    --theme-color-muted: #95A5A6;
+    --theme-color-text: #ECF0F1;
+    --theme-box-shadow: #7F8C8D;
+    --theme-alert-color: #3498DB;
+}
+
+*[data-aetheme=organic-nature] {
+    --theme-color-primary: #27AE60;
+    --theme-color-secondary: #2ECC71;
+    --theme-color-accent: #0B5032;
+    --theme-color-muted: #A2E2BB;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #7F8C8D;
+    --theme-alert-color: #FF4C51;
+}
+
+*[data-aetheme=tropical] {
+    --theme-color-primary: #FF6F61;
+    --theme-color-secondary: #FFBC42;
+    --theme-color-accent: #3AA17E;
+    --theme-color-muted: #F4E8C1;
+    --theme-color-text: #252D39;
+    --theme-box-shadow: #3AA17E;
+    --theme-alert-color: #67A4E5;
+}
+
+*[data-aetheme=vibrant-modern] {
+    --theme-color-primary: #FF5733;
+    --theme-color-secondary: #C70039;
+    --theme-color-accent: #C4411B;
+    --theme-color-muted: #FFC8B2;
+    --theme-color-text: #FFC300;
+    --theme-box-shadow: #900C3F;
+    --theme-alert-color: #DAF7A6;
+}
+
+*[data-aetheme=autumn-days] {
+    --theme-color-primary: #D35400;
+    --theme-color-secondary: #E67E22;
+    --theme-color-accent: #873600;
+    --theme-color-muted: #F7C79A;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #7B241C;
+    --theme-alert-color: #873600;
+}
+
+*[data-aetheme=tech-future] {
+    --theme-color-primary: #0A0A0A;
+    --theme-color-secondary: #2C2C2C;
+    --theme-color-accent: #E74C3C;
+    --theme-color-muted: #BDC3C7;
+    --theme-color-text: #ECF0F1;
+    --theme-box-shadow: #7F8C8D;
+    --theme-alert-color: #3498DB;
+}
+
+*[data-aetheme=luxury] {
+    --theme-color-primary: #2E2B2B;
+    --theme-color-secondary: #4A4747;
+    --theme-color-accent: #D4AF37;
+    --theme-color-muted: #5E5B5B;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #1A1717;
+    --theme-alert-color: #C8B27D;
+}
+
+*[data-aetheme=midnight] {
+    --theme-color-primary: #37404A;
+    --theme-color-secondary: #3C4858;
+    --theme-color-accent: #7b858f;
+    --theme-color-muted: #464f5b;
+    --theme-color-text: #FFFFFF;
+    --theme-box-shadow: #37404A;
+    --theme-alert-color: #F84D70;
+}
+* {
+    font-family: var(--menu-primary-font);
+}
+
+body {
+    height: 100vh !important;
+    width: 100vw !important;
+    overflow-x: hidden;
+}
+
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info[aria-expanded].inactive::after {
+    display: none;
+}
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info[aria-expanded].inactive,
+.ae-menubar[aria-orientation=vertical] > .wrapper-user .user-info[aria-expanded].inactive * {
+    cursor: auto;
+}
+
+#sc-main-content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+#app-frames {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+#contrl_abas .tab > a > span {
+    word-break: keep-all;
+    white-space: nowrap;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.submenu .wrapper .label,
+#list_megamenu .wrapper .label {
+    max-width: 120px;
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    word-break: break-word;
+    white-space: normal;
+}
+
+.submenu .wrapper .label {
+    max-width: 250px;
+}
+#list_megamenu .submenu .wrapper .label {
+    max-width: none;
+}
+
+.ae-menubar.menubar[aria-orientation="vertical"] {
+    /*min-width: 260px*/
+}
+
+.logo img {
+    visibility: hidden;
+}
+
+.ae-menubar.tabsbar {
+    display: none;
+}
+#id_links_abas, #idMenuDown {
+    display: none;
+}
+
+.show-mobile, .show-mobile-flex {
+    display: none;
+}
+
+.ae-menubar .user:hover > .mb_icon, .ae-menubar .user:focus-visible > .mb_icon, .ae-menubar .user[aria-expanded=true] > .mb_icon {
+    top: 3px;
+}
+.ae-menubar .user > .mb_icon {
+    position: relative;
+    top: 0px;
+    font-size: 2.15em;
+    text-align: center;
+    transition: top 250ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+.vertical-orientation .ae-menubar[role=toolbar] > div.wrapper {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+.button.expand-button {
+}
+.button.mob-button {
+    width: 42px;
+    height: 42px;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px !important;
+}
+
+.logo img {
+    max-height: 48px !important;
+}
+.ae-menubar[aria-orientation=vertical] > .wrapper-header {
+    column-gap: 20px;
+}
+
+li.wrapper[disabled="disabled"],
+li.result-item[disabled="disabled"] {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+ul.context-menu-list.context-menu-root {
+    background: var(--theme-color-primary);
+    color: var(--theme-color-text);
+    padding: 0.5rem;
+    border: solid 1px rgba(0,0,0,.0);
+    border-radius: .25em;
+}
+
+ul.context-menu-list.context-menu-root li:not(.context-menu-separator) {
+    background: transparent;
+    color: var(--theme-color-text);
+    border: none;
+    border-radius: 4px;
+}
+
+ul.context-menu-list.context-menu-root li.context-menu-separator {
+    background: transparent;
+    color: var(--theme-color-text);
+    border: solid 1px rgba(0,0,0,0);
+    border-width: 1px 0 0 0;
+    border-color: var(--theme-color-text);
+    padding: 0 !important;
+    margin: 5px 0 !important;
+}
+
+ul.context-menu-list.context-menu-root li:not(.context-menu-separator):hover {
+    background: var(--theme-color-accent);
+}
+
+.shortcuts-title {
+    padding: 20px;
+    font-size: 20px;
+    border-bottom: solid 1px;
+    border-color: var(--theme-color-secondary);
+}
+
+ul#shortcuts-list {
+    max-height: 400px;
+    overflow: auto;
+}
+
+.ae-menubar #shortcuts-panel {
+    max-height: none;
+    overflow: auto;
+}
+
+p.shortcut-description {
+    height: 58px;
+    white-space: nowrap;
+    /* width: 30px; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+p.shortcut-title i {
+    display: flex;
+    flex-direction: column;
+    height: 40px;
+    width: 40px;
+    background: rgba(0,0,0,.2);
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+}
+
+p.shortcut-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    align-items: center;
+}
+
+p.shortcut-description {
+    height: auto;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* height: 36px; */
+}
+
+ul#shortcuts-list {
+    column-gap: 1px !important;
+    row-gap: 1px !important;
+    display: flex;
+    background: var(--theme-color-secondary);
+}
+.ae-menubar #shortcuts-panel #shortcuts-list > .list-item .shortcut-title, .ae-menubar #shortcuts-panel #shortcuts-list > .list-item .shortcut-description {
+    word-break: break-word;
+    text-align: center;
+}
+.ae-menubar #shortcuts-panel ul#shortcuts-list > .list-item {
+    background-color: var(--theme-color-primary);
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.ae-menubar #shortcuts-panel ul#shortcuts-list > .list-item.dead-item {
+    background: var(--theme-color-primary) !important;
+}
+
+#shortcuts {
+    padding: 1px !important;
+}
+
+#user-avatar {
+    width: 60px;
+    min-width: 60px;
+    height: 60px;
+}
+
+#context-menu-layer,
+.context-menu-list.context-menu-root {
+    z-index: 1001 !important;
+}
+.panel-backdrop-overlay {
+    position: fixed;
+    background: transparent;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+}
+.ae-menubar .panel {
+    position: fixed;
+    z-index: 1002;
+}
+
+.ae-menubar .panel *::-webkit-scrollbar {
+    width: 4px;
+}
+.ae-menubar .panel *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.25);
+}
+.ae-menubar .panel *::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.ae-menubar .main-navigation [role=menuitem] .submenu[role=menu] .submenu[role=menu] {
+    top: 0.25em;
+    left: calc(100% + 2px);
+}
+@media only screen and (max-width: 1188px) {
+    #esc-button-show {
+        display: none;
+    }
+    .hide-mobile {
+        display: none !important;
+    }
+    .show-mobile {
+        display: block !important;
+    }
+    .show-mobile-flex {
+        display: flex !important;
+    }
+}
+
+iframe.loading {
+    height: 0px !important;
+}
+.loader-placeholder {
+    display: none;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+iframe.loading + .loader-placeholder {
+    display: flex;
+}
+.tab-loader-placeholder {
+    display: none;
+    height: 15px;
+    width: 15px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+li.tab.loading .tab-loader-placeholder {
+    display: inline-flex;
+}
+li.tab .mb_icon {
+    width: 15px;
+    text-align: center;
+}
+li.tab.loading .mb_icon {
+    display: none;
+}
+
+.loader-placeholder .lds-dual-ring {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+}
+.loader-placeholder .lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    border-bottom-color: var(--theme-color-accent);
+    border-top-color: var(--theme-color-accent);
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+.tab-loader-placeholder .lds-dual-ring {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+}
+.tab-loader-placeholder .lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 15px;
+    height: 15px;
+    margin: 0px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    border-bottom-color: var(--theme-color-text);
+    border-top-color: var(--theme-color-text);
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+err-msg {
+     display: none;
+}
+
+.action-button .mb_icon {
+    position: relative;
+}
+.flex-separator {
+    flex-grow: 1;
+}
+
+
+.ae-menubar .toolbar #notification-dot {
+    position: absolute;
+    display: none;
+    top: -2px;
+    left: 25px;
+    min-width: 8px;
+    min-height: 8px;
+    padding: 0;
+    border-radius: 50rem;
+    color: white;
+    font-size: 0.75rem;
+    line-height: 0.875rem;
+    text-align: center;
+    transform: translate(-92%, -31%);
+}
+
+
+.swal2-modal.notif-popup .swal2-header {
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    border: solid 0px rgba(0,0,0,0.3);
+    border-width: 0 0 1px 0;
+    border-radius: 5px 5px 0 0;
+    background: rgba(0,0,0,0.05);
+}
+
+.swal2-popup.swal2-modal.notif-popup.swal2-show {
+    padding: 0;
+    box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
+    border-radius: 4px;
+    max-width: 70%;
+    min-width: 400px;
+}
+
+.swal2-modal.notif-popup img.swal2-image {
+    margin: 0;
+    height: 30px !important;
+    width: auto !important;
+    border-radius: 100%;
+}
+
+.swal2-modal.notif-popup h2#swal2-title {
+    margin: 0;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+    flex-wrap: wrap;
+    font-size: 1.4rem;
+}
+
+.swal2-modal.notif-popup .swal2-actions {
+    padding: 20px;
+}
+
+.swal2-modal.notif-popup .swal2-content {
+    min-height: 200px;
+    white-space: normal;
+    word-wrap: break-word;
+    padding: 5px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.swal2-modal.notif-popup #swal2-content {
+    text-align: left;
+    width: 100%;
+}
+.swal2-modal.notif-popup .swal2-container.swal2-center.swal2-fade.swal2-shown {
+    backdrop-filter: blur(2px);
+}
+
+
+
+
+.submenu[role=menu].container {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    padding: 0.5em;
+    background-color: var(--theme-color-primary);
+    border-radius: 4px;
+    box-shadow: 0 2px 6px var(--theme-menubar-global-boxShadowColor);
+    display: block;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1002;
+}
+
+#list_megamenu .submenu[role=menu].container {
+    position: fixed;
+
+}
+
+.submenu[role=menu].container.show {
+    visibility: visible;
+    pointer-events: all;
+}
+
+.submenu[role=menu].container .submenu_row {
+    --gutter-x: 1.5rem;
+    --gutter-y: 0;
+    row-gap: 1rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    display: flex;
+}
+
+.submenu[role=menu].container .submenu_row > * {
+    max-width: 100%;
+    margin-top: var(--gutter-y);
+    padding-right: calc(var(--gutter-x)*.5);
+    padding-left: calc(var(--gutter-x)*.5);
+    flex-shrink: 0;
+}
+
+.submenu[role=menu].container [role="menuitem"].border_bottom,
+.submenu[role=menu].container .wrapper.section_title [role="menuitem"]{
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--theme-color-muted) !important;
+}
+
+.submenu[role=menu].container .wrapper:last-child [role="menuitem"] {
+    border-bottom-width: 0;
+}
+
+.submenu[role=menu].container .wrapper.section_title [role=menuitem] span {
+    white-space: normal;
+    word-break: break-word;
+    max-width: 80vw;
+}
+
+.submenu[role=menu].container .wrapper.section_title [role=menuitem]{
+    color: var(--theme-menubar-nav-submenu-menuitem-color);
+    text-transform: uppercase;
+}
+
+.submenu[role=menu].container .wrapper.section_title [role=menuitem]:hover {
+    background-color: transparent;
+}
+
+.submenu[role=menu].container .wrapper.section_title ~ .wrapper:not(.section_title) [role="menuitem"] {
+    margin-left: 0.5rem;
+}
+
+#list_megamenu .submenu_row .section_title [role=menuitem] {
+    justify-content: left;
+    cursor: auto;
+}
+
+#list_megamenu .submenu_row [role=menuitem] {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    min-height: 35px;
+}
+
+#list_megamenu li.wrapper.wrapper.section_title {
+    font-weight: bold;
+    margin-left: 6px;
+}
+
+#list_megamenu li.wrapper.wrapper.section_title span.label {
+    font-weight: bold !important;
+}
+
+@media screen and (min-width: 576px) {
+    .submenu[role=menu].container {
+        max-width: 540px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .submenu[role=menu].container {
+        max-width: 720px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .submenu[role=menu].container {
+        max-width: 960px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .submenu[role=menu].container {
+        max-width: 1140px;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .submenu[role=menu].container {
+        max-width: 1320px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .col_md {
+        width: 50%;
+        flex: 0 0 auto;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .col_lg {
+        width: 25%;
+        flex: 0 0 auto;
+    }
+}
+    </style>
+    
+<?php
+$font_name = $menu_data['font_string'];
+if (trim($font_name) == '') {
+    $font_name = 'sans-serif';
+}
+?>
+<style>
+    :root {
+        --menu-primary-font: '<?php echo $font_name; ?>', sans-serif;
+    }
+</style><?php
+$font_name = $menu_data['font_string'];
+if (trim($font_name) != '' && trim($font_name) != '-') {
+?>
+    <link href='https://fonts.googleapis.com/css?family=<?php echo str_replace(' ', '+', $font_name);?>' rel='stylesheet' type='text/css'>
+    <?php
+}
+?>
+
+  <style type="text/css">
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body{
+      background-color: #dee3eb;
+      overflow: hidden;
+    }
+    
+    .sample-image {
+      width: auto;
+    }
+
+    .sample-image-third {
+      width: calc(33.33% - .5rem);
+    }
+
+
+
+    .frame-container {
+      padding: 0.562rem 0.5rem 0.5rem 0.5rem;
+      flex-flow: column nowrap;
+      row-gap: .5rem;
+      display: flex;
+      height: 100vh;
+      justify-content: stretch;
+      align-items: stretch;
+    }
+
+    .frame-container > div ,
+    .frame-container > iframe {
+      flex-grow: 1;
+    }
+
+    .frame-container > div > iframe{
+      height: 100%;
+      width: 100%;
+    }
+
+    .sample-row{      
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
+      column-gap: .65rem;
+      display: flex;
+    }
+    .ae-menubar.toolbar.compact {
+      padding: 0 !important;
+      height: auto;
+    }
+
+  </style>
+  <main>
+    <div id='sc-main-content' class="vertical-orientation">
+      <section class="ae-menubar menubar" role="toolbar" aria-orientation="vertical" tabindex="0" data-aetheme="<?php echo ( isset($_COOKIE["menuTheme"]) && !empty($_COOKIE["menuTheme"]) && in_array($_COOKIE["menuTheme"], $menu_data["pick_themes"]) ) ? $_COOKIE["menuTheme"] : "light-gray"; ?>">
+        <div class="wrapper-header">
+          <div class="logo"><a id="sc-menu-link-home" href="./"><span class="only-sr">Scriptcase menubar home </span><img
+                class="d-block" src="<?php echo ""; ?>" aria-hidden="true" /><img
+                class="d-none" src="<?php echo ""; ?>" aria-hidden="true" /></a></div>
+          <div class="mb_icon fa-solid fa-compress hide-mobile" id="switch-menu-position" aria-label="menu fixo" role="checkbox"
+            aria-checked="true"></div>
+        </div>
+          <style>
+    .header-string-m-text {
+        color: var(--theme-color-text);
+        font-size: 1rem;
+        display: block;
+        width: 100%;
+        font-weight: bold;
+        word-wrap: break-word;
+    }
+</style>
+<span class="header-string-m-text"><?php echo "" . $_SESSION['varDescricao'] . ""; ?></span>
+          <?php
+          if ($menu_data['usercheck'] == 'S') {
+          ?>
+        <div class="wrapper-user">
+          <div class="user-info" aria-expanded="false" aria-controls="user-menu">
+            <div class="user action-button" role="button" id="user-button" aria-label="ações do usuário"
+              aria-expanded="false" aria-controls="user-panel" aria-owns="user-panel">
+              <img src="<?php echo ""; ?>" class="user_image" />
+            </div>
+            <div class="group">
+              <p class="user-name"><?php echo ""; ?></p>
+              <p class="user-profile"><?php echo ""; ?></p>
+            </div>
+          </div>
+          <div class="user-menu p-right-4">
+            <div class="wrapper" id="user-menu">
+              <div class="user-menu-content">
+                <div class="section actions ae-menubar-accordion">
+                  <ul role="menubar" aria-label="ações do menu do usuário" id="user_menu_list">
+                  </ul>
+                </div>
+                <hr class="divider-y divider-solid divider-theme-color my-2" />
+              </div>
+            </div>
+          </div>
+        </div>
+          <?php
+              }
+              ?>
+        <div class="wrapper-navigation ae-menubar-accordion" aria-label="navegação principal">
+          <ul role="menubar" aria-label="navegação principal" id="nav_list">
+          </ul>
+        </div>
+      </section>
+      <section class="ae-menubar tabsbar compact" role="toolbar" aria-orientation="horizontal" tabindex="0" data-aetheme="<?php echo ( isset($_COOKIE["menuTheme"]) && !empty($_COOKIE["menuTheme"]) && in_array($_COOKIE["menuTheme"], $menu_data["pick_themes"]) ) ? $_COOKIE["menuTheme"] : "light-gray"; ?>">
+        
+      </section>
+      
+      <div class="frame-container" id="app-frames" data-aetheme="<?php echo ( isset($_COOKIE["menuTheme"]) && !empty($_COOKIE["menuTheme"]) && in_array($_COOKIE["menuTheme"], $menu_data["pick_themes"]) ) ? $_COOKIE["menuTheme"] : "light-gray"; ?>">
+        <iframe class="nm_frame_app" name="nm_frame_app" src="" frameborder="0"></iframe>
+          <div class="loader-placeholder"><div class="lds-dual-ring"></div></div>
+      </div>
+        
+<?php
+?>
+<style>
+    .submenu[role=menu].container{
+        width: auto;
+    }
+
+    .submenu[role=menu].container.submenu.dropdown .close-megamenu-flex {
+        display: none;
+    }
+
+    .submenu[role=menu].container.submenu.dropdown.fullscreen .close-megamenu-flex {
+        display: inline-block;
+        color: var(--theme-color-text);
+        background: var(--theme-color-secondary);
+        width: 100%;
+        border-radius: 4px;
+        padding: 0px;
+        position: sticky;
+        top: 0px;
+        z-index: 1;
+    }
+
+    .submenu[role=menu].container .submenu_row > * {
+        flex-grow: 1;
+    }
+</style>
+<div id="list_megamenu" style="position: absolute;width: 100vw;" class="" tabindex="0" data-aetheme="<?php echo ( isset($_COOKIE["menuTheme"]) && !empty($_COOKIE["menuTheme"]) && in_array($_COOKIE["menuTheme"], $menu_data["pick_themes"]) ) ? $_COOKIE["menuTheme"] : "light-gray"; ?>">
+
+</div>
+    </div>
+  </main>
+    <script>
+        var items_data = <?php echo $menu_itens; ?>;
+        var user_menu_data = <?php echo $user_itens; ?>;
+        var targets_list = <?php echo $var_targets; ?>;
+        var apl_default = '<?php echo $apl_default; ?>';
+        var apl_default_location = '<?php echo $apl_default_location; ?>';
+        var apl_link_build = '<?php echo $apl_link_build; ?>';
+        var use_load = ('<?php echo $menu_data["check_use_loader"]; ?>' == 'S');
+        var should_reload = ('<?php echo $menu_data["should_reload"]; ?>' != 'S');
+        var start_expanded = ('<?php echo $menu_data["check_start_expanded"]; ?>' == 'S');
+    </script>
+    <script>
+        
+var Menubar = class {
+    static #config;
+    static #settings;
+    static #animationShow;
+    static #animationName;
+    static #menubar;
+    static #menubarVertical;
+    static #toolbar;
+    static #mainNavigation;
+    static #mobileButton;
+    static #mobileNavigation;
+    static #actionButton;
+    static #userPanel;
+    static #accordion;
+    static #collapseMenu;
+    static #submenus;
+
+
+    closePanel() {
+        this.#closepanelOpened();
+    }
+    constructor(settings) {
+        Menubar.#config = this.#configs();
+        Menubar.#settings = { ...Menubar.#config.settings, ...settings };
+        Menubar.#animationShow = Menubar.#settings.animation.show !== undefined ? Menubar.#settings.animation.show : Menubar.#config.settings.animation.show;
+        Menubar.#animationName = Menubar.#settings.animation.name ? Menubar.#settings.animation.name : Menubar.#config.settings.animation.name;
+        Menubar.#menubar = document.querySelector(Menubar.#config.selectors.menubar);
+        Menubar.#menubarVertical = document.querySelector(Menubar.#config.selectors.menubarVertical);
+        Menubar.#toolbar = document.querySelector(Menubar.#config.selectors.toolbar);
+        Menubar.#mainNavigation = Menubar.#menubar.querySelector(Menubar.#config.selectors.mainNavigation);
+        Menubar.#mobileButton = Menubar.#menubar.querySelector(Menubar.#config.selectors.mobileButton);
+        Menubar.#mobileNavigation = Menubar.#menubar.querySelector(Menubar.#config.selectors.mobileNavigation);
+        Menubar.#actionButton = document.querySelectorAll(Menubar.#config.selectors.actionButton);
+        Menubar.#accordion = document.querySelectorAll(Menubar.#config.selectors.accordion);
+        Menubar.#collapseMenu = Menubar.#menubar.querySelector(Menubar.#config.selectors.switchMenuPosition);
+        Menubar.#submenus = Menubar.#menubar.querySelectorAll(Menubar.#config.selectors.submenu);
+
+        // init
+        this.#init();
+    };
+
+    /**
+     * Método de configuração
+     * @private
+     * @returns {object} config
+     */
+    #configs() {
+        const config = {
+            selectors: {
+                menubar: '.ae-menubar',
+                menubarVertical: '.ae-menubar.menubar[aria-orientation="vertical"]',
+                toolbar: '.ae-menubar [role="toolbar"]',
+                mainNavigation: '.main-navigation',
+                hasSubmenu: '[role="menuitem"][aria-haspopup="true"]',
+                isActive: '[role="menuitem"][data-active="true"]',
+                mobileButton: '.menu-mobile-control',
+                mobileButtonIconControl: '#hamburger-icon-control',
+                mobileNavigation: '.ae-menu-mobile',
+                mobileNavigationOverlay: '#mobile-navigation-overlay',
+                panels: '.panel',
+                actionButton: '.action-button',
+                userActionsMenu: '.section.actions',
+                accordion: '.ae-menubar-accordion',
+                switchMenuPosition: '#switch-menu-position',
+                wrapperUser: '.wrapper-user',
+                userButton: '.user.action-button',
+                userMenu: '.user-menu',
+                userInfo: '.user-info',
+                userMenuContent: '.user-menu-content',
+                submenu: '.submenu:not(.container)',
+            },
+            menubar: {
+                loadingTime: 500
+            },
+            settings: {
+                keepOpen: false,
+                animation: {
+                    show: true,
+                    name: 'slide-left'
+                },
+                overlay: {
+                    show: true,
+                    bgColor: 'rgba(0,0,0,.55)'
+                },
+                panel: {
+                    offset: 4, //pixels
+                    animation: 'slide-right-top'
+                }
+            },
+            layers: {
+                layer_1: 'layer-900',
+                layer_2: 'layer-800',
+            },
+            animation: {
+                className: [
+                    'slide-top-bouncy',
+                    'slide-right-bouncy',
+                    'slide-bottom-bouncy',
+                    'slide-left-bouncy',
+                    'slide-top',
+                    'slide-right',
+                    'slide-bottom',
+                    'slide-left',
+                    'reveal-opacity',
+                    'reveal-blur'
+                ],
+                duration: 650,
+            }
+        }
+        return config;
+    }
+
+    #init() {
+        // inic. métodos
+        // -----------------------------------
+        if (Menubar.#menubar && Menubar.#menubar.classList.contains('menubar') && Menubar.#menubar.getAttribute('aria-orientation') === 'horizontal') {
+            if (Menubar.#mainNavigation) {
+                this.#responsiveObserver()
+            } else if (Menubar.#mobileNavigation) {
+                Menubar.#mobileButton.style.display = 'grid';
+                Menubar.#mobileNavigation.style.top = `${Menubar.#menubar.getBoundingClientRect().height}px`;
+                Menubar.#mobileNavigation.classList.add(Menubar.#config.layers.layer_1);
+            }
+        }
+
+        if (Menubar.#menubar.getAttribute('aria-orientation') === 'horizontal') {
+            this.#submenusCheckVisibilityInViewport()
+        }
+
+        if (Menubar.#mobileButton && Menubar.#mobileNavigation) {
+            this.#mobileControl();
+
+            document.addEventListener('click', () => {
+                if ($('.menu-mobile-control:visible').length == 0) {
+                    if (Menubar.#mobileButton.getAttribute('aria-pressed') === 'true') {
+                        Menubar.#mobileButton.click();
+                    }
+                }
+            });
+        }
+
+        if (Menubar.#accordion) {
+            Menubar.#accordion.forEach(accordion => {
+                this.#menubarAccordion(accordion);
+            });
+        }
+
+        if (Menubar.#menubarVertical) {
+            if (Menubar.#collapseMenu) {
+                Menubar.#collapseMenu.addEventListener('click', () => {
+
+                    if (Menubar.#collapseMenu.getAttribute('aria-checked') === 'false') {
+                        Menubar.#collapseMenu.setAttribute('aria-checked', 'true');
+                        Menubar.#collapseMenu.classList.remove('fa-expand');
+                        Menubar.#collapseMenu.classList.add('fa-compress');
+                    } else {
+                        Menubar.#collapseMenu.setAttribute('aria-checked', 'false');
+                        Menubar.#collapseMenu.classList.remove('fa-compress');
+                        Menubar.#collapseMenu.classList.add('fa-expand');
+                    }
+
+                    if (Menubar.#menubarVertical.getAttribute('data-collapsible') === 'true') {
+                        Menubar.#menubarVertical.setAttribute('data-collapsible', 'false');
+                    } else {
+                        Menubar.#menubarVertical.setAttribute('data-collapsible', 'true');
+                    }
+
+                    this.#collapsibleMenu();
+                });
+            }
+
+            Menubar.#menubarVertical.addEventListener('mouseenter', () => {
+                if (Menubar.#menubarVertical.classList.contains('collapsed')) {
+                    this.#collapsibleMenu();
+                }
+            });
+            Menubar.#menubarVertical.addEventListener('mouseleave', () => {
+                if (Menubar.#menubarVertical.classList.contains('expanded')) {
+                    this.#collapsibleMenu();
+                }
+            });
+
+            if (Menubar.#menubarVertical.querySelector(Menubar.#config.selectors.wrapperUser)) {
+                this.#userMenu();
+            }
+        }
+
+        if (document.querySelectorAll(`${Menubar.#config.selectors.menubar} ${Menubar.#config.selectors.panels}`).length !== 0) {
+            this.#panel();
+
+            document.addEventListener('click', () => {
+                const keepOpened = document.querySelector("[data-keep-open='true']");
+
+                if (keepOpened.style.visibility === "hidden" || keepOpened.style.visibility === "") {
+                    this.#closepanelOpened();
+                }
+            });
+        }
+
+        this.#close();
+
+        // Configurações do objeto
+        // -----------------------------------
+        Object.preventExtensions(this);
+    }
+
+    /**
+     * Controla a responsividade da barra de menu e de seus elementos
+     * @private
+     */
+    #responsiveObserver() {
+        const gridGap = window.getComputedStyle(Menubar.#menubar.firstElementChild).columnGap;
+        const menubarSplit = document.querySelector('.ae-menubar.menubar.split');
+
+        const mainNavigationControl = (visibility) => {
+            if (visibility === 'show') {
+                Menubar.#mobileButton.style.display = 'none';
+                Menubar.#mainNavigation.style.display = 'flex';
+                Menubar.#mainNavigation.classList.remove('hide');
+                Menubar.#mainNavigation.removeAttribute('aria-hidden');
+                Menubar.#mainNavigation.removeAttribute('aria-hidden');
+            } else if (visibility === 'hide') {
+                Menubar.#mobileButton.style.display = 'grid';
+                Menubar.#mainNavigation.style.display = 'none';
+                Menubar.#mainNavigation.classList.add('hide');
+                Menubar.#mainNavigation.classList.remove('show');
+                Menubar.#mainNavigation.setAttribute('aria-hidden', 'true');
+            }
+        }
+
+        const responseMobile = () => {
+            //oculta mainNavigation
+            mainNavigationControl('hide');
+        };
+
+        setTimeout(() => {
+            let menubarMinWidth = null;
+
+            if (menubarSplit) {
+                menubarMinWidth = Menubar.#mainNavigation.offsetWidth;
+            } else {
+                menubarMinWidth = sumElementsWidth(Array.from(Menubar.#menubar.children).splice(0, 2));
+            }
+
+            const mobileObserver = new ResizeObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.target.classList.contains((Menubar.#config.selectors.menubar).replace('.', ''))) {
+                        if (menubarMinWidth > entry.borderBoxSize[0].inlineSize) {
+                            responseMobile();
+                        } else {
+                            mainNavigationControl('show');
+                            if (Menubar.#mobileNavigation && Menubar.#mobileButton.getAttribute('aria-pressed') === 'true') {
+                                this.#mobileButtonControl();
+                                this.#mobileNavigationControl();
+                            }
+                        }
+                    }
+                });
+            });
+            mobileObserver.observe(Menubar.#menubar);
+
+            if (Menubar.#mobileNavigation) {
+                Menubar.#mobileNavigation.style.top = `${Menubar.#menubar.getBoundingClientRect().height}px`;
+                Menubar.#mobileNavigation.classList.add(Menubar.#config.layers.layer_1);
+            }
+
+        }, Menubar.#config.menubar.loadingTime);
+    }
+
+    /**
+     * Controla o botão de disparo do menu mobile
+     * @private
+     */
+    #mobileButtonControl() {
+        const mobileButtonIconControl = Menubar.#mobileButton.querySelector(Menubar.#config.selectors.mobileButtonIconControl);
+        let ariaPressed = Menubar.#mobileButton.getAttribute('aria-pressed');
+
+        if (ariaPressed === 'true') {
+            Menubar.#mobileButton.setAttribute('aria-pressed', 'false');
+            mobileButtonIconControl.checked = false;
+
+        } else {
+            Menubar.#mobileButton.setAttribute('aria-pressed', 'true');
+            mobileButtonIconControl.checked = true;
+        }
+    }
+
+    /**
+     * Controla a visibilidade e animação da navegação mobile
+     * @private
+     */
+    #mobileNavigationControl() {
+        const overlayShow = Menubar.#settings.overlay.show !== undefined ? Menubar.#settings.overlay.show : Menubar.#config.settings.overlay.show;
+
+        const showMobile = () => {
+            // props
+            Menubar.#mobileNavigation.setAttribute('aria-hidden', 'false');
+            Menubar.#mobileNavigation.setAttribute('data-show', 'true');
+            if (!Menubar.#animationShow) {
+                Menubar.#mobileNavigation.style.setProperty('display', 'block');
+            }
+            // adiciona overlay
+            if (overlayShow) {
+                document.body.appendChild(this.#createOverlay());
+                Menubar.#mobileButton.classList.add(Menubar.#config.layers.layer_1);
+            }
+            // Fecha o painel aberto
+            this.#closepanelOpened();
+        }
+        const hideMobile = () => {
+            // props
+            Menubar.#mobileNavigation.setAttribute('aria-hidden', 'true');
+            Menubar.#mobileNavigation.setAttribute('data-show', 'false');
+            if (!Menubar.#animationShow) {
+                Menubar.#mobileNavigation.style.setProperty('display', 'none');
+            }
+            // remove overlay
+            if (overlayShow) {
+                this.#removeOverlay(document.getElementById(Menubar.#config.selectors.mobileNavigationOverlay));
+            }
+        }
+
+        if (Menubar.#mobileNavigation.getAttribute('data-show') === 'false') {
+            showMobile();
+        }
+        else {
+            hideMobile();
+        }
+
+        // controle de animação
+        if (Menubar.#animationShow) {
+            this.#animationClassControl(Menubar.#mobileNavigation);
+        }
+    }
+
+    /**
+     * Controla o status do botão mobile, a exibição do menu mobile e configurações iniciais do menu
+     * @private
+     */
+    #mobileControl() {
+        if (Menubar.#mobileButton) {
+            Menubar.#mobileButton.addEventListener('click', () => {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                this.#mobileButtonControl();
+                this.#mobileNavigationControl();
+                this.#isActive();
+            });
+        }
+
+        if (Menubar.#mobileNavigation) {
+            const mainNavMobile = Menubar.#mobileNavigation.querySelector('.main-navigation-mobile');
+            mainNavMobile.style.paddingBottom = `${parseInt(window.getComputedStyle(mainNavMobile).paddingBottom.replace('px', '')) + Menubar.#menubar.offsetHeight}px`;
+        }
+    }
+
+    /**
+     * Expande ou colapsa o submenu da navegação mobile
+     * @private
+     */
+    #menubarAccordion(element) {
+        if (element) {
+            const hasSubmenu = element.querySelectorAll(Menubar.#config.selectors.hasSubmenu);
+            let animExpandId = null;
+
+            if (hasSubmenu) {
+                hasSubmenu.forEach(menuitem => {
+                    // Funcionalidades
+                    // ----------------------------------------------
+                    function toggle() {
+
+                        let nextEl = menuitem.nextElementSibling;
+                        if (!nextEl) {
+                            return;
+                            var wrapper = new DOMParser().parseFromString('<span class="wrapper" style="height: 0px;"></span>', "text/html");
+                            menuitem.append(wrapper.querySelector('.wrapper'));
+                            nextEl = menuitem.nextElementSibling;
+                        }
+                        let nestingSubmenuOpen = nextEl ? nextEl.querySelectorAll('.submenu.isOpen') : [];
+                        let start;
+
+                        // accordion: animações
+                        // -----------------------
+                        const animExpand = (timestamp) => {
+                            if (start === undefined) { start = timestamp };
+
+                            const elapsed = timestamp - start;
+
+                            if (nextEl.offsetHeight < nextEl.firstElementChild.offsetHeight) {
+                                nextEl.style.height = `${nextEl.offsetHeight + Math.round(0.1 * elapsed)}px`;
+                                menuitem.classList.add('animating');
+                                animExpandId = requestAnimationFrame(animExpand);
+                            }
+                            // aplica altura flexível para comportar automaticamente a altura dos submenus aninhados (filhos)
+                            if (nextEl.offsetHeight >= nextEl.firstElementChild.offsetHeight) {
+                                nextEl.style.height = '100%';
+                                menuitem.classList.remove('animating');
+                            }
+                        };
+                        const animCollapse = (timestamp) => {
+                            if (start === undefined) { start = timestamp };
+
+                            const elapsed = timestamp - start;
+
+                            if (nextEl.offsetHeight > 0) {
+                                nextEl.style.height = `${nextEl.offsetHeight - Math.round(0.1 * elapsed)}px`;
+                                menuitem.classList.add('animating');
+                                requestAnimationFrame(animCollapse);
+                            }
+                            // verifica se o resultado da subtração é um número negativo e iguala altura a zero
+                            if (Math.sign(nextEl.offsetHeight - Math.round(0.1 * elapsed)) === -1) {
+                                nextEl.style.height = '0px';
+                                menuitem.classList.remove('animating');
+                            }
+                        };
+                        // -----------------------
+
+                        // accordion: expande submenu
+                        if (nextEl.offsetHeight === 0) {
+                            requestAnimationFrame(animExpand);
+                            menuitem.setAttribute('aria-expanded', 'true');
+                            nextEl.firstElementChild.setAttribute('aria-hidden', 'false');
+                        }
+                        // accordion: colapsa submenu
+                        else {
+                            if (!Menubar.#settings.keepOpen) {
+                                //fechar todos os submenus aninhados
+                                let nestedMenuitems = menuitem.parentElement.querySelectorAll('[role="menuitem"][aria-haspopup="true"][aria-expanded="true"]');
+                                nestedMenuitems = Array.from(nestedMenuitems);
+                                for (let i = 1; i < nestedMenuitems.length; i++) {
+                                    nestedMenuitems[i].click();
+                                }
+                            }
+                            requestAnimationFrame(animCollapse);
+                            menuitem.setAttribute('aria-expanded', 'false');
+                            nextEl.firstElementChild.setAttribute('aria-hidden', 'true');
+                        }
+                        //submenu aninhado
+                        if (menuitem.parentElement.parentElement.classList.contains('submenu')) {
+                            const globalWrapper = menuitem.parentElement.parentElement.parentElement;
+
+                            if (!nextEl.firstElementChild.classList.contains('isOpen')) {
+                                nextEl.firstElementChild.classList.add('isOpen');
+                            }
+                            else {
+                                nextEl.firstElementChild.classList.remove('isOpen');
+                            }
+                        }
+                    }
+
+                    // Eventos
+                    // ----------------------------------------------
+                    menuitem.addEventListener('click', () => {
+                        event.stopPropagation();
+                        toggle();
+                    })
+                })
+            }
+        }
+    }
+
+    /**
+     * Verifica a visibilidade dos submenus em relação a viewport, e corrige sua posição horizontal
+     */
+    #submenusCheckVisibilityInViewport() {
+        function isElementPartiallyInViewport(el) {
+            const rect = el.getBoundingClientRect();
+
+            return (
+                (rect.left + rect.width) <= window.innerWidth
+            );
+        }
+
+        function checkSubmenusVisibility() {
+            Menubar.#submenus.forEach(submenu => {
+                submenu.style.removeProperty("right");
+                submenu.style.removeProperty("left");
+
+                if (!isElementPartiallyInViewport(submenu)) {
+                    submenu.style.setProperty("right", "calc(100% - 0.5em)");
+                    submenu.style.setProperty("left", "auto");
+                }
+            });
+        }
+
+        const menuitens = document.querySelectorAll(".ae-menubar[aria-orientation='horizontal'] [role='menuitem']");
+
+        menuitens.forEach(menuitem => {
+            menuitem.addEventListener('mouseenter', checkSubmenusVisibility);
+        })
+    }
+
+    /**
+     * Fecha o elemento aberto ao apertar a tecla ESC (menubar e/ou painel)
+     * @private
+     */
+    #close() {
+        const closeAll = () => {
+            // fecha o menu mobile
+            if (Menubar.#mobileNavigation && Menubar.#mobileNavigation.getAttribute('data-show') === 'true') {
+                Menubar.#mobileButton.click();
+            }
+
+            // fecha painel aberto
+            this.#closepanelOpened();
+        }
+
+        window.addEventListener('keydown', () => {
+            if (event.keyCode === 27) {
+                closeAll();
+            }
+        });
+    }
+
+    /**
+     * Fecha o painel aberto
+     */
+    #closepanelOpened() {
+        const panelOpeneds = document.querySelectorAll(`${Menubar.#config.selectors.panels}[is-open]`);
+
+        if (panelOpeneds) {
+            panelOpeneds.forEach(panel => {
+                const evtDispatch = new CustomEvent('panel-closed', {detail: {panel: panel}});
+                document.querySelector(`[aria-owns="${panel.getAttribute('id')}"]`).click();
+                document.dispatchEvent(evtDispatch);
+            });
+        }
+    }
+
+    /**
+     * Configura e controla comportamentos padrões de painéis da toolbar
+     * @private
+     */
+    #panel() {
+        const panelAnimationName = Menubar.#settings.panel.animation;
+        let panelCloseButton = null;
+
+        const addClass = (panel) => {
+            if (panel) {
+                panel.classList.add(panelAnimationName);
+            } else {
+                event.target.classList.add(panelAnimationName);
+            }
+        }
+        const removeClass = (panel) => {
+            if (panel) {
+                panel.classList.remove(panelAnimationName);
+            } else {
+                event.target.classList.remove(panelAnimationName);
+            }
+        }
+        const startAnimation = (event) => {
+            removeClass();
+            event.target.removeEventListener('animationend', startAnimation);
+        }
+        const endAnimation = (event) => {
+            removeClass();
+            event.target.style.opacity = '0';
+            event.target.style.visibility = 'hidden';
+            event.target.removeEventListener('animationend', endAnimation);
+        }
+        const setPanelPosition = (panel, button) => {
+
+            let offsetTop;
+
+            if (document.querySelector('.ae-menubar.menubar[aria-orientation="horizontal"]')) {
+                if (document.querySelector('.ae-menubar.menubar.split')) {
+                    offsetTop = `${((parseInt(window.getComputedStyle(document.querySelector('.ae-menubar.menubar')).height.replace('px', ''))) / 2) + Menubar.#settings.panel.offset}px`
+                } else {
+                    offsetTop = `${(parseInt(window.getComputedStyle(document.querySelector('.ae-menubar.menubar')).height.replace('px', ''))) + Menubar.#settings.panel.offset}px`
+                }
+            } else {
+                offsetTop = `${(parseInt(window.getComputedStyle(document.querySelector('.ae-menubar.toolbar')).height.replace('px', ''))) + Menubar.#settings.panel.offset}px`
+            }
+
+            panel.style.position = 'absolute';
+            panel.style.top = offsetTop;
+
+            // if (!Menubar.#menubar.classList.contains('is-rtl')) {
+            if (document.querySelector('html').getAttribute('dir') != "RTL") {
+                if (document.querySelector('.ae-menubar.toolbar')) {
+                    panel.style.left = button.getBoundingClientRect().right - panel.offsetWidth - document.querySelector('.ae-menubar.toolbar').offsetLeft + 'px';
+                }
+                else if (document.querySelector('.ae-menubar.menubar .toolbar') || document.querySelector('.ae-menubar.menubar .user.action-button')) {
+                    panel.style.left = button.getBoundingClientRect().right - panel.offsetWidth - document.querySelector('.ae-menubar.menubar').offsetLeft + 'px';
+                }
+            } else {
+                if (document.querySelector('.ae-menubar.toolbar')) {
+                    panel.style.left = button.getBoundingClientRect().right - button.offsetWidth - document.querySelector('.ae-menubar.toolbar').offsetLeft + 'px';
+                }
+                else if (document.querySelector('.ae-menubar.menubar .toolbar') || document.querySelector('.ae-menubar.menubar .user.action-button')) {
+                    panel.style.left = button.getBoundingClientRect().right - button.offsetWidth - document.querySelector('.ae-menubar.menubar').offsetLeft + 'px';
+                }
+            }
+
+        }
+
+        // configurações iniciais dos painéis
+        document.querySelectorAll(Menubar.#config.selectors.panels).forEach(panel => {
+            const panelButton = document.querySelector(`[aria-owns="${panel.getAttribute('id')}"]`);
+            panelCloseButton = panel.querySelector("[data-close]");
+
+            // adiciona classe de animação na inicialização dos painéis
+            if (panel && !panel.classList.contains(panelAnimationName)) {
+                panel.style.setProperty('animation-direction', 'normal', 'important');
+                addClass(panel, panelAnimationName);
+                panel.addEventListener('animationend', startAnimation);
+            }
+
+            if (panel) {
+                if (panelButton) {
+                    // reposicionamento dinâmico
+                    window.addEventListener('resize', () => {
+                        setPanelPosition(panel, panelButton);
+                    });
+                    // reposicionamento no click
+                    panelButton.addEventListener('click', () => {
+                        setPanelPosition(panel, panelButton);
+                    });
+                }
+            }
+        });
+
+        // controle de exibição
+        Menubar.#actionButton.forEach(button => {
+            button.addEventListener('click', () => {
+                event.stopImmediatePropagation();
+
+                const panelOpened = document.querySelector(`${Menubar.#config.selectors.panels}[is-open]`);
+                let panel = button.getAttribute('aria-owns');
+                panel = document.getElementById(panel);
+                const evtDispatch = new CustomEvent('panel-oppened', {detail: {panel: panel}});
+
+                if (panelOpened && panelOpened.getAttribute('id') !== panel.getAttribute('id')) {
+                    const panelOwns = document.querySelector(`[aria-owns="${panelOpened.getAttribute('id')}"]`);
+                    panelOwns.setAttribute('aria-expanded', 'false');
+                    panelOpened.style.opacity = '0';
+                    panelOpened.style.visibility = 'hidden';
+                    panelOpened.removeAttribute('is-open');
+                    panelOpened.setAttribute('aria-hidden', 'true');
+                }
+
+                try {
+                    if (panel.hasAttribute('is-open')) {
+                        panel.removeAttribute('is-open');
+                        panel.setAttribute('aria-hidden', 'true');
+                        panel.style.setProperty('animation-direction', 'reverse', 'important');
+                        addClass(panel);
+                        panel.addEventListener('animationend', endAnimation);
+                        button.setAttribute('aria-expanded', 'false');
+
+                    } else {
+                        panel.setAttribute('is-open', 'true');
+                        panel.style.opacity = '1';
+                        panel.style.visibility = 'visible';
+                        panel.setAttribute('aria-hidden', 'false');
+                        panel.style.setProperty('animation-direction', 'normal', 'important');
+                        addClass(panel)
+                        panel.addEventListener('animationend', startAnimation);
+                        button.setAttribute('aria-expanded', 'true');
+                        // fecha o menu mobile
+                        if (Menubar.#mobileNavigation && Menubar.#mobileNavigation.getAttribute('data-show') === 'true') {
+                            Menubar.#mobileButton.click();
+                        }
+                    }
+                } catch (err) {
+                    console.debug('Este trigger não possui um painel associado!', err);
+                }
+                document.dispatchEvent(evtDispatch);
+
+
+            })
+        })
+
+        // fecha o painel no botão data-close
+        if (panelCloseButton) {
+            panelCloseButton.addEventListener("click", ev => {
+                // const ownButton = document.getElementById(ev.currentTarget.dataset.close);
+                // ownButton.click();
+                this.#closepanelOpened();
+            });
+        }
+    }
+
+    /**
+     * Verifica se um item do menu tem o status ativo e realiza ações complementares
+     * @private
+     */
+    #isActive() {
+        const isActive = Menubar.#mobileNavigation.querySelectorAll(Menubar.#config.selectors.isActive);
+
+        if (isActive) {
+            isActive.forEach(menuitem => {
+                if (!menuitem.getAttribute('href') && menuitem.getAttribute('aria-expanded') === 'false') {
+                    menuitem.click();
+                }
+            })
+        }
+    }
+
+    /**
+     * Cria um overlay para impedir interações com os elementos abaixo deste
+     * @private
+     * @return { DOM Element} overlay
+     */
+    #createOverlay() {
+        const overlay = document.createElement('div');
+
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = Menubar.#settings.overlay.bgColor ? Menubar.#settings.overlay.bgColor : Menubar.#config.settings.overlay.bgColor;
+        overlay.classList.add('ae-overlay', Menubar.#config.layers.layer_2);
+        overlay.setAttribute('id', Menubar.#config.selectors.mobileNavigationOverlay);
+
+        return overlay;
+    }
+
+    /**
+     * Remove uma overlay ativa
+     * @param {DOM Element} overlay ['mobile-navigation' || 'main-navigation'] Informa ao método qual overlay remover.
+     */
+    #removeOverlay(target) {
+        document.querySelector('body').removeChild(target);
+    }
+
+    /**
+     * Controla a animação de entrada e saída do elemento
+     * @param {DOM Element} element Elemento que receberá a classe de animação
+     */
+    #animationClassControl(element) {
+        const startAnimation = () => {
+            switch (Menubar.#animationName) {
+                case 'slide-top-bouncy':
+                    element.classList.add('slide-top-bouncy');
+                    break;
+                case 'slide-right-bouncy':
+                    element.classList.add('slide-right-bouncy');
+                    break;
+                case 'slide-bottom-bouncy':
+                    element.classList.add('slide-bottom-bouncy');
+                    break;
+                case 'slide-left-bouncy':
+                    element.classList.add('slide-left-bouncy');
+                    break;
+                case 'slide-top':
+                    element.classList.add('slide-top');
+                    break;
+                case 'slide-right':
+                    element.classList.add('slide-right');
+                    break;
+                case 'slide-bottom':
+                    element.classList.add('slide-bottom');
+                    break;
+                case 'slide-left':
+                    element.classList.add('slide-left');
+                    break;
+                case 'reveal-opacity':
+                    element.classList.add('reveal-opacity');
+                    break;
+                case 'reveal-blur':
+                    element.classList.add('reveal-blur');
+                    break;
+            }
+
+            Menubar.#mobileButton.style.setProperty('pointer-events', 'none');
+            element.style.setProperty('display', 'block');
+            element.addEventListener('animationend', endAnimation);
+        }
+
+        const endAnimation = () => {
+            if (Menubar.#animationShow) {
+                Menubar.#config.animation.className.forEach(className => {
+                    if (element.classList.contains(className)) {
+                        element.classList.remove(className);
+                    }
+                });
+
+                element.style.setProperty('animation-direction', 'reverse', 'important');
+                Menubar.#mobileButton.style.removeProperty('pointer-events');
+                element.removeEventListener('animationend', endAnimation);
+            }
+
+            if (element.getAttribute('data-show') === 'false') {
+                element.style.setProperty('display', 'none');
+
+                if (Menubar.#animationShow) {
+                    element.style.setProperty('animation-direction', 'normal', 'important');
+                }
+            }
+        }
+
+
+        if (Menubar.#animationShow) {
+            startAnimation();
+        }
+    }
+
+    /**
+     * Controla a interação de visualização do menu vertical entre colapsada e extendida
+     */
+    #collapsibleMenu() {
+        if (Menubar.#menubarVertical) {
+            let logos = Menubar.#menubarVertical.querySelectorAll('.logo img');
+            let menubarVert_width = Menubar.#menubarVertical.offsetWidth;
+            const menuitems = Menubar.#menubarVertical.querySelectorAll('.wrapper-navigation [role="menuitem"]');
+            const menuitems_labels = Menubar.#menubarVertical.querySelectorAll('.wrapper-navigation [role="menubar"] > .wrapper > [role="menuitem"] > .label');
+            const navgroup_labels = Menubar.#menubarVertical.querySelectorAll('.wrapper-navigation [role="menubar"] .navigation-group > .label');
+            const menuitems_opened = Menubar.#menubarVertical.querySelectorAll('.wrapper-navigation [role="menubar"] [role="menuitem"][aria-expanded="true"]');
+
+            const wrapperUser = Menubar.#menubarVertical.querySelector(Menubar.#config.selectors.wrapperUser);
+            let userMenu, userInfo, userInfoGroup, userButton;
+            const wrapperHeader = Menubar.#menubarVertical.querySelector(".wrapper-header");
+
+            if (wrapperUser) {
+                userMenu = wrapperUser.querySelector(Menubar.#config.selectors.userMenu);
+                userInfo = wrapperUser.querySelector(Menubar.#config.selectors.userInfo);
+                userInfoGroup = wrapperUser.querySelector(`${Menubar.#config.selectors.userInfo} > .group`);
+                userButton = wrapperUser.querySelector(Menubar.#config.selectors.userButton);
+            }
+
+            let start, previousTimestamp;
+
+            const animate_expand = timestamp => {
+                if (start === undefined) { start = timestamp };
+
+                const menubarMaxWidth = parseInt(Menubar.#menubarVertical.getAttribute('data-width'));
+                const menubarWidth = Menubar.#menubarVertical.offsetWidth;
+                const elapsed = timestamp - start;
+
+                if (previousTimestamp !== timestamp) {
+                    const width = Math.min(menubarWidth + elapsed, menubarMaxWidth);
+                    Menubar.#menubarVertical.style.width = `${width}px`;
+                }
+
+                if (menubarWidth !== menubarMaxWidth) {
+                    requestAnimationFrame(animate_expand)
+                } else {
+                    Menubar.#menubarVertical.style.width = '260px';
+                    Menubar.#menubarVertical.classList.add('expanded');
+                }
+            }
+
+            const animate_collapse = timestamp => {
+                if (start === undefined) { start = timestamp };
+
+                const menubarWidth = Menubar.#menubarVertical.offsetWidth;
+                const elapsed = timestamp - start;
+
+                if (menubarWidth === menubarVert_width) {
+                    Menubar.#menubarVertical.setAttribute('data-width', menubarWidth);
+                }
+
+                if (previousTimestamp !== timestamp) {
+                    const width = Math.max(menubarWidth - elapsed, 80);
+                    Menubar.#menubarVertical.style.width = `${width}px`;
+                    Menubar.#menubarVertical.style.minWidth = `${width}px`;
+                }
+
+                if (menubarWidth !== 80) {
+                    requestAnimationFrame(animate_collapse)
+                } else if (menubarWidth === 80) {
+                    Menubar.#menubarVertical.classList.add('collapsed');
+                }
+            }
+
+            const handler_collapse = () => {
+                requestAnimationFrame(animate_collapse);
+
+                Menubar.#menubarVertical.classList.remove('expanded');
+                Menubar.#collapseMenu.classList.add('d-none');
+
+                wrapperHeader.style.setProperty("justify-content", "center");
+
+                logos[0].classList.add('d-none');
+                logos[0].classList.remove('d-block');
+                logos[1].classList.add('d-block');
+                logos[1].classList.remove('d-none');
+
+                let checkWrapperUserAnimating = null;
+                const checkWrapperUserClassAnimating = () => {
+                    if (wrapperUser && !wrapperUser.classList.contains('animating')) {
+                        clearInterval(checkWrapperUserAnimating);
+
+                        wrapperUser.style.display = 'flex';
+                        wrapperUser.style.flexFlow = 'row nowrap';
+                        wrapperUser.style.justifyContent = 'center';
+                        userMenu.classList.add('d-none');
+                        userInfoGroup.classList.add('d-none');
+                        userInfo.setAttribute('data-expanded', userInfo.getAttribute('aria-expanded'));
+                        userInfo.removeAttribute('aria-expanded');
+                    }
+                }
+
+                if (wrapperUser) {
+                    checkWrapperUserAnimating = setInterval(checkWrapperUserClassAnimating, 50);
+                }
+
+                let checkMenuitemAnimation = null;
+                const checkMenuitemClassAnimation = () => {
+                    menuitems.forEach(menuitem => {
+                        if (!menuitem.classList.contains('animating')) {
+                            clearInterval(checkMenuitemAnimation);
+
+                            menuitems_opened.forEach(menuitem => {
+                                if (menuitem.nextElementSibling) {
+                                    menuitem.nextElementSibling.classList.add('d-none');
+                                }
+                            });
+
+                            menuitems_labels.forEach(label => {
+                                label.classList.add('d-none');
+                                label.parentElement.style.justifyContent = 'center';
+                            });
+
+                            navgroup_labels.forEach(label => {
+                                label.classList.add('d-none');
+                                if (menuitem.previousElementSibling) {
+                                    label.previousElementSibling.classList.remove('d-none');
+                                }
+                                label.parentElement.style.justifyContent = 'center';
+                            });
+                        }
+                    })
+                }
+
+                checkMenuitemAnimation = setInterval(checkMenuitemClassAnimation, 50);
+            }
+
+            const handler_expand = () => {
+                requestAnimationFrame(animate_expand);
+
+                Menubar.#menubarVertical.classList.remove('collapsed');
+                Menubar.#collapseMenu.classList.remove('d-none');
+
+                wrapperHeader.style.removeProperty("justify-content");
+
+                logos[1].classList.add('d-none');
+                logos[1].classList.remove('d-block');
+                logos[0].classList.add('d-block');
+                logos[0].classList.remove('d-none');
+
+                let checkWrapperUserAnimating = null;
+                const checkWrapperUserClassAnimating = () => {
+                    if (wrapperUser && !wrapperUser.classList.contains('animating')) {
+                        clearInterval(checkWrapperUserAnimating);
+
+                        wrapperUser.style.display = 'block';
+                        wrapperUser.style.flexFlow = '';
+                        wrapperUser.style.justifyContent = '';
+                        userMenu.classList.remove('d-none');
+                        userInfoGroup.classList.remove('d-none');
+                        userInfo.setAttribute('aria-expanded', userInfo.getAttribute('data-expanded'));
+                        userInfo.removeAttribute('data-expanded');
+                    }
+                }
+
+                if (wrapperUser) {
+                    checkWrapperUserAnimating = setInterval(checkWrapperUserClassAnimating, 50);
+                }
+
+                let checkMenuitemAnimation = null;
+                const checkMenuitemClassAnimation = () => {
+                    menuitems.forEach(menuitem => {
+                        if (!menuitem.classList.contains('animating')) {
+                            clearInterval(checkMenuitemAnimation);
+
+                            menuitems_opened.forEach(menuitem => {
+                                if (menuitem.nextElementSibling) {
+                                    menuitem.nextElementSibling.classList.remove('d-none');
+                                }
+                            });
+
+                            menuitems_labels.forEach(label => {
+                                label.classList.remove('d-none');
+                                label.parentElement.style.justifyContent = 'flex-start';
+                            });
+
+                            navgroup_labels.forEach(label => {
+                                label.classList.remove('d-none');
+                                if (menuitem.previousElementSibling) {
+                                    label.previousElementSibling.classList.add('d-none');
+                                }
+                                label.parentElement.style.justifyContent = 'flex-start';
+                            });
+                        }
+                    })
+                }
+
+                checkMenuitemAnimation = setInterval(checkMenuitemClassAnimation, 50);
+            }
+
+            if (Menubar.#menubarVertical.getAttribute('data-collapsible') === 'true') {
+                if (!Menubar.#menubarVertical.classList.contains('collapsed')) {
+                    handler_collapse();
+                } else {
+                    handler_expand();
+                }
+            }
+
+            document.menu_collapse_func = handler_collapse;
+            document.menu_expand_func = handler_expand;
+
+        }
+    }
+
+    /**
+     * Controla o menu do usuário da menubar vertical
+     */
+    #userMenu() {
+        const wrapperUser = Menubar.#menubarVertical.querySelector(Menubar.#config.selectors.wrapperUser);
+        const userInfo = wrapperUser.querySelector(Menubar.#config.selectors.userInfo)
+
+        if (wrapperUser) {
+            userInfo.addEventListener('click', () => {
+                const expanded = userInfo.getAttribute('aria-expanded');
+                const userMenu = wrapperUser.querySelector(Menubar.#config.selectors.userMenu);
+                const userMenuWrapper = wrapperUser.querySelector(`${Menubar.#config.selectors.userMenu} > .wrapper`);
+                const userMenuContentHeight = wrapperUser.querySelector(Menubar.#config.selectors.userMenuContent).offsetHeight;
+                let start;
+
+                const animExpand = timestamp => {
+                    if (start === undefined) { start = timestamp };
+
+                    const elapsed = timestamp - start;
+
+                    if (userMenuWrapper.offsetHeight < userMenuContentHeight) {
+                        userMenuWrapper.style.height = `${Math.min(userMenuWrapper.offsetHeight + (0.1 * elapsed), userMenuContentHeight)}px`;
+                        wrapperUser.classList.add('animating');
+                        requestAnimationFrame(animExpand);
+                    } else {
+                        userInfo.setAttribute('aria-expanded', 'true');
+                        userMenuWrapper.style.height = 'fit-content';
+                        wrapperUser.classList.remove('animating');
+                    }
+                }
+
+                const animCollapse = timestamp => {
+                    if (start === undefined) { start = timestamp };
+
+                    const elapsed = timestamp - start;
+
+                    if (userMenuWrapper.offsetHeight !== 0) {
+                        userMenuWrapper.style.height = `${Math.max(userMenuWrapper.offsetHeight - (0.1 * elapsed), 0)}px`;
+                        wrapperUser.classList.add('animating');
+                        requestAnimationFrame(animCollapse);
+                    } else {
+                        userInfo.setAttribute('aria-expanded', 'false');
+                        userMenu.classList.remove('m-top-4');
+                        wrapperUser.classList.remove('animating');
+                    }
+                }
+
+                if (expanded === 'false') {
+                    requestAnimationFrame(animExpand);
+                    userMenu.classList.add('m-top-4');
+                } else {
+                    requestAnimationFrame(animCollapse);
+                }
+            })
+        }
+    }
+}
+
+// Funções auxiliares
+// ----------------------------------------------------------
+function sumElementsWidth(nodeElements) {
+    let width = 0;
+    if (nodeElements) {
+        nodeElements.forEach(element => {
+            width += element.offsetWidth;
+        });
+        return width;
+    }
+}
+const menuJSON_url = {};
+const panelTheme = document.getElementById('themes-panel');
+const panelNotification = document.getElementById("notification-panel");
+var loadTimeout = null;
+var notif_update_lock = false;
+
+function markAllAsRead() {
+    const markAllAsRead_btn = document.getElementById("markAllAsRead-btn");
+    markAllAsRead_btn.addEventListener("click", (ev) => {
+        ev.stopImmediatePropagation();
+        const notificationItems = document.querySelectorAll(".notification-item");
+        notificationItems.forEach((item) => {
+            item.setAttribute("data-read", "true");
+        });
+        markAllAsReadAjax();
+        // countNotifications();
+    });
+}
+function countNotifications() {
+    if (notif_update_lock) return true;
+    const notificationDot = document.getElementById("notification-dot");
+    const notificationNumber = document.getElementById("notification-number");
+    const notificationItems = document.querySelectorAll(".notification-item[data-read=false]");
+    $.ajax({
+        type: "POST",
+        url: '',
+        data: {
+            ajax_notif_request: 'count',
+            script_case_init: '1'
+        },
+        complete: function (a, b) {
+            if (a.responseJSON && (typeof a.responseJSON.msg === typeof '' || typeof a.responseJSON.msg === typeof 1)) {
+                var counterCap = parseInt(a.responseJSON.msg);
+                if (counterCap > 0) {
+                    $(notificationDot).show();
+                    $(notificationNumber).closest('.unread-counter').show();
+                } else {
+                    $(notificationDot).hide();
+                    $(notificationNumber).closest('.unread-counter').hide();
+                }
+                if ( counterCap >= 100 ) {
+                    counterCap = '99+';
+                }
+                notificationNumber.textContent = counterCap;
+            } else {
+                ajaxError(a);
+            }
+        },
+        dataType: 'json'
+    });
+}
+function notificationClose() {
+    const notificationsClose = document.querySelectorAll(".notification-close");
+    const notificationsConfirmBlock = document.querySelectorAll(".confirm-exclude");
+    const notificationsOKConfirm = document.querySelectorAll(".confirm-exclude .ok-confirm");
+    const notificationsCancelConfirm = document.querySelectorAll(".confirm-exclude .cancel-confirm");
+    notificationsConfirmBlock.forEach((item) => {
+        item.addEventListener("click", (ev) => {
+            ev.stopImmediatePropagation();
+        });
+    });
+    notificationsOKConfirm.forEach((item) => {
+        item.addEventListener("click", (ev) => {
+            ev.stopImmediatePropagation();
+            deleteNotif($(item).closest('.notification-item').attr('id'));
+            $(item).closest('.notification-item').remove();
+            countNotifications();
+            notif_update_lock = false;
+        });
+    });
+    notificationsCancelConfirm.forEach((item) => {
+        item.addEventListener("click", (ev) => {
+            ev.stopImmediatePropagation();
+            $(item).closest('.confirm-exclude').removeClass('open-confirm');
+            notif_update_lock = false;
+        });
+    });
+    notificationsClose.forEach((item) => {
+        item.addEventListener("click", (ev) => {
+            ev.stopImmediatePropagation();
+            notif_update_lock = true;
+            $('.confirm-exclude').removeClass('open-confirm');
+            $(item).closest('.notification-item').find('.confirm-exclude').addClass('open-confirm');
+        });
+    });
+}
+
+function startAppTab(initApp) {
+
+    if (typeof openInTab == 'function') {
+        openInTab(apl_default, 'init_tab', '', '', '<i class="mb_icon fas fa-house"></i>', '_self', true);
+    } else {
+        if($("#nav_list a[tab-name='init_tab']").length)
+        {
+            $("#nav_list a[tab-name='init_tab']").click();
+        }
+
+        $('#app-frames').find('iframe').addClass('loading');
+        if (loadTimeout) {
+            clearTimeout(loadTimeout);
+        }
+        loadTimeout = setTimeout(function () {
+            $('#app-frames iframe').removeClass('loading');
+        }, 10000);
+        $('.nm_frame_app').attr('src', apl_default);
+    }
+}
+function layoutControl(offsetX) {
+    const thresholdX = offsetX ? offsetX : 16;
+    const menubar_vertical = document.querySelector('.ae-menubar.menubar[aria-orientation="vertical"]');
+    const toolbar = document.querySelector('.ae-menubar.toolbar');
+    const switch_menu_pos_button = document.getElementById('switch-menu-position');
+    const sc_main_content = document.getElementById('sc-main-content');
+    const checkRTL = document.querySelector('html').getAttribute('dir') == "RTL";
+
+    sc_main_content.parentElement.style.height = '100%';
+
+    if(checkRTL) {
+        if(window.getComputedStyle(menubar_vertical).left !== 'auto') {
+            menubar_vertical.style.right = '0';
+            menubar_vertical.style.left = 'auto';
+        }
+    }
+
+    const layout = () => {
+        if(checkRTL) {
+            sc_main_content.style.paddingRight = menubar_vertical.offsetWidth + 'px';
+
+            if(toolbar) {
+                setTimeout(() => {
+                    toolbar.style.width = sc_main_content.offsetWidth - menubar_vertical.offsetWidth - thresholdX - 16 + 'px';
+                }, 251)
+            }
+
+        } else {
+            sc_main_content.style.paddingLeft = menubar_vertical.offsetWidth + 'px';
+        }
+    }
+
+    // init
+    layout();
+
+    // click
+    switch_menu_pos_button.addEventListener('click', () => {
+        setTimeout(layout, 350);
+    });
+}
+function getCookieMenu(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return false;
+}
+function pickTheme(themeName) {
+    var themeButton = $('[data-theme="'+themeName+'"]');
+    if (themeButton.length > 0) {
+        $('[data-themeapply]').closest('li.theme-name.button ').removeClass('active');
+        themeButton.closest('li.theme-name.button ').addClass('active');
+        document.querySelectorAll('[data-aetheme]').forEach(menubar => {
+            menubar.setAttribute('data-aetheme', themeName);
+        });
+        document.cookie = "menuTheme=" + themeName;
+    }
+    // $('ul.context-menu-list.context-menu-root').attr('data-aetheme', button.getAttribute('data-theme'));
+    // $('#app-frames').attr('data-aetheme', button.getAttribute('data-theme'));
+}
+function themeApply() {
+    var cookieTheme = getCookieMenu('menuTheme');
+    if (cookieTheme && panelTheme.querySelectorAll('[data-theme="'+cookieTheme+'"]')[0]) {
+        pickTheme(cookieTheme);
+    }
+    panelTheme.querySelectorAll('[data-themeapply]').forEach(button => {
+        button.addEventListener('click', () => {
+            pickTheme(button.getAttribute('data-theme'))
+        });
+    });
+}
+
+function loadJSON(url) {
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro na solicitação ${response.status}`)
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            //console.log(data);
+        })
+        .catch(error => {
+            console.error('Erro ao carregar o arquivo JSON:', error);
+        })
+}
+
+
+function updateNavMenu() {
+    var vert = document.querySelector('.ae-menubar.menubar').getAttribute('aria-orientation') == 'vertical';
+    if (vert) {
+        layoutControl(4);
+    }
+    document.getElementById('nav_list').innerHTML = renderItems(items_data, vert);
+    if (document.getElementById('nav_mobile')) {
+        document.getElementById('nav_mobile').innerHTML = renderItems(items_data, true);
+    }
+    if (document.querySelector('#list_megamenu')) {
+        document.querySelector('#list_megamenu').innerHTML = renderMegaBox(items_data);
+    }
+    if ($('#user_menu_list')[0]) {
+        if (user_menu_data.length > 0) {
+            $('#user_menu_list')[0].innerHTML = renderItems(user_menu_data, true);
+        } else {
+            $('#user_menu_list').closest('.section.actions.ae-menubar-accordion').remove();
+            $('.user-info').addClass('inactive').off('click');
+            $('.user-menu').remove();
+        }
+    }
+    $('.ae-menubar.menubar[aria-orientation="vertical"] a,.ae-menubar.menubar[aria-orientation="vertical"] a span').on('click.closeVertMenu', function() {
+        $('.ae-menubar.menubar[aria-orientation="vertical"]').removeClass('expanded-mob');
+    });
+    if (typeof loadMegamenus == 'function') {
+        loadMegamenus();
+        $('.close-megamenu-flex').on('click', function () {
+            var mega_container = $(this).closest('.dropdown');
+            mega_container.removeClass('show');
+            if ($('[aria-controls="'+mega_container.id+'"]').length > 0) {
+                $('[aria-controls="' + mega_container.id + '"]').setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+}
+function renderUserImage(arr_items, is_vert) {
+    var el = $('.user_image');
+    if (el.length > 0) {
+        var src = el.attr('src');
+        if (src.trim() == '') {
+            el.replaceWith('<i class="mb_icon fa-solid fa-user" aria-hidden="true"></i>');
+        }
+    }
+}
+function renderLogo() {
+    var el_list = $('.logo img');
+    el_list.each(function(i, el) {
+        var src = $(el).attr('src');
+        if (src.trim() != '') {
+            $(el).css('visibility', 'visible');
+        }
+    });
+}
+function renderMenuUser(arr_items){
+    var ret_html = '';
+    arr_items.forEach(function (item) {
+        var has_icon = item.icon_check == 'S';
+        var icon = item.icon_fa;
+        var label = item.label;
+        var url = item.link;
+        var id = item.id;
+        var target = item.target;
+
+        ret_html += '<li class="wrapper" role="none">'+"\n";
+        ret_html += "<a href=\"" + url + "\" tab-name=\""+ id + "\" tab-title=\""+ label + "\" target=\""+ target + "\" role=\"menuitem\" aria-haspopup=\"false\" aria-expanded=\"false\" data-active=\"false\">"+"\n";
+
+        if (has_icon) {
+            ret_html += '   <i class="mb_icon ' + icon + '" aria-hidden="true"> </i>'+"\n";
+        }
+        if(label != '') {
+            ret_html += '       <span class="label">' + label + '</span>' + "\n";
+        }
+        ret_html += '</a>'+"\n";
+        ret_html += '</li>'+"\n";
+    });
+    return ret_html;
+}
+function getTarget(target_name) {
+    var ret = 'nm_frame_app';
+    try {
+        var targets = targets_list;
+        if (targets[target_name] !== undefined) {
+            ret = targets[target_name];
+        }
+    } catch (e) {
+        ret = 'nm_frame_app';
+    }
+    return ret
+}
+function renderMegaBoxColumn(arr_items) {
+    var ret_html = "" ;
+    arr_items.forEach(function (item) {
+        var has_icon = item.icon_check == 'S';
+        var icon = item.icon_fa;
+        var disabled = (item.disabled == 'Y') ? 'disabled="disabled"' : '';
+        var label = item.label;
+        var hint = item.hint;
+        var url = item.link;
+        var id = item.id;
+        var link_target = item.link_target;
+        var fav_check = item.fav_check;
+        var children = Object.values(item.itens);
+        var has_popup = 'true';
+
+        try {
+            link_target = getTarget(link_target);
+            if (link_target == '_self' && url == '#' && (!children || !children.length)) {
+                url = 'javascript: window.close();';
+            }
+        } catch (e) {
+            link_target = 'nm_frame_app';
+        }
+
+
+        if (!children || !children.length) {
+            ret_html += '<li class="wrapper" ' + disabled + ' role="none">'+"\n";
+                has_popup = 'false';
+                ret_html += "<a class=\"border_botto_m\" role='menuitem' href=\"" + url + "\" tab-name=\""+ id + "\" title=\"" + hint + "\" tab-title=\""+ label + "\" target=\""+ link_target + "\" role=\"menuitem\" aria-haspopup=\""+ has_popup + "\" aria-expanded=\"false\" data-active=\"false\">"+"\n";
+            if (has_icon) {
+                ret_html += '   <i class="mb_icon ' + icon + '" aria-hidden="true"> </i>'+"\n";
+            }
+            if(label != '') {
+                ret_html += '       <span class="label">' + label + '</span>' + "\n";
+            }
+            ret_html += '</a>'+"\n";
+            ret_html += '</li>'+"\n";
+        } else {
+            ret_html += renderMegaBoxColumn(children);
+        }
+
+    });
+    return ret_html;
+}
+function renderMegaBoxItens(arr_items) {
+    var ret_html = "" ;
+    arr_items.forEach(function (item) {
+        var has_icon = item.icon_check == 'S';
+        var icon = item.icon_fa;
+        var label = item.label;
+        var hint = item.hint;
+        var id = item.id;
+        var children = Object.values(item.itens);
+
+
+        ret_html += '<ul class="col_md col_lg">'+"\n";
+        ret_html += '<li class="wrapper wrapper section_title" role="none">'+"\n";
+        ret_html += '<p role="menuitem">'+"\n";
+        if (has_icon) {
+            ret_html += '   <i class="mb_icon ' + icon + '" aria-hidden="true"> </i>'+"\n";
+        }
+        if(label != '') {
+            ret_html += '       <span class="label">' + label + '</span>' + "\n";
+        }
+        ret_html += '</p>'+"\n";
+        ret_html += '</li>'+"\n";
+        ret_html += renderMegaBoxColumn(children)+"\n";
+        ret_html += '</ul>'+"\n";
+    });
+    return ret_html;
+}
+function renderMegaBox(arr_items) {
+
+    var ret_html = "" ;
+    arr_items.forEach(function (item) {
+        var mega_check = item.mega_check == 'S';
+        var id = item.id;
+        var children = Object.values(item.itens);
+        if (mega_check) {
+            ret_html += "<div id=\"megamenu-" + id + "\" class=\"submenu container dropdown\" role=\"menu\" aria-label=\"Mega menu\">";
+            ret_html += "<button class=\"button mob-button close-megamenu-flex\"> <i class=\"fas fa-xmark\"></i> </button>";
+            ret_html += "<div class=\"submenu_row\" >";
+            ret_html += renderMegaBoxItens(children);
+            ret_html += '</div>' + "\n";
+            ret_html += '</div>' + "\n";
+        }
+    });
+    return ret_html
+}
+function renderItems(arr_items, is_vert, level) {
+    var ret_html = '';
+    if (typeof level == 'undefined') {
+        level = 0;
+    }
+    arr_items.forEach(function (item) {
+        var has_icon = item.icon_check == 'S';
+        var icon = item.icon_fa;
+        var disabled = (item.disabled == 'Y') ? 'disabled="disabled"' : '';
+        var label = item.label;
+        var hint = item.hint;
+        var url = item.link;
+        var id = item.id;
+        var link_target = item.link_target;
+        var fav_check = item.fav_check;
+        var mega_check = item.mega_check == 'S' && level == 0;
+        var children = Object.values(item.itens);
+        var has_popup = 'true';
+
+        try {
+            link_target = getTarget(link_target);
+            if (link_target == '_self' && url == '#' && (!children || !children.length)) {
+                url = 'javascript: window.close();';
+            }
+        } catch (e) {
+            link_target = 'nm_frame_app';
+        }
+
+        ret_html += '<li class="wrapper" ' + disabled + ' role="none">'+"\n";
+        if (!children || !children.length) {
+            has_popup = 'false';
+            ret_html += "<a href=\"" + url + "\" tab-name=\""+ id + "\" title=\"" + hint + "\" tab-title=\""+ label + "\" target=\""+ link_target + "\" role=\"menuitem\" aria-haspopup=\""+ has_popup + "\" aria-expanded=\"false\" data-active=\"false\">"+"\n";
+        } else {
+            if (mega_check) {
+                ret_html += '   <span role="menuitem" aria-haspopup="' + has_popup + '" aria-expanded="false" data-axis="' + ((is_vert) ? 'vertical' : 'horizontal') + '" data-megamenu="link" aria-controls="megamenu-' + id + '" data-active="false">' + "\n";
+            } else {
+                ret_html += '   <span role="menuitem" aria-haspopup="' + has_popup + '" aria-expanded="false" aria-controls="submenu-' + id + '" data-active="false">' + "\n";
+            }
+        }
+        if (has_icon) {
+            ret_html += '   <i class="mb_icon ' + icon + '" aria-hidden="true"> </i>'+"\n";
+        }
+        if(label != '') {
+            ret_html += '       <span class="label">' + label + '</span>' + "\n";
+        }
+        if (mega_check) {
+            ret_html += '   </span>' + "\n";
+        } else {
+            if (!children || !children.length) {
+            } else {
+                if (is_vert) {
+                    ret_html += '   </span>' + "\n";
+                }
+            }
+            if (children && children.length > 0) {
+                if (is_vert) {
+                    ret_html += '<div class="wrapper">' + "\n";
+                }
+                ret_html += '   <ul class="submenu" id="submenu-' + id + '" role="menu" aria-label="' + label + '" aria-hidden="true">' + "\n";
+                ret_html += renderItems(children, is_vert, level + 1);
+                ret_html += '   </ul>' + "\n";
+                if (is_vert) {
+                    ret_html += '</div>' + "\n";
+                }
+            } else {
+                ret_html += '</a>' + "\n";
+            }
+            if (!children || !children.length) {
+            } else {
+                if (!is_vert) {
+                    ret_html += '   </span>' + "\n";
+                }
+            }
+        }
+        ret_html += '</li>'+"\n";
+    });
+    return ret_html;
+}
+
+function hideTBButton(panel_name) {
+    $('[aria-controls="'+panel_name+'-panel"]').hide();
+}
+function showTBButton(panel_name) {
+    $('[aria-controls="'+panel_name+'-panel"]').show();
+}
+
+function finishLoadingTab(tabName) {
+    var frame_el = $('#' + tabName + ' iframe');
+    var tab_el = $('#id_tab_' + tabName);
+    if ($('#id_tab_' + tabName + ' a').is('.active')) {
+        bodyColorUpdate(frame_el[0].parentNode);
+    }
+    tab_el.removeClass('loading');
+    frame_el.removeClass('loading');
+}
+function setLoadingTab(tabName) {
+    var frame_el = $('#' + tabName + ' iframe');
+    var tab_el = $('#id_tab_' + tabName);
+    tab_el.addClass('loading');
+    if (typeof use_load != 'undefined' && use_load) {
+        frame_el.addClass('loading');
+    }
+}
+
+function bodyColorUpdate(el_wrap) {
+    try {
+        var iFrameEl = $(el_wrap).find('iframe')[0];
+        var bgcolor = '#efefef';
+        var iframeDoc = iFrameEl.contentDocument || iFrameEl.contentWindow.document;
+        bgcolor = iFrameEl.contentWindow.getComputedStyle(iframeDoc.body).backgroundColor;
+        $('body').css('background-color', bgcolor);
+    } catch (e) {
+        console.log(e);
+    }
+}
+function tryRenderCalendarFix(el_wrap) {
+    try {
+        var iFrameEl = $(el_wrap).find('iframe')[0];
+        var iframeDoc = iFrameEl.contentWindow;
+        if ( iframeDoc.scMainCalendar ) {
+            iframeDoc.scMainCalendar.render();
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+function activateItem(id) {
+    var vert = document.querySelector('.ae-menubar.menubar').getAttribute('aria-orientation') == 'vertical';
+    var activeItem =  $('[tab-name="' + id + '"]');
+    $('[role="menuitem"]').attr('data-active', 'false');
+    activeItem.attr('data-active', 'true');
+    if (vert) {
+        activeItem.parents('.wrapper').find(' > [role="menuitem"]').attr('data-active', 'true');
+    } else {
+        activeItem.parents('[role="menuitem"]').attr('data-active', 'true');
+    }
+}
+function handleLinks(e) {
+    if ($('a[tab-name="' + e + '"]').attr('target') == '_self' && ($('a[tab-name="' + e + '"]').attr('href') == '#' || $('a[tab-name="' + e + '"]').attr('href') == '')) {
+        window.close();
+        return false;
+    }
+    if ($('a[tab-name="' + e + '"]').attr('href') == '#' || $('a[tab-name="' + e + '"]').attr('href') == '') {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    }
+    // $('body').removeAttr("style");
+    activateItem(e);
+    if (typeof use_load != 'undefined' && use_load) {
+        $('#app-frames').find('iframe').addClass('loading');
+    }
+    // if (!$('#app-frames').find('iframe').hasClass('loading')) {
+    //     bodyColorUpdate($('#app-frames'));
+    // }
+    if (typeof use_load != 'undefined' && use_load) {
+        if (loadTimeout) {
+            clearTimeout(loadTimeout);
+        }
+        loadTimeout = setTimeout(function() {
+            $('#app-frames iframe').removeClass('loading');
+        }, 10000);
+    }
+
+    $('.ae-menubar.menubar[aria-orientation="vertical"]').removeClass('expanded-mob');
+    $('.submenu.container.dropdown').removeClass('show');
+    if ($('.menu-mobile-control').attr('aria-pressed') === 'true') {
+        $('.menu-mobile-control').click();
+    }
+}
+function flattenItems(arr_items) {
+
+    return arr_items.reduce((acc, x) => {
+        acc = acc.concat(x);
+        if (typeof x.itens == typeof {}) {
+            acc = acc.concat(flattenItems(Object.values(x.itens)));
+            // x.itens = [];
+        }
+        return acc;
+    }, []);
+
+
+}
+
+var SCMenubar;
+window.addEventListener('load', () => {
+
+    // Inicialização da aplicação de temas
+    //-------------------------------------
+    if (panelTheme) {
+        themeApply();
+    }
+    if (panelNotification) {
+        markAllAsRead();
+        countNotifications();
+        notificationClose();
+    }
+
+    // Sistema de busca do menu
+    //-------------------------------------
+
+    renderUserImage();
+    renderLogo();
+    // Controle de layout
+    //---------------------------------
+    /**
+     * @param {number} offsetX - deslocamento entre a toolbar e a menubar vertical
+     */
+    updateNavMenu();
+    if (typeof startCrumbs == 'function') {
+        startCrumbs();
+    }
+    if (typeof searchInit == 'function') {
+        searchInit();
+    }
+    if (typeof startTabs == 'function') {
+        startTabs();
+    } else {
+        $('#app-frames iframe').on('load', function () {
+            bodyColorUpdate($('#app-frames')); $('#app-frames iframe').removeClass('loading');
+        });
+        $('a[tab-name], a[tab-name] > span').on('click', function (e) {
+            var el = $(this).closest('a[tab-name]');
+            if (el.attr('target') == 'nm_frame_app') {
+                handleLinks(el.attr('tab-name'));
+            }
+        });
+    }
+    // Inicialização do menu
+    //-------------------------------------
+    SCMenubar = new Menubar({
+        animation: {
+            show: true,
+            name: 'slide-left'
+        }
+    });
+
+    document.addEventListener('panel-oppened', function(e) {
+        if (e.detail.panel.id == 'search-panel') {
+            $('#main-search').focus();
+        }
+        $('#' + e.detail.panel.id).after('<div class="panel-backdrop-overlay"></div>');
+        $('.panel-backdrop-overlay').off('click');
+        $('.panel-backdrop-overlay').on('click', function () {
+            SCMenubar.closePanel();
+        });
+    });
+    document.addEventListener('panel-closed', function(e) {
+        $('.panel-backdrop-overlay').remove();
+        $('#main-search').val('');
+        $('#search-result .result-links').html('');
+        notif_update_lock = false;
+        $('.confirm-exclude').removeClass('open-confirm');
+    });
+
+    $('.button.expand-button').on('click', function () {
+        $('.ae-menubar.menubar[aria-orientation="vertical"]').addClass('expanded-mob');
+        if (typeof document.menu_expand_func == 'function') {
+            document.menu_expand_func();
+        }
+    });
+    $('#close-menu-expand').on('click', function () {
+        $('.ae-menubar.menubar[aria-orientation="vertical"]').removeClass('expanded-mob');
+    });
+    if (apl_default != '') {
+        startAppTab('');
+    }
+    if (!start_expanded) {
+        $('#switch-menu-position').click();
+    }
+    $('err-msg').each(function(i, t) {
+        var er_msg = $(t).html();
+
+        Swal.fire({
+            title: '',
+            html: er_msg,
+            confirmButtonText: 'OK'
+        });
+    });
+});
+
+
+const menubar = document.querySelector('.ae-menubar.menubar');
+const menubarHeight = menubar ? menubar.offsetHeight : 0;
+function cleanDropdownStyle(dropdown) {
+    const styleAttr = dropdown.getAttribute('style');
+    const pattern = /right:\s*calc\(100%\s*-\s*0\.5em\);?/;
+
+    if (styleAttr && styleAttr.match(pattern)) {
+        const cleanedStyle = styleAttr.replace(pattern, '').trim();
+        dropdown.setAttribute('style', cleanedStyle);
+    }
+}
+function handleMenuItem(megamenu_link) {
+    const dropdownId = megamenu_link.getAttribute('aria-controls');
+    const dropdown = document.getElementById(dropdownId);
+    const sectionTitles = dropdown.querySelectorAll('.section_title>p');
+    const megamenu_linkRect = megamenu_link.getBoundingClientRect();
+    const dropdownRect = dropdown.getBoundingClientRect();
+    const axis = megamenu_link.getAttribute('data-axis');
+
+    // Remove a classe 'show' de todos os dropdowns
+    document.querySelectorAll('.dropdown').forEach(function (dropdown) {
+        dropdown.classList.remove('show');
+        const controlItem = document.querySelector(`[aria-controls="${dropdown.id}"]`);
+        if (controlItem) {
+            controlItem.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Adiciona a classe 'show' para o dropdown atual
+    dropdown.classList.add('show');
+    megamenu_link.setAttribute('aria-expanded', 'true');
+
+    let top, left;
+
+    if (axis === 'horizontal') {
+        // Alinha horizontalmente
+        top = menubarHeight - 10;
+        left = megamenu_linkRect.left - dropdownRect.width/2 + megamenu_linkRect.width/2;
+
+        // Verifica se o dropdown se encaixa na viewport horizontalmente
+        if (left + dropdownRect.width > window.innerWidth) {
+            left = megamenu_linkRect.right - dropdownRect.width;
+        }
+
+
+    } else {
+        // Alinha verticalmente (default)
+        top = megamenu_linkRect.bottom;
+        left = megamenu_linkRect.left;
+
+        // Verifica se o dropdown se encaixa na viewport verticalmente
+        if (top + dropdownRect.height > window.innerHeight) {
+            top = 0;
+        }
+
+        // Verifica se o dropdown se encaixa na viewport horizontalmente
+        if (left + dropdownRect.width > window.innerWidth) {
+            left = window.innerWidth - dropdownRect.width;
+        }
+
+    }
+
+
+    // Garante que o dropdown não saia do limite esquerdo
+    if (left < 0) {
+        left = 0;
+    }
+    if (
+        top < 10 && (
+            (document.querySelector('.expand-button') && document.querySelector('.expand-button').checkVisibility())
+            ||
+            (document.querySelector('.menu-mobile-control') && document.querySelector('.menu-mobile-control').checkVisibility())
+        )
+    ) {
+        dropdown.classList.add('fullscreen');
+
+        left = 0;
+    } else {
+        dropdown.classList.remove('fullscreen');
+    }
+
+
+    // Garante que o dropdown seja visível em telas menores
+    if (dropdownRect.height > window.innerHeight) {
+        dropdown.style.maxHeight = `100vh`;
+        dropdown.style.overflowY = 'auto';
+    }
+
+    left = Math.trunc(left);
+    top = Math.trunc(top);
+    dropdown.style.top = `${top}px`;
+    dropdown.style.left = `${left}px`;
+    dropdown.style["max-height"] = `calc(100vh - ${top}px)`;
+    dropdown.style["overflow-y"] = `auto`;
+    dropdown.style["overflow-x"] = `hidden`;
+
+    setTimeout(() => {
+        cleanDropdownStyle(dropdown);
+    }, 150);
+
+    var title_height = 0;
+    sectionTitles.forEach(function (title) {
+        if (title.offsetHeight > title_height) {
+            title_height = title.offsetHeight;
+        }
+    });
+    sectionTitles.forEach(function (title) {
+        title.style.height = title_height + 'px';
+    });
+
+    // Adiciona ouvinte de eventos ao megamenu_link para manipular mouseleave
+    megamenu_link.addEventListener('mouseleave', function (ev) {
+        ev.stopPropagation();
+        setTimeout(() => {
+            if (!dropdown.matches(':hover') && !megamenu_link.matches(':hover')) {
+                dropdown.classList.remove('show');
+                megamenu_link.setAttribute('aria-expanded', 'false');
+            }
+        }, 100);
+    }, {once: true});
+
+    // Adiciona ouvinte de eventos ao dropdown para manipular mouseleave
+    dropdown.addEventListener('mouseleave', function (ev) {
+        ev.stopPropagation();
+        setTimeout(() => {
+            if (!dropdown.matches(':hover') && !megamenu_link.matches(':hover')) {
+                dropdown.classList.remove('show');
+                megamenu_link.setAttribute('aria-expanded', 'false');
+            }
+        }, 100);
+    }, {once: true});
+
+    // Adiciona ouvintes de eventos ao dropdown para manipular mouseenter
+    dropdown.addEventListener('mouseenter', function (ev) {
+        ev.stopPropagation();
+        dropdown.classList.add('show');
+        megamenu_link.setAttribute('aria-expanded', 'true');
+    }, {once: true});
+}
+function loadMegamenus() {
+
+    document.querySelectorAll('[data-megamenu="link"]').forEach(function (megamenu_link) {
+        const axis = megamenu_link.getAttribute('data-axis');
+        megamenu_link.setAttribute('aria-expanded', 'false');
+        if (axis === 'horizontal') {
+            megamenu_link.addEventListener('mouseenter', () => handleMenuItem(megamenu_link));
+        } else {
+            megamenu_link.addEventListener('click', () => handleMenuItem(megamenu_link));
+        }
+    }, {once: true});
+
+    window.addEventListener('resize', function () {
+        document.querySelectorAll('.dropdown').forEach(function (dropdown) {
+            dropdown.classList.remove('show');
+            const controlItem = document.querySelector(`[aria-controls="${dropdown.id}"]`);
+            if (controlItem) {
+                controlItem.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }, {once: true});
+};
+
+    </script>
+    <?php
+
+}function GerenciadorFinanceiro_Mnu_escreveMenu($arr_menu_apl, $path_imag_cab = '', $strAlign = '')
+{
+  $arr_menu_user = $arr_menu_apl['data_user'];
+  $arr_menu = $arr_menu_apl['data'];
+?>
+        <div class='menu menu--horizontal'>
+            <div class='menu__toggle'>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class='menu__container scMenuHTableCssAlt'>
+                <div class='menu__layer'>
+                    <?php
+                    $this->GerenciadorFinanceiro_Mnu_escreveMenuRec($arr_menu, $arr_menu_apl, $path_imag_cab, 'menu__list');
+                    ?>
+                </div>
+            </div>
+        </div><?php
+}
+function GerenciadorFinanceiro_Mnu_target($str_target)
+{
+    if ('_blank' == $str_target)
+    {
+        return '_blank';
+    }
+    elseif ('_parent' == $str_target)
+    {
+        return '_parent';
+    }
+    else
+    {
+        return 'GerenciadorFinanceiro_Mnu_iframe';
+    }
+}
+   function nm_prot_aspas($str_item)
+   {
+       return str_replace('"', '\"', $str_item);
+   }
+   function Gera_sc_init($apl_menu)
+   {
+        $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['sc_init'][$apl_menu] = 1;
+        return  1;
+   }
+   function getMenuArrItemLink($apl_menu, $str_id)
+   {
+       foreach($apl_menu as $id_item => $arr_item)
+       {
+           if($arr_item['id'] == $str_id)
+           {
+               return $arr_item;
+           }
+           elseif(isset($arr_item['itens']) && !empty($arr_item['itens']))
+           {
+               $_arr_item = $this->getMenuArrItemLink($arr_item['itens'], $str_id);
+               if(isset($_arr_item) && !empty($_arr_item))
+               {
+                   return $_arr_item;
+               }
+           }
+       }
+   }   function regionalDefault()
+   {
+       $_SESSION['scriptcase']['reg_conf']['date_format']   = (isset($this->Nm_conf_reg[$this->str_conf_reg]['data_format']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['data_format'] : "ddmmyyyy";
+       $_SESSION['scriptcase']['reg_conf']['date_sep']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['data_sep']))                 ?  $this->Nm_conf_reg[$this->str_conf_reg]['data_sep'] : "/";
+       $_SESSION['scriptcase']['reg_conf']['date_week_ini'] = (isset($this->Nm_conf_reg[$this->str_conf_reg]['prim_dia_sema']))            ?  $this->Nm_conf_reg[$this->str_conf_reg]['prim_dia_sema'] : "SU";
+       $_SESSION['scriptcase']['reg_conf']['time_format']   = (isset($this->Nm_conf_reg[$this->str_conf_reg]['hora_format']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['hora_format'] : "hhiiss";
+       $_SESSION['scriptcase']['reg_conf']['time_sep']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['hora_sep']))                 ?  $this->Nm_conf_reg[$this->str_conf_reg]['hora_sep'] : ":";
+       $_SESSION['scriptcase']['reg_conf']['time_pos_ampm'] = (isset($this->Nm_conf_reg[$this->str_conf_reg]['hora_pos_ampm']))            ?  $this->Nm_conf_reg[$this->str_conf_reg]['hora_pos_ampm'] : "right_without_space";
+       $_SESSION['scriptcase']['reg_conf']['time_simb_am']  = (isset($this->Nm_conf_reg[$this->str_conf_reg]['hora_simbolo_am']))          ?  $this->Nm_conf_reg[$this->str_conf_reg]['hora_simbolo_am'] : "am";
+       $_SESSION['scriptcase']['reg_conf']['time_simb_pm']  = (isset($this->Nm_conf_reg[$this->str_conf_reg]['hora_simbolo_pm']))          ?  $this->Nm_conf_reg[$this->str_conf_reg]['hora_simbolo_pm'] : "pm";
+       $_SESSION['scriptcase']['reg_conf']['simb_neg']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['num_sinal_neg']))            ?  $this->Nm_conf_reg[$this->str_conf_reg]['num_sinal_neg'] : "-";
+       $_SESSION['scriptcase']['reg_conf']['grup_num']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['num_sep_agr']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['num_sep_agr'] : ".";
+       $_SESSION['scriptcase']['reg_conf']['dec_num']       = (isset($this->Nm_conf_reg[$this->str_conf_reg]['num_sep_dec']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['num_sep_dec'] : ",";
+       $_SESSION['scriptcase']['reg_conf']['neg_num']       = (isset($this->Nm_conf_reg[$this->str_conf_reg]['num_format_num_neg']))       ?  $this->Nm_conf_reg[$this->str_conf_reg]['num_format_num_neg'] : 2;
+       $_SESSION['scriptcase']['reg_conf']['monet_simb']    = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_simbolo']))        ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_simbolo'] : "R$";
+       $_SESSION['scriptcase']['reg_conf']['monet_f_pos']   = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_format_num_pos'])) ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_format_num_pos'] : 3;
+       $_SESSION['scriptcase']['reg_conf']['monet_f_neg']   = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_format_num_neg'])) ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_format_num_neg'] : 13;
+       $_SESSION['scriptcase']['reg_conf']['grup_val']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_sep_agr']))        ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_sep_agr'] : ".";
+       $_SESSION['scriptcase']['reg_conf']['dec_val']       = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_sep_dec']))        ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_sep_dec'] : ",";
+       $_SESSION['scriptcase']['reg_conf']['html_dir']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['ger_ltr_rtl']))              ?  " DIR='" . $this->Nm_conf_reg[$this->str_conf_reg]['ger_ltr_rtl'] . "'" : "";
+       $_SESSION['scriptcase']['reg_conf']['css_dir']       = (isset($this->Nm_conf_reg[$this->str_conf_reg]['ger_ltr_rtl']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['ger_ltr_rtl'] : "LTR";
+       $_SESSION['scriptcase']['reg_conf']['html_dir_only'] = (isset($this->Nm_conf_reg[$this->str_conf_reg]['ger_ltr_rtl']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['ger_ltr_rtl'] : "";
+       $_SESSION['scriptcase']['reg_conf']['num_group_digit']       = (isset($this->Nm_conf_reg[$this->str_conf_reg]['num_group_digit']))       ?  $this->Nm_conf_reg[$this->str_conf_reg]['num_group_digit'] : "1";
+       $_SESSION['scriptcase']['reg_conf']['unid_mont_group_digit'] = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_group_digit'])) ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_group_digit'] : "1";
+   }
+
+}
+if (isset($_POST['nmgp_start'])) {$nmgp_start = $_POST['nmgp_start'];} 
+if (isset($_GET['nmgp_start']))  {$nmgp_start = $_GET['nmgp_start'];} 
+$Sem_Session = (!isset($_SESSION['sc_session'])) ? true : false;
+$_SESSION['scriptcase']['sem_session'] = false;
+if (!isset($_SERVER['HTTP_REFERER']) || (!isset($nmgp_parms) && !isset($script_case_init) && !isset($nmgp_start) ))
+{
+    $Sem_Session = false;
+}
+$NM_dir_atual = getcwd();
+if (empty($NM_dir_atual)) {
+    $str_path_sys  = (isset($_SERVER['SCRIPT_FILENAME'])) ? $_SERVER['SCRIPT_FILENAME'] : $_SERVER['ORIG_PATH_TRANSLATED'];
+    $str_path_sys  = str_replace("\\", '/', $str_path_sys);
+}
+else {
+    $sc_nm_arquivo = explode("/", $_SERVER['PHP_SELF']);
+    $str_path_sys  = str_replace("\\", "/", getcwd()) . "/" . $sc_nm_arquivo[count($sc_nm_arquivo)-1];
+}
+$str_path_web    = $_SERVER['PHP_SELF'];
+$str_path_web    = str_replace("\\", '/', $str_path_web);
+$str_path_web    = str_replace('//', '/', $str_path_web);
+$path_aplicacao  = substr($str_path_web, 0, strrpos($str_path_web, '/'));
+$path_aplicacao  = substr($path_aplicacao, 0, strrpos($path_aplicacao, '/'));
+$root            = substr($str_path_sys, 0, -1 * strlen($str_path_web));
+if ($Sem_Session && (!isset($nmgp_start) || $nmgp_start != "SC")) {
+    if (isset($_COOKIE['sc_apl_default_LIGA_InfoTIME'])) {
+        $apl_def = explode(",", $_COOKIE['sc_apl_default_LIGA_InfoTIME']);
+    }
+    elseif (is_file($root . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_imag_temp'] . "/sc_apl_default_LIGA_InfoTIME.txt")) {
+        $apl_def = explode(",", file_get_contents($root . $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['glo_nm_path_imag_temp'] . "/sc_apl_default_LIGA_InfoTIME.txt"));
+    }
+    if (isset($apl_def)) {
+        if ($apl_def[0] != "GerenciadorFinanceiro_Mnu") {
+            $_SESSION['scriptcase']['sem_session'] = true;
+            if (strtolower(substr($apl_def[0], 0 , 7)) == "http://" || strtolower(substr($apl_def[0], 0 , 8)) == "https://" || substr($apl_def[0], 0 , 2) == "..") {
+                $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['redir'] = $apl_def[0];
+            }
+            else {
+                $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['redir'] = $path_aplicacao . "/" . SC_dir_app_name($apl_def[0]) . "/index.php";
+            }
+            $Redir_tp = (isset($apl_def[1])) ? trim(strtoupper($apl_def[1])) : "";
+            $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['redir_tp'] = $Redir_tp;
+        }
+        if (isset($_COOKIE['sc_actual_lang_LIGA_InfoTIME'])) {
+            $_SESSION['scriptcase']['GerenciadorFinanceiro_Mnu']['session_timeout']['lang'] = $_COOKIE['sc_actual_lang_LIGA_InfoTIME'];
+        }
+    }
+}
+if ((isset($_POST['nmgp_opcao']) && $_POST['nmgp_opcao'] == "force_lang") || (isset($_GET['nmgp_opcao']) && $_GET['nmgp_opcao'] == "force_lang"))
+{
+    if (isset($_POST['nmgp_opcao']) && $_POST['nmgp_opcao'] == "force_lang")
+    {
+        $nmgp_opcao  = $_POST['nmgp_opcao'];
+        $nmgp_idioma = $_POST['nmgp_idioma'];
+    }
+    else
+    {
+        $nmgp_opcao  = $_GET['nmgp_opcao'];
+        $nmgp_idioma = $_GET['nmgp_idioma'];
+    }
+    $Temp_lang = explode(";" , $nmgp_idioma);
+    if (isset($Temp_lang[0]) && !empty($Temp_lang[0]))
+    {
+        $_SESSION['scriptcase']['str_lang'] = $Temp_lang[0];
+    }
+    if (isset($Temp_lang[1]) && !empty($Temp_lang[1]))
+    {
+        $_SESSION['scriptcase']['str_conf_reg'] = $Temp_lang[1];
+    }
+}
+$contr_GerenciadorFinanceiro_Mnu = new GerenciadorFinanceiro_Mnu_class;
+$contr_GerenciadorFinanceiro_Mnu->GerenciadorFinanceiro_Mnu_menu();
+
+?>

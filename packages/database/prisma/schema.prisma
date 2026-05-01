@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+  /// Fora de node_modules/.pnpm — evita EPERM no Windows ao renomear query_engine com DLL em uso
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Tenant raiz (TLL: portal-cliente/tenacidade.tll)
+model Tenacidade {
+  idTenacidade BigInt @id @default(autoincrement()) @map("id_tenacidade")
+  idUsuarioAuditoria BigInt? @map("id_usuario_auditoria")
+  razaoSocial        String? @map("razao_social") @db.VarChar(255)
+  nomeFantasia       String? @map("nome_fantasia") @db.VarChar(255)
+  chaveAcesso        String? @map("chave_acesso") @db.VarChar(255)
+  dataExpiracao      DateTime? @map("data_expiracao")
+  estoque            String? @db.Char(1)
+  ativo              String? @db.Char(1)
+  enderecoIpAuditoria   String? @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String? @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  usuarios Usuario[]
+  grupos   GrupoUsuario[]
+  clientes Cliente[]
+
+  @@map("tenacidade")
+}
+
+model Usuario {
+  idUsuario           BigInt   @id @default(autoincrement()) @map("id_usuario")
+  idTenacidade        BigInt?  @map("id_tenacidade")
+  idUsuarioAuditoria  BigInt?  @map("id_usuario_auditoria")
+  nome                String?  @db.VarChar(100)
+  login               String?  @db.VarChar(32)
+  /// Legado MD5 (32) ou hash forte — coluna alvo mínima 255 para bcrypt/argon2
+  senha               String?  @db.VarChar(255)
+  email               String?  @db.VarChar(100)
+  ativo               String?  @db.VarChar(3)
+  dataAtivacao        DateTime? @map("data_ativacao")
+  indicadorFinanceiro String?   @map("indicador_financeiro") @db.Char(1)
+  codigoAtivacao      String?   @map("codigo_ativacao") @db.VarChar(32)
+  administrador       String?   @db.VarChar(3)
+  descontoMaximoImp   Decimal?  @map("desconto_maximo_imp") @db.Decimal(5, 2)
+  descontoMaximoMes   Decimal?  @map("desconto_maximo_mes") @db.Decimal(5, 2)
+  acessoAuditoria     String?   @map("acesso_auditoria") @db.VarChar(1)
+  acessoAutorizacoes  String?   @map("acesso_autorizacoes") @db.VarChar(1)
+  listaEmpresa        String?   @map("lista_empresa") @db.VarChar(255)
+  enderecoIpAuditoria    String? @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String? @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  tenacidade Tenacidade? @relation(fields: [idTenacidade], references: [idTenacidade])
+  grupos     UsuarioGrupoUsuario[]
+
+  @@map("usuario")
+}
+
+model Aplicacao {
+  idAplicacao            BigInt  @id @default(autoincrement()) @map("id_aplicacao")
+  idUsuarioAuditoria     BigInt? @map("id_usuario_auditoria")
+  nome                   String? @db.VarChar(255)
+  tipo                   String? @db.VarChar(20)
+  descricao              String? @db.VarChar(255)
+  enderecoIpAuditoria    String? @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String? @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  grupos GrupoUsuarioAplicacao[]
+
+  @@map("aplicacao")
+}
+
+model GrupoUsuario {
+  idGrupoUsuario BigInt   @id @default(autoincrement()) @map("id_grupo_usuario")
+  idTenacidade   BigInt?  @map("id_tenacidade")
+  idFornecedor   BigInt?  @map("id_fornecedor")
+  idUsuarioAuditoria BigInt? @map("id_usuario_auditoria")
+  descricao      String?  @db.VarChar(255)
+  enderecoIpAuditoria    String? @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String? @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  tenacidade Tenacidade? @relation(fields: [idTenacidade], references: [idTenacidade])
+  usuarios   UsuarioGrupoUsuario[]
+  aplicacoes GrupoUsuarioAplicacao[]
+
+  @@map("grupo_usuario")
+}
+
+model UsuarioGrupoUsuario {
+  idUsuarioGrupoUsuario BigInt @id @default(autoincrement()) @map("id_usuario_grupo_usuario")
+  idTenacidade          BigInt? @map("id_tenacidade")
+  idUsuario             BigInt? @map("id_usuario")
+  idGrupoUsuario        BigInt? @map("id_grupo_usuario")
+  idUsuarioAuditoria    BigInt? @map("id_usuario_auditoria")
+  enderecoIpAuditoria    String? @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String? @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  usuario      Usuario?      @relation(fields: [idUsuario], references: [idUsuario])
+  grupoUsuario GrupoUsuario? @relation(fields: [idGrupoUsuario], references: [idGrupoUsuario])
+
+  @@map("usuario_grupo_usuario")
+}
+
+model GrupoUsuarioAplicacao {
+  idGrupoUsuarioAplicacao BigInt @id @default(autoincrement()) @map("id_grupo_usuario_aplicacao")
+  idTenacidade            BigInt? @map("id_tenacidade")
+  idGrupoUsuario          BigInt? @map("id_grupo_usuario")
+  idAplicacao             BigInt? @map("id_aplicacao")
+  idUsuarioAuditoria      BigInt? @map("id_usuario_auditoria")
+  consulta                String? @db.VarChar(3)
+  inclusao                String? @db.VarChar(3)
+  exclusao                String? @db.VarChar(3)
+  alteracao               String? @db.VarChar(3)
+  exportacao              String? @db.VarChar(3)
+  impressao               String? @db.VarChar(3)
+  enderecoIpAuditoria    String? @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String? @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  grupoUsuario GrupoUsuario? @relation(fields: [idGrupoUsuario], references: [idGrupoUsuario])
+  aplicacao    Aplicacao?    @relation(fields: [idAplicacao], references: [idAplicacao])
+
+  @@map("grupo_usuario_aplicacao")
+}
+
+/// Subconjunto de campos — cliente completo no TLL (specs/cliente)
+model Cliente {
+  idCliente            BigInt   @id @default(autoincrement()) @map("id_cliente")
+  idTenacidade         BigInt?  @map("id_tenacidade")
+  idSituacaoCliente    BigInt?  @map("id_situacao_cliente")
+  idClientePai         BigInt?  @map("id_cliente_pai")
+  idConcorrente        BigInt?  @map("id_concorrente")
+  idTipoCliente        BigInt?  @map("id_tipo_cliente")
+  idRegiaoEstadual     BigInt?  @map("id_regiao_estadual")
+  idClienteCanal       BigInt?  @map("id_cliente_canal")
+  idContaCaixa         BigInt?  @map("id_conta_caixa")
+  idMunicipio          BigInt?  @map("id_municipio")
+  idUsuarioAuditoria   BigInt?  @map("id_usuario_auditoria")
+  tipoPessoa           String?  @map("tipo_pessoa") @db.Char(1)
+  razaoSocial          String?  @map("razao_social") @db.VarChar(255)
+  nomeFantasia         String?  @map("nome_fantasia") @db.VarChar(255)
+  sexo                 String?  @db.Char(1)
+  dataNascimento       DateTime? @map("data_nascimento")
+  cnpj                 String?  @db.VarChar(14)
+  inscricaoEstadual    String?  @map("inscricao_estadual") @db.VarChar(20)
+  inscricaoMunicipal   String?  @map("inscricao_municipal") @db.VarChar(20)
+  cep                  String?  @db.VarChar(8)
+  tipoLogradouro       String?  @map("tipo_logradouro") @db.VarChar(100)
+  logradouro           String?  @db.VarChar(100)
+  numero               String?  @db.VarChar(100)
+  complemento          String?  @db.VarChar(100)
+  bairro               String?  @db.VarChar(100)
+  cidade               String?  @db.VarChar(100)
+  estado               String?  @db.Char(2)
+  telefone             String?  @db.VarChar(50)
+  celular              String?  @db.VarChar(50)
+  email                String?  @db.VarChar(100)
+  homePage             String?  @map("home_page") @db.VarChar(255)
+  contatos             String?  @db.VarChar(255)
+  numeroAntigo         BigInt?  @map("numero_antigo")
+  idClienteInfolab     BigInt?  @map("id_cliente_infolab")
+  observacoes          String?  @db.Text
+  emiteBoleto          String?  @map("emite_boleto") @db.Char(1)
+  certificadoRegistro  String?  @map("certificado_registro") @db.VarChar(10)
+  dataEmissaoCr        DateTime? @map("data_emissao_cr") @db.Date
+  dataValidadeCr       DateTime? @map("data_validade_cr") @db.Date
+  chaveAcesso          String?  @map("chave_acesso") @db.VarChar(50)
+  dataExpiracao        DateTime? @map("data_expiracao") @db.Date
+  qtdLicenca           Int?     @map("qtd_licenca") @db.SmallInt
+  clientePublico       String?  @map("cliente_publico") @db.Char(1)
+  enderecoIpAuditoria    String? @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String? @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  tenacidade Tenacidade? @relation(fields: [idTenacidade], references: [idTenacidade])
+
+  @@map("cliente")
+}

@@ -1,0 +1,581 @@
+
+// =============================================================================
+// INFOTIME — Prisma Schema
+// Entidade: cliente (equivalente a "pacientes" em CRM de laboratório)
+// Tabelas: cliente + 8 tabelas relacionadas + coleta_domiciliar
+// Gerado a partir dos arquivos .tll do infotime-migration/cliente/
+// =============================================================================
+//
+// NOTA: O Infotime não possui tabela "pacientes".
+//   - `cliente`           → laboratórios / clientes da Liga Sistemas
+//   - `coleta_domiciliar` → dados de pacientes (CPF, nome, nascimento)
+//                           vindos do portal público de agendamento de coleta
+//   - `cliente_aluno`     → alunos/pacientes em contexto educacional
+//
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+/// Tipo de pessoa jurídica ou física
+/// Origem: cliente.tipo_pessoa char(1)
+enum TipoPessoa {
+  J /// Pessoa Jurídica (CNPJ)
+  F /// Pessoa Física (CPF)
+}
+
+/// Sexo do contato ou cliente PF
+/// Origem: cliente.sexo, cliente_contato.sexo, cliente_aluno.sexo char(1)
+enum Sexo {
+  M /// Masculino
+  F /// Feminino
+  N /// Não informado
+}
+
+/// Flags de flag S/N (char(1) legado) → boolean no novo sistema
+/// Campos: emite_boleto, cliente_publico, assina_proposta, recebe_cobranca
+/// CONFIRMAR NO SCRIPTCASE: se há outros valores além de S/N
+
+/// Situação da coleta domiciliar
+/// Origem: coleta_domiciliar.situacao_coleta char(1)
+enum SituacaoColeta {
+  A /// Aguardando
+  C /// Confirmada
+  R /// Realizada
+  X /// Cancelada
+}
+
+/// Tipo de contato na comunicação
+/// Origem: cliente_comunicacao.tipo_contato char(1)
+/// CONFIRMAR VALORES NO SCRIPTCASE — enum inferido
+enum TipoContato {
+  T /// Telefone
+  E /// Email
+  V /// Visita
+  W /// WhatsApp
+  O /// Outro
+}
+
+// =============================================================================
+// TABELAS DE DOMÍNIO (lookup tables)
+// =============================================================================
+
+/// Situações do cliente: Ativo, Inativo, Prospect, Lead, etc.
+model SituacaoCliente {
+  id                    BigInt    @id @default(autoincrement()) @map("id_situacao_cliente")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+  descricao             String?   @map("descricao") @db.VarChar(255)
+
+  // Auditoria Scriptcase
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  // Relações
+  clientes              Cliente[]
+
+  @@index([tenacidadeId])
+  @@map("situacao_cliente")
+}
+
+/// Segmentos de cliente: Lab. clínico, Hospital, Veterinário, etc.
+model TipoCliente {
+  id                    BigInt    @id @default(autoincrement()) @map("id_tipo_cliente")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+  descricao             String?   @map("descricao") @db.VarChar(255)
+
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  clientes              Cliente[]
+
+  @@index([tenacidadeId])
+  @@map("tipo_cliente")
+}
+
+/// Canal de origem do cliente: Congresso, Site, Indicação, Força Tarefa, etc.
+model ClienteCanal {
+  id                    BigInt    @id @default(autoincrement()) @map("id_cliente_canal")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+  descricao             String?   @map("descricao") @db.VarChar(255)
+
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  clientes              Cliente[]
+
+  @@index([tenacidadeId])
+  @@map("cliente_canal")
+}
+
+/// Regiões estaduais para segmentação comercial
+model RegiaoEstadual {
+  id                    BigInt    @id @default(autoincrement()) @map("id_regiao_estadual")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+  estado                String?   @map("estado") @db.Char(2)
+  descricao             String?   @map("descricao") @db.VarChar(255)
+
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  clientes              Cliente[]
+
+  @@index([tenacidadeId])
+  @@index([estado])
+  @@map("regiao_estadual")
+}
+
+/// Municípios (tabela IBGE) para vinculação de NFS-e
+model Municipio {
+  id                    BigInt    @id @default(autoincrement()) @map("id_municipio")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+  uf                    String?   @map("uf") @db.Char(2)
+  siglaEstado           String?   @map("sigla_estado") @db.Char(2)
+  codigo                String?   @map("codigo") @db.VarChar(7)   // Código IBGE 7 dígitos
+  nome                  String?   @map("nome") @db.VarChar(255)
+
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  clientes              Cliente[]
+
+  @@index([uf])
+  @@index([codigo])
+  @@map("municipio")
+}
+
+// =============================================================================
+// ENTIDADE PRINCIPAL: cliente
+// =============================================================================
+
+/// Cliente da Liga Sistemas — laboratórios, hospitais, clínicas.
+/// Multi-tenant via id_tenacidade.
+/// Suporta PJ (CNPJ) e PF (CPF via campo cnpj).
+/// Controla licenças do InfoLAB via chave_acesso + data_expiracao + qtd_licenca.
+model Cliente {
+  // ── Chave primária ──────────────────────────────────────────────────────────
+  id                    BigInt    @id @default(autoincrement()) @map("id_cliente")
+
+  // ── Multi-tenant ────────────────────────────────────────────────────────────
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+
+  // ── Chaves estrangeiras (FKs) ────────────────────────────────────────────────
+  situacaoClienteId     BigInt?   @map("id_situacao_cliente")
+  clientePaiId          BigInt?   @map("id_cliente_pai")           // Auto-referência: hierarquia matriz/filial
+  concorrenteId         BigInt?   @map("id_concorrente")           // FK → concorrente (relação provável)
+  tipoClienteId         BigInt?   @map("id_tipo_cliente")
+  regiaoEstadualId      BigInt?   @map("id_regiao_estadual")
+  clienteCanalId        BigInt?   @map("id_cliente_canal")
+  contaCaixaId          BigInt?   @map("id_conta_caixa")           // FK → conta_caixa (relação provável)
+  municipioId           BigInt?   @map("id_municipio")
+
+  // ── Auditoria Scriptcase ─────────────────────────────────────────────────────
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  // ── Tipo de pessoa ───────────────────────────────────────────────────────────
+  tipoPessoa            String?   @map("tipo_pessoa") @db.Char(1)
+  // ⚠️  BACKEND: validar enum TipoPessoa J|F antes de salvar
+
+  // ── Identificação ────────────────────────────────────────────────────────────
+  razaoSocial           String?   @map("razao_social") @db.VarChar(255)
+  nomeFantasia          String?   @map("nome_fantasia") @db.VarChar(255)
+  sexo                  String?   @map("sexo") @db.Char(1)         // Apenas para PF
+  dataNascimento        DateTime? @map("data_nascimento")           // timestamp — sem timezone
+  cnpj                  String?   @map("cnpj") @db.VarChar(14)     // CNPJ (14 dígitos) OU CPF (11 dígitos) para PF
+  inscricaoEstadual     String?   @map("inscricao_estadual") @db.VarChar(20)
+  inscricaoMunicipal    String?   @map("inscricao_municipal") @db.VarChar(20)
+
+  // ── Endereço ─────────────────────────────────────────────────────────────────
+  cep                   String?   @map("cep") @db.VarChar(8)       // Sem máscara: 8 dígitos
+  tipoLogradouro        String?   @map("tipo_logradouro") @db.VarChar(100)
+  logradouro            String?   @map("logradouro") @db.VarChar(100)
+  numero                String?   @map("numero") @db.VarChar(100)
+  complemento           String?   @map("complemento") @db.VarChar(100)
+  bairro                String?   @map("bairro") @db.VarChar(100)
+  cidade                String?   @map("cidade") @db.VarChar(100)
+  estado                String?   @map("estado") @db.Char(2)       // UF: SP, MG, RJ...
+
+  // ── Contato ──────────────────────────────────────────────────────────────────
+  telefone              String?   @map("telefone") @db.VarChar(50)
+  celular               String?   @map("celular") @db.VarChar(50)
+  email                 String?   @map("email") @db.VarChar(100)
+  homePage              String?   @map("home_page") @db.VarChar(255)
+  contatos              String?   @map("contatos") @db.VarChar(255) // Texto livre de contatos
+
+  // ── Dados históricos / migração ───────────────────────────────────────────────
+  numeroAntigo          BigInt?   @map("numero_antigo")
+  clienteInfolabId      BigInt?   @map("id_cliente_infolab")       // ID no sistema InfoLAB do cliente
+
+  // ── Informações adicionais ────────────────────────────────────────────────────
+  observacoes           String?   @map("observacoes")              // text
+
+  // ── Financeiro ───────────────────────────────────────────────────────────────
+  emiteBoleto           String?   @map("emite_boleto") @db.Char(1) // S|N → migrar para Boolean
+
+  // ── Certificado de Registro ───────────────────────────────────────────────────
+  certificadoRegistro   String?   @map("certificado_registro") @db.VarChar(10)
+  dataEmissaoCr         DateTime? @map("data_emissao_cr") @db.Date
+  dataValidadeCr        DateTime? @map("data_validade_cr") @db.Date
+
+  // ── Licenciamento InfoLAB ─────────────────────────────────────────────────────
+  chaveAcesso           String?   @map("chave_acesso") @db.VarChar(50) // Token de acesso ao portal
+  dataExpiracao         DateTime? @map("data_expiracao") @db.Date       // Validade da licença
+  qtdLicenca            Int?      @map("qtd_licenca") @db.SmallInt      // Número de licenças
+  clientePublico        String?   @map("cliente_publico") @db.Char(1)  // S|N → migrar para Boolean
+
+  // ── Relacionamentos ───────────────────────────────────────────────────────────
+  situacaoCliente       SituacaoCliente?   @relation(fields: [situacaoClienteId], references: [id])
+  tipoCliente           TipoCliente?       @relation(fields: [tipoClienteId], references: [id])
+  clienteCanal          ClienteCanal?      @relation(fields: [clienteCanalId], references: [id])
+  regiaoEstadual        RegiaoEstadual?    @relation(fields: [regiaoEstadualId], references: [id])
+  municipio             Municipio?         @relation(fields: [municipioId], references: [id])
+
+  // Auto-referência: hierarquia matriz → filial
+  clientePai            Cliente?           @relation("ClienteHierarquia", fields: [clientePaiId], references: [id])
+  clientesFilhos        Cliente[]          @relation("ClienteHierarquia")
+
+  // Sub-módulos 1:N
+  contatos_             ClienteContato[]
+  comunicacoes          ClienteComunicacao[]
+  documentos            ClienteDocumento[]
+  senhas                ClienteSenha[]
+  telefones             ClienteTelefone[]
+  planoContas           ClientePlanoConta[]
+
+  // ⚠️  Relações prováveis — FK existe no DB, modelo não disponível aqui
+  // contaCaixa         ContaCaixa?        @relation(fields: [contaCaixaId], references: [id])
+  // concorrente        Concorrente?       @relation(fields: [concorrenteId], references: [id])
+
+  // ── Índices ───────────────────────────────────────────────────────────────────
+  @@index([tenacidadeId])
+  @@index([situacaoClienteId])
+  @@index([tipoClienteId])
+  @@index([clienteCanalId])
+  @@index([cnpj])
+  @@index([email])
+  @@index([chaveAcesso])
+  @@index([clientePaiId])
+  @@index([razaoSocial])
+  @@index([nomeFantasia])
+  @@index([cidade, estado])
+  @@index([dataExpiracao])
+
+  @@map("cliente")
+}
+
+// =============================================================================
+// SUB-MÓDULOS DO CLIENTE
+// =============================================================================
+
+/// Contatos do cliente (pessoa de contato: gerente, financeiro, técnico, etc.)
+/// Controla quem assina propostas e quem recebe cobranças.
+model ClienteContato {
+  id                    BigInt    @id @default(autoincrement()) @map("id_cliente_contato")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  clienteId             BigInt?   @map("id_cliente")
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+
+  titulo                String?   @map("titulo") @db.VarChar(10)   // Sr., Sra., Dr., Dra.
+  nome                  String?   @map("nome") @db.VarChar(100)
+  sexo                  String?   @map("sexo") @db.Char(1)
+  dataNascimento        DateTime? @map("data_nascimento")
+  cargo                 String?   @map("cargo") @db.VarChar(100)
+  departamento          String?   @map("departamento") @db.VarChar(100)
+  telefone              String?   @map("telefone") @db.VarChar(50)
+  celular               String?   @map("celular") @db.VarChar(50)
+  email                 String?   @map("email") @db.VarChar(100)
+  assinaProposta        String?   @map("assina_proposta") @db.Char(1)   // S|N → Boolean
+  recebeCobranca        String?   @map("recebe_cobranca") @db.Char(1)   // S|N → Boolean
+  observacoes           String?   @map("observacoes")
+
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  // Relação
+  cliente               Cliente?  @relation(fields: [clienteId], references: [id])
+
+  @@index([clienteId])
+  @@index([tenacidadeId])
+  @@index([email])
+  @@map("cliente_contato")
+}
+
+/// Registro de comunicações com o cliente (calls, e-mails, visitas, anexos)
+model ClienteComunicacao {
+  id                    BigInt    @id @default(autoincrement()) @map("id_cliente_comunicacao")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  clienteId             BigInt?   @map("id_cliente")
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+
+  dataContato           DateTime? @map("data_contato")
+  tipoContato           String?   @map("tipo_contato") @db.Char(1)  // T=Tel, E=Email, V=Visita...
+  // ⚠️  CONFIRMAR valores possíveis de tipo_contato no Scriptcase
+  nome                  String?   @map("nome") @db.VarChar(255)     // Nome do contato/interlocutor
+  assunto               String?   @map("assunto") @db.VarChar(255)
+  observacoes           String?   @map("observacoes")
+  nomeArquivo           String?   @map("nome_arquivo") @db.VarChar(255)     // Nome original do arquivo
+  nomeReferencia        String?   @map("nome_referencia") @db.VarChar(255)  // Nome no storage
+
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  cliente               Cliente?  @relation(fields: [clienteId], references: [id])
+
+  @@index([clienteId])
+  @@index([tenacidadeId])
+  @@index([dataContato])
+  @@map("cliente_comunicacao")
+}
+
+/// Documentos anexados ao cliente (contratos, alvarás, certificados, etc.)
+model ClienteDocumento {
+  id                    BigInt    @id @default(autoincrement()) @map("id_cliente_documento")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  clienteId             BigInt?   @map("id_cliente")
+  tipoDocumentoId       BigInt?   @map("id_tipo_documento")         // FK → tipo_documento (relação provável)
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+
+  descricao             String?   @map("descricao") @db.VarChar(100)
+  versao                String?   @map("versao") @db.VarChar(20)
+  dataReferencia        DateTime? @map("data_referencia")
+  dataValidade          DateTime? @map("data_validade")
+  observacoes           String?   @map("observacoes")
+  nomeArquivo           String?   @map("nome_arquivo") @db.VarChar(255)     // Nome original
+  nomeReferencia        String?   @map("nome_referencia") @db.VarChar(255)  // Nome no storage (S3/MinIO)
+
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  cliente               Cliente?  @relation(fields: [clienteId], references: [id])
+  // tipoDocumento      TipoDocumento? @relation(...)   // relação provável
+
+  @@index([clienteId])
+  @@index([tenacidadeId])
+  @@index([tipoDocumentoId])
+  @@index([dataValidade])
+  @@map("cliente_documento")
+}
+
+/// Credenciais de acesso a sistemas externos vinculados ao cliente
+/// ⚠️  SEGURANÇA: campo `senha` em plain text — MIGRAR para vault/criptografia
+model ClienteSenha {
+  id                    BigInt    @id @default(autoincrement()) @map("id_cliente_senha")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  clienteId             BigInt?   @map("id_cliente")
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+
+  descricao             String?   @map("descricao") @db.VarChar(150)
+  url                   String?   @map("url") @db.VarChar(255)
+  login                 String?   @map("login") @db.VarChar(150)
+  senha                 String?   @map("senha") @db.VarChar(150)   // ⚠️ PLAIN TEXT — criptografar!
+  observacoes           String?   @map("observacoes")
+
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  cliente               Cliente?  @relation(fields: [clienteId], references: [id])
+
+  @@index([clienteId])
+  @@index([tenacidadeId])
+  @@map("cliente_senha")
+}
+
+/// Telefones adicionais do cliente (normalização da tabela principal)
+model ClienteTelefone {
+  id                    BigInt    @id @default(autoincrement()) @map("id_cliente_telefone")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  clienteId             BigInt?   @map("id_cliente")
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+
+  codigoArea            String?   @map("codigo_area") @db.Char(2)
+  numero                String?   @map("numero") @db.VarChar(10)
+
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  cliente               Cliente?  @relation(fields: [clienteId], references: [id])
+
+  @@index([clienteId])
+  @@index([tenacidadeId])
+  @@map("cliente_telefone")
+}
+
+/// Plano de contas padrão por cliente (pré-associa categorias financeiras)
+model ClientePlanoConta {
+  id                    BigInt    @id @default(autoincrement()) @map("id_cliente_plano_conta")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  clienteId             BigInt?   @map("id_cliente")
+  planoContaId          BigInt?   @map("id_plano_conta")            // FK → plano_conta (relação provável)
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  cliente               Cliente?  @relation(fields: [clienteId], references: [id])
+  // planoConta         PlanoConta? @relation(...)   // relação provável
+
+  @@unique([clienteId, planoContaId])
+  @@index([clienteId])
+  @@index([tenacidadeId])
+  @@map("cliente_plano_conta")
+}
+
+// =============================================================================
+// COLETA DOMICILIAR — dados mais próximos de "pacientes"
+// Solicitações de coleta a domicílio vindas do portal público do laboratório
+// =============================================================================
+
+/// Solicitações de coleta domiciliar — contém dados pessoais do paciente:
+/// nome, CPF, data de nascimento, agendamento, exames solicitados.
+/// ⚠️  LGPD: dados sensíveis de saúde — exige DPA (Data Processing Agreement)
+model ColetaDomiciliar {
+  id                    BigInt    @id @default(autoincrement()) @map("id_coleta_domiciliar")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+
+  // ── Dados pessoais do paciente ───────────────────────────────────────────────
+  nome                  String?   @map("nome") @db.VarChar(100)
+  cpf                   String?   @map("cpf") @db.VarChar(11)       // Sem máscara: 11 dígitos
+  email                 String?   @map("email") @db.VarChar(100)
+  dataNascimento        DateTime? @map("data_nascimento")
+
+  // ── Telefones ────────────────────────────────────────────────────────────────
+  telefoneResidencial   String?   @map("telefone_residencial") @db.VarChar(50)
+  telefoneComercial     String?   @map("telefone_comercial") @db.VarChar(50)
+  celular               String?   @map("celular") @db.VarChar(50)
+
+  // ── Agendamento (até 2 opções de horário) ────────────────────────────────────
+  dataAgendamento1      DateTime? @map("data_agendamento1")
+  horaAgendamento1      String?   @map("hora_agendamento1") @db.Char(5)  // HH:MM
+  dataAgendamento2      DateTime? @map("data_agendamento2")
+  horaAgendamento2      String?   @map("hora_agendamento2") @db.Char(5)  // HH:MM
+
+  // ── Endereço de coleta ───────────────────────────────────────────────────────
+  cep                   String?   @map("cep") @db.VarChar(8)
+  tipoLogradouro        String?   @map("tipo_logradouro") @db.VarChar(100)
+  logradouro            String?   @map("logradouro") @db.VarChar(100)
+  numero                String?   @map("numero") @db.VarChar(100)
+  complemento           String?   @map("complemento") @db.VarChar(100)
+  bairro                String?   @map("bairro") @db.VarChar(100)
+  cidade                String?   @map("cidade") @db.VarChar(100)
+  estado                String?   @map("estado") @db.Char(2)
+
+  // ── Status da coleta ─────────────────────────────────────────────────────────
+  situacaoColeta        String?   @map("situacao_coleta") @db.Char(1)
+  // ⚠️  BACKEND: validar enum SituacaoColeta A|C|R|X
+  dataColeta            DateTime? @map("data_coleta")                // Data/hora realizada
+
+  // ── Exames e arquivos ────────────────────────────────────────────────────────
+  relacaoExames         String?   @map("relacao_exames")             // text — lista de exames
+  nomeArquivo           String?   @map("nome_arquivo") @db.VarChar(255)
+  nomeReferencia        String?   @map("nome_referencia") @db.VarChar(255)
+
+  // ── Rastreio da solicitação ───────────────────────────────────────────────────
+  dataHoraInclusao      DateTime? @map("data_hotra_inclusao")        // ⚠️ typo no DB: "hotra" → corrigir
+  enderecoIp            String?   @map("endereco_ip") @db.VarChar(20)
+  observacao            String?   @map("observacao")                 // text
+
+  // ── Auditoria Scriptcase ─────────────────────────────────────────────────────
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  // ── Índices ───────────────────────────────────────────────────────────────────
+  @@index([tenacidadeId])
+  @@index([cpf])
+  @@index([email])
+  @@index([situacaoColeta])
+  @@index([dataAgendamento1])
+  @@index([dataColeta])
+
+  @@map("coleta_domiciliar")
+}
+
+// =============================================================================
+// CLIENTE_ALUNO — aluno/paciente em contexto educacional/escolar
+// =============================================================================
+
+/// Alunos vinculados a clientes (escolas/faculdades).
+/// Contém dados pessoais completos: equivalente a "paciente" nesse contexto.
+/// ⚠️  LGPD: dado de menor de idade potencial — requer atenção especial
+model ClienteAluno {
+  id                    BigInt    @id @default(autoincrement()) @map("id_cliente_aluno")
+  tenacidadeId          BigInt?   @map("id_tenacidade")
+  clienteResponsavelId  BigInt?   @map("id_cliente_responsavel")    // FK → cliente (relação provável)
+  situacaoAlunoId       BigInt?   @map("id_situacao_aluno")         // FK → tabela de situação (não mapeada)
+  usuarioAuditoriaId    BigInt?   @map("id_usuario_auditoria")
+
+  // ── Dados pessoais ───────────────────────────────────────────────────────────
+  nome                  String?   @map("nome") @db.VarChar(255)
+  nomeSocial            String?   @map("nome_social") @db.VarChar(255)
+  sexo                  String?   @map("sexo") @db.Char(1)
+  dataNascimento        DateTime? @map("data_nascimento")
+  matricula             String?   @map("matricula") @db.VarChar(20)
+  documento             String?   @map("documento") @db.VarChar(20) // RG ou outro documento
+  cpf                   String?   @map("cpf") @db.VarChar(14)
+
+  // ── Endereço ─────────────────────────────────────────────────────────────────
+  cep                   String?   @map("cep") @db.VarChar(8)
+  tipoLogradouro        String?   @map("tipo_logradouro") @db.VarChar(100)
+  logradouro            String?   @map("logradouro") @db.VarChar(100)
+  numero                String?   @map("numero") @db.VarChar(100)
+  complemento           String?   @map("complemento") @db.VarChar(100)
+  bairro                String?   @map("bairro") @db.VarChar(100)
+  cidade                String?   @map("cidade") @db.VarChar(100)
+  estado                String?   @map("estado") @db.Char(2)
+
+  // ── Contato ──────────────────────────────────────────────────────────────────
+  telefone              String?   @map("telefone") @db.VarChar(50)
+  celular               String?   @map("celular") @db.VarChar(50)
+  email                 String?   @map("email") @db.VarChar(100)
+  observacoes           String?   @map("observacoes")
+
+  // ── Dados civis ──────────────────────────────────────────────────────────────
+  nacionalidade         String?   @map("nacionalidade") @db.VarChar(255)
+  naturalidade          String?   @map("naturalidade") @db.VarChar(255)
+  ufNascimento          String?   @map("uf_nascimento") @db.VarChar(255)
+  nomePai               String?   @map("nome_pai") @db.VarChar(255)
+  nomeMae               String?   @map("nome_mae") @db.VarChar(255)
+
+  // ── Dados acadêmicos ─────────────────────────────────────────────────────────
+  descricaoTurma        String?   @map("descricao_turma") @db.VarChar(255)
+  unidade               String?   @map("unidade") @db.VarChar(255)
+  curso                 String?   @map("curso") @db.VarChar(255)
+  anoLetivo             Float?    @map("ano_letivo")             // double precision → considerar Int
+  serie                 Int?      @map("serie") @db.SmallInt
+  turno                 String?   @map("turno") @db.VarChar(50) // Manhã/Tarde/Noite
+  situacao              String?   @map("situacao") @db.VarChar(50) // ⚠️ texto livre — padronizar com enum
+
+  // ── Auditoria Scriptcase ─────────────────────────────────────────────────────
+  enderecoIpAuditoria   String?   @map("endereco_ip_auditoria") @db.VarChar(50)
+  nomeAplicacaoAuditoria String?  @map("nome_aplicacao_auditoria") @db.VarChar(255)
+
+  // ── Relações ─────────────────────────────────────────────────────────────────
+  // clienteResponsavel Cliente?  @relation(fields: [clienteResponsavelId], references: [id])
+  // ⚠️  relação provável — confirmar se id_cliente_responsavel → cliente.id_cliente
+
+  // ── Índices ───────────────────────────────────────────────────────────────────
+  @@index([tenacidadeId])
+  @@index([clienteResponsavelId])
+  @@index([cpf])
+  @@index([matricula])
+  @@index([email])
+  @@index([situacaoAlunoId])
+
+  @@map("cliente_aluno")
+}

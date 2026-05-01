@@ -1,0 +1,9208 @@
+<?php
+   include_once('LancamentoReceita_Boleto_Lst_session.php');
+   @ini_set('session.cookie_httponly', 1);
+   @ini_set('session.use_only_cookies', 1);
+   @ini_set('session.cookie_secure', 0);
+   @session_start() ;
+   $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_perfil']          = "ligasistemas";
+   $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_prod']       = "";
+   $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_conf']       = "";
+   $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imagens']    = "";
+   $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imag_temp']  = "";
+   $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_cache']      = "";
+   $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_doc']        = "";
+    //check publication with the prod
+    $NM_dir_atual = getcwd();
+    if (empty($NM_dir_atual))
+    {
+        $str_path_sys          = (isset($_SERVER['SCRIPT_FILENAME'])) ? $_SERVER['SCRIPT_FILENAME'] : $_SERVER['ORIG_PATH_TRANSLATED'];
+        $str_path_sys          = str_replace("\\", '/', $str_path_sys);
+    }
+    else
+    {
+        $sc_nm_arquivo         = explode("/", $_SERVER['PHP_SELF']);
+        $str_path_sys          = str_replace("\\", "/", getcwd()) . "/" . $sc_nm_arquivo[count($sc_nm_arquivo)-1];
+    }
+    $str_path_apl_url = $_SERVER['PHP_SELF'];
+    $str_path_apl_url = str_replace("\\", '/', $str_path_apl_url);
+    $str_path_apl_url = substr($str_path_apl_url, 0, strrpos($str_path_apl_url, "/"));
+    $str_path_apl_url = substr($str_path_apl_url, 0, strrpos($str_path_apl_url, "/")+1);
+    $str_path_apl_dir = substr($str_path_sys, 0, strrpos($str_path_sys, "/"));
+    $str_path_apl_dir = substr($str_path_apl_dir, 0, strrpos($str_path_apl_dir, "/")+1);
+    //check prod
+    if(empty($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_prod']))
+    {
+            /*check prod*/$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_prod'] = $str_path_apl_url . "_lib/prod";
+    }
+    //check img
+    if(empty($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imagens']))
+    {
+            /*check img*/$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imagens'] = $str_path_apl_url . "_lib/file/img";
+    }
+    //check tmp
+    if(empty($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imag_temp']))
+    {
+            /*check tmp*/$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imag_temp'] = $str_path_apl_url . "_lib/tmp";
+    }
+    //check cache
+    if(empty($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_cache']))
+    {
+            /*check tmp*/$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_cache'] = $str_path_apl_dir . "_lib/file/cache";
+    }
+    //check doc
+    if(empty($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_doc']))
+    {
+            /*check doc*/$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_doc'] = $str_path_apl_dir . "_lib/file/doc";
+    }
+    //end check publication with the prod
+//
+class LancamentoReceita_Boleto_Lst_ini
+{
+   var $nm_cod_apl;
+   var $nm_nome_apl;
+   var $nm_seguranca;
+   var $nm_grupo;
+   var $nm_autor;
+   var $nm_versao_sc;
+   var $nm_tp_lic_sc;
+   var $nm_dt_criacao;
+   var $nm_hr_criacao;
+   var $nm_autor_alt;
+   var $nm_dt_ult_alt;
+   var $nm_hr_ult_alt;
+   var $nm_timestamp;
+   var $nm_app_version;
+   var $cor_link_dados;
+   var $root;
+   var $server;
+   var $java_protocol;
+   var $server_pdf;
+   var $Arr_result;
+   var $sc_protocolo;
+   var $path_prod;
+   var $path_link;
+   var $path_aplicacao;
+   var $path_embutida;
+   var $path_botoes;
+   var $path_img_global;
+   var $path_img_modelo;
+   var $path_icones;
+   var $path_imagens;
+   var $path_imag_cab;
+   var $path_imag_temp;
+   var $path_libs;
+   var $path_doc;
+   var $str_lang;
+   var $str_conf_reg;
+   var $str_schema_all;
+   var $Str_btn_grid;
+   var $str_google_fonts;
+   var $path_cep;
+   var $path_secure;
+   var $path_js;
+   var $path_help;
+   var $path_adodb;
+   var $path_grafico;
+   var $path_atual;
+   var $Gd_missing;
+   var $sc_site_ssl;
+   var $nm_cont_lin;
+   var $nm_limite_lin;
+   var $nm_limite_lin_prt;
+   var $nm_limite_lin_res;
+   var $nm_limite_lin_res_prt;
+   var $Qtd_reg_ajax_grid;
+   var $nm_falta_var;
+   var $nm_falta_var_db;
+   var $nm_tpbanco;
+   var $nm_servidor;
+   var $nm_usuario;
+   var $nm_senha;
+   var $nm_database_encoding;
+   var $nm_arr_db_extra_args = array();
+   var $nm_con_db2 = array();
+   var $nm_con_persistente;
+   var $nm_con_use_schema;
+   var $nm_tabela;
+   var $nm_ger_css_emb;
+   var $nm_col_dinamica   = array();
+   var $nm_order_dinamico = array();
+   var $nm_hidden_blocos  = array();
+   var $sc_tem_trans_banco;
+   var $nm_bases_all;
+   var $nm_bases_access;
+   var $nm_bases_ibase;
+   var $nm_bases_mysql;
+   var $nm_bases_postgres;
+   var $nm_bases_sqlite;
+   var $sc_page;
+   var $sc_lig_md5 = array();
+   var $sc_lig_target = array();
+   var $sc_export_ajax = false;
+   var $sc_export_ajax_img = false;
+   var $force_db_utf8 = true;
+//
+   function init($Tp_init = "")
+   {
+       global
+             $nm_url_saida, $nm_apl_dependente, $script_case_init, $nmgp_opcao;
+
+      if (!function_exists("sc_check_mobile"))
+      {
+          include_once("../_lib/lib/php/nm_check_mobile.php");
+      }
+          include_once("../_lib/lib/php/fix.php");
+      $_SESSION['scriptcase']['proc_mobile'] = sc_check_mobile();
+        if (isset($_GET['_sc_force_mobile'])) {
+            $_SESSION['scriptcase']['force_mobile'] = 'Y' == $_GET['_sc_force_mobile'];
+        }
+        if (isset($_SESSION['scriptcase']['force_mobile'])) {
+            $_SESSION['scriptcase']['proc_mobile'] = $_SESSION['scriptcase']['force_mobile'];
+        }
+      @ini_set('magic_quotes_runtime', 0);
+      $this->sc_page = $script_case_init;
+      $_SESSION['scriptcase']['sc_num_page'] = $script_case_init;
+      $_SESSION['scriptcase']['sc_cnt_sql']  = 0;
+      $this->sc_charset['UTF-8'] = 'utf-8';
+      $this->sc_charset['ISO-2022-JP'] = 'iso-2022-jp';
+      $this->sc_charset['ISO-2022-KR'] = 'iso-2022-kr';
+      $this->sc_charset['ISO-8859-1'] = 'iso-8859-1';
+      $this->sc_charset['ISO-8859-2'] = 'iso-8859-2';
+      $this->sc_charset['ISO-8859-3'] = 'iso-8859-3';
+      $this->sc_charset['ISO-8859-4'] = 'iso-8859-4';
+      $this->sc_charset['ISO-8859-5'] = 'iso-8859-5';
+      $this->sc_charset['ISO-8859-6'] = 'iso-8859-6';
+      $this->sc_charset['ISO-8859-7'] = 'iso-8859-7';
+      $this->sc_charset['ISO-8859-8'] = 'iso-8859-8';
+      $this->sc_charset['ISO-8859-8-I'] = 'iso-8859-8-i';
+      $this->sc_charset['ISO-8859-9'] = 'iso-8859-9';
+      $this->sc_charset['ISO-8859-10'] = 'iso-8859-10';
+      $this->sc_charset['ISO-8859-13'] = 'iso-8859-13';
+      $this->sc_charset['ISO-8859-14'] = 'iso-8859-14';
+      $this->sc_charset['ISO-8859-15'] = 'iso-8859-15';
+      $this->sc_charset['WINDOWS-1250'] = 'windows-1250';
+      $this->sc_charset['WINDOWS-1251'] = 'windows-1251';
+      $this->sc_charset['WINDOWS-1252'] = 'windows-1252';
+      $this->sc_charset['TIS-620'] = 'tis-620';
+      $this->sc_charset['WINDOWS-1253'] = 'windows-1253';
+      $this->sc_charset['WINDOWS-1254'] = 'windows-1254';
+      $this->sc_charset['WINDOWS-1255'] = 'windows-1255';
+      $this->sc_charset['WINDOWS-1256'] = 'windows-1256';
+      $this->sc_charset['WINDOWS-1257'] = 'windows-1257';
+      $this->sc_charset['KOI8-R'] = 'koi8-r';
+      $this->sc_charset['BIG-5'] = 'big5';
+      $this->sc_charset['EUC-CN'] = 'EUC-CN';
+      $this->sc_charset['GB18030'] = 'GB18030';
+      $this->sc_charset['GB2312'] = 'gb2312';
+      $this->sc_charset['EUC-JP'] = 'euc-jp';
+      $this->sc_charset['SJIS'] = 'shift-jis';
+      $this->sc_charset['EUC-KR'] = 'euc-kr';
+      $_SESSION['scriptcase']['charset_entities']['UTF-8'] = 'UTF-8';
+      $_SESSION['scriptcase']['charset_entities']['ISO-8859-1'] = 'ISO-8859-1';
+      $_SESSION['scriptcase']['charset_entities']['ISO-8859-5'] = 'ISO-8859-5';
+      $_SESSION['scriptcase']['charset_entities']['ISO-8859-15'] = 'ISO-8859-15';
+      $_SESSION['scriptcase']['charset_entities']['WINDOWS-1251'] = 'cp1251';
+      $_SESSION['scriptcase']['charset_entities']['WINDOWS-1252'] = 'cp1252';
+      $_SESSION['scriptcase']['charset_entities']['BIG-5'] = 'BIG5';
+      $_SESSION['scriptcase']['charset_entities']['EUC-CN'] = 'GB2312';
+      $_SESSION['scriptcase']['charset_entities']['GB2312'] = 'GB2312';
+      $_SESSION['scriptcase']['charset_entities']['SJIS'] = 'Shift_JIS';
+      $_SESSION['scriptcase']['charset_entities']['EUC-JP'] = 'EUC-JP';
+      $_SESSION['scriptcase']['charset_entities']['KOI8-R'] = 'KOI8-R';
+      $_SESSION['scriptcase']['trial_version'] = 'N';
+      $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['decimal_db'] = "."; 
+      $this->nm_cod_apl      = "LancamentoReceita_Boleto_Lst"; 
+      $this->nm_nome_apl     = ""; 
+      $this->nm_seguranca    = ""; 
+      $this->nm_grupo        = "LIGA_InfoTIME"; 
+      $this->nm_grupo_versao = "2"; 
+      $this->nm_autor        = "nelson"; 
+      $this->nm_script_by    = "netmake";
+      $this->nm_script_type  = "PHP";
+      $this->nm_versao_sc    = "v9"; 
+      $this->nm_tp_lic_sc    = "sb_micro_bronze"; 
+      $this->nm_dt_criacao   = "20160106"; 
+      $this->nm_hr_criacao   = "101909"; 
+      $this->nm_autor_alt    = "nelson"; 
+      $this->nm_dt_ult_alt   = "20260311"; 
+      $this->nm_hr_ult_alt   = "105330"; 
+      $this->Apl_paginacao   = "FULL"; 
+      $temp_bug_list         = explode(" ", microtime()); 
+      list($NM_usec, $NM_sec) = $temp_bug_list; 
+      $this->nm_timestamp    = (float) $NM_sec; 
+      $this->nm_app_version  = "1.0.1";
+      $this->nm_tp_variance  = "P";
+// 
+// 
+      $NM_dir_atual = getcwd();
+      if (empty($NM_dir_atual))
+      {
+          $str_path_sys          = (isset($_SERVER['SCRIPT_FILENAME'])) ? $_SERVER['SCRIPT_FILENAME'] : $_SERVER['ORIG_PATH_TRANSLATED'];
+          $str_path_sys          = str_replace("\\", '/', $str_path_sys);
+      }
+      else
+      {
+          $sc_nm_arquivo         = explode("/", $_SERVER['PHP_SELF']);
+          $str_path_sys          = str_replace("\\", "/", getcwd()) . "/" . $sc_nm_arquivo[count($sc_nm_arquivo)-1];
+      }
+      $this->sc_site_ssl     = $this->appIsSsl();
+      $this->sc_protocolo    = $this->sc_site_ssl ? 'https://' : 'http://';
+      $this->sc_protocolo    = "";
+      $this->path_prod       = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_prod'];
+      $this->path_conf       = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_conf'];
+      $this->path_imagens    = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imagens'];
+      $this->path_imag_temp  = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imag_temp'];
+      $this->path_cache  = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_cache'];
+      $this->path_doc        = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_doc'];
+      if (!isset($_SESSION['scriptcase']['str_lang']) || empty($_SESSION['scriptcase']['str_lang']))
+      {
+          $_SESSION['scriptcase']['str_lang'] = "pt_br";
+      }
+      if (!isset($_SESSION['scriptcase']['str_conf_reg']) || empty($_SESSION['scriptcase']['str_conf_reg']))
+      {
+          $_SESSION['scriptcase']['str_conf_reg'] = "pt_br";
+      }
+      $this->str_lang        = $_SESSION['scriptcase']['str_lang'];
+      $this->str_conf_reg    = $_SESSION['scriptcase']['str_conf_reg'];
+      if (!isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['save_session']['save_grid_state_session']))
+      { 
+          $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['save_session']['save_grid_state_session'] = false;
+          $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['save_session']['data'] = '';
+      } 
+      $this->str_schema_all    = (isset($_SESSION['scriptcase']['str_schema_all']) && !empty($_SESSION['scriptcase']['str_schema_all'])) ? $_SESSION['scriptcase']['str_schema_all'] : "Liga_Soft_sm/Liga_Soft_sm";
+      if (isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['sub_cons_schema_all']))
+      { 
+         $this->str_schema_all    = $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['sub_cons_schema_all'];
+         $this->str_schema_filter = $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['sub_cons_schema_filter'];
+      } 
+      $_SESSION['scriptcase']['erro']['str_schema'] = $this->str_schema_all . "_error.css";
+      $_SESSION['scriptcase']['erro']['str_lang']   = $this->str_lang;
+      $this->server          = (!isset($_SERVER['HTTP_HOST'])) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
+      if (!isset($_SERVER['HTTP_HOST']) && isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != 80 && !$this->sc_site_ssl )
+      {
+          $this->server         .= ":" . $_SERVER['SERVER_PORT'];
+      }
+      $this->java_protocol   = ($this->sc_site_ssl) ? 'https://' : 'http://';
+      $this->server_pdf      = $this->java_protocol . $this->server;
+      $this->server          = "";
+      $str_path_web          = $_SERVER['PHP_SELF'];
+      $str_path_web          = str_replace("\\", '/', $str_path_web);
+      $str_path_web          = str_replace('//', '/', $str_path_web);
+      $this->root            = substr($str_path_sys, 0, -1 * strlen($str_path_web));
+      $this->path_aplicacao  = substr($str_path_sys, 0, strrpos($str_path_sys, '/'));
+      $this->path_aplicacao  = substr($this->path_aplicacao, 0, strrpos($this->path_aplicacao, '/')) . '/LancamentoReceita_Boleto_Lst';
+      $this->path_embutida   = substr($this->path_aplicacao, 0, strrpos($this->path_aplicacao, '/') + 1);
+      $this->path_aplicacao .= '/';
+      $this->path_link       = substr($str_path_web, 0, strrpos($str_path_web, '/'));
+      $this->path_link       = substr($this->path_link, 0, strrpos($this->path_link, '/')) . '/';
+      $this->path_botoes     = $this->path_link . "_lib/img";
+      $this->path_img_global = $this->path_link . "_lib/img";
+      $this->path_img_modelo = $this->path_link . "_lib/img";
+      $this->path_icones     = $this->path_link . "_lib/img";
+      $this->path_imag_cab   = $this->path_link . "_lib/img";
+      $this->path_help       = $this->path_link . "_lib/webhelp/";
+      $this->path_font       = $this->root . $this->path_link . "_lib/font/";
+      $this->path_btn        = $this->root . $this->path_link . "_lib/buttons/";
+      $this->path_css        = $this->root . $this->path_link . "_lib/css/";
+      $this->path_lib_php    = $this->root . $this->path_link . "_lib/lib/php";
+      $this->path_lib_js     = $this->root . $this->path_link . "_lib/lib/js";
+      $pos_path = strrpos($this->path_prod, "/");
+      $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['path_grid_sv'] = $this->root . substr($this->path_prod, 0, $pos_path) . "/conf/grid_sv/";
+      $this->path_lang       = "../_lib/lang/";
+      $this->path_lang_js    = "../_lib/js/";
+      $this->path_chart_theme = $this->root . $this->path_link . "_lib/chart/";
+      $this->path_cep        = $this->path_prod . "/cep";
+      $this->path_cor        = $this->path_prod . "/cor";
+      $this->path_js         = $this->path_prod . "/lib/js";
+      $this->path_libs       = $this->root . $this->path_prod . "/lib/php";
+      $this->path_third      = $this->root . $this->path_prod . "/third";
+      $this->path_adodb      = $this->root . $this->path_prod . "/third/adodb";
+      $_SESSION['scriptcase']['dir_temp'] = $this->root . $this->path_imag_temp;
+      $this->Cmp_Sql_Time     = array();
+
+      include("../_lib/css/" . $this->str_schema_all . "_grid.php");
+      $temp_Str_btn_grid    = trim($str_button) . "/" . trim($str_button) . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".php";
+      include($this->path_btn . $temp_Str_btn_grid);
+      $this->css_help_tooltip_faicon = isset($css_help_tooltip_faicon) && '' != trim($css_help_tooltip_faicon) ? trim($css_help_tooltip_faicon) : "fa fa-question-circle";
+      $this->css_schema_info_tooltiptheme = isset($css_schema_info_tooltiptheme) && '' != trim($css_schema_info_tooltiptheme)  ? trim($css_schema_info_tooltiptheme) : "";
+      $this->tippy_themes = [];
+      $this->tippy_theme_default = '';
+      if ('' != $this->css_schema_info_tooltiptheme) {
+          $this->scGetTippyCssTheme($this->tippy_themes, $this->css_schema_info_tooltiptheme);
+          $this->tippy_theme_default = $this->css_schema_info_tooltiptheme;
+      }
+
+      if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['lang'])) {
+          $this->str_lang = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['lang'];
+      }
+      elseif (!isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['actual_lang']) || $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['actual_lang'] != $this->str_lang) {
+          $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['actual_lang'] = $this->str_lang;
+          setcookie('sc_actual_lang_LIGA_InfoTIME',$this->str_lang,'0','/', '', ini_get('session.cookie_secure'), ini_get('session.cookie_httponly'));
+      }
+      $_SESSION['scriptcase']['fusioncharts_new'] = true;
+      if (!isset($_SESSION['scriptcase']['phantomjs_charts']))
+      {
+          $_SESSION['scriptcase']['phantomjs_charts'] = @is_dir($this->path_third . '/phantomjs');
+      }
+      if (isset($_SESSION['scriptcase']['phantomjs_charts']))
+      {
+          $aTmpOS = $this->getRunningOS();
+          $_SESSION['scriptcase']['phantomjs_charts'] = @is_dir($this->path_third . '/phantomjs/' . $aTmpOS['os']);
+      }
+      if (!class_exists('Services_JSON'))
+      {
+          include_once("LancamentoReceita_Boleto_Lst_json.php");
+      }
+      $this->SC_Link_View = (isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Link_View'])) ? $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Link_View'] : false;
+      if (isset($_GET['SC_Link_View']) && !empty($_GET['SC_Link_View']) && is_numeric($_GET['SC_Link_View']))
+      {
+          if ($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          {
+              $this->SC_Link_View = true;
+              $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Link_View'] = true;
+          }
+      }
+            if (isset($_POST['nmgp_opcao']) && 'ajax_check_file' == $_POST['nmgp_opcao'] ){
+                 include_once("../_lib/lib/php/nm_api.php"); 
+            switch( $_REQUEST['rsargs'] ){
+               default:
+                   echo 0;exit;
+               break;
+               }
+
+    $out1_img_cache = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imag_temp'] . $file_name;
+    $orig_img = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imag_temp']. '/'.basename($_POST['AjaxCheckImg']);
+    copy($__file_download, $_SERVER['DOCUMENT_ROOT'].$orig_img);
+    echo $orig_img . '_@@NM@@_';
+    if(file_exists($out1_img_cache)){
+        echo $out1_img_cache;
+        exit;
+    }
+
+         include_once("../_lib/lib/php/nm_trata_img.php");
+            copy($__file_download, $_SERVER['DOCUMENT_ROOT'].$out1_img_cache);
+            $sc_obj_img = new nm_trata_img($_SERVER['DOCUMENT_ROOT'].$out1_img_cache, true);
+
+            if(!empty($img_width) && !empty($img_height)){
+                $sc_obj_img->setWidth($img_width);
+                $sc_obj_img->setHeight($img_height);
+            }            $sc_obj_img->createImg($_SERVER['DOCUMENT_ROOT'].$out1_img_cache);
+            echo $out1_img_cache;
+               exit;
+            }
+      if (isset($_POST['nmgp_opcao']) && $_POST['nmgp_opcao'] == "ajax_save_ancor")
+      {
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['ancor_save'] = $_POST['ancor_save'];
+          $oJson = new Services_JSON();
+          if ($_SESSION['scriptcase']['sem_session']) {
+              unset($_SESSION['sc_session']);
+          }
+          exit;
+      }
+      if (isset($_SESSION['scriptcase']['user_logout']))
+      {
+          foreach ($_SESSION['scriptcase']['user_logout'] as $ind => $parms)
+          {
+              if (isset($_SESSION[$parms['V']]) && $_SESSION[$parms['V']] == $parms['U'])
+              {
+                  unset($_SESSION['scriptcase']['user_logout'][$ind]);
+                  $nm_apl_dest = $parms['R'];
+                  $dir = explode("/", $nm_apl_dest);
+                  if (count($dir) == 1)
+                  {
+                      $nm_apl_dest = str_replace(".php", "", $nm_apl_dest);
+                      $nm_apl_dest = $this->path_link . SC_dir_app_name($nm_apl_dest) . "/" . $nm_apl_dest . ".php";
+                  }
+                  if (isset($_POST['nmgp_opcao']) && ($_POST['nmgp_opcao'] == "ajax_event" || $_POST['nmgp_opcao'] == "ajax_navigate"))
+                  {
+                      $this->Arr_result = array();
+                      $this->Arr_result['redirInfo']['action']              = $nm_apl_dest;
+                      $this->Arr_result['redirInfo']['target']              = $parms['T'];
+                      $this->Arr_result['redirInfo']['metodo']              = "post";
+                      $this->Arr_result['redirInfo']['script_case_init']    = $this->sc_page;
+                      $oJson = new Services_JSON();
+                      echo $oJson->encode($this->Arr_result);
+                      exit;
+                  }
+?>
+                  <html>
+                  <body>
+                  <form name="FRedirect" method="POST" action="<?php echo $nm_apl_dest; ?>" target="<?php echo $parms['T']; ?>">
+                  </form>
+                  <script>
+                   document.FRedirect.submit();
+                  </script>
+                  </body>
+                  </html>
+<?php
+                  exit;
+              }
+          }
+      }
+      global $under_dashboard, $dashboard_app, $own_widget, $parent_widget, $compact_mode, $remove_margin, $remove_border, $remove_background;
+      if (!isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['under_dashboard']))
+      {
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['under_dashboard'] = false;
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['dashboard_app']   = '';
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['own_widget']      = '';
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['parent_widget']   = '';
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['compact_mode']    = false;
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['remove_margin']   = false;
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['remove_border']   = false;
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['remove_background'] = false;
+      }
+      if (isset($_GET['under_dashboard']) && 1 == $_GET['under_dashboard'])
+      {
+          if (isset($_GET['own_widget']) && 'dbifrm_widget' == substr($_GET['own_widget'], 0, 13)) {
+              $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['own_widget'] = $_GET['own_widget'];
+              $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['under_dashboard'] = true;
+              if (isset($_GET['dashboard_app'])) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['dashboard_app'] = $_GET['dashboard_app'];
+              }
+              if (isset($_GET['parent_widget'])) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['parent_widget'] = $_GET['parent_widget'];
+              }
+              if (isset($_GET['compact_mode'])) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['compact_mode'] = 1 == $_GET['compact_mode'];
+              }
+              if (isset($_GET['remove_margin'])) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['remove_margin'] = 1 == $_GET['remove_margin'];
+              }
+              if (isset($_GET['remove_border'])) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['remove_border'] = 1 == $_GET['remove_border'];
+              }
+              if (isset($_GET['remove_background'])) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['remove_background'] = 1 == $_GET['remove_background'];
+              }
+          }
+      }
+      elseif (isset($under_dashboard) && 1 == $under_dashboard)
+      {
+          if (isset($own_widget) && 'dbifrm_widget' == substr($own_widget, 0, 13)) {
+              $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['own_widget'] = $own_widget;
+              $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['under_dashboard'] = true;
+              if (isset($dashboard_app)) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['dashboard_app'] = $dashboard_app;
+              }
+              if (isset($parent_widget)) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['parent_widget'] = $parent_widget;
+              }
+              if (isset($compact_mode)) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['compact_mode'] = 1 == $compact_mode;
+              }
+              if (isset($remove_margin)) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['remove_margin'] = 1 == $remove_margin;
+              }
+              if (isset($remove_border)) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['remove_border'] = 1 == $remove_border;
+              }
+              if (isset($remove_background)) {
+                  $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['remove_background'] = 1 == $remove_background;
+              }
+          }
+      }
+      if (!isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['maximized']))
+      {
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['maximized'] = false;
+      }
+      if (isset($_GET['maximized']))
+      {
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['maximized'] = 1 == $_GET['maximized'];
+      }
+      if ($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['under_dashboard'])
+      {
+          $sTmpDashboardApp = $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['dashboard_app'];
+          if ('' != $sTmpDashboardApp && isset($_SESSION['scriptcase']['dashboard_targets'][$sTmpDashboardApp]["LancamentoReceita_Boleto_Lst"]))
+          {
+              foreach ($_SESSION['scriptcase']['dashboard_targets'][$sTmpDashboardApp]["LancamentoReceita_Boleto_Lst"] as $sTmpTargetLink => $sTmpTargetWidget)
+              {
+                  if (isset($this->sc_lig_target[$sTmpTargetLink]))
+                  {
+                      $this->sc_lig_target[$sTmpTargetLink] = $sTmpTargetWidget;
+                  }
+              }
+          }
+      }
+        global $link_compact_mode, $link_remove_margin, $link_remove_border, $link_remove_background, $link_margin_top;
+        if (isset($link_compact_mode) || isset($link_remove_margin) || isset($link_remove_border) || isset($link_remove_background) || isset($link_margin_top)) {
+            $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['link_info'] = array();
+        }
+        if (isset($link_compact_mode) && 'ok' == $link_compact_mode) {
+            $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['link_info']['compact_mode'] = true;
+        }
+        if (isset($link_remove_margin) && 'ok' == $link_remove_margin) {
+            $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['link_info']['remove_margin'] = true;
+        }
+        if (isset($link_remove_border) && 'ok' == $link_remove_border) {
+            $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['link_info']['remove_border'] = true;
+        }
+        if (isset($link_remove_background) && 'ok' == $link_remove_background) {
+            $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['link_info']['remove_background'] = true;
+        }
+        if (isset($link_margin_top) && '' != $link_margin_top) {
+            $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['link_info']['margin_top'] = $link_margin_top;
+        }
+      if (!isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['responsive_chart']))
+      {
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['responsive_chart'] = array(
+              'enabled' => false,
+              'active'  => false,
+          );
+      }
+      if ($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['responsive_chart']['enabled'])
+      {
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['responsive_chart']['active'] = true;
+      }
+      elseif ($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['under_dashboard'] && $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['compact_mode'] && !$_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_info']['maximized'])
+      {
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['responsive_chart']['active'] = true;
+      }
+      else
+      {
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['responsive_chart']['active'] = false;
+      }
+      if ($Tp_init == "Path_sub")
+      {
+          return;
+      }
+      $str_path = substr($this->path_prod, 0, strrpos($this->path_prod, '/') + 1);
+      if (!is_file($this->root . $str_path . 'devel/class/xmlparser/nmXmlparserIniSys.class.php'))
+      {
+          unset($_SESSION['scriptcase']['nm_sc_retorno']);
+          unset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao']);
+      }
+      include($this->path_lang . $this->str_lang . ".lang.php");
+      include($this->path_lang . "config_region.php");
+      include($this->path_lang . "lang_config_region.php");
+      asort($this->Nm_lang_conf_region);
+      $_SESSION['scriptcase']['charset']  = "UTF-8";
+      ini_set('default_charset', $_SESSION['scriptcase']['charset']);
+      $_SESSION['scriptcase']['charset_html']  = (isset($this->sc_charset[$_SESSION['scriptcase']['charset']])) ? $this->sc_charset[$_SESSION['scriptcase']['charset']] : $_SESSION['scriptcase']['charset'];
+      if (!function_exists("mb_convert_encoding"))
+      {
+          echo "<div><font size=6>" . $this->Nm_lang['lang_othr_prod_xtmb'] . "</font></div>";exit;
+      } 
+      elseif (!function_exists("sc_convert_encoding"))
+      {
+          echo "<div><font size=6>" . $this->Nm_lang['lang_othr_prod_xtsc'] . "</font></div>";exit;
+      } 
+      foreach ($this->Nm_lang_conf_region as $ind => $dados)
+      {
+         if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($dados))
+         {
+             $this->Nm_lang_conf_region[$ind] = sc_convert_encoding($dados, $_SESSION['scriptcase']['charset'], "UTF-8");
+         }
+      }
+      foreach ($this->Nm_conf_reg[$this->str_conf_reg] as $ind => $dados)
+      {
+         if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($dados))
+         {
+             $this->Nm_conf_reg[$this->str_conf_reg][$ind] = sc_convert_encoding($dados, $_SESSION['scriptcase']['charset'], "UTF-8");
+         }
+      }
+      foreach ($this->Nm_lang as $ind => $dados)
+      {
+         if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($ind))
+         {
+             $ind = sc_convert_encoding($ind, $_SESSION['scriptcase']['charset'], "UTF-8");
+             $this->Nm_lang[$ind] = $dados;
+         }
+         if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($dados))
+         {
+             $this->Nm_lang[$ind] = sc_convert_encoding($dados, $_SESSION['scriptcase']['charset'], "UTF-8");
+         }
+         $this->Nm_lang[$ind] = str_replace('"', '&quot;',  $this->Nm_lang[$ind]);
+      }
+      $_SESSION['sc_session']['SC_download_violation'] = $this->Nm_lang['lang_errm_fnfd'];
+      if (isset($_SESSION['sc_session']['SC_parm_violation']) && !isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['redir']))
+      {
+          unset($_SESSION['sc_session']['SC_parm_violation']);
+          echo "<html>";
+          echo "<body>";
+          echo "<table align=\"center\" width=\"50%\" border=1 height=\"50px\">";
+          echo "<tr>";
+          echo "   <td align=\"center\">";
+          echo "       <b><font size=4>" . $this->Nm_lang['lang_errm_ajax_data'] . "</font>";
+          echo "   </b></td>";
+          echo " </tr>";
+          echo "</table>";
+          echo "</body>";
+          echo "</html>";
+          exit;
+      }
+      if (isset($_POST['nm_grid_submit']) && $_POST['nm_grid_submit'] == 1 && isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['csrf_token'] ) && !isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['embutida']) && !isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_form'])) {
+          if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] != $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['csrf_token']) {
+              echo "<html>";
+              echo "<body>";
+              echo "<table align=\"center\" width=\"50%\" border=1 height=\"50px\">";
+              echo "<tr>";
+              echo "   <td align=\"center\">";
+              echo "       <b><font size=4>" . $this->Nm_lang['lang_errm_ajax_csrf'] . "</font>";
+              echo "   </b></td>";
+              echo " </tr>";
+              echo "</table>";
+              echo "</body>";
+              echo "</html>";
+              exit;
+          }
+      }
+      if (isset($this->Nm_lang['lang_errm_dbcn_conn']))
+      {
+          $_SESSION['scriptcase']['db_conn_error'] = $this->Nm_lang['lang_errm_dbcn_conn'];
+      }
+      $PHP_ver = str_replace(".", "", phpversion()); 
+      if (substr($PHP_ver, 0, 3) < 434)
+      {
+          echo "<div><font size=6>" . $this->Nm_lang['lang_othr_prod_phpv'] . "</font></div>";exit;
+      } 
+      if (file_exists($this->path_libs . "/ver.dat"))
+      {
+          $SC_ver = file($this->path_libs . "/ver.dat"); 
+          $SC_ver = str_replace(".", "", $SC_ver[0]); 
+          if (substr($SC_ver, 0, 5) < 40015)
+          {
+              echo "<div><font size=6>" . $this->Nm_lang['lang_othr_prod_incp'] . "</font></div>";exit;
+          } 
+      } 
+      $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['path_doc'] = $this->path_doc; 
+      $_SESSION['scriptcase']['nm_path_prod'] = $this->root . $this->path_prod . "/"; 
+      if (empty($this->path_imag_cab))
+      {
+          $this->path_imag_cab = $this->path_img_global;
+      }
+      if (!is_dir($this->root . $this->path_prod))
+      {
+         $str_message = "<html>
+
+<head>
+    <title>{var_str_title}</title>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            overflow-x: hidden;
+            min-width: 320px;
+            background: #FFFFFF;
+            font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            line-height: 1.4285em;
+            color: rgba(0, 0, 0, 0.87);
+            font-smoothing: antialiased;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        user agent stylesheet body {
+            display: block;
+            margin: 8px;
+        }
+
+        html {
+            font-size: 14px;
+        }
+
+        html {
+            line-height: 1.15;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        ::selection {
+            background-color: #CCE2FF;
+            color: rgba(0, 0, 0, 0.87);
+        }
+
+        .ui.container {
+            width: 933px;
+            min-width: 992px;
+            max-width: 1199px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+        .ui.container {
+            display: block;
+            max-width: 100% !important;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        .ui.message:last-child {
+            margin-bottom: 0em;
+        }
+
+        .ui.message:first-child {
+            margin-top: 0em;
+        }
+
+        .ui.message {
+            font-size: 1em;
+        }
+
+        .ui.message {
+            position: relative;
+            min-height: 1em;
+            margin: 1em 0em;
+            background: #F8F8F9;
+            padding: 1em 1.5em;
+            line-height: 1.4285em;
+            color: rgba(0, 0, 0, 0.87);
+            transition: opacity 0.1s ease, color 0.1s ease, background 0.1s ease, box-shadow 0.1s ease;
+            border-radius: 0.28571429rem;
+            box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.22) inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+        }
+
+        article,
+        aside,
+        footer,
+        header,
+        nav,
+        section {
+            display: block;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        .ui.message> :last-child {
+            margin-bottom: 0em;
+        }
+
+        .ui.message> :first-child {
+            margin-top: 0em;
+        }
+
+        .ui.message .header+p {
+            margin-top: 0.25em;
+        }
+
+        .ui.message p {
+            opacity: 0.85;
+            margin: 0.75em 0em;
+        }
+
+        p {
+            margin: 0em 0em 1em;
+            line-height: 1.4285em;
+        }
+
+        .ui.message .header:not(.ui) {
+            font-size: 1.14285714em;
+        }
+
+        .ui.message .header {
+            display: block;
+            font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            margin: -0.14285714em 0em 1.2rem 0em;
+        }
+
+        .ui.button {
+            cursor: pointer;
+            display: inline-block;
+            min-height: 1em;
+            outline: 0;
+            border: none;
+            vertical-align: baseline;
+            background: #e0e1e2 none;
+            color: rgba(0, 0, 0, .6);
+            font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            margin: 0 .25em 0 0;
+            padding: .78571429em 1.5em .78571429em;
+            text-transform: none;
+            text-shadow: none;
+            font-weight: 700;
+            line-height: 1em;
+            font-style: normal;
+            text-align: center;
+            text-decoration: none;
+            border-radius: .28571429rem;
+            box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34, 36, 38, .15) inset;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease;
+            will-change: '';
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .ui.button,
+        .ui.buttons .button,
+        .ui.buttons .or {
+            font-size: 1rem;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+            column-gap: .5rem;
+            display: flex;
+        }
+        
+        .ui.primary.button,
+        .ui.primary.buttons .button {
+            background-color: #2185d0;
+            color: #fff;
+            text-shadow: none;
+            background-image: none;
+        }
+        
+        .ui.primary.button {
+            box-shadow: 0 0 0 0 rgba(34, 36, 38, .15) inset;
+        }
+
+        [type=reset], [type=submit], button, html [type=button] {
+            -webkit-appearance: button;
+        }
+
+        .icon{
+            position: relative;
+            width: 1.2rem;
+            height: 1.2rem;
+            display: block;
+            color: inherit;
+            background-repeat: no-repeat;
+        }
+
+        .icon.database{
+            background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\" fill=\"%23FFFFFF\"><path d=\"M448 80v48c0 44.2-100.3 80-224 80S0 172.2 0 128V80C0 35.8 100.3 0 224 0S448 35.8 448 80zM393.2 214.7c20.8-7.4 39.9-16.9 54.8-28.6V288c0 44.2-100.3 80-224 80S0 332.2 0 288V186.1c14.9 11.8 34 21.2 54.8 28.6C99.7 230.7 159.5 240 224 240s124.3-9.3 169.2-25.3zM0 346.1c14.9 11.8 34 21.2 54.8 28.6C99.7 390.7 159.5 400 224 400s124.3-9.3 169.2-25.3c20.8-7.4 39.9-16.9 54.8-28.6V432c0 44.2-100.3 80-224 80S0 476.2 0 432V346.1z\"/></svg>');
+        }
+    </style>
+</head>
+
+<body>
+    <div class='ui container' style='padding-top:2rem'>
+        <section class='ui message'>
+            <div class='content'>
+                <div class='header'>
+                    <h1 class='ui header'>{var_str_title}</h1>
+                </div>
+                <p>{var_str_message}</p>
+                <p>{var_str_message_conn}</p>
+                {v_str_btn_inside}
+            </div>
+        </section>
+    </div>";
+         $str_message_end = "</body>
+</html>";
+         $str_message = str_replace('{var_str_title}', $this->Nm_lang['lang_errm_cmlb_nfndtitle'], $str_message);
+         $str_message = str_replace('{var_str_message}', $this->Nm_lang['lang_errm_cmlb_nfnd'], $str_message);
+          $str_message = str_replace('{var_str_message_conn}','', $str_message);
+         $str_message = str_replace('{v_str_btn_inside}', '', $str_message);
+         echo $str_message;
+          if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['iframe_menu'] && (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan']) || !$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan'])) 
+          { 
+              if (isset($_SESSION['scriptcase']['nm_sc_retorno']) && !empty($_SESSION['scriptcase']['nm_sc_retorno'])) 
+              if (isset($_SESSION['scriptcase']['nm_sc_retorno']) && !empty($_SESSION['scriptcase']['nm_sc_retorno'])) 
+              { 
+               $btn_value = "" . $this->Ini->Nm_lang['lang_btns_back'] . "";
+               if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($btn_value))
+               {
+                   $btn_value = sc_convert_encoding($btn_value, $_SESSION['scriptcase']['charset'], "UTF-8");
+               }
+               $btn_hint = "" . $this->Ini->Nm_lang['lang_btns_back_hint'] . "";
+               if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($btn_hint))
+               {
+                   $btn_hint = sc_convert_encoding($btn_hint, $_SESSION['scriptcase']['charset'], "UTF-8");
+               }
+?>
+                   <input type="button" id="sai" onClick="window.location='<?php echo $_SESSION['scriptcase']['nm_sc_retorno'] ?>'; return false" class="scButton_default" value="<?php echo $btn_value ?>" title="<?php echo $btn_hint ?>" style="vertical-align: middle;">
+
+<?php
+              } 
+              else 
+              { 
+               $btn_value = "" . $this->Ini->Nm_lang['lang_btns_exit'] . "";
+               if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($btn_value))
+               {
+                   $btn_value = sc_convert_encoding($btn_value, $_SESSION['scriptcase']['charset'], "UTF-8");
+               }
+               $btn_hint = "" . $this->Ini->Nm_lang['lang_btns_exit_hint'] . "";
+               if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($btn_hint))
+               {
+                   $btn_hint = sc_convert_encoding($btn_hint, $_SESSION['scriptcase']['charset'], "UTF-8");
+               }
+?>
+                   <input type="button" id="sai" onClick="window.location='<?php echo $nm_url_saida ?>'; return false" class="scButton_danger" value="<?php echo $btn_value ?>" title="<?php echo $btn_hint ?>" style="vertical-align: middle;">
+
+<?php
+              } 
+          } 
+          echo $str_message_end;
+          exit ;
+      }
+
+      $this->nm_ger_css_emb = true;
+      $this->Control_Css    = "coo";
+      $this->path_atual     = getcwd();
+      $opsys = strtolower(php_uname());
+
+      $this->nm_cont_lin           = 0;
+      $this->nm_limite_lin         = 0;
+      $this->nm_limite_lin_prt     = 0;
+      $this->nm_limite_lin_res     = 0;
+      $this->nm_limite_lin_res_prt = 0;
+// 
+      include_once($this->path_aplicacao . "LancamentoReceita_Boleto_Lst_erro.class.php"); 
+      $this->Erro = new LancamentoReceita_Boleto_Lst_erro();
+      include_once($this->path_adodb . "/adodb.inc.php"); 
+      $this->sc_Include($this->path_libs . "/nm_sec_prod.php", "F", "nm_reg_prod") ; 
+      $this->sc_Include($this->path_libs . "/nm_ini_perfil.php", "F", "perfil_lib") ; 
+// 
+ if(function_exists('set_php_timezone')) set_php_timezone('LancamentoReceita_Boleto_Lst'); 
+// 
+      $this->sc_Include($this->path_lib_php . "/nm_functions.php", "", "") ; 
+      global $bol_api_prod; 
+      $bol_api_prod = true; 
+      if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao']) && !empty($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao'])) 
+      { 
+          $bol_api_prod = false; 
+      } 
+      $this->sc_Include($this->path_lib_php . "/nm_api.php", "", "") ; 
+      $this->sc_Include($this->path_lib_php . "/nm_edit.php", "F", "nmgp_Form_Num_Val") ; 
+      $this->sc_Include($this->path_lib_php . "/nm_conv_dados.php", "F", "nm_conv_limpa_dado") ; 
+      $this->sc_Include($this->path_lib_php . "/nm_data.class.php", "C", "nm_data") ; 
+      $this->nm_data = new nm_data("pt_br");
+      if (is_file("../_lib/css/" . $this->str_schema_all . "_grid.php")) {
+          include("../_lib/css/" . $this->str_schema_all . "_grid.php");
+      } else {
+          $str_tree_col = "";
+          $str_tree_exp = "";
+          $str_button   = "";
+      }
+      $this->Color_bg_ajax = (!isset($str_ajax_bg)       || "" == trim($str_ajax_bg))       ? "#000" : $str_ajax_bg;
+      $this->Border_c_ajax = (!isset($str_ajax_border_c) || "" == trim($str_ajax_border_c)) ? ""     : $str_ajax_border_c;
+      $this->Border_s_ajax = (!isset($str_ajax_border_s) || "" == trim($str_ajax_border_s)) ? ""     : $str_ajax_border_s;
+      $this->Border_w_ajax = (!isset($str_ajax_border_w) || "" == trim($str_ajax_border_w)) ? ""     : $str_ajax_border_w;
+      $this->Tree_img_col    = trim($str_tree_col);
+      $this->Tree_img_exp    = trim($str_tree_exp);
+      $this->scGridRefinedSearchExpandFAIcon    = trim($scGridRefinedSearchExpandFAIcon);
+      $this->scGridRefinedSearchCollapseFAIcon    = trim($scGridRefinedSearchCollapseFAIcon);
+      $this->Tree_img_type   = "kie";
+      perfil_lib($this->path_libs);
+      if (!isset($_SESSION['sc_session'][$this->sc_page]['SC_Check_Perfil']))
+      {
+          if(function_exists("nm_check_perfil_exists")) nm_check_perfil_exists($this->path_libs, $this->path_prod);
+          $_SESSION['sc_session'][$this->sc_page]['SC_Check_Perfil'] = true;
+      }
+      if (function_exists("nm_check_pdf_server")) $this->server_pdf = nm_check_pdf_server($this->path_libs, $this->server_pdf);
+      if (!isset($_SESSION['scriptcase']['sc_num_img']))
+      { 
+          $_SESSION['scriptcase']['sc_num_img'] = 1;
+      } 
+      $this->arr_buttons_usr = array();
+
+      $this->arr_buttons_usr['SC_btn_0']['hint']             = "";
+      $this->arr_buttons_usr['SC_btn_0']['type']             = "button";
+      $this->arr_buttons_usr['SC_btn_0']['value']            = "Gerar CNAB e Boleto Itaú";
+      $this->arr_buttons_usr['SC_btn_0']['display']          = "only_text";
+      $this->arr_buttons_usr['SC_btn_0']['display_position'] = "text_right";
+      $this->arr_buttons_usr['SC_btn_0']['style']            = "default";
+      $this->arr_buttons_usr['SC_btn_0']['image']            = "";
+
+      $this->arr_buttons_usr['SC_btn_1']['hint']             = "";
+      $this->arr_buttons_usr['SC_btn_1']['type']             = "button";
+      $this->arr_buttons_usr['SC_btn_1']['value']            = "Autorizações";
+      $this->arr_buttons_usr['SC_btn_1']['display']          = "text_fontawesomeicon";
+      $this->arr_buttons_usr['SC_btn_1']['display_position'] = "text_right";
+      $this->arr_buttons_usr['SC_btn_1']['style']            = "default";
+      $this->arr_buttons_usr['SC_btn_1']['image']            = "";
+      $this->arr_buttons_usr['SC_btn_1']['has_fa']            = "true";
+      $this->arr_buttons_usr['SC_btn_1']['fontawesomeicon']            = "fas fa-key";
+
+      $this->arr_buttons_usr['SC_btn_2']['hint']             = "";
+      $this->arr_buttons_usr['SC_btn_2']['type']             = "button";
+      $this->arr_buttons_usr['SC_btn_2']['value']            = "Enviar email";
+      $this->arr_buttons_usr['SC_btn_2']['display']          = "text_fontawesomeicon";
+      $this->arr_buttons_usr['SC_btn_2']['display_position'] = "text_right";
+      $this->arr_buttons_usr['SC_btn_2']['style']            = "default";
+      $this->arr_buttons_usr['SC_btn_2']['image']            = "";
+      $this->arr_buttons_usr['SC_btn_2']['has_fa']            = "true";
+      $this->arr_buttons_usr['SC_btn_2']['fontawesomeicon']            = "";
+      $this->str_google_fonts= isset($str_google_fonts)?$str_google_fonts:'';
+      $this->regionalDefault();
+      $this->Str_btn_grid    = trim($str_button) . "/" . trim($str_button) . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".php";
+      $this->Str_btn_css     = trim($str_button) . "/" . trim($str_button) . ".css";
+      if (is_file($this->path_btn . $this->Str_btn_grid)) {
+          include($this->path_btn . $this->Str_btn_grid);
+      }
+      $_SESSION['scriptcase']['erro']['str_schema_dir'] = $this->str_schema_all . "_error" . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".css";
+      $this->sc_tem_trans_banco = false;
+      if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['redir'])) {
+          $SS_cod_html  = '<!DOCTYPE html>';
+          $SS_cod_html .= "<HTML>\r\n";
+          $SS_cod_html .= " <HEAD>\r\n";
+          $SS_cod_html .= "  <TITLE></TITLE>\r\n";
+          $SS_cod_html .= "   <META http-equiv=\"Content-Type\" content=\"text/html; charset=" . $_SESSION['scriptcase']['charset_html'] . "\"/>\r\n";
+          if ($_SESSION['scriptcase']['proc_mobile']) {
+              $SS_cod_html .= "   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0\"/>\r\n";
+          }
+          $SS_cod_html .= "   <META http-equiv=\"Expires\" content=\"Fri, Jan 01 1900 00:00:00 GMT\"/>\r\n";
+          $SS_cod_html .= "    <META http-equiv=\"Pragma\" content=\"no-cache\"/>\r\n";
+          if ($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['redir_tp'] == "R") {
+              $SS_cod_html .= "  </HEAD>\r\n";
+              $SS_cod_html .= "   <body>\r\n";
+          }
+          else {
+              $SS_cod_html .= "    <link rel=\"shortcut icon\" href=\"../_lib/img/scriptcase__NM__ico__NM__favicon.ico\">\r\n";
+              $SS_cod_html .= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"../_lib/css/" . $this->str_schema_all . "_grid.css\"/>\r\n";
+              $SS_cod_html .= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"../_lib/css/" . $this->str_schema_all . "_grid" . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".css\"/>\r\n";
+              $SS_cod_html .= "  </HEAD>\r\n";
+              $SS_cod_html .= "   <body class=\"scGridPage\">\r\n";
+              $SS_cod_html .= "    <table align=\"center\"><tr><td style=\"padding: 0\"><div class=\"scGridBorder\">\r\n";
+              $SS_cod_html .= "    <table class=\"scGridTabela\" width='100%' cellspacing=0 cellpadding=0><tr class=\"scGridFieldOdd\"><td class=\"scGridFieldOddFont\" style=\"padding: 15px 30px; text-align: center\">\r\n";
+              $SS_cod_html .= $this->Nm_lang['lang_errm_expired_session'] . "\r\n";
+              $SS_cod_html .= "     <form name=\"Fsession_redir\" method=\"post\"\r\n";
+              $SS_cod_html .= "           target=\"_self\">\r\n";
+              $SS_cod_html .= "           <input type=\"button\" name=\"sc_sai_seg\" value=\"OK\" onclick=\"sc_session_redir('" . $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['redir'] . "');\">\r\n";
+              $SS_cod_html .= "     </form>\r\n";
+              $SS_cod_html .= "    </td></tr></table>\r\n";
+              $SS_cod_html .= "    </div></td></tr></table>\r\n";
+          }
+          $SS_cod_html .= "    <script type=\"text/javascript\">\r\n";
+          if ($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['redir_tp'] == "R") {
+              $SS_cod_html .= "      sc_session_redir('" . $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['redir'] . "');\r\n";
+          }
+          $SS_cod_html .= "      function sc_session_redir(url_redir)\r\n";
+          $SS_cod_html .= "      {\r\n";
+          $SS_cod_html .= "         if (window.parent && window.parent.document != window.document && typeof window.parent.sc_session_redir === 'function')\r\n";
+          $SS_cod_html .= "         {\r\n";
+          $SS_cod_html .= "            window.parent.sc_session_redir(url_redir);\r\n";
+          $SS_cod_html .= "         }\r\n";
+          $SS_cod_html .= "         else\r\n";
+          $SS_cod_html .= "         {\r\n";
+          $SS_cod_html .= "             if (window.opener && typeof window.opener.sc_session_redir === 'function')\r\n";
+          $SS_cod_html .= "             {\r\n";
+          $SS_cod_html .= "                 window.close();\r\n";
+          $SS_cod_html .= "                 window.opener.sc_session_redir(url_redir);\r\n";
+          $SS_cod_html .= "             }\r\n";
+          $SS_cod_html .= "             else\r\n";
+          $SS_cod_html .= "             {\r\n";
+          $SS_cod_html .= "                 window.location = url_redir;\r\n";
+          $SS_cod_html .= "             }\r\n";
+          $SS_cod_html .= "         }\r\n";
+          $SS_cod_html .= "      }\r\n";
+          $SS_cod_html .= "    </script>\r\n";
+          $SS_cod_html .= " </body>\r\n";
+          $SS_cod_html .= "</HTML>\r\n";
+          unset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']);
+          unset($_SESSION['sc_session']);
+      }
+      if (isset($SS_cod_html) && isset($_GET['nmgp_opcao']) && (substr($_GET['nmgp_opcao'], 0, 14) == "ajax_aut_comp_" || substr($_GET['nmgp_opcao'], 0, 13) == "ajax_autocomp"))
+      {
+          unset($_SESSION['sc_session']);
+          $oJson = new Services_JSON();
+          echo $oJson->encode("ss_time_out");
+          exit;
+      }
+      elseif (isset($SS_cod_html) && ((isset($_POST['nmgp_opcao']) && substr($_POST['nmgp_opcao'], 0, 5) == "ajax_") || (isset($_GET['nmgp_opcao']) && substr($_GET['nmgp_opcao'], 0, 5) == "ajax_")))
+      {
+          unset($_SESSION['sc_session']);
+          $this->Arr_result = array();
+          $this->Arr_result['ss_time_out'] = true;
+          $oJson = new Services_JSON();
+          echo $oJson->encode($this->Arr_result);
+          exit;
+      }
+      elseif (isset($SS_cod_html))
+      {
+          echo $SS_cod_html;
+          exit;
+      }
+      $this->nm_bases_access     = array("access", "ado_access", "ace_access");
+      $this->nm_bases_db2        = array();
+      $this->nm_bases_ibase      = array("ibase", "firebird", "pdo_firebird", "borland_ibase");
+      $this->nm_bases_informix   = array();
+      $this->nm_bases_mssql      = array();
+      $this->nm_bases_mysql      = array("mysql", "mysqlt", "mysqli", "maxsql", "pdo_mysql", "pdo_mariadb", "azure_mysql", "azure_mysqlt", "azure_mysqli", "azure_maxsql", "azure_pdo_mysql", "azure_pdo_mariadb", "googlecloud_mysql", "googlecloud_mysqlt", "googlecloud_mysqli", "googlecloud_maxsql", "googlecloud_pdo_mysql", "googlecloud_pdo_mariadb", "amazonrds_mysql", "amazonrds_mysqlt", "amazonrds_mysqli", "amazonrds_maxsql", "amazonrds_pdo_mysql", "amazonrds_pdo_mariadb");
+      $this->nm_bases_postgres   = array("postgres", "postgres64", "postgres7", "pdo_pgsql", "azure_postgres", "azure_postgres64", "azure_postgres7", "azure_pdo_pgsql", "googlecloud_postgres", "googlecloud_postgres64", "googlecloud_postgres7", "googlecloud_pdo_pgsql", "amazonrds_postgres", "amazonrds_postgres64", "amazonrds_postgres7", "amazonrds_pdo_pgsql");
+      $this->nm_bases_oracle     = array();
+      $this->sqlite_version      = "old";
+      $this->nm_bases_sqlite     = array("sqlite", "sqlite3", "pdosqlite");
+      $this->nm_bases_sybase     = array();
+      $this->nm_bases_vfp        = array();
+      $this->nm_bases_odbc       = array();
+      $this->nm_bases_progress     = array();
+      $this->nm_bases_all        = array_merge($this->nm_bases_access, $this->nm_bases_ibase, $this->nm_bases_mysql, $this->nm_bases_postgres, $this->nm_bases_sqlite);
+      $this->nm_font_ttf = array("ar", "ja", "pl", "ru", "sk", "thai", "zh_cn", "zh_hk", "cz", "el", "ko", "mk");
+      $this->nm_ttf_arab = array("ar");
+      $this->nm_ttf_jap  = array("ja");
+      $this->nm_ttf_rus  = array("pl", "ru", "sk", "cz", "el", "mk");
+      $this->nm_ttf_thai = array("thai");
+      $this->nm_ttf_chi  = array("zh_cn", "zh_hk", "ko");
+      $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['seq_dir'] = 0; 
+      $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['sub_dir'] = array(); 
+      $_SESSION['scriptcase']['nm_bases_security']  = "enc_nm_enc_v1HQNmH9FUHABYHuBOHuNOVcFeH5XCHIJsHQFYZ1FaHAzGZMFaDEBOHErsHEFqZuB/D9XsZSFUHAvmVWJsDMvmVcFKV5BmVoBqD9BsZkFGHAvsD5XGHgBeHEFiV5B3DoF7D9XsDuFaHAveHQJwDMNOVcFCDWXCHIJeHQBiZSBOHArKZMBqDMveHEJqV5FaHIBOHQJKDQJsZ1vCV5FGHuNOV9FeDWXCVoFGDcBqZSBOZ1BeV5X7DEBeHEXeH5FYDoJeD9XsZSFUZ1rwV5X7HuzGVIBOV5X7DoJsD9XGZSB/HArYHQJwDEBODkFeH5FYVoFGHQJKDQBOZ1rwHQJeHgvsVcBOV5F/VoBqDcBqZ1B/Z1rYV5FaDEBOVkJGH5F/DoB/HQFYH9X7HABYV5FGHgrKVcBOHEFYVENUDcBqZ1BOZ1BeHQFGDEBOZSXeDuFYVoB/D9NmDQJsZ1rwV5raDMBYVcrsH5FqVENUHQFYZSFaHArKV5XGDErKHErCDWF/VoBiDcJUZSX7Z1BYHuFaDMNOVIFCDur/HMJwD9XGZkBiHAN7HQBODMveVkJqDuJeDorqD9NmZSX7HIrKV5BODMvODkBsV5X7HIXGHQJmZ1F7Z1vmD5rqDEBOHArCDWF/HMBqHQJeH9BiDSrwHQJeDMBOVIBsDWJeHIJeHQFYZkBiD1vsZMJeHgvsHEJqDWF/HIX7HQXGDuBqHANOHQB/DMvmZSNiHEFYHIrqHQFYZ1BOD1rwHuX7DMveHArCHEB3ZuBODcJUZSX7HIBeD5BqHgvsZSJ3H5FqHMBqHQBqZSBqD1zGZMBqDMvCVkJqDWB3DoXGHQXGDuBqHIvsVWJwDMBOVIBsV5F/HMBOHQFYZ1BODSrYHuFUHgBeHArCDWX7HIraHQXGDQFUDSN7HQB/DMrYVcFeDuFqHINUDcBwH9B/HIrwV5JeDMBYDkBsH5FYHMBOHQJeH9FUHArYHuB/DMvmV9BUH5FqHMraHQFYZ1BOHAvsD5XGHgBYHArCDWXCHMBOHQXGDQFUDSBYHQB/DMNOV9BUDWJeHMJeHQFYZ1BOD1rKHuFUHgBOHErCDuJeHIX7DcJUZSX7HIBeD5BqHgvsZSJ3H5FqVoFGDcBqH9BOZ1BeD5BqDMBYHEJGH5F/VoJeDcXOZ9rqZ1rwVWJeHgvsVcFCDWrmVoraD9BiH9FaHIBeZMBOHgvCZSXeDuJeZuFaD9XsDQX7HIBOV5JwHgrKVcFKDWFYVErqHQFYVIJwD1rwV5FGDEBeHEXeH5X/DoF7D9NwZSX7D1BeV5raHuvmVcFKV5X7VoFGD9BiZ1X7Z1BeD5JeDErKVkJGDWB3DoBqHQXODQBqHAvmV5BqDMrYVcBUDurGVoFGHQJmZ1F7Z1vmD5rqDEBOHArCDWBmDoJeHQBiDQBqHAvmVWJeDMvOVcBUH5B3VoX7HQBqZkFGHArKV5FUDMrYZSXeV5FqHIJsDcBwH9FUHAN7HuX7HuvmDkBODWFYHIF7D9JmZSB/D1NaD5JeHgBOHEBUDuJeZuFaDcBiDQFaHAveD5NUHgNKDkBOV5FYHMBiHQBiZ1F7DSrYV5BODMBYHAFKDWF/HMFGD9JKDQFGD1BeVWJsHgrKVcBOV5FYVoB/D9XOVIJwHArKV5FaDMrYHErCHEFqVoBiDcBwH9X7Z1rwV5BOHuNOZSFeDWFaVENUD9JmZ1B/D1rwD5NUDMrYHErCDuFYZuFaDcBwDQJsHArYHuFaHuNOZSrCH5FqDoXGHQJmZ1BiDSvOV5FUHgveHEBOV5JeZura";
+      $this->prep_conect();
+      if (isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['initialize']) && $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['initialize'])  
+      { 
+          
+/*----- Scriptcase Locale: Event onApplicationInit ------*/
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+if (!isset($_SESSION['i'])) {$_SESSION['i'] = "";}
+if (!isset($this->sc_temp_i)) {$this->sc_temp_i = (isset($_SESSION['i'])) ? $_SESSION['i'] : "";}
+if (!isset($_SESSION['total_chked'])) {$_SESSION['total_chked'] = "";}
+if (!isset($this->sc_temp_total_chked)) {$this->sc_temp_total_chked = (isset($_SESSION['total_chked'])) ? $_SESSION['total_chked'] : "";}
+if (!isset($_SESSION['varPrivAdmin'])) {$_SESSION['varPrivAdmin'] = "";}
+if (!isset($this->sc_temp_varPrivAdmin)) {$this->sc_temp_varPrivAdmin = (isset($_SESSION['varPrivAdmin'])) ? $_SESSION['varPrivAdmin'] : "";}
+if (!isset($_SESSION['varIdUsuario'])) {$_SESSION['varIdUsuario'] = "";}
+if (!isset($this->sc_temp_varIdUsuario)) {$this->sc_temp_varIdUsuario = (isset($_SESSION['varIdUsuario'])) ? $_SESSION['varIdUsuario'] : "";}
+if (!isset($_SESSION['varIdTenacidade'])) {$_SESSION['varIdTenacidade'] = "";}
+if (!isset($this->sc_temp_varIdTenacidade)) {$this->sc_temp_varIdTenacidade = (isset($_SESSION['varIdTenacidade'])) ? $_SESSION['varIdTenacidade'] : "";}
+if (!isset($_SESSION['varPrimeiraVez'])) {$_SESSION['varPrimeiraVez'] = "";}
+if (!isset($this->sc_temp_varPrimeiraVez)) {$this->sc_temp_varPrimeiraVez = (isset($_SESSION['varPrimeiraVez'])) ? $_SESSION['varPrimeiraVez'] : "";}
+  $this->sc_temp_varPrimeiraVez = "";
+$this->sc_temp_varIdTenacidade;
+$this->sc_temp_varIdUsuario;
+$this->sc_temp_varPrivAdmin;
+
+$this->sc_temp_i=0;
+$this->sc_temp_total_chked = array();
+if (isset($this->sc_temp_varPrimeiraVez)) {$_SESSION['varPrimeiraVez'] = $this->sc_temp_varPrimeiraVez;}
+if (isset($this->sc_temp_varIdTenacidade)) {$_SESSION['varIdTenacidade'] = $this->sc_temp_varIdTenacidade;}
+if (isset($this->sc_temp_varIdUsuario)) {$_SESSION['varIdUsuario'] = $this->sc_temp_varIdUsuario;}
+if (isset($this->sc_temp_varPrivAdmin)) {$_SESSION['varPrivAdmin'] = $this->sc_temp_varPrivAdmin;}
+if (isset($this->sc_temp_total_chked)) {$_SESSION['total_chked'] = $this->sc_temp_total_chked;}
+if (isset($this->sc_temp_i)) {$_SESSION['i'] = $this->sc_temp_i;}
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+/*----- END - Scriptcase Locale: Event onApplicationInit ------*/
+ 
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['initialize'] = false;
+      } 
+      $this->conectDB();
+      if (!in_array(strtolower($this->nm_tpbanco), $this->nm_bases_all))
+      {
+          echo "<tr>";
+          echo "   <td bgcolor=\"\">";
+          echo "       <b><font size=\"4\">" . $this->Nm_lang['lang_errm_dbcn_nspt'] . "</font>";
+          echo "  " . $perfil_trab;
+          echo "   </b></td>";
+          echo " </tr>";
+          echo "</table>";
+          if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['iframe_menu'] && (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan']) || !$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan'])) 
+          { 
+              if (isset($_SESSION['scriptcase']['nm_sc_retorno']) && !empty($_SESSION['scriptcase']['nm_sc_retorno'])) 
+              { 
+                  echo "<a href='" . $_SESSION['scriptcase']['nm_sc_retorno'] . "' target='_self'><img border='0' src='" . $this->path_botoes . "/nm_scriptcase9_SoftCloud_sm_bvoltar.gif' title='" . $this->Nm_lang['lang_btns_rtrn_scrp_hint'] . "' align=absmiddle></a> \n" ; 
+              } 
+              else 
+              { 
+                  echo "<a href='$nm_url_saida' target='_self'><img border='0' src='" . $this->path_botoes . "/nm_scriptcase9_SoftCloud_sm_bsair.gif' title='" . $this->Nm_lang['lang_btns_exit_appl_hint'] . "' align=absmiddle></a> \n" ; 
+              } 
+          } 
+          exit ;
+      } 
+      if (empty($this->nm_tabela))
+      {
+          $this->nm_tabela = "lancamentoreceita_view"; 
+      }
+      $this->Nm_accent_access    = array('cmp_i'=>"",'cmp_f'=>"",'cmp_apos'=>"",'arg_i'=>"",'arg_f'=>"",'arg_apos'=>"");
+      $this->Nm_accent_ibase     = array('cmp_i'=>"",'cmp_f'=>"",'cmp_apos'=>"",'arg_i'=>"",'arg_f'=>"",'arg_apos'=>"");
+      $this->Nm_accent_mysql     = array('cmp_i'=>"",'cmp_f'=>"",'cmp_apos'=>"",'arg_i'=>"",'arg_f'=>"",'arg_apos'=>"");
+      $this->Nm_accent_postgres  = array('cmp_i'=>"unaccent(",'cmp_f'=>")",'cmp_apos'=>"",'arg_i'=>"' || unaccent('",'arg_f'=>"') || '",'arg_apos'=>"");
+      $this->Nm_accent_sqlite    = array('cmp_i'=>"",'cmp_f'=>"",'cmp_apos'=>"",'arg_i'=>"",'arg_f'=>"",'arg_apos'=>"");
+
+      $this->Nm_accent_no = array('cmp_i'=>'','cmp_f'=>'','cmp_apos'=>'','arg_i'=>'','arg_f'=>'','arg_apos'=>'');
+      if (in_array(strtolower($this->nm_tpbanco), $this->nm_bases_access)) {
+          $this->Nm_accent_yes = $this->Nm_accent_access;
+      }
+      elseif (in_array(strtolower($this->nm_tpbanco), $this->nm_bases_ibase)) {
+          $this->Nm_accent_yes = $this->Nm_accent_ibase;
+      }
+      elseif (in_array(strtolower($this->nm_tpbanco), $this->nm_bases_mysql)) {
+          $this->Nm_accent_yes = $this->Nm_accent_mysql;
+      }
+      elseif (in_array(strtolower($this->nm_tpbanco), $this->nm_bases_postgres)) {
+          $this->Nm_accent_yes = $this->Nm_accent_postgres;
+      }
+      elseif (in_array(strtolower($this->nm_tpbanco), $this->nm_bases_sqlite)) {
+          $this->Nm_accent_yes = $this->Nm_accent_sqlite;
+      }
+      else {
+          $this->Nm_accent_yes = $this->Nm_accent_no;
+      }
+   }
+
+   function getRunningOS()
+   {
+       $aOSInfo = array();
+
+       if (FALSE !== strpos(strtolower(php_uname()), 'windows')) 
+       {
+           $aOSInfo['os'] = 'win';
+       }
+       elseif (FALSE !== strpos(strtolower(php_uname()), 'linux')) 
+       {
+           $aOSInfo['os'] = 'linux-i386';
+           if(strpos(strtolower(php_uname()), 'x86_64') !== FALSE) 
+            {
+               $aOSInfo['os'] = 'linux-amd64';
+            }
+       }
+       elseif (FALSE !== strpos(strtolower(php_uname()), 'darwin'))
+       {
+           $aOSInfo['os'] = 'macos';
+       }
+
+       return $aOSInfo;
+   }
+
+    function scGetTippyCssTheme(&$themeList, $themeName)
+    {
+        if (isset($themeList[$themeName])) {
+            return;
+        }
+
+        $themeNameParts = explode('__NM__', $themeName);
+
+        $themeList[$themeName] = [
+            'tippy' => $themeNameParts[1],
+            'file' => '../_lib/freecss/' . $themeName . '.css'
+        ];
+    }
+
+   function prep_conect()
+   {
+      if (isset($_SESSION['scriptcase']['sc_connection']) && !empty($_SESSION['scriptcase']['sc_connection']))
+      {
+          foreach ($_SESSION['scriptcase']['sc_connection'] as $NM_con_orig => $NM_con_dest)
+          {
+              if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao']) && $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao'] == $NM_con_orig)
+              {
+/*NM*/            $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao'] = $NM_con_dest;
+              }
+              if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_perfil']) && $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_perfil'] == $NM_con_orig)
+              {
+/*NM*/            $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_perfil'] = $NM_con_dest;
+              }
+              if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_con_' . $NM_con_orig]))
+              {
+                  $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_con_' . $NM_con_orig] = $NM_con_dest;
+              }
+          }
+      }
+      $con_devel             = (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao'])) ? $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao'] : ""; 
+      $perfil_trab           = ""; 
+      $this->nm_falta_var    = ""; 
+      $this->nm_falta_var_db = ""; 
+      $nm_crit_perfil        = false;
+      if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao']) && !empty($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao']))
+      {
+          if (!isset($_GET['nmgp_opcao']) || ('pdf' != $_GET['nmgp_opcao'] && 'pdf_res' != $_GET['nmgp_opcao'])) {
+              ob_start();
+          } else {
+              @ini_set('zlib.output_compression',0);
+              $bufferSize = @ini_get('output_buffering');
+              if ('' != $bufferSize) {
+                  $bufferSize = min($bufferSize * 10, 65536);
+                  echo str_repeat('&nbsp;', $bufferSize);
+              }
+              
+          }
+          db_conect_devel($con_devel, $this->root . $this->path_prod, 'LIGA_InfoTIME', 2, $this->force_db_utf8); 
+          if (!isset($this->Ajax_result_set)) {$this->Ajax_result_set = ob_get_contents();}
+          ob_end_clean();
+          if (empty($_SESSION['scriptcase']['glo_tpbanco']) && empty($_SESSION['scriptcase']['glo_banco']))
+          {
+              $nm_crit_perfil = true;
+          }
+      }
+      if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_perfil']) && !empty($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_perfil']))
+      {
+          $perfil_trab = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_perfil'];
+      }
+      elseif (isset($_SESSION['scriptcase']['glo_perfil']) && !empty($_SESSION['scriptcase']['glo_perfil']))
+      {
+          $perfil_trab = $_SESSION['scriptcase']['glo_perfil'];
+      }
+      if (!empty($perfil_trab))
+      {
+          $_SESSION['scriptcase']['glo_senha_protect'] = "";
+          carrega_perfil($perfil_trab, $this->path_libs, "S", $this->path_conf);
+          if (empty($_SESSION['scriptcase']['glo_senha_protect']))
+          {
+              $nm_crit_perfil = true;
+          }
+      }
+      else
+      {
+          $perfil_trab = $con_devel;
+      }
+      if (!isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_init']) || !$_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_init']) 
+      {
+          if (!isset($_SESSION['varIdTenacidade'])) 
+          {
+              $this->nm_falta_var .= "varIdTenacidade; ";
+          }
+          if (!isset($_SESSION['varPrimeiraVez'])) 
+          {
+              $this->nm_falta_var .= "varPrimeiraVez; ";
+          }
+          if (!isset($_SESSION['varIdUsuario'])) 
+          {
+              $this->nm_falta_var .= "varIdUsuario; ";
+          }
+          if (!isset($_SESSION['varPrivAdmin'])) 
+          {
+              $this->nm_falta_var .= "varPrivAdmin; ";
+          }
+          if (!isset($_SESSION['varRemetente'])) 
+          {
+              $this->nm_falta_var .= "varRemetente; ";
+          }
+          if (!isset($_SESSION['nossoNumeroRecebido'])) 
+          {
+              $this->nm_falta_var .= "nossoNumeroRecebido; ";
+          }
+          if (!isset($_SESSION['parm1'])) 
+          {
+              $this->nm_falta_var .= "parm1; ";
+          }
+          if (!isset($_SESSION['varDiretorioArquivo'])) 
+          {
+              $this->nm_falta_var .= "varDiretorioArquivo; ";
+          }
+          if (!isset($_SESSION['varServidorSMTP'])) 
+          {
+              $this->nm_falta_var .= "varServidorSMTP; ";
+          }
+          if (!isset($_SESSION['varUsuarioSMTP'])) 
+          {
+              $this->nm_falta_var .= "varUsuarioSMTP; ";
+          }
+          if (!isset($_SESSION['varSenhaSMTP'])) 
+          {
+              $this->nm_falta_var .= "varSenhaSMTP; ";
+          }
+      }
+// 
+      if (!isset($_SESSION['scriptcase']['glo_tpbanco']))
+      {
+          if (!$nm_crit_perfil)
+          {
+              $this->nm_falta_var_db .= "glo_tpbanco; ";
+          }
+      }
+      else
+      {
+          $this->nm_tpbanco = $_SESSION['scriptcase']['glo_tpbanco']; 
+      }
+      if (!isset($_SESSION['scriptcase']['glo_servidor']))
+      {
+          if (!$nm_crit_perfil)
+          {
+              $this->nm_falta_var_db .= "glo_servidor; ";
+          }
+      }
+      else
+      {
+          $this->nm_servidor = $_SESSION['scriptcase']['glo_servidor']; 
+      }
+      if (!isset($_SESSION['scriptcase']['glo_banco']))
+      {
+          if (!$nm_crit_perfil)
+          {
+              $this->nm_falta_var_db .= "glo_banco; ";
+          }
+      }
+      else
+      {
+          $this->nm_banco = $_SESSION['scriptcase']['glo_banco']; 
+      }
+      if (!isset($_SESSION['scriptcase']['glo_usuario']))
+      {
+          if (!$nm_crit_perfil)
+          {
+              $this->nm_falta_var_db .= "glo_usuario; ";
+          }
+      }
+      else
+      {
+          $this->nm_usuario = $_SESSION['scriptcase']['glo_usuario']; 
+      }
+      if (!isset($_SESSION['scriptcase']['glo_senha']))
+      {
+          if (!$nm_crit_perfil)
+          {
+              $this->nm_falta_var_db .= "glo_senha; ";
+          }
+      }
+      else
+      {
+          $this->nm_senha = $_SESSION['scriptcase']['glo_senha']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_database_encoding']))
+      {
+          $this->nm_database_encoding = $_SESSION['scriptcase']['glo_database_encoding']; 
+      }
+      $this->nm_arr_db_extra_args = array(); 
+      if (isset($_SESSION['scriptcase']['glo_use_ssl']))
+      {
+          $this->nm_arr_db_extra_args['use_ssl'] = $_SESSION['scriptcase']['glo_use_ssl']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_mysql_ssl_key']))
+      {
+          $this->nm_arr_db_extra_args['mysql_ssl_key'] = $_SESSION['scriptcase']['glo_mysql_ssl_key']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_mysql_ssl_cert']))
+      {
+          $this->nm_arr_db_extra_args['mysql_ssl_cert'] = $_SESSION['scriptcase']['glo_mysql_ssl_cert']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_mysql_ssl_capath']))
+      {
+          $this->nm_arr_db_extra_args['mysql_ssl_capath'] = $_SESSION['scriptcase']['glo_mysql_ssl_capath']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_mysql_ssl_ca']))
+      {
+          $this->nm_arr_db_extra_args['mysql_ssl_ca'] = $_SESSION['scriptcase']['glo_mysql_ssl_ca']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_mysql_ssl_cipher']))
+      {
+          $this->nm_arr_db_extra_args['mysql_ssl_cipher'] = $_SESSION['scriptcase']['glo_mysql_ssl_cipher']; 
+      }
+      if (isset($_SESSION['scriptcase']['postgres_sslmode']))
+      {
+          $this->nm_arr_db_extra_args['postgres_sslmode'] = $_SESSION['scriptcase']['postgres_sslmode']; 
+      }
+      if (isset($_SESSION['scriptcase']['postgres_sslrootcert']))
+      {
+          $this->nm_arr_db_extra_args['postgres_sslrootcert'] = $_SESSION['scriptcase']['postgres_sslrootcert']; 
+      }
+      if (isset($_SESSION['scriptcase']['postgres_sslkey']))
+      {
+          $this->nm_arr_db_extra_args['postgres_sslkey'] = $_SESSION['scriptcase']['postgres_sslkey']; 
+      }
+      if (isset($_SESSION['scriptcase']['postgres_sslcert']))
+      {
+          $this->nm_arr_db_extra_args['postgres_sslcert'] = $_SESSION['scriptcase']['postgres_sslcert']; 
+      }
+      if (isset($_SESSION['scriptcase']['ibase_charset']))
+      {
+          $this->nm_arr_db_extra_args['ibase_charset'] = $_SESSION['scriptcase']['ibase_charset']; 
+      }
+      if (isset($_SESSION['scriptcase']['ibase_rolename']))
+      {
+          $this->nm_arr_db_extra_args['ibase_rolename'] = $_SESSION['scriptcase']['ibase_rolename']; 
+      }
+      if (isset($_SESSION['scriptcase']['ibase_dialect']))
+      {
+          $this->nm_arr_db_extra_args['ibase_dialect'] = $_SESSION['scriptcase']['ibase_dialect']; 
+      }
+      if (isset($_SESSION['scriptcase']['use_ssh']))
+      {
+          $this->nm_arr_db_extra_args['use_ssh'] = $_SESSION['scriptcase']['use_ssh']; 
+      }
+      if (isset($_SESSION['scriptcase']['ssh_server']))
+      {
+          $this->nm_arr_db_extra_args['ssh_server'] = $_SESSION['scriptcase']['ssh_server']; 
+      }
+      if (isset($_SESSION['scriptcase']['ssh_user']))
+      {
+          $this->nm_arr_db_extra_args['ssh_user'] = $_SESSION['scriptcase']['ssh_user']; 
+      }
+      if (isset($_SESSION['scriptcase']['ssh_port']))
+      {
+          $this->nm_arr_db_extra_args['ssh_port'] = $_SESSION['scriptcase']['ssh_port']; 
+      }
+      if (isset($_SESSION['scriptcase']['ssh_privatecert']))
+      {
+          $this->nm_arr_db_extra_args['ssh_privatecert'] = $_SESSION['scriptcase']['ssh_privatecert']; 
+      }
+      if (isset($_SESSION['scriptcase']['ssh_localserver']))
+      {
+          $this->nm_arr_db_extra_args['ssh_localserver'] = $_SESSION['scriptcase']['ssh_localserver']; 
+      }
+      if (isset($_SESSION['scriptcase']['ssh_localport']))
+      {
+          $this->nm_arr_db_extra_args['ssh_localport'] = $_SESSION['scriptcase']['ssh_localport']; 
+      }
+      if (isset($_SESSION['scriptcase']['ssh_localportforwarding']))
+      {
+          $this->nm_arr_db_extra_args['ssh_localportforwarding'] = $_SESSION['scriptcase']['ssh_localportforwarding']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_use_persistent']))
+      {
+          $this->nm_con_persistente = $_SESSION['scriptcase']['glo_use_persistent']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_use_schema']))
+      {
+          $this->nm_con_use_schema = $_SESSION['scriptcase']['glo_use_schema']; 
+      }
+      $this->date_delim  = "'";
+      $this->date_delim1 = "'";
+      if (in_array(strtolower($this->nm_tpbanco), $this->nm_bases_access))
+      {
+          $this->date_delim  = "#";
+          $this->date_delim1 = "#";
+      }
+      if (isset($_SESSION['scriptcase']['glo_decimal_db']) && !empty($_SESSION['scriptcase']['glo_decimal_db']))
+      {
+          $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['decimal_db'] = $_SESSION['scriptcase']['glo_decimal_db']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_date_separator']) && !empty($_SESSION['scriptcase']['glo_date_separator']))
+      {
+          $SC_temp = trim($_SESSION['scriptcase']['glo_date_separator']);
+          if (strlen($SC_temp) == 2)
+          {
+              $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date']  = substr($SC_temp, 0, 1); 
+              $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date1'] = substr($SC_temp, 1, 1); 
+          }
+          else
+           {
+              $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date']  = $SC_temp; 
+              $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date1'] = $SC_temp; 
+          }
+          $this->date_delim  = $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date'];
+          $this->date_delim1 = $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date1'];
+      }
+// 
+      if (!empty($this->nm_falta_var) || !empty($this->nm_falta_var_db) || $nm_crit_perfil)
+      {
+         $str_message = "<html>
+
+<head>
+    <title>{var_str_title}</title>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            overflow-x: hidden;
+            min-width: 320px;
+            background: #FFFFFF;
+            font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            line-height: 1.4285em;
+            color: rgba(0, 0, 0, 0.87);
+            font-smoothing: antialiased;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        user agent stylesheet body {
+            display: block;
+            margin: 8px;
+        }
+
+        html {
+            font-size: 14px;
+        }
+
+        html {
+            line-height: 1.15;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        ::selection {
+            background-color: #CCE2FF;
+            color: rgba(0, 0, 0, 0.87);
+        }
+
+        .ui.container {
+            width: 933px;
+            min-width: 992px;
+            max-width: 1199px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+        .ui.container {
+            display: block;
+            max-width: 100% !important;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        .ui.message:last-child {
+            margin-bottom: 0em;
+        }
+
+        .ui.message:first-child {
+            margin-top: 0em;
+        }
+
+        .ui.message {
+            font-size: 1em;
+        }
+
+        .ui.message {
+            position: relative;
+            min-height: 1em;
+            margin: 1em 0em;
+            background: #F8F8F9;
+            padding: 1em 1.5em;
+            line-height: 1.4285em;
+            color: rgba(0, 0, 0, 0.87);
+            transition: opacity 0.1s ease, color 0.1s ease, background 0.1s ease, box-shadow 0.1s ease;
+            border-radius: 0.28571429rem;
+            box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.22) inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+        }
+
+        article,
+        aside,
+        footer,
+        header,
+        nav,
+        section {
+            display: block;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        .ui.message> :last-child {
+            margin-bottom: 0em;
+        }
+
+        .ui.message> :first-child {
+            margin-top: 0em;
+        }
+
+        .ui.message .header+p {
+            margin-top: 0.25em;
+        }
+
+        .ui.message p {
+            opacity: 0.85;
+            margin: 0.75em 0em;
+        }
+
+        p {
+            margin: 0em 0em 1em;
+            line-height: 1.4285em;
+        }
+
+        .ui.message .header:not(.ui) {
+            font-size: 1.14285714em;
+        }
+
+        .ui.message .header {
+            display: block;
+            font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            margin: -0.14285714em 0em 1.2rem 0em;
+        }
+
+        .ui.button {
+            cursor: pointer;
+            display: inline-block;
+            min-height: 1em;
+            outline: 0;
+            border: none;
+            vertical-align: baseline;
+            background: #e0e1e2 none;
+            color: rgba(0, 0, 0, .6);
+            font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            margin: 0 .25em 0 0;
+            padding: .78571429em 1.5em .78571429em;
+            text-transform: none;
+            text-shadow: none;
+            font-weight: 700;
+            line-height: 1em;
+            font-style: normal;
+            text-align: center;
+            text-decoration: none;
+            border-radius: .28571429rem;
+            box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34, 36, 38, .15) inset;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease;
+            will-change: '';
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .ui.button,
+        .ui.buttons .button,
+        .ui.buttons .or {
+            font-size: 1rem;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+            column-gap: .5rem;
+            display: flex;
+        }
+        
+        .ui.primary.button,
+        .ui.primary.buttons .button {
+            background-color: #2185d0;
+            color: #fff;
+            text-shadow: none;
+            background-image: none;
+        }
+        
+        .ui.primary.button {
+            box-shadow: 0 0 0 0 rgba(34, 36, 38, .15) inset;
+        }
+
+        [type=reset], [type=submit], button, html [type=button] {
+            -webkit-appearance: button;
+        }
+
+        .icon{
+            position: relative;
+            width: 1.2rem;
+            height: 1.2rem;
+            display: block;
+            color: inherit;
+            background-repeat: no-repeat;
+        }
+
+        .icon.database{
+            background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\" fill=\"%23FFFFFF\"><path d=\"M448 80v48c0 44.2-100.3 80-224 80S0 172.2 0 128V80C0 35.8 100.3 0 224 0S448 35.8 448 80zM393.2 214.7c20.8-7.4 39.9-16.9 54.8-28.6V288c0 44.2-100.3 80-224 80S0 332.2 0 288V186.1c14.9 11.8 34 21.2 54.8 28.6C99.7 230.7 159.5 240 224 240s124.3-9.3 169.2-25.3zM0 346.1c14.9 11.8 34 21.2 54.8 28.6C99.7 390.7 159.5 400 224 400s124.3-9.3 169.2-25.3c20.8-7.4 39.9-16.9 54.8-28.6V432c0 44.2-100.3 80-224 80S0 476.2 0 432V346.1z\"/></svg>');
+        }
+    </style>
+</head>
+
+<body>
+    <div class='ui container' style='padding-top:2rem'>
+        <section class='ui message'>
+            <div class='content'>
+                <div class='header'>
+                    <h1 class='ui header'>{var_str_title}</h1>
+                </div>
+                <p>{var_str_message}</p>
+                <p>{var_str_message_conn}</p>
+                {v_str_btn_inside}
+            </div>
+        </section>
+    </div>";
+         $str_message_end = "</body>
+</html>";
+         $str_message = str_replace('{var_str_title}', $this->Nm_lang['lang_errm_dbcn_create'], $str_message);
+          if (empty($this->nm_falta_var_db))
+          {
+              if (!empty($this->nm_falta_var))
+              {
+                  $str_message = str_replace('{var_str_message}', $this->Nm_lang['lang_errm_glob'] . $this->nm_falta_var, $str_message);
+                  $str_message = str_replace('{var_str_message_conn}','', $str_message);
+              }
+              elseif ($nm_crit_perfil)
+              {
+                  $str_message = str_replace('{var_str_message}', $this->Nm_lang['lang_errm_dbcn_nfnd'], $str_message);
+                  $str_message = str_replace('{var_str_message_conn}', $this->Nm_lang['lang_errm_dbcn_conn_nfnd'] . ' ' . $perfil_trab, $str_message);
+                  $str_message = str_replace('{v_str_btn_inside}', "<button class='ui button primary' style='font-size: 16px !important;'><a href='" . $this->path_prod . "' style='color: white;text-decoration:none'><i class='icon database' style='float: left;padding-right: .5rem;'></i>". $this->Nm_lang['lang_errm_dbcn_create'] ."</a></button>", $str_message);
+              }
+          }
+          else
+          {
+                  $str_message = str_replace('{var_str_message}', $this->Nm_lang['lang_errm_dbcn_data'], $str_message);
+          }
+         $str_message = str_replace('{var_str_message_conn}','', $str_message);
+         $str_message = str_replace('{v_str_btn_inside}', '', $str_message);
+          echo $str_message;
+          if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['iframe_menu'] && (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan']) || !$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan'])) 
+          { 
+              if (isset($_SESSION['scriptcase']['nm_sc_retorno']) && !empty($_SESSION['scriptcase']['nm_sc_retorno'])) 
+              { 
+               $btn_value = "" . $this->Ini->Nm_lang['lang_btns_back'] . "";
+               if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($btn_value))
+               {
+                   $btn_value = sc_convert_encoding($btn_value, $_SESSION['scriptcase']['charset'], "UTF-8");
+               }
+               $btn_hint = "" . $this->Ini->Nm_lang['lang_btns_back_hint'] . "";
+               if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($btn_hint))
+               {
+                   $btn_hint = sc_convert_encoding($btn_hint, $_SESSION['scriptcase']['charset'], "UTF-8");
+               }
+?>
+                   <input type="button" id="sai" onClick="window.location='<?php echo $_SESSION['scriptcase']['nm_sc_retorno'] ?>'; return false" class="scButton_default" value="<?php echo $btn_value ?>" title="<?php echo $btn_hint ?>" style="vertical-align: middle;">
+
+<?php
+              } 
+              elseif(!empty($nm_url_saida)) 
+              { 
+               $btn_value = "" . $this->Ini->Nm_lang['lang_btns_exit'] . "";
+               if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($btn_value))
+               {
+                   $btn_value = sc_convert_encoding($btn_value, $_SESSION['scriptcase']['charset'], "UTF-8");
+               }
+               $btn_hint = "" . $this->Ini->Nm_lang['lang_btns_exit_hint'] . "";
+               if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($btn_hint))
+               {
+                   $btn_hint = sc_convert_encoding($btn_hint, $_SESSION['scriptcase']['charset'], "UTF-8");
+               }
+?>
+                   <input type="button" id="sai" onClick="window.location='<?php echo $nm_url_saida ?>'; return false" class="scButton_danger" value="<?php echo $btn_value ?>" title="<?php echo $btn_hint ?>" style="vertical-align: middle;">
+
+<?php
+              } 
+          } 
+          echo $str_message_end;
+          exit ;
+      }
+      if (isset($_SESSION['scriptcase']['glo_db_master_usr']) && !empty($_SESSION['scriptcase']['glo_db_master_usr']))
+      {
+          $this->nm_usuario = $_SESSION['scriptcase']['glo_db_master_usr']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_db_master_pass']) && !empty($_SESSION['scriptcase']['glo_db_master_pass']))
+      {
+          $this->nm_senha = $_SESSION['scriptcase']['glo_db_master_pass']; 
+      }
+      if (isset($_SESSION['scriptcase']['glo_db_master_cript']) && !empty($_SESSION['scriptcase']['glo_db_master_cript']))
+      {
+          $_SESSION['scriptcase']['glo_senha_protect'] = $_SESSION['scriptcase']['glo_db_master_cript']; 
+      }
+   }
+   function conectDB()
+   {
+      global $glo_senha_protect;
+      $glo_senha_protect = (isset($_SESSION['scriptcase']['glo_senha_protect'])) ? $_SESSION['scriptcase']['glo_senha_protect'] : "S";
+      if (isset($_SESSION['scriptcase']['nm_sc_retorno']) && !empty($_SESSION['scriptcase']['nm_sc_retorno']) && isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao']) && !empty($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao']))
+      { 
+          $this->Db = db_conect_devel($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_conexao'], $this->root . $this->path_prod, 'LIGA_InfoTIME', 1, $this->force_db_utf8); 
+      } 
+      else 
+      { 
+          ob_start();
+          $databaseEncoding = $this->force_db_utf8 ? 'utf8' : $this->nm_database_encoding;
+          $this->Db = db_conect($this->nm_tpbanco, $this->nm_servidor, $this->nm_usuario, $this->nm_senha, $this->nm_banco, $glo_senha_protect, "S", $this->nm_con_persistente, $this->nm_con_db2, $databaseEncoding, $this->nm_arr_db_extra_args); 
+          if (!isset($this->Ajax_result_set)) {$this->Ajax_result_set = ob_get_contents();}
+          ob_end_clean();
+      } 
+      if (!isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['embutida']) || !$_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      {
+          if (substr($_POST['nmgp_opcao'], 0, 5) == "ajax_")
+          {
+              ob_start();
+          } 
+      } 
+      if (in_array(strtolower($this->nm_tpbanco), $this->nm_bases_ibase))
+      {
+          if (function_exists('ibase_timefmt'))
+          {
+              ibase_timefmt('%Y-%m-%d %H:%M:%S');
+          } 
+          $GLOBALS["NM_ERRO_IBASE"] = 1;  
+          $this->Ibase_version = "old";
+          if ($ibase_version = $this->Db->Execute("SELECT RDB\$GET_CONTEXT('SYSTEM','ENGINE_VERSION') AS \"Version\" FROM RDB\$DATABASE"))
+          {
+              if (isset($ibase_version->fields[0]) && substr($ibase_version->fields[0], 0, 1) > 2) {$this->Ibase_version = "new";}
+          }
+      } 
+      if (in_array(strtolower($this->nm_tpbanco), $this->nm_bases_postgres))
+      {
+          $this->Db->Execute("SET DATESTYLE TO ISO");
+      } 
+      if (!isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['embutida']) || !$_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      {
+          if (substr($_POST['nmgp_opcao'], 0, 5) == "ajax_")
+          {
+              ob_end_clean();
+          } 
+      } 
+   }
+   function regionalDefault()
+   {
+       $_SESSION['scriptcase']['reg_conf']['date_format']   = (isset($this->Nm_conf_reg[$this->str_conf_reg]['data_format']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['data_format'] : "ddmmyyyy";
+       $_SESSION['scriptcase']['reg_conf']['date_sep']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['data_sep']))                 ?  $this->Nm_conf_reg[$this->str_conf_reg]['data_sep'] : "/";
+       $_SESSION['scriptcase']['reg_conf']['date_week_ini'] = (isset($this->Nm_conf_reg[$this->str_conf_reg]['prim_dia_sema']))            ?  $this->Nm_conf_reg[$this->str_conf_reg]['prim_dia_sema'] : "SU";
+       $_SESSION['scriptcase']['reg_conf']['time_format']   = (isset($this->Nm_conf_reg[$this->str_conf_reg]['hora_format']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['hora_format'] : "hhiiss";
+       $_SESSION['scriptcase']['reg_conf']['time_sep']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['hora_sep']))                 ?  $this->Nm_conf_reg[$this->str_conf_reg]['hora_sep'] : ":";
+       $_SESSION['scriptcase']['reg_conf']['time_pos_ampm'] = (isset($this->Nm_conf_reg[$this->str_conf_reg]['hora_pos_ampm']))            ?  $this->Nm_conf_reg[$this->str_conf_reg]['hora_pos_ampm'] : "right_without_space";
+       $_SESSION['scriptcase']['reg_conf']['time_simb_am']  = (isset($this->Nm_conf_reg[$this->str_conf_reg]['hora_simbolo_am']))          ?  $this->Nm_conf_reg[$this->str_conf_reg]['hora_simbolo_am'] : "am";
+       $_SESSION['scriptcase']['reg_conf']['time_simb_pm']  = (isset($this->Nm_conf_reg[$this->str_conf_reg]['hora_simbolo_pm']))          ?  $this->Nm_conf_reg[$this->str_conf_reg]['hora_simbolo_pm'] : "pm";
+       $_SESSION['scriptcase']['reg_conf']['simb_neg']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['num_sinal_neg']))            ?  $this->Nm_conf_reg[$this->str_conf_reg]['num_sinal_neg'] : "-";
+       $_SESSION['scriptcase']['reg_conf']['grup_num']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['num_sep_agr']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['num_sep_agr'] : ".";
+       $_SESSION['scriptcase']['reg_conf']['dec_num']       = (isset($this->Nm_conf_reg[$this->str_conf_reg]['num_sep_dec']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['num_sep_dec'] : ",";
+       $_SESSION['scriptcase']['reg_conf']['neg_num']       = (isset($this->Nm_conf_reg[$this->str_conf_reg]['num_format_num_neg']))       ?  $this->Nm_conf_reg[$this->str_conf_reg]['num_format_num_neg'] : 2;
+       $_SESSION['scriptcase']['reg_conf']['monet_simb']    = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_simbolo']))        ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_simbolo'] : "R$";
+       $_SESSION['scriptcase']['reg_conf']['monet_f_pos']   = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_format_num_pos'])) ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_format_num_pos'] : 3;
+       $_SESSION['scriptcase']['reg_conf']['monet_f_neg']   = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_format_num_neg'])) ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_format_num_neg'] : 13;
+       $_SESSION['scriptcase']['reg_conf']['grup_val']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_sep_agr']))        ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_sep_agr'] : ".";
+       $_SESSION['scriptcase']['reg_conf']['dec_val']       = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_sep_dec']))        ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_sep_dec'] : ",";
+       $_SESSION['scriptcase']['reg_conf']['html_dir']      = (isset($this->Nm_conf_reg[$this->str_conf_reg]['ger_ltr_rtl']))              ?  " DIR='" . $this->Nm_conf_reg[$this->str_conf_reg]['ger_ltr_rtl'] . "'" : "";
+       $_SESSION['scriptcase']['reg_conf']['css_dir']       = (isset($this->Nm_conf_reg[$this->str_conf_reg]['ger_ltr_rtl']))              ?  $this->Nm_conf_reg[$this->str_conf_reg]['ger_ltr_rtl'] : "LTR";
+       $_SESSION['scriptcase']['reg_conf']['num_group_digit']       = (isset($this->Nm_conf_reg[$this->str_conf_reg]['num_group_digit']))       ?  $this->Nm_conf_reg[$this->str_conf_reg]['num_group_digit'] : "1";
+       $_SESSION['scriptcase']['reg_conf']['unid_mont_group_digit'] = (isset($this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_group_digit'])) ?  $this->Nm_conf_reg[$this->str_conf_reg]['unid_mont_group_digit'] : "1";
+       eval ('set'.$this->Control_Css.$this->Tree_img_type.'("'.$this->nm_script_type.'SESSID_",base64_encode("'.$this->nm_script_by.'?".substr(md5(mt_rand()),8,16)),time()+86400,\'/\', \'\', ini_get(\'session.cookie_secure\'), ini_get(\'session.cookie_httponly\'));');
+   }
+// 
+
+   function scCsrfGetToken()
+   {
+       if (!isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['csrf_token']))
+       {
+           $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['csrf_token'] = $this->scCsrfGenerateToken();
+       }
+
+       return $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['csrf_token'];
+   }
+
+   function scCsrfGenerateToken()
+   {
+       $aSources = array(
+           'abcdefghijklmnopqrstuvwxyz',
+           'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+           '1234567890',
+           '!@$*()-_[]{},.;:'
+       );
+
+       $sRandom = '';
+
+       $aSourcesSizes = array();
+       $iSourceSize   = sizeof($aSources) - 1;
+       for ($i = 0; $i <= $iSourceSize; $i++)
+       {
+           $aSourcesSizes[$i] = strlen($aSources[$i]) - 1;
+       }
+
+       for ($i = 0; $i < 64; $i++)
+       {
+           $iSource = $this->scCsrfRandom(0, $iSourceSize);
+           $sRandom .= substr($aSources[$iSource], $this->scCsrfRandom(0, $aSourcesSizes[$iSource]), 1);
+       }
+
+       return $sRandom;
+   }
+
+   function scCsrfRandom($iMin, $iMax)
+   {
+       return mt_rand($iMin, $iMax);
+   }
+
+   function sc_Include($path, $tp, $name)
+   {
+       if ((empty($tp) && empty($name)) || ($tp == "F" && !function_exists($name)) || ($tp == "C" && !class_exists($name)))
+       {
+           include_once($path);
+       }
+   } // sc_Include
+   function sc_Sql_Protect($var, $tp, $conex="")
+   {
+       if (empty($conex) || $conex == "ligasistemas")
+       {
+           $TP_banco = $_SESSION['scriptcase']['glo_tpbanco'];
+       }
+       else
+       {
+           eval ("\$TP_banco = \$this->nm_con_" . $conex . "['tpbanco'];");
+       }
+       if ($tp == "date")
+       {
+           $delim  = "'";
+           $delim1 = "'";
+           if (in_array(strtolower($TP_banco), $this->nm_bases_access))
+           {
+               $delim  = "#";
+               $delim1 = "#";
+           }
+           if (isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date']) && !empty($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date']))
+           {
+               $delim  = $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date'];
+               $delim1 = $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date1'];
+           }
+           return $delim . $var . $delim1;
+       }
+       else
+       {
+           return $var;
+       }
+   } // sc_Sql_Protect
+   function sc_Date_Protect($val_dt)
+   {
+       $dd = substr($val_dt, 8, 2);
+       $mm = substr($val_dt, 5, 2);
+       $yy = substr($val_dt, 0, 4);
+       $hh = (strlen($val_dt) > 10) ? substr($val_dt, 10) : "";
+       if ($mm > 12) {
+           $mm = 12;
+       }
+       $dd_max = 31;
+       if ($mm == '04' || $mm == '06' || $mm == '09' || $mm == 11) {
+           $dd_max = 30;
+       }
+       if ($mm == '02') {
+           $dd_max = ($yy % 4 == 0) ? 29 : 28;
+       }
+       if ($dd > $dd_max) {
+           $dd = $dd_max;
+       }
+       return $yy . "-" . $mm . "-" . $dd . $hh;
+   }
+        function appIsSsl() {
+                if (isset($_SERVER['HTTPS'])) {
+                        if ('on' == strtolower($_SERVER['HTTPS'])) {
+                                return true;
+                        }
+                        if ('1' == $_SERVER['HTTPS']) {
+                                return true;
+                        }
+                }
+
+                if (isset($_SERVER['REQUEST_SCHEME'])) {
+                        if ('https' == $_SERVER['REQUEST_SCHEME']) {
+                                return true;
+                        }
+                }
+
+                if (isset($_SERVER['SERVER_PORT'])) {
+                        if ('443' == $_SERVER['SERVER_PORT']) {
+                                return true;
+                        }
+                }
+
+                return false;
+        }
+   function Get_Gb_date_format($GB, $cmp)
+   {
+       return (isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Gb_date_format'][$GB][$cmp])) ? $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Gb_date_format'][$GB][$cmp] : "";
+   }
+
+   function Get_Gb_prefix_date_format($GB, $cmp)
+   {
+       return (isset($_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Gb_prefix_date_format'][$GB][$cmp])) ? $_SESSION['sc_session'][$this->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Gb_prefix_date_format'][$GB][$cmp] : "";
+   }
+
+   function GB_date_format($val, $format, $prefix="", $conf_region="S", $mask="")
+   {
+           return $val;
+   }
+   function Get_arg_groupby($val, $format)
+   {
+       return $val; 
+   }
+   function Get_format_dimension($ind_ini, $ind_qb, $campo, $rs, $conf_region="S", $mask="")
+   {
+       $retorno    = array();
+       $format     = $this->Get_Gb_date_format($ind_qb, $campo);
+       $Prefix_dat = $this->Get_Gb_prefix_date_format($ind_qb, $campo);
+       if (empty($format) || $rs->fields[$ind_ini] == "")
+       {
+           $retorno['orig'] = $rs->fields[$ind_ini];
+           $retorno['fmt']  = $rs->fields[$ind_ini];
+           return $retorno;
+       }
+       if ($format == 'YYYYMMDDHHIISS')
+       {
+           $retorno['orig'] = $rs->fields[$ind_ini];
+           $retorno['fmt']  = $this->GB_date_format($rs->fields[$ind_ini], $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'YYYYMMDDHHII')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "1,2,3,4");
+           $temp            = $rs->fields[$ind_ini] . "-" . $rs->fields[$ind_ini + 1] . "-" . $rs->fields[$ind_ini + 2] . " " . $rs->fields[$ind_ini + 3] . ":" . $rs->fields[$ind_ini + 4];
+           $retorno['orig'] = $temp;
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'YYYYMMDDHH')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "1,2,3");
+           $temp            = $rs->fields[$ind_ini] . "-" . $rs->fields[$ind_ini + 1] . "-" . $rs->fields[$ind_ini + 2] . " " . $rs->fields[$ind_ini + 3];
+           $retorno['orig'] = $temp;
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'YYYYMMDD2')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "1,2");
+           $temp            = $rs->fields[$ind_ini] . "-" . $rs->fields[$ind_ini + 1] . "-" . $rs->fields[$ind_ini + 2];
+           $retorno['orig'] = $temp;
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'YYYYMM')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "1");
+           $temp            = $rs->fields[$ind_ini] . "-" . $rs->fields[$ind_ini + 1];
+           $retorno['orig'] = $temp;
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'MMDD')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "0,1");
+           $temp            = "0000-" . $rs->fields[$ind_ini] . "-" . $rs->fields[$ind_ini + 1];
+           $retorno['orig'] = $temp;
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'YYYY')
+       {
+           $retorno['orig'] = $rs->fields[$ind_ini];
+           $retorno['fmt']  = $this->GB_date_format($rs->fields[$ind_ini], $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'BIMONTHLY' || $format == 'QUARTER' || $format == 'FOURMONTHS' || $format == 'SEMIANNUAL' || $format == 'WEEK')
+       {
+           $temp            = (substr($rs->fields[$ind_ini], 0, 1) == 0) ? substr($rs->fields[$ind_ini], 1) : $rs->fields[$ind_ini];
+           $retorno['orig'] = $rs->fields[$ind_ini];
+           $retorno['fmt']  = $Prefix_dat . $temp;
+           return $retorno;
+       }
+       if ($format == 'DAYNAME'|| $format == 'YYYYDAYNAME')
+       {
+           if ($format == 'DAYNAME')
+           {
+               $retorno['orig'] = $rs->fields[$ind_ini];
+               $ano             = "";
+               $daynum          = $rs->fields[$ind_ini];
+           }
+           else
+           {
+               $retorno['orig'] = $rs->fields[$ind_ini] . $rs->fields[$ind_ini + 1];
+               $ano             = " " . $rs->fields[$ind_ini];
+               $daynum          = $rs->fields[$ind_ini + 1];
+           }
+           if (in_array(strtolower($this->nm_tpbanco), $this->nm_bases_access) || in_array(strtolower($this->nm_tpbanco), $this->nm_bases_oracle) || in_array(strtolower($this->nm_tpbanco), $this->nm_bases_mssql) || in_array(strtolower($this->nm_tpbanco), $this->nm_bases_db2) || in_array(strtolower($this->nm_tpbanco), $this->nm_bases_progress))
+           {
+               $daynum--;
+           }
+           if (in_array(strtolower($this->nm_tpbanco), $this->nm_bases_mysql))
+           {
+               $daynum = ($daynum == 6) ? 0 : $daynum + 1;
+           }
+           if ($daynum == 0) {
+               $retorno['fmt'] = $Prefix_dat . $this->Nm_lang['lang_days_sund'] . $ano;
+           }
+           if ($daynum == 1) {
+               $retorno['fmt'] = $Prefix_dat . $this->Nm_lang['lang_days_mond'] . $ano;
+           }
+           if ($daynum == 2) {
+               $retorno['fmt'] = $Prefix_dat . $this->Nm_lang['lang_days_tued'] . $ano;
+           }
+           if ($daynum == 3) {
+               $retorno['fmt'] = $Prefix_dat . $this->Nm_lang['lang_days_wend'] . $ano;
+           }
+           if ($daynum == 4) {
+               $retorno['fmt'] = $Prefix_dat . $this->Nm_lang['lang_days_thud'] . $ano;
+           }
+           if ($daynum == 5) {
+               $retorno['fmt'] = $Prefix_dat . $this->Nm_lang['lang_days_frid'] . $ano;
+           }
+           if ($daynum == 6) {
+               $retorno['fmt'] = $Prefix_dat . $this->Nm_lang['lang_days_satd'] . $ano;
+           }
+           return $retorno;
+       }
+       if ($format == 'HH')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "0");
+           $temp            = "0000-00-00 " . $rs->fields[$ind_ini];
+           $retorno['orig'] = $rs->fields[$ind_ini];
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'DD')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "0");
+           $temp            = "0000-00-" . $rs->fields[$ind_ini];
+           $retorno['orig'] = $rs->fields[$ind_ini];
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'MM')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "0");
+           $temp            = "0000-" . $rs->fields[$ind_ini];
+           $retorno['orig'] = $rs->fields[$ind_ini];
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'YYYY')
+       {
+           $temp            = $rs->fields[$ind_ini];
+           $retorno['orig'] = $rs->fields[$ind_ini];
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'YYYYHH')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "1");
+           $temp            = $rs->fields[$ind_ini] . "-00-00 " . $rs->fields[$ind_ini + 1];
+           $retorno['orig'] = $rs->fields[$ind_ini] . $rs->fields[$ind_ini + 1];
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       if ($format == 'YYYYDD')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "1");
+           $temp            = $rs->fields[$ind_ini] . "-00-" . $rs->fields[$ind_ini + 1];
+           $retorno['orig'] = $rs->fields[$ind_ini] . $rs->fields[$ind_ini + 1];
+           $retorno['fmt']  = $this->GB_date_format($temp, $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       elseif ($format == 'YYYYBIMONTHLY' || $format == 'YYYYQUARTER' || $format == 'YYYYFOURMONTHS' || $format == 'YYYYSEMIANNUAL')
+       {
+           $temp            = (substr($rs->fields[$ind_ini + 1], 0, 1) == 0) ? substr($rs->fields[$ind_ini + 1], 1) : $rs->fields[$ind_ini + 1];
+           $retorno['orig'] = $rs->fields[$ind_ini] . $rs->fields[$ind_ini + 1];
+           $retorno['fmt']  = $Prefix_dat . $temp . " " . $rs->fields[$ind_ini];
+           return $retorno;
+       }
+       elseif ($format == 'YYYYWEEK')
+       {
+           $temp            = (substr($rs->fields[$ind_ini + 1], 0, 1) == 0) ? substr($rs->fields[$ind_ini + 1], 1) : $rs->fields[$ind_ini + 1];
+           $retorno['orig'] = (strlen($rs->fields[$ind_ini + 1]) == 1) ? $rs->fields[$ind_ini] . "0" . $rs->fields[$ind_ini + 1] : $rs->fields[$ind_ini] . $rs->fields[$ind_ini + 1];
+           $retorno['fmt']  = $Prefix_dat . $temp . " " . $rs->fields[$ind_ini];
+           return $retorno;
+       }
+       if ($format == 'YYYYHH' || $format == 'YYYYDD')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "1");
+           $retorno['orig'] = $rs->fields[$ind_ini] . $rs->fields[$ind_ini + 1];
+           $retorno['fmt']  = $rs->fields[$ind_ini] . $_SESSION['scriptcase']['reg_conf']['date_sep'] . $rs->fields[$ind_ini + 1];
+           return $retorno;
+       }
+       elseif ($format == 'HHIISS')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "0,1,2");
+           $retorno['orig'] = $rs->fields[$ind_ini] . ":" . $rs->fields[$ind_ini + 1] . ":" . $rs->fields[$ind_ini + 2];
+           $retorno['fmt']  = $this->GB_date_format("0000-00-00 " . $retorno['orig'], $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       elseif ($format == 'HHII')
+       {
+           $this->Ajust_fields($ind_ini, $rs, "0,1");
+           $retorno['orig'] = $rs->fields[$ind_ini] . ":" . $rs->fields[$ind_ini + 1];
+           $retorno['fmt']  = $this->GB_date_format("0000-00-00 " . $retorno['orig'], $format, $Prefix_dat, $conf_region, $mask);
+           return $retorno;
+       }
+       else
+       {
+           $retorno['orig'] = $rs->fields[$ind_ini];
+           $retorno['fmt']  = $rs->fields[$ind_ini];
+           return $retorno;
+       }
+   }
+   function Ajust_fields($ind_ini, &$rs, $parts)
+   {
+       $prep = explode(",", $parts);
+       foreach ($prep as $ind)
+       {
+           $ind_ok = $ind_ini + $ind;
+           $rs->fields[$ind_ok] = (int) $rs->fields[$ind_ok];
+           if (strlen($rs->fields[$ind_ok]) == 1)
+           {
+               $rs->fields[$ind_ok] = "0" . $rs->fields[$ind_ok];
+           }
+       }
+   }
+   function Get_date_order_groupby($sql_def, $order, $format="", $order_old="")
+   {
+       $order      = " " . trim($order);
+       $order_old .= (!empty($order_old)) ? ", " : "";
+       return $order_old . $sql_def . $order;
+   }
+}
+//===============================================================================
+//
+class LancamentoReceita_Boleto_Lst_sub_css
+{
+   function __construct()
+   {
+      global $script_case_init;
+      $str_schema_all = (isset($_SESSION['scriptcase']['str_schema_all']) && !empty($_SESSION['scriptcase']['str_schema_all'])) ? $_SESSION['scriptcase']['str_schema_all'] : "Liga_Soft_sm/Liga_Soft_sm";
+      if ($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['SC_herda_css'] == "N")
+      {
+          $_SESSION['sc_session'][$script_case_init]['SC_sub_css']['LancamentoReceita_Boleto_Lst']    = $str_schema_all . "_grid.css";
+          $_SESSION['sc_session'][$script_case_init]['SC_sub_css_bw']['LancamentoReceita_Boleto_Lst'] = $str_schema_all . "_grid_bw.css";
+      }
+   }
+}
+//
+class LancamentoReceita_Boleto_Lst_apl
+{
+   var $Ini;
+   var $Erro;
+   var $Db;
+   var $Lookup;
+   var $nm_location;
+   var $NM_ajax_flag  = false;
+   var $NM_ajax_opcao = '';
+   var $grid;
+   var $Res;
+   var $Graf;
+   var $pdf;
+   var $xls;
+   var $xml;
+   var $json;
+   var $csv;
+   var $rtf;
+//
+//----- 
+   function prep_modulos($modulo)
+   {
+      $this->$modulo->Ini = $this->Ini;
+      $this->$modulo->Db = $this->Db;
+      $this->$modulo->Erro = $this->Erro;
+      $this->$modulo->Lookup = $this->Lookup;
+      $this->$modulo->arr_buttons = $this->arr_buttons;
+   }
+//
+
+function getPaddingFromCss($cssRule)
+{
+    $paddingInfo = [
+        'top' => '',
+        'bottom' => '',
+        'left' => '',
+        'right' => '',
+    ];
+
+    $cssRuleParts = explode(' ', trim($cssRule));
+    $partsCount = count($cssRuleParts);
+
+    if (4 == $partsCount) {
+        $paddingInfo['top'] = $cssRuleParts[0];
+        $paddingInfo['right'] = $cssRuleParts[1];
+        $paddingInfo['bottom'] = $cssRuleParts[2];
+        $paddingInfo['left'] = $cssRuleParts[3];
+    } elseif (3 == $partsCount) {
+        $paddingInfo['top'] = $cssRuleParts[0];
+        $paddingInfo['right'] = $cssRuleParts[1];
+        $paddingInfo['bottom'] = $cssRuleParts[2];
+        $paddingInfo['left'] = $cssRuleParts[1];
+    } elseif (2 == $partsCount) {
+        $paddingInfo['top'] = $cssRuleParts[0];
+        $paddingInfo['right'] = $cssRuleParts[1];
+        $paddingInfo['bottom'] = $cssRuleParts[0];
+        $paddingInfo['left'] = $cssRuleParts[1];
+    } else {
+        $paddingInfo['top'] = $cssRuleParts[0];
+        $paddingInfo['right'] = $cssRuleParts[0];
+        $paddingInfo['bottom'] = $cssRuleParts[0];
+        $paddingInfo['left'] = $cssRuleParts[0];
+    }
+
+    return $paddingInfo;
+}
+
+//----- 
+   function controle($linhas = 0)
+   {
+      global $nm_saida, $nm_url_saida, $script_case_init, $nmgp_parms_pdf, $nmgp_graf_pdf, $nm_apl_dependente, $nmgp_navegator_print, $nmgp_tipo_print, $nmgp_cor_print, $nmgp_cor_word, $Det_use_pass_pdf, $Det_pdf_zip, $NMSC_conf_apl, $NM_contr_var_session, $NM_run_iframe, $SC_module_export, $nmgp_password,
+             $glo_senha_protect, $nmgp_opcao, $nm_call_php, $rec, $nmgp_quant_linhas, $nmgp_fast_search, $nmgp_cond_fast_search, $nmgp_arg_fast_search, $nmgp_ordem;
+
+      $Parms_form_pdf = false;
+      if (isset($_SESSION['sc_session']['scriptcase']['embutida_form_pdf']['LancamentoReceita_Boleto_Lst']))
+      { 
+          $GLOBALS['nmgp_parms'] = $_SESSION['sc_session']['scriptcase']['embutida_form_pdf']['LancamentoReceita_Boleto_Lst'];
+          $Parms_form_pdf = true;
+      } 
+      if ($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'] || $Parms_form_pdf)
+      { 
+          if (!empty($GLOBALS['nmgp_parms'])) 
+          { 
+              $GLOBALS['nmgp_parms'] = str_replace("@aspass@", "'", $GLOBALS['nmgp_parms']);
+              $todox = str_replace("?#?@?@?", "?#?@ ?@?", $GLOBALS["nmgp_parms"]);
+              $todo  = explode("?@?", $todox);
+              foreach ($todo as $param)
+              {
+                   $cadapar = explode("?#?", $param);
+                   if (1 < sizeof($cadapar))
+                   {
+                       if (substr($cadapar[0], 0, 11) == "SC_glo_par_")
+                       {
+                           $cadapar[0] = substr($cadapar[0], 11);
+                           $cadapar[1] = $_SESSION[$cadapar[1]];
+                       }
+                       if (isset($GLOBALS['sc_conv_var'][$cadapar[0]]))
+                       {
+                           $cadapar[0] = $GLOBALS['sc_conv_var'][$cadapar[0]];
+                       }
+                       elseif (isset($GLOBALS['sc_conv_var'][strtolower($cadapar[0])]))
+                       {
+                           $cadapar[0] = $GLOBALS['sc_conv_var'][strtolower($cadapar[0])];
+                       }
+                       nm_limpa_str_LancamentoReceita_Boleto_Lst($cadapar[1]);
+                       nm_protect_num_LancamentoReceita_Boleto_Lst($cadapar[0], $cadapar[1]);
+                       if ($cadapar[1] == "@ ") {$cadapar[1] = trim($cadapar[1]); }
+                       $Tmp_par   = $cadapar[0];
+                       $$Tmp_par = $cadapar[1];
+                       if ($Tmp_par == "nmgp_opcao")
+                       {
+                           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'] = $cadapar[1];
+                       }
+                   }
+              }
+          } 
+          if (!isset($varIdTenacidade) && isset($varidtenacidade)) 
+          {
+             $varIdTenacidade = $varidtenacidade;
+          }
+          if (isset($varIdTenacidade)) 
+          {
+              $_SESSION['varIdTenacidade'] = $varIdTenacidade;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdTenacidade"]);
+          }
+          if (!isset($varPrimeiraVez) && isset($varprimeiravez)) 
+          {
+             $varPrimeiraVez = $varprimeiravez;
+          }
+          if (isset($varPrimeiraVez)) 
+          {
+              $_SESSION['varPrimeiraVez'] = $varPrimeiraVez;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrimeiraVez"]);
+          }
+          if (!isset($varIdUsuario) && isset($varidusuario)) 
+          {
+             $varIdUsuario = $varidusuario;
+          }
+          if (isset($varIdUsuario)) 
+          {
+              $_SESSION['varIdUsuario'] = $varIdUsuario;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdUsuario"]);
+          }
+          if (!isset($varPrivAdmin) && isset($varprivadmin)) 
+          {
+             $varPrivAdmin = $varprivadmin;
+          }
+          if (isset($varPrivAdmin)) 
+          {
+              $_SESSION['varPrivAdmin'] = $varPrivAdmin;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrivAdmin"]);
+          }
+          if (isset($total_chked)) 
+          {
+              $_SESSION['total_chked'] = $total_chked;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["total_chked"]);
+          }
+          if (isset($i)) 
+          {
+              $_SESSION['i'] = $i;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["i"]);
+          }
+          if (!isset($varRemetente) && isset($varremetente)) 
+          {
+             $varRemetente = $varremetente;
+          }
+          if (isset($varRemetente)) 
+          {
+              $_SESSION['varRemetente'] = $varRemetente;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varRemetente"]);
+          }
+          if (!isset($nossoNumeroRecebido) && isset($nossonumerorecebido)) 
+          {
+             $nossoNumeroRecebido = $nossonumerorecebido;
+          }
+          if (isset($nossoNumeroRecebido)) 
+          {
+              $_SESSION['nossoNumeroRecebido'] = $nossoNumeroRecebido;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["nossoNumeroRecebido"]);
+          }
+          if (isset($parm1)) 
+          {
+              $_SESSION['parm1'] = $parm1;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["parm1"]);
+          }
+          if (!isset($varDiretorioArquivo) && isset($vardiretorioarquivo)) 
+          {
+             $varDiretorioArquivo = $vardiretorioarquivo;
+          }
+          if (isset($varDiretorioArquivo)) 
+          {
+              $_SESSION['varDiretorioArquivo'] = $varDiretorioArquivo;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varDiretorioArquivo"]);
+          }
+          if (!isset($varServidorSMTP) && isset($varservidorsmtp)) 
+          {
+             $varServidorSMTP = $varservidorsmtp;
+          }
+          if (isset($varServidorSMTP)) 
+          {
+              $_SESSION['varServidorSMTP'] = $varServidorSMTP;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varServidorSMTP"]);
+          }
+          if (!isset($varUsuarioSMTP) && isset($varusuariosmtp)) 
+          {
+             $varUsuarioSMTP = $varusuariosmtp;
+          }
+          if (isset($varUsuarioSMTP)) 
+          {
+              $_SESSION['varUsuarioSMTP'] = $varUsuarioSMTP;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varUsuarioSMTP"]);
+          }
+          if (!isset($varSenhaSMTP) && isset($varsenhasmtp)) 
+          {
+             $varSenhaSMTP = $varsenhasmtp;
+          }
+          if (isset($varSenhaSMTP)) 
+          {
+              $_SESSION['varSenhaSMTP'] = $varSenhaSMTP;
+              nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varSenhaSMTP"]);
+          }
+      } 
+      if ($Parms_form_pdf)
+      { 
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_pdf'] = true;
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form'] = true;
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_full'] = false;
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_pai'] = "";
+      } 
+      $_SESSION['scriptcase']['sc_ctl_ajax'] = 'part';
+      if (!function_exists("SC_Mail_Image"))
+      {
+          include_once("LancamentoReceita_Boleto_Lst_sc_mail_image.php");
+      }
+      if (!$this->Ini || isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_ibase'])) 
+      { 
+          $this->Ini = new LancamentoReceita_Boleto_Lst_ini(); 
+          $this->Ini->init();
+      } 
+      if (in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_ibase) && $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      {
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_ibase'] = true;
+      }
+      $this->Ini->Proc_print      = false;
+      $this->Ini->Export_det_zip  = false;
+      $this->Ini->Export_html_zip = false;
+      $this->Ini->Export_zip      = false;
+      $this->Ini->Export_img_zip  = false;
+      $this->Ini->Img_export_zip  = array();
+      $this->Ini->Embutida_iframe = (strpos($this->Ini->sc_page, "-") !== false) ? true : false;
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['emb_lig_aba'] = array();
+      $this->Change_Menu = false;
+      if (!isset($nmgp_opcao)) {
+         $nmgp_opcao = "";
+      }
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'])) {
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "";
+      }
+      if ($nmgp_opcao != "ajax_navigate" && $nmgp_opcao != "ajax_detalhe" && isset($_SESSION['scriptcase']['menu_atual']) && (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['sc_outra_jan']) || !$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['sc_outra_jan'] || $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['sc_modal']))
+      {
+          $this->sc_init_menu = "x";
+          if (isset($_SESSION['scriptcase'][$_SESSION['scriptcase']['menu_atual']]['sc_init']['LancamentoReceita_Boleto_Lst']))
+          {
+              $this->sc_init_menu = $_SESSION['scriptcase'][$_SESSION['scriptcase']['menu_atual']]['sc_init']['LancamentoReceita_Boleto_Lst'];
+          }
+          elseif (isset($_SESSION['scriptcase']['menu_apls'][$_SESSION['scriptcase']['menu_atual']]))
+          {
+              foreach ($_SESSION['scriptcase']['menu_apls'][$_SESSION['scriptcase']['menu_atual']] as $init => $resto)
+              {
+                  if ($this->Ini->sc_page == $init)
+                  {
+                      $this->sc_init_menu = $init;
+                      break;
+                  }
+              }
+          }
+          if (!$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'] && $this->Ini->sc_page == $this->sc_init_menu && !isset($_SESSION['scriptcase']['menu_apls'][$_SESSION['scriptcase']['menu_atual']][$this->sc_init_menu]['LancamentoReceita_Boleto_Lst']))
+          {
+               $_SESSION['scriptcase']['menu_apls'][$_SESSION['scriptcase']['menu_atual']][$this->sc_init_menu]['LancamentoReceita_Boleto_Lst']['link'] = $this->Ini->sc_protocolo . $this->Ini->server . $this->Ini->path_link . "" . SC_dir_app_name('LancamentoReceita_Boleto_Lst') . "/LancamentoReceita_Boleto_Lst.php";
+               $_SESSION['scriptcase']['menu_apls'][$_SESSION['scriptcase']['menu_atual']][$this->sc_init_menu]['LancamentoReceita_Boleto_Lst']['label'] = "" . $this->Ini->Nm_lang['lang_othr_grid_titl'] . " Geração de Boletos e CNAB";
+               $this->Change_Menu = true;
+          }
+          elseif ($this->Ini->sc_page == $this->sc_init_menu)
+          {
+              $achou = false;
+              foreach ($_SESSION['scriptcase']['menu_apls'][$_SESSION['scriptcase']['menu_atual']][$this->sc_init_menu] as $apl => $parms)
+              {
+                  if ($apl == "LancamentoReceita_Boleto_Lst")
+                  {
+                      $achou = true;
+                  }
+                  elseif ($achou)
+                  {
+                      unset($_SESSION['scriptcase']['menu_apls'][$_SESSION['scriptcase']['menu_atual']][$this->sc_init_menu][$apl]);
+                      $this->Change_Menu = true;
+                  }
+              }
+          }
+      }
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      {
+          $this->Change_Menu = false;
+      }
+      $this->Db = $this->Ini->Db; 
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['nm_tpbanco'] = $this->Ini->nm_tpbanco;
+      $this->nm_data = new nm_data("pt_br");
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      { 
+          include_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_erro.class.php"); 
+      } 
+      else 
+      { 
+          include_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_erro.class.php"); 
+      } 
+      $this->Erro      = new LancamentoReceita_Boleto_Lst_erro();
+      $this->Erro->Ini = $this->Ini;
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      { 
+          require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_lookup.class.php"); 
+      } 
+      else 
+      { 
+          require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_lookup.class.php"); 
+      } 
+      $this->Lookup       = new LancamentoReceita_Boleto_Lst_lookup();
+      $this->Lookup->Db   = $this->Db;
+      $this->Lookup->Ini  = $this->Ini;
+      $this->Lookup->Erro = $this->Erro;
+      $dir_raiz          = strrpos($_SERVER['PHP_SELF'],"/") ;  
+      $dir_raiz          = substr($_SERVER['PHP_SELF'], 0, $dir_raiz + 1) ;  
+      $this->nm_location = $this->Ini->sc_protocolo . $this->Ini->server . $dir_raiz . "LancamentoReceita_Boleto_Lst.php" ; 
+      if (!$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      {
+          $this->Ini->sc_Include($this->Ini->path_libs . "/nm_trata_saida.php", "C", "nm_trata_saida") ; 
+          $nm_saida = new nm_trata_saida();
+          $ajax_opc_print = false;
+          if (isset($_POST['nmgp_opcao']) && $_POST['nmgp_opcao'] == "ajax_export")
+          {
+              $this->Ini->sc_export_ajax = true;
+              $this->Ini->Arr_result     = array();
+              $nmgp_opcao                = $_POST['export_opc'];
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = $nmgp_opcao;
+              if ($nmgp_opcao == "print" || $nmgp_opcao == "res_print" || $nmgp_opcao == "det_print")
+              {
+                  $ajax_opc_print   = true;
+                  $nm_arquivo_print = "/sc_LancamentoReceita_Boleto_Lst_" . session_id();
+                  $nm_saida->seta_arquivo($this->Ini->root . $this->Ini->path_imag_temp . $nm_arquivo_print . ".html");
+                  $this->Ini->sc_export_ajax_img = true;
+              }
+              ob_start();
+          }
+      }
+      if (!$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      {
+          $_SESSION['scriptcase']['saida_var'] = false;
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['ajax_nav'] = false;
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['scroll_navigate'] = false;
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['scroll_navigate_reload'] = false;
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['scroll_navigate_app'] = false;
+          if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['scroll_navigate_header_row']))
+          {
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['scroll_navigate_header_row'] = 1;
+          }
+          if (isset($_POST['nmgp_opcao']) && ($_POST['nmgp_opcao'] == "ajax_navigate" || $_POST['nmgp_opcao'] == "ajax_detalhe"))
+          {
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['ajax_nav'] = true;
+              $_SESSION['scriptcase']['saida_var']  = true;
+              $_SESSION['scriptcase']['saida_html'] = "";
+              $this->Ini->Arr_result = array();
+              $nmgp_opcao = $_POST['opc'];
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = $nmgp_opcao;
+              if (isset($_POST['parm']) && $_POST['parm'] == "save_grid")
+              {
+                  $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['save_grid'] = true;
+              }
+              if ($nmgp_opcao == "edit" && isset($_POST['parm']) && $_POST['parm'] == "fim")
+              {
+                  $rec = $_POST['parm'];
+              }
+              if ($nmgp_opcao == "rec" || $nmgp_opcao == "muda_rec_linhas")
+              {
+                  $rec = $_POST['parm'];
+              }
+              if ($nmgp_opcao == "muda_qt_linhas")
+              {
+                  $nmgp_quant_linhas  = strtolower($_POST['parm']);
+              }
+              if (($_POST['opc'] == "igual" || $_POST['opc'] == "resumo") && isset($_POST['parm']) && ($_POST['parm'] == "reload" || $_POST['parm'] == "breload"))
+              {
+                  $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['refresh_interativ'] = "S";
+                  $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['contr_total_geral'] = "NAO";
+                  $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['contr_array_resumo'] = "NAO";
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['tot_geral']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['arr_total']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['using_summary_cache']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['pivot_group_by']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['pivot_x_axys']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['pivot_y_axys']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['pivot_fill']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['pivot_order']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['pivot_order_col']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['pivot_order_level']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['pivot_order_sort']);
+                  unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['pivot_tabular']);
+              }
+              if ($nmgp_opcao == "fast_search")
+              {
+                  $_POST['parm'] = str_replace("__NM_PLUS__", "+", $_POST['parm']);
+                  $_POST['parm'] = str_replace("__NM_AMP__", "&", $_POST['parm']);
+                  $_POST['parm'] = str_replace("__NM_PRC__", "%", $_POST['parm']);
+                  $temp = explode("_SCQS_", $_POST['parm']);
+                  $nmgp_fast_search      = (isset($temp[0])) ? $temp[0] : "";
+                  $nmgp_cond_fast_search = (isset($temp[1])) ? $temp[1] : "";
+                  $nmgp_arg_fast_search  = (isset($temp[2])) ? $temp[2] : "";
+              }
+              if ($nmgp_opcao == "ordem")
+              {
+                  $nmgp_ordem = $_POST['parm'];
+              }
+          }
+      }
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Gb_date_format'])) 
+      {
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Gb_date_format'] = array();
+      }
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_All_Groupby'] = array('sc_free_total' => 'grid');
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Groupby_hide'])) 
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Groupby_hide'] = array();
+      }
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Ind_Groupby'])) 
+      { 
+          foreach ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_All_Groupby'] as $Ind => $Tp)
+          {
+              if (!in_array($Ind, $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Groupby_hide'])) 
+              { 
+                  break;
+              }
+          }
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Ind_Groupby'] = $Ind;
+      } 
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['Labels_GB'] = array();
+      if  ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Ind_Groupby'] == "sc_free_total")
+      {
+      }
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']))
+      {
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb'] = array();
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['all']['SC_Ind_Groupby'] = "";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['all']['SC_Gb_Free_cmp'] = array();
+          if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Ind_Groupby']))
+          {
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['all']['SC_Ind_Groupby'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Ind_Groupby'];
+          }
+          if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Gb_Free_cmp']))
+          {
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['all']['SC_Gb_Free_cmp'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Gb_Free_cmp'];
+          }
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['res']['summarizing_fields_display'] = array();
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['res']['summarizing_fields_order']   = array();
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['res']['summarizing_fields_control'] = array();
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['res']['pivot_x_axys']               = array();
+          if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['summarizing_fields_display']))
+          {
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['res']['summarizing_fields_display'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['summarizing_fields_display'];
+          }
+          if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['summarizing_fields_order']))
+          {
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['res']['summarizing_fields_order'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['summarizing_fields_order'];
+          }
+          if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['summarizing_fields_control']))
+          {
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['res']['summarizing_fields_control'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['summarizing_fields_control'];
+          }
+          if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pivot_x_axys']))
+          {
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dados_orig_gb']['res']['pivot_x_axys'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pivot_x_axys'];
+          }
+      }
+      $this->Ini->Apl_resumo  = "LancamentoReceita_Boleto_Lst_resumo_" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Ind_Groupby'] . ".class.php"; 
+      $this->Ini->Apl_grafico = "LancamentoReceita_Boleto_Lst_grafico_" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_Ind_Groupby'] . ".class.php"; 
+      $_SESSION['sc_session']['path_third'] = $this->Ini->path_prod . "/third";
+      $_SESSION['sc_session']['real_path_third'] = $this->Ini->path_third;
+      $_SESSION['sc_session']['path_prod']  = $this->Ini->path_prod . "/third";
+      $_SESSION['sc_session']['path_img']   = $this->Ini->path_img_global;
+      $_SESSION['sc_session']['path_libs']  = $this->Ini->path_libs;
+      if (is_dir($this->Ini->path_aplicacao . 'img'))
+      {
+          $Res_dir_img = @opendir($this->Ini->path_aplicacao . 'img');
+          if ($Res_dir_img)
+          {
+              while (FALSE !== ($Str_arquivo = @readdir($Res_dir_img))) 
+              {
+                 if (@is_file($this->Ini->path_aplicacao . 'img/' . $Str_arquivo) && '.' != $Str_arquivo && '..' != $this->Ini->path_aplicacao . 'img/' . $Str_arquivo)
+                 {
+                     @unlink($this->Ini->path_aplicacao . 'img/' . $Str_arquivo);
+                 }
+              }
+          }
+          @closedir($Res_dir_img);
+          rmdir($this->Ini->path_aplicacao . 'img');
+      }
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['xls_return']  = ($nmgp_opcao == "xls")  ? "volta_grid" : "resumo"; 
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['csv_return']  = ($nmgp_opcao == "csv")  ? "volta_grid" : "resumo"; 
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['xml_return']  = ($nmgp_opcao == "xml")  ? "volta_grid" : "resumo"; 
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['json_return'] = ($nmgp_opcao == "json") ? "volta_grid" : "resumo"; 
+      $this->Ini->SC_module_export = (isset($SC_module_export) && !empty($SC_module_export)) ? $SC_module_export : "grid,resume,chart"; 
+      if (empty($this->Ini->SC_module_export) && $nmgp_opcao == 'pdf')
+      { 
+          $this->Ini->SC_module_export = "grid,resume";
+      }
+      elseif (empty($this->Ini->SC_module_export) && $nmgp_opcao == 'print')
+      { 
+          $this->Ini->SC_module_export = "grid";
+      }
+      elseif (empty($this->Ini->SC_module_export) && $nmgp_opcao == 'pdf_res')
+      { 
+          $this->Ini->SC_module_export = "resume,chart";
+      }
+      elseif (empty($this->Ini->SC_module_export) && $nmgp_opcao == 'res_print')
+      { 
+          $this->Ini->SC_module_export = "resume";
+      }
+      if (empty($this->Ini->SC_module_export) && $nmgp_opcao == 'xls')
+      { 
+          $this->Ini->SC_module_export = "grid";
+      }
+      elseif (empty($this->Ini->SC_module_export) && $nmgp_opcao == 'xls_res')
+      { 
+          $this->Ini->SC_module_export = "resume";
+      }
+      if ($nmgp_opcao == 'print' || $nmgp_opcao == 'res_print') {
+          $this->Ini->Proc_print = true;
+          if (!empty($nmgp_password)) {
+              $this->Ini->Export_html_zip = true;
+          }
+          $_SESSION['scriptcase']['proc_mobile'] = false;
+          if ($nmgp_opcao == 'print') {
+              $this->ret_print = "volta_grid";
+          }
+          else {
+              $this->ret_print = "resumo";
+          }
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['print_return'] = $this->ret_print;
+      }
+      if (!$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      {
+          if ($this->Ini->Export_html_zip)
+          {
+              $this->Ini->Export_img_zip = true;
+              if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['html_name']))
+              {
+                  $nm_arquivo_html = "/" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['html_name'];
+              }
+              elseif ($nmgp_opcao == 'print' && strpos(" " . $this->Ini->SC_module_export, "grid") !== false)
+              {
+                  $nm_arquivo_html = "/sc_LancamentoReceita_Boleto_Lst_" . session_id() . ".html";
+              }
+              else
+              {
+                  $nm_arquivo_html = "/sc_LancamentoReceita_Boleto_Lst_res_" . session_id() . ".html";
+              }
+              $nm_saida->seta_arquivo($this->Ini->root . $this->Ini->path_imag_temp . $nm_arquivo_html);
+          }
+      }
+      if ($nmgp_opcao == "doc_word") {  
+          $this->ret_word = "volta_grid";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_return'] = $this->ret_word;
+          $_SESSION['scriptcase']['proc_mobile'] = false;
+      }
+      if ($nmgp_opcao == "doc_word_res") {  
+          $this->ret_word = "resumo";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_return'] = $this->ret_word;
+          $_SESSION['scriptcase']['proc_mobile'] = false;
+      }
+      if ($nmgp_opcao == "doc_word_res" && strpos(" " . $this->Ini->SC_module_export, "grid") !== false)  
+      { 
+          $nmgp_opcao = "doc_word"; 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "doc_word"; 
+      }
+      elseif ($nmgp_opcao == "doc_word" && strpos(" " . $this->Ini->SC_module_export, "grid") === false)  
+      { 
+          $nmgp_opcao = "doc_word_res"; 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "doc_word_res"; 
+      }
+      if ($nmgp_opcao == "xls_res" && strpos(" " . $this->Ini->SC_module_export, "grid") !== false)  
+      { 
+          $nmgp_opcao = "xls"; 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "xls"; 
+      }
+      elseif ($nmgp_opcao == "xls" && strpos(" " . $this->Ini->SC_module_export, "grid") === false)  
+      { 
+          $nmgp_opcao = "xls_res"; 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "xls_res"; 
+      }
+      if ($nmgp_opcao == "csv_res" && strpos(" " . $this->Ini->SC_module_export, "grid") !== false)  
+      { 
+          $nmgp_opcao = "csv"; 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "csv"; 
+      }
+      elseif ($nmgp_opcao == "csv" && strpos(" " . $this->Ini->SC_module_export, "grid") === false)  
+      { 
+          $nmgp_opcao = "csv_res"; 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "csv_res"; 
+      }
+      if ($nmgp_opcao == "xml_res" && strpos(" " . $this->Ini->SC_module_export, "grid") !== false)  
+      { 
+          $nmgp_opcao = "xml"; 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "xml"; 
+      }
+      elseif ($nmgp_opcao == "xml" && strpos(" " . $this->Ini->SC_module_export, "grid") === false)  
+      { 
+          $nmgp_opcao = "xml_res"; 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "xml_res"; 
+      }
+      if ($nmgp_opcao == "json_res" && strpos(" " . $this->Ini->SC_module_export, "grid") !== false)  
+      { 
+          $nmgp_opcao = "json"; 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "json"; 
+      }
+      elseif ($nmgp_opcao == "json" && strpos(" " . $this->Ini->SC_module_export, "grid") === false)  
+      { 
+          $nmgp_opcao = "json_res"; 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "json_res"; 
+      }
+      $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['skip_charts'] = (strpos(" " . $this->Ini->SC_module_export, "chart") !== false) ? false : true;
+      $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['skip_summary'] = false;
+      if ('chart' == $this->Ini->SC_module_export) {
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['skip_summary'] = true;
+          $this->Ini->SC_module_export = 'resume,chart';
+      }
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_det'] = false;
+      if ($nmgp_opcao == 'pdf')
+      { 
+          if (strpos(" " . $this->Ini->SC_module_export, "grid") === false && (strpos(" " . $this->Ini->SC_module_export, "resume") !== false || strpos(" " . $this->Ini->SC_module_export, "chart") !== false))
+          { 
+              $nmgp_opcao = 'pdf_res';
+          } 
+      } 
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_res'] = false;
+      if ($nmgp_opcao == 'pdf_res')
+      {
+          if (strpos(" " . $this->Ini->SC_module_export, "grid") !== false)
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = 'pdf';
+              $nmgp_opcao = 'pdf';
+          }
+          else
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_res'] = true;
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = 'pdf';
+              $nmgp_opcao = 'pdf';
+              $rRFP = fopen($this->Ini->root . $this->Ini->path_imag_temp . '/sc_pb_' . session_id() . '.tmp', "w");
+              fwrite($rRFP, "PDF\n");
+              fwrite($rRFP, "\n");
+              fwrite($rRFP, "\n");
+              fwrite($rRFP, "100\n");
+              $lang_protect = $this->Ini->Nm_lang['lang_pdff_gnrt'];
+              if (!NM_is_utf8($lang_protect))
+              {
+                  $lang_protect = sc_convert_encoding($lang_protect, "UTF-8", $_SESSION['scriptcase']['charset']);
+              }
+              fwrite($rRFP, 90 . "_#NM#_" . $lang_protect . "...\n");
+              fclose($rRFP);
+          }
+      }
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['conf_chart_level'] = "S";
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida']))
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida']      = false;
+      } 
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_grid']))
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_grid'] = false;
+      } 
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_init']))
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_init'] = false;
+      } 
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_label']))
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_label'] = false;
+      } 
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['cab_embutida']))
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['cab_embutida'] = "";
+      } 
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_pdf']))
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_pdf'] = "";
+      } 
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_treeview']))
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_treeview'] = false;
+      } 
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_opcao']))
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_opcao'] = "";
+      } 
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['proc_pdf'] = (!$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'] && ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "pdf" || $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "pdf_res")) ? true : false;
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['proc_pdf']) {
+          $_SESSION['scriptcase']['proc_mobile'] = false;
+      } 
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['proc_pdf_vert'] = false;
+      include("../_lib/css/" . $this->Ini->str_schema_all . "_form.php");
+      $this->Ini->Msg_ico_title = (isset($str_msg_ico_title) && !empty($str_msg_ico_title)) ? $str_msg_ico_title : "";
+      $this->Ini->Msg_ico_body  = (isset($str_msg_ico_body) && !empty($str_msg_ico_body))   ? $str_msg_ico_body  : "";
+      include("../_lib/css/" . $this->Ini->str_schema_all . "_grid.php");
+      $this->Ini->Tree_img_col    = trim($str_tree_col);
+      $this->Ini->Tree_img_exp    = trim($str_tree_exp);
+      $this->Ini->scGridRefinedSearchExpandFAIcon    = trim($scGridRefinedSearchExpandFAIcon);
+      $this->Ini->scGridRefinedSearchCollapseFAIcon    = trim($scGridRefinedSearchCollapseFAIcon);
+      $this->Ini->str_chart_theme = (isset($str_chart_theme)?$str_chart_theme:'');
+      $this->Ini->Str_btn_grid    = trim($str_button) . "/" . trim($str_button) . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".php";
+      $this->Ini->Str_btn_css     = trim($str_button) . "/" . trim($str_button) . ".css";
+      include($this->Ini->path_btn . $this->Ini->Str_btn_grid);
+      $this->arr_buttons['group_group_2']= array(
+          'value'            => "Ações",
+          'hint'             => "",
+          'type'             => "button",
+          'display'          => "only_text",
+          'display_position' => "text_right",
+          'image'            => "",
+          'fontawesomeicon'  => "fas fa-cog",
+          'has_fa'           => true,
+          'content_icons'    => false,
+          'style'            => "default",
+      );
+
+      $this->arr_buttons['group_group_3']= array(
+          'value'            => "Exportar",
+          'hint'             => "",
+          'type'             => "button",
+          'display'          => "only_text",
+          'display_position' => "text_right",
+          'image'            => "",
+          'fontawesomeicon'  => "fas fa-cog",
+          'has_fa'           => true,
+          'content_icons'    => false,
+          'style'            => "default",
+      );
+
+      $this->arr_buttons['group_group_2']= array(
+          'value'            => "Exportar",
+          'hint'             => "",
+          'type'             => "button",
+          'display'          => "only_text",
+          'display_position' => "text_right",
+          'image'            => "",
+          'fontawesomeicon'  => "fas fa-cog",
+          'has_fa'           => true,
+          'content_icons'    => false,
+          'style'            => "default",
+      );
+
+      $this->arr_buttons['group_group_1']= array(
+          'value'            => "" . $this->Ini->Nm_lang['lang_btns_expt'] . "",
+          'hint'             => "" . $this->Ini->Nm_lang['lang_btns_expt'] . "",
+          'type'             => "button",
+          'display'          => "text_fontawesomeicon",
+          'display_position' => "text_right",
+          'image'            => "scriptcase__NM__export.png",
+          'fontawesomeicon'  => "fas fa-download",
+          'has_fa'           => true,
+          'content_icons'    => false,
+          'style'            => "default",
+      );
+
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida']) || !$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      { 
+      $this->Ini->Img_sep_grid             = "/" . trim($str_toolbar_separator);
+      $this->Ini->grid_table_width         = (!isset($str_grid_table_width) || "" == trim($str_grid_table_width)) ? "" : $str_grid_table_width;
+      $this->Ini->Label_sort_pos           = trim($str_label_sort_pos);
+      $this->Ini->Label_sort               = trim($str_label_sort);
+      $this->Ini->Label_sort_asc           = trim($str_label_sort_asc);
+      $this->Ini->Label_sort_desc          = trim($str_label_sort_desc);
+      $this->Ini->Label_summary_sort_pos   = trim($str_resume_label_sort_pos);
+      $this->Ini->Label_summary_sort       = trim($str_resume_label_sort);
+      $this->Ini->Label_summary_sort_asc   = trim($str_resume_label_sort_asc);
+      $this->Ini->Label_summary_sort_desc  = trim($str_resume_label_sort_desc);
+      $this->Ini->Sum_ico_line             = trim($sum_ico_line);
+      $this->Ini->Sum_ico_column           = trim($sum_ico_column);
+      $this->Ini->ajax_div_icon            = trim($ajax_div_icon);
+      $this->Ini->Str_toolbarnav_separator = '/' . trim($str_toolbarnav_separator);
+      $this->Ini->Img_qs_search            = '' != trim($img_qs_search)        ? trim($img_qs_search)        : 'scriptcase__NM__qs_lupa.png';
+      $this->Ini->Img_qs_clean             = '' != trim($img_qs_clean)         ? trim($img_qs_clean)         : 'scriptcase__NM__qs_close.png';
+      $this->Ini->Str_qs_image_padding     = '' != trim($str_qs_image_padding) ? trim($str_qs_image_padding) : '0';
+      $this->Ini->App_div_tree_img_col     = trim($app_div_str_tree_col);
+      $this->Ini->App_div_tree_img_exp     = trim($app_div_str_tree_exp);
+      $this->Ini->Bubble_tail              = trim($str_bubble_tail);
+      $this->Ini->refinedsearch_hide       = trim($refinedsearch_hide);
+      $this->Ini->refinedsearch_show       = trim($refinedsearch_show);
+      $this->Ini->refinedsearch_close      = trim($refinedsearch_close);
+      $this->Ini->refinedsearch_values_separator          = trim($refinedsearch_values_separator);
+      $this->Ini->refinedsearch_campo_close_icon          = trim($refinedsearch_campo_close_icon);
+      $this->Ini->grid_moldura_padding = $this->getPaddingFromCss($grid_moldura_padding);
+      $this->Ini->grid_table_margin = $this->getPaddingFromCss($grid_table_margin);
+      $this->Ini->grid_link_margin_top = '';
+      if ('' != $this->Ini->grid_table_margin['top']) {
+          $this->Ini->grid_link_margin_top = $this->Ini->grid_table_margin['top'];
+      } elseif ('' != $this->Ini->grid_moldura_padding['top']) {
+          $this->Ini->grid_link_margin_top = $this->Ini->grid_moldura_padding['top'];
+      }
+          $this->Ini->sc_Include($this->Ini->path_lib_php . "/nm_gp_config_btn.php", "F", "nmButtonOutput") ; 
+          $_SESSION['scriptcase']['css_popup']                 = $this->Ini->str_schema_all . "_grid.css";
+          $_SESSION['scriptcase']['css_popup_dir']             = $this->Ini->str_schema_all . "_grid" . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".css";
+          $_SESSION['scriptcase']['css_btn_popup']             = $this->Ini->Str_btn_css;
+          $_SESSION['scriptcase']['str_google_fonts']          = $this->Ini->str_google_fonts;
+          $_SESSION['scriptcase']['css_popup_tab']             = $this->Ini->str_schema_all . "_tab.css";
+          $_SESSION['scriptcase']['css_popup_tab_dir']         = $this->Ini->str_schema_all . "_tab" . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".css";
+          $_SESSION['scriptcase']['css_popup_div']             = $this->Ini->str_schema_all . "_appdiv.css";
+          $_SESSION['scriptcase']['css_popup_div_dir']         = $this->Ini->str_schema_all . "_appdiv" . $_SESSION['scriptcase']['reg_conf']['css_dir'] . ".css";
+          $_SESSION['scriptcase']['bg_btn_popup']['bok']       = nmButtonOutput($this->arr_buttons, "bok_appdiv", "processa();", "processa();", "bok", "", "", "", "absmiddle", "", "0px", $this->Ini->path_botoes, "", "", "", "", "", "only_text", "text_right", "", "", "", "", "", "", "");
+          $_SESSION['scriptcase']['bg_btn_popup']['bsair']     = nmButtonOutput($this->arr_buttons, "bsair_appdiv", "window.close()", "window.close()", "bsair", "", "", "", "absmiddle", "", "0px", $this->Ini->path_botoes, "", "", "", "", "", "only_text", "text_right", "", "", "", "", "", "", "");
+          $_SESSION['scriptcase']['bg_btn_popup']['btbremove'] = nmButtonOutput($this->arr_buttons, "bsair_appdiv", "self.parent.tb_remove()", "self.parent.tb_remove()", "bsair", "", "", "", "absmiddle", "", "0px", $this->Ini->path_botoes, "", "", "", "", "", "only_text", "text_right", "", "", "", "", "", "", "");
+      } 
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order']))
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "nomefantasia";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "dataprevisao";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "valorprevisao";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "parcela";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "idnotafiscal";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "nossonumero";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "enviouemail";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "idlancamentoreceita";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "idcliente";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "idcontacaixa";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "razaosocial";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'][] = "idsituacaodocumento";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order_orig'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'];
+          if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['usr_cmp_sel']))
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['usr_cmp_sel'] = array();
+          } 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['usr_cmp_sel']['idcliente'] = "off";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['usr_cmp_sel']['idcontacaixa'] = "off";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['usr_cmp_sel']['razaosocial'] = "off";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['usr_cmp_sel']['idsituacaodocumento'] = "off";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['usr_cmp_sel_orig'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['usr_cmp_sel'];
+      } 
+      if (isset($_SESSION['scriptcase']['sc_apl_conf']['LancamentoReceita_Boleto_Lst']['exit']) && $_SESSION['scriptcase']['sc_apl_conf']['LancamentoReceita_Boleto_Lst']['exit'] != '')
+      {
+          $_SESSION['scriptcase']['sc_url_saida'][$this->Ini->sc_page]       = $_SESSION['scriptcase']['sc_apl_conf']['LancamentoReceita_Boleto_Lst']['exit'];
+          $_SESSION['scriptcase']['sc_force_url_saida'][$this->Ini->sc_page] = true;
+      }
+
+      $this->Ini->sc_Include($this->Ini->path_libs . "/nm_gc.php", "F", "nm_gc") ; 
+      nm_gc($this->Ini->path_libs);
+      if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'])
+      { 
+          $_SESSION['scriptcase']['sc_page_process'] = $this->Ini->sc_page;
+      } 
+      $_SESSION['scriptcase']['sc_idioma_pivot']['pt_br'] = array(
+          'smry_ppup_titl'      => $this->Ini->Nm_lang['lang_othr_smry_ppup_titl'],
+          'smry_ppup_fild'      => $this->Ini->Nm_lang['lang_othr_smry_ppup_fild'],
+          'smry_ppup_posi'      => $this->Ini->Nm_lang['lang_othr_smry_ppup_posi'],
+          'smry_ppup_sort'      => $this->Ini->Nm_lang['lang_othr_smry_ppup_sort'],
+          'smry_ppup_posi_labl' => $this->Ini->Nm_lang['lang_othr_smry_ppup_posi_labl'],
+          'smry_ppup_posi_data' => $this->Ini->Nm_lang['lang_othr_smry_ppup_posi_data'],
+          'smry_ppup_sort_labl' => $this->Ini->Nm_lang['lang_othr_smry_ppup_sort_labl'],
+          'smry_ppup_sort_vlue' => $this->Ini->Nm_lang['lang_othr_smry_ppup_sort_vlue'],
+          'smry_ppup_chek_tabu' => $this->Ini->Nm_lang['lang_othr_smry_ppup_chek_tabu'],
+      );
+      $_SESSION['scriptcase']['sc_tab_meses']['int'] = array(
+                                  $this->Ini->Nm_lang['lang_mnth_janu'],
+                                  $this->Ini->Nm_lang['lang_mnth_febr'],
+                                  $this->Ini->Nm_lang['lang_mnth_marc'],
+                                  $this->Ini->Nm_lang['lang_mnth_apri'],
+                                  $this->Ini->Nm_lang['lang_mnth_mayy'],
+                                  $this->Ini->Nm_lang['lang_mnth_june'],
+                                  $this->Ini->Nm_lang['lang_mnth_july'],
+                                  $this->Ini->Nm_lang['lang_mnth_augu'],
+                                  $this->Ini->Nm_lang['lang_mnth_sept'],
+                                  $this->Ini->Nm_lang['lang_mnth_octo'],
+                                  $this->Ini->Nm_lang['lang_mnth_nove'],
+                                  $this->Ini->Nm_lang['lang_mnth_dece']);
+      $_SESSION['scriptcase']['sc_tab_meses']['abr'] = array(
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_janu'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_febr'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_marc'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_apri'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_mayy'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_june'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_july'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_augu'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_sept'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_octo'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_nove'],
+                                  $this->Ini->Nm_lang['lang_shrt_mnth_dece']);
+      $_SESSION['scriptcase']['sc_tab_dias']['int'] = array(
+                                  $this->Ini->Nm_lang['lang_days_sund'],
+                                  $this->Ini->Nm_lang['lang_days_mond'],
+                                  $this->Ini->Nm_lang['lang_days_tued'],
+                                  $this->Ini->Nm_lang['lang_days_wend'],
+                                  $this->Ini->Nm_lang['lang_days_thud'],
+                                  $this->Ini->Nm_lang['lang_days_frid'],
+                                  $this->Ini->Nm_lang['lang_days_satd']);
+      $_SESSION['scriptcase']['sc_tab_dias']['abr'] = array(
+                                  $this->Ini->Nm_lang['lang_shrt_days_sund'],
+                                  $this->Ini->Nm_lang['lang_shrt_days_mond'],
+                                  $this->Ini->Nm_lang['lang_shrt_days_tued'],
+                                  $this->Ini->Nm_lang['lang_shrt_days_wend'],
+                                  $this->Ini->Nm_lang['lang_shrt_days_thud'],
+                                  $this->Ini->Nm_lang['lang_shrt_days_frid'],
+                                  $this->Ini->Nm_lang['lang_shrt_days_satd']);
+      if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'])
+      { 
+          $this->pdf_zip = (isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opc_pdf']['pdf_zip'])) ? $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opc_pdf']['pdf_zip'] : "N";
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['use_pass_pdf'] = "";
+          $_SESSION['scriptcase']['sc_tp_pdf'] = "wkhtmltopdf";
+          $_SESSION['scriptcase']['sc_idioma_pdf'] = array();
+          $_SESSION['scriptcase']['sc_idioma_pdf']['pt_br'] = array('titulo' => $this->Ini->Nm_lang['lang_pdff_titl'], 'titulo_colunas' => $this->Ini->Nm_lang['lang_btns_clmn_hint'], 'modules' => $this->Ini->Nm_lang['lang_export_modules'], 'mod_grid' => $this->Ini->Nm_lang['lang_export_mod_grid'], 'mod_resume' => $this->Ini->Nm_lang['lang_export_mod_summary'], 'mod_chart' => $this->Ini->Nm_lang['lang_export_mod_chart'], 'tp_imp' => $this->Ini->Nm_lang['lang_pdff_type'], 'color' => $this->Ini->Nm_lang['lang_pdff_colr'], 'econm' => $this->Ini->Nm_lang['lang_pdff_bndw'], 'tp_pap' => $this->Ini->Nm_lang['lang_pdff_pper'], 'carta' => $this->Ini->Nm_lang['lang_pdff_letr'], 'oficio' => $this->Ini->Nm_lang['lang_pdff_legl'], 'customiz' => $this->Ini->Nm_lang['lang_pdff_cstm'], 'alt_papel' => $this->Ini->Nm_lang['lang_pdff_pper_hgth'], 'larg_papel' => $this->Ini->Nm_lang['lang_pdff_pper_wdth'], 'orient' => $this->Ini->Nm_lang['lang_pdff_pper_orie'], 'retrato' => $this->Ini->Nm_lang['lang_pdff_prtr'], 'paisag' => $this->Ini->Nm_lang['lang_pdff_lnds'], 'book' => $this->Ini->Nm_lang['lang_pdff_bkmk'], 'grafico' => $this->Ini->Nm_lang['lang_pdff_chrt'], 'largura' => $this->Ini->Nm_lang['lang_pdff_wdth'], 'fonte' => $this->Ini->Nm_lang['lang_pdff_font'], 'create' => $this->Ini->Nm_lang['lang_pdff_create'], 'sim' => $this->Ini->Nm_lang['lang_pdff_chrt_yess'], 'nao' => $this->Ini->Nm_lang['lang_pdff_chrt_nooo'], 'chart_level' => $this->Ini->Nm_lang['lang_chart_level_groupby'], 'chart_level' => $this->Ini->Nm_lang['lang_chart_level_groupby'], 'group_general' => $this->Ini->Nm_lang['lang_pdff_group_general'], 'group_chart' => $this->Ini->Nm_lang['lang_pdff_group_chart'], 'pdf_res' => $this->Ini->Nm_lang['lang_app_xls_summry'], 'pdf_cons' => $this->Ini->Nm_lang['lang_app_xls_grid'], 'password' => $this->Ini->Nm_lang['lang_app_xls_pswd'], 'page_break' => $this->Ini->Nm_lang['lang_groupby_break_page_pdf'], 'other_options' => $this->Ini->Nm_lang['lang_app_other_options'], 'label_group' => $this->Ini->Nm_lang['lang_pdf_below_groupby'], 'page_label' => $this->Ini->Nm_lang['lang_pdf_all_pages_title'], 'page_header' => $this->Ini->Nm_lang['lang_pdf_all_pages_header'], 'format_zip' => $this->Ini->Nm_lang['lang_export_pdf_zip'], 'cancela' => $this->Ini->Nm_lang['lang_pdff_cncl']);
+      } 
+      $_SESSION['scriptcase']['sc_idioma_graf_flash'] = array();
+      $_SESSION['scriptcase']['sc_idioma_graf_flash']['pt_br'] = array(
+          'titulo' => $this->Ini->Nm_lang['lang_chrt_titl'],
+          'titulo_colunas' => $this->Ini->Nm_lang['lang_btns_clmn_hint'],
+          'tipo_g' => $this->Ini->Nm_lang['lang_chrt_type'],
+          'tp_barra' => $this->Ini->Nm_lang['lang_flsh_chrt_bars'],
+          'tp_pizza' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie'],
+          'tp_linha' => $this->Ini->Nm_lang['lang_flsh_chrt_line'],
+          'tp_area' => $this->Ini->Nm_lang['lang_flsh_chrt_area'],
+          'tp_marcador' => $this->Ini->Nm_lang['lang_flsh_chrt_mrks'],
+          'tp_gauge' => $this->Ini->Nm_lang['lang_flsh_chrt_gaug'],
+          'tp_radar' => $this->Ini->Nm_lang['lang_flsh_chrt_radr'],
+          'tp_polar' => $this->Ini->Nm_lang['lang_flsh_chrt_polr'],
+          'tp_funil' => $this->Ini->Nm_lang['lang_flsh_chrt_funl'],
+          'tp_pyramid' => $this->Ini->Nm_lang['lang_flsh_chrt_pyrm'],
+          'largura' => $this->Ini->Nm_lang['lang_chrt_wdth'],
+          'altura' => $this->Ini->Nm_lang['lang_chrt_hgth'],
+          'modo_gera' => $this->Ini->Nm_lang['lang_chrt_gtmd'],
+          'sintetico' => $this->Ini->Nm_lang['lang_chrt_smzd'],
+          'analitico' => $this->Ini->Nm_lang['lang_chrt_anlt'],
+          'order' => $this->Ini->Nm_lang['lang_chrt_ordr'],
+          'order_none' => $this->Ini->Nm_lang['lang_chrt_ordr_none'],
+          'order_asc' => $this->Ini->Nm_lang['lang_chrt_ordr_asc'],
+          'order_desc' => $this->Ini->Nm_lang['lang_chrt_ordr_desc'],
+          'limit_chart_items' => $this->Ini->Nm_lang['lang_limit_chart_items'],
+          'barra_orien' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_layo'],
+          'barra_orien_horiz' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_horz'],
+          'barra_orien_verti' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_vrtc'],
+          'barra_forma' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_shpe'],
+          'barra_forma_barra' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_bars'],
+          'barra_forma_cilin' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_cyld'],
+          'barra_forma_cone' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_cone'],
+          'barra_forma_piram' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_pyrm'],
+          'barra_dimen' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_dmns'],
+          'barra_dimen_2d' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_2ddm'],
+          'barra_dimen_3d' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_3ddm'],
+          'barra_sobre' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_3ovr'],
+          'barra_sobre_nao' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_3ont'],
+          'barra_sobre_sim' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_3oys'],
+          'barra_empil' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_stck'],
+          'barra_empil_desat' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_stan'],
+          'barra_empil_ativa' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_stay'],
+          'barra_empil_perce' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_stap'],
+          'barra_inver' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_invr'],
+          'barra_inver_norma' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_invn'],
+          'barra_inver_inver' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_invi'],
+          'barra_agrup' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_srgr'],
+          'barra_agrup_conju' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_srst'],
+          'barra_agrup_serie' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_srbs'],
+          'barra_funil' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_funl'],
+          'barra_funil_nao' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_3ont'],
+          'barra_funil_sim' => $this->Ini->Nm_lang['lang_flsh_chrt_bars_3oys'],
+          'pizza_forma' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_shpe'],
+          'pizza_forma_pizza' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_fpie'],
+          'pizza_forma_donut' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_dnts'],
+          'pizza_dimen' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_dmns'],
+          'pizza_dimen_2d' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_2ddm'],
+          'pizza_dimen_3d' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_3ddm'],
+          'pizza_orden' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_srtn'],
+          'pizza_orden_desat' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_nsrt'],
+          'pizza_orden_ascen' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_asrt'],
+          'pizza_orden_desce' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_dsrt'],
+          'pizza_explo' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_expl'],
+          'pizza_explo_desat' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_dxpl'],
+          'pizza_explo_ativa' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_axpl'],
+          'pizza_explo_click' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_cxpl'],
+          'pizza_valor' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_fval'],
+          'pizza_valor_valor' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_fvlv'],
+          'pizza_valor_perce' => $this->Ini->Nm_lang['lang_flsh_chrt_fpie_fvlp'],
+          'linha_forma' => $this->Ini->Nm_lang['lang_flsh_chrt_line_shpe'],
+          'linha_forma_linha' => $this->Ini->Nm_lang['lang_flsh_chrt_line_line'],
+          'linha_forma_splin' => $this->Ini->Nm_lang['lang_flsh_chrt_line_spln'],
+          'linha_forma_degra' => $this->Ini->Nm_lang['lang_flsh_chrt_line_step'],
+          'linha_inver' => $this->Ini->Nm_lang['lang_flsh_chrt_line_invr'],
+          'linha_inver_norma' => $this->Ini->Nm_lang['lang_flsh_chrt_line_invn'],
+          'linha_inver_inver' => $this->Ini->Nm_lang['lang_flsh_chrt_line_invi'],
+          'linha_agrup' => $this->Ini->Nm_lang['lang_flsh_chrt_line_srgr'],
+          'linha_agrup_conju' => $this->Ini->Nm_lang['lang_flsh_chrt_line_srst'],
+          'linha_agrup_serie' => $this->Ini->Nm_lang['lang_flsh_chrt_line_srbs'],
+          'area_forma' => $this->Ini->Nm_lang['lang_flsh_chrt_area_shpe'],
+          'area_forma_area' => $this->Ini->Nm_lang['lang_flsh_chrt_area_area'],
+          'area_forma_splin' => $this->Ini->Nm_lang['lang_flsh_chrt_area_spln'],
+          'area_empil' => $this->Ini->Nm_lang['lang_flsh_chrt_area_stak'],
+          'area_empil_desat' => $this->Ini->Nm_lang['lang_flsh_chrt_area_stan'],
+          'area_empil_ativa' => $this->Ini->Nm_lang['lang_flsh_chrt_area_stay'],
+          'area_empil_perce' => $this->Ini->Nm_lang['lang_flsh_chrt_area_stap'],
+          'area_inver' => $this->Ini->Nm_lang['lang_flsh_chrt_area_invr'],
+          'area_inver_norma' => $this->Ini->Nm_lang['lang_flsh_chrt_area_invn'],
+          'area_inver_inver' => $this->Ini->Nm_lang['lang_flsh_chrt_area_invi'],
+          'area_agrup' => $this->Ini->Nm_lang['lang_flsh_chrt_area_srgr'],
+          'area_agrup_conju' => $this->Ini->Nm_lang['lang_flsh_chrt_area_srst'],
+          'area_agrup_serie' => $this->Ini->Nm_lang['lang_flsh_chrt_area_srbs'],
+          'marca_inver' => $this->Ini->Nm_lang['lang_flsh_chrt_mrks_invr'],
+          'marca_inver_norma' => $this->Ini->Nm_lang['lang_flsh_chrt_mrks_invn'],
+          'marca_inver_inver' => $this->Ini->Nm_lang['lang_flsh_chrt_mrks_invi'],
+          'marca_agrup' => $this->Ini->Nm_lang['lang_flsh_chrt_mrks_srgr'],
+          'marca_agrup_conju' => $this->Ini->Nm_lang['lang_flsh_chrt_mrks_srst'],
+          'marca_agrup_serie' => $this->Ini->Nm_lang['lang_flsh_chrt_mrks_srbs'],
+          'gauge_forma' => $this->Ini->Nm_lang['lang_flsh_chrt_gaug_shpe'],
+          'gauge_forma_circular' => $this->Ini->Nm_lang['lang_flsh_chrt_gaug_circ'],
+          'gauge_forma_semi' => $this->Ini->Nm_lang['lang_flsh_chrt_gaug_semi'],
+          'pyram_slice' => $this->Ini->Nm_lang['lang_flsh_chrt_pyrm_slic'],
+          'pyram_slice_s' => $this->Ini->Nm_lang['lang_flsh_chrt_pyrm_opcs'],
+          'pyram_slice_n' => $this->Ini->Nm_lang['lang_flsh_chrt_pyrm_opcn'],
+          'chart_enable_scroll' => $this->Ini->Nm_lang['lang_chart_enable_scroll'],
+      );
+      if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'])
+      { 
+          $_SESSION['scriptcase']['sc_idioma_prt'] = array();
+          $_SESSION['scriptcase']['sc_idioma_prt']['pt_br'] = array('titulo' => $this->Ini->Nm_lang['lang_btns_prtn_titl_hint'], 'modules' => $this->Ini->Nm_lang['lang_export_modules'], 'mod_grid' => $this->Ini->Nm_lang['lang_export_mod_grid'], 'mod_resume' => $this->Ini->Nm_lang['lang_export_mod_summary'], 'mod_chart' => $this->Ini->Nm_lang['lang_export_mod_chart'], 'group_general' => $this->Ini->Nm_lang['lang_pdff_group_general'], 'titulo_colunas' => $this->Ini->Nm_lang['lang_btns_clmn_hint'], 'modoimp' => $this->Ini->Nm_lang['lang_btns_mode_prnt_hint'], 'curr' => $this->Ini->Nm_lang['lang_othr_curr_page'], 'total' => $this->Ini->Nm_lang['lang_othr_full'], 'cor' => $this->Ini->Nm_lang['lang_othr_prtc'], 'pb' => $this->Ini->Nm_lang['lang_othr_bndw'], 'color' => $this->Ini->Nm_lang['lang_othr_colr'], 'pdf_res' => $this->Ini->Nm_lang['lang_app_xls_summry'], 'pdf_cons' => $this->Ini->Nm_lang['lang_app_xls_grid'], 'cancela' => $this->Ini->Nm_lang['lang_btns_cncl_prnt_hint'], 'password' => $this->Ini->Nm_lang['lang_app_xls_pswd']);
+      } 
+      if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'])
+      { 
+          $_SESSION['scriptcase']['sc_idioma_word'] = array();
+          $_SESSION['scriptcase']['sc_idioma_word']['pt_br'] = array('titulo' => $this->Ini->Nm_lang['lang_export_title'], 'modules' => $this->Ini->Nm_lang['lang_export_modules'], 'mod_grid' => $this->Ini->Nm_lang['lang_export_mod_grid'], 'mod_resume' => $this->Ini->Nm_lang['lang_export_mod_summary'], 'mod_chart' => $this->Ini->Nm_lang['lang_export_mod_chart'], 'group_general' => $this->Ini->Nm_lang['lang_pdff_group_general'], 'titulo_colunas' => $this->Ini->Nm_lang['lang_btns_clmn_hint'], 'cor' => $this->Ini->Nm_lang['lang_othr_prtc'], 'pb' => $this->Ini->Nm_lang['lang_othr_bndw'], 'color' => $this->Ini->Nm_lang['lang_othr_colr'], 'cancela' => $this->Ini->Nm_lang['lang_btns_cncl_prnt_hint'], 'password' => $this->Ini->Nm_lang['lang_app_xls_pswd']);
+      } 
+      if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'])
+      { 
+          $_SESSION['scriptcase']['sc_idioma_xls'] = array();
+          $_SESSION['scriptcase']['sc_idioma_xls']['pt_br'] = array('titulo' => $this->Ini->Nm_lang['lang_app_xls_title'], 'modules' => $this->Ini->Nm_lang['lang_export_modules'], 'mod_grid' => $this->Ini->Nm_lang['lang_export_mod_grid'], 'mod_resume' => $this->Ini->Nm_lang['lang_export_mod_summary'], 'mod_chart' => $this->Ini->Nm_lang['lang_export_mod_chart'], 'group_general' => $this->Ini->Nm_lang['lang_pdff_group_general'], 'titulo_colunas' => $this->Ini->Nm_lang['lang_btns_clmn_hint'], 'tp_xls' => $this->Ini->Nm_lang['lang_app_xls_ext'], 'tot_xls' => $this->Ini->Nm_lang['lang_othr_export_excel_total'], 'xls_res' => $this->Ini->Nm_lang['lang_app_xls_summry'], 'xls_cons' => $this->Ini->Nm_lang['lang_app_xls_grid'], 'password' => $this->Ini->Nm_lang['lang_app_xls_pswd']);
+      } 
+      $this->Ini->Gd_missing  = true;
+      if (function_exists("getProdVersion"))
+      {
+          $_SESSION['scriptcase']['sc_prod_Version'] = str_replace(".", "", getProdVersion($this->Ini->path_libs));
+      }
+      if (function_exists("gd_info"))
+      {
+          $this->Ini->Gd_missing = false;
+      }
+      $this->Ini->sc_Include($this->Ini->path_lib_php . "/nm_trata_img.php", "C", "nm_trata_img") ; 
+      if ((!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao']) || empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao']) || !isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig'])))
+      {
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "inicio";//=)
+      }
+      if (isset($_SESSION['scriptcase']['sc_apl_conf']['LancamentoReceita_Boleto_Lst']['start']) && $_SESSION['scriptcase']['sc_apl_conf']['LancamentoReceita_Boleto_Lst']['start'] == 'filter')
+      {
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "inicio" || $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "grid")  
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "busca";
+          }   
+      }
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] != "detalhe" && (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig']) || !empty($nmgp_parms) || !empty($GLOBALS["nmgp_parms"])))
+      {
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opc_liga'] = array();  
+          if (isset($NMSC_conf_apl) && !empty($NMSC_conf_apl))
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opc_liga'] = $NMSC_conf_apl;  
+          }   
+      }
+          if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opc_liga']['paginacao']) && !empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opc_liga']['paginacao']))
+          { 
+              $this->Ini->Apl_paginacao = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opc_liga']['paginacao'];
+          } 
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'] && $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "busca")
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "grid" ;  
+      }   
+      if (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao_print']) || empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao_print']))  
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao_print'] = "inicio" ;  
+      }   
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['print_all'] = false;
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "print")  
+      { 
+          if (strpos(" " . $this->Ini->SC_module_export, "grid") === false)
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "res_print";
+          }
+      } 
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "res_print")  
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao']     = "resumo";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['print_all'] = true;
+          if (strpos(" " . $this->Ini->SC_module_export, "grid") !== false)
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "print";
+              $nmgp_tipo_print = "RC";
+          }
+      } 
+      if (substr($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'], 0, 7) == "grafico")  
+      { 
+          $_SESSION['scriptcase']['sc_ctl_ajax'] = 'part';
+      } 
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "pdf")
+      { 
+          $this->Ini->path_img_modelo = $this->Ini->path_img_modelo;
+      } 
+
+      if (isset($_POST['nmgp_opcao']) && 'resumo' == $_POST['nmgp_opcao']
+          &&
+          isset($_POST['reload_summary_data']) && 'Y' == $_POST['reload_summary_data']
+      ) {
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['contr_array_resumo'] = 'NAO';
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['contr_total_geral'] = 'NAO';
+          unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['tot_geral']);
+          unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['using_summary_cache']);
+      }
+
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "fast_search")  
+      { 
+          $this->SC_fast_search($GLOBALS["nmgp_fast_search"], $GLOBALS["nmgp_cond_fast_search"], $GLOBALS["nmgp_arg_fast_search"]);
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_ant'] == $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq'])
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = 'igual';
+          } 
+          else 
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_ant'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq'];
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['contr_array_resumo'] = "NAO";
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['contr_total_geral']  = "NAO";
+              unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['tot_geral']);
+              unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['using_summary_cache']);
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = 'pesq';
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['orig_pesq'] = 'grid';
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_refresh'] = true;
+          } 
+      } 
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "interativ_search")
+      { 
+          $this->SC_proc_interativ_search($_POST['parm']);
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_ant'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq'];
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['contr_array_resumo'] = "NAO";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['contr_total_geral']  = "NAO";
+          unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['tot_geral']);
+          unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['using_summary_cache']);
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = 'inicio';
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opc_int_search'] = true;
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_refresh'] = true;
+      } 
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == 'pesq' && isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['orig_pesq']) && !empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['orig_pesq']))  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['orig_pesq'] == "res")  
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = 'resumo';
+          } 
+          elseif ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['orig_pesq'] == "grid") 
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = 'inicio';
+          } 
+      } 
+      if ('gantt' == $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] && ('inicio' == $_GET['nmgp_opcao'] || 'inicio' == $_POST['nmgp_opcao'])) {
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = 'inicio';
+      }
+//
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['prim_cons'] = false;  
+      if (substr($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'], 0, 7) != "grafico" && $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] != "detalhe" && (!isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig']) || !empty($nmgp_parms) || !empty($GLOBALS["nmgp_parms"])))  
+      { 
+         unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['use_pass_pdf']);
+       if (!$GLOBALS['nm_restore_grid_save']) { 
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['prim_cons'] = true;  
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig'] = " where (IdTenacidade='" . $_SESSION['varIdTenacidade'] . "')";
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq']        = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig'];  
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_ant']    = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig'];  
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['cond_pesq']         = ""; 
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'] = "";
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_grid']   = "";
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_lookup'] = "";
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['campos_busca']      = array();
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['grid_pesq']         = array();
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['Grid_search']       = array();
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_fast']   = "";
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'] = "";
+       }
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['contr_total_geral'] = "NAO";
+          unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['sc_total']);
+          unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['tot_geral']);
+          unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['using_summary_cache']);
+         $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['contr_array_resumo'] = "NAO";
+      } 
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_ant'];  
+      if ($nmgp_opcao == "formphp")
+      { 
+          if ($nm_call_php == "SC_btn_0")
+          { 
+              $this->SC_btn_0();
+          } 
+          if ($nm_call_php == "SC_btn_1")
+          { 
+              $this->SC_btn_1();
+          } 
+          if ($nm_call_php == "SC_btn_2")
+          { 
+              $this->SC_btn_2();
+          } 
+          $this->Db->Close(); 
+          exit;
+      } 
+      $nm_flag_pdf   = true;
+      $nm_vendo_pdf  = ("pdf" == $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao']);
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['graf_pdf'] = "S";
+      if (isset($nmgp_graf_pdf) && !empty($nmgp_graf_pdf))
+      {
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['graf_pdf'] = $nmgp_graf_pdf;
+      }
+      if (!$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      {
+         if ($nm_flag_pdf && $nm_vendo_pdf)
+         {
+            $nm_arquivo_htm_temp = $this->Ini->root . $this->Ini->path_imag_temp . "/sc_LancamentoReceita_Boleto_Lst_html_" . session_id() . "_2.html";
+            $nm_arquivo_pdf_base = "/sc_pdf_" . md5(date("Ymd") . "_" . session_id()) . "_LancamentoReceita_Boleto_Lst.pdf";
+            $nm_arquivo_pdf_url  = $this->Ini->path_imag_temp . $nm_arquivo_pdf_base;
+            $nm_arquivo_pdf_serv = $this->Ini->root . $nm_arquivo_pdf_url;
+            $nm_arquivo_de_saida = $this->Ini->root . $this->Ini->path_imag_temp . "/sc_LancamentoReceita_Boleto_Lst_html_" . session_id() . ".html";
+            $nm_url_de_saida = $this->Ini->server_pdf . $this->Ini->path_imag_temp . "/sc_LancamentoReceita_Boleto_Lst_html_" . session_id() . ".html";
+            if (in_array(trim($this->Ini->str_lang), $this->Ini->nm_font_ttf) && strtolower($_SESSION['scriptcase']['charset']) != "utf-8")
+            { 
+                $nm_saida->seta_arquivo($nm_arquivo_de_saida, $_SESSION['scriptcase']['charset']);
+            }
+            else
+            { 
+                $nm_saida->seta_arquivo($nm_arquivo_de_saida);
+            }
+         }
+      }
+//----------------------------------->
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "doc_word_res")
+      { 
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['print_navigator'] = "Microsoft Internet Explorer";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['print_all'] = true;
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['doc_word']  = true;
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao']     = "resumo";
+          $_SESSION['scriptcase']['saida_word'] = true;
+          if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_name']))
+          {
+              $Pos = strrpos($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_name'], ".");
+              if ($Pos === false) {
+                  $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_name'] .= ".doc";
+              }
+              $nm_arquivo_doc_word = "/" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_name'];
+          }
+          else
+          {
+              $nm_arquivo_doc_word = "/sc_LancamentoReceita_Boleto_Lst_res_" . session_id() . ".doc";
+          }
+          $nm_saida->seta_arquivo($this->Ini->root . $this->Ini->path_imag_temp . $nm_arquivo_doc_word);
+          $this->Ini->nm_limite_lin_res_prt = 0;
+          $GLOBALS['nmgp_cor_print'] = $nmgp_cor_word;
+      } 
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "xls")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_xls.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_xls.class.php"); 
+          } 
+          $this->xls  = new LancamentoReceita_Boleto_Lst_xls();
+          $this->prep_modulos("xls");
+          $this->xls->monta_xls();
+      }
+      else
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "xls_res")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_res_xls.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_res_xls.class.php"); 
+          } 
+          $this->xls  = new LancamentoReceita_Boleto_Lst_res_xls();
+          $this->prep_modulos("xls");
+          $this->xls->monta_xls();
+      }
+      else
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "xml")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_xml.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_xml.class.php"); 
+          } 
+          $this->xml  = new LancamentoReceita_Boleto_Lst_xml();
+          $this->prep_modulos("xml");
+          $this->xml->monta_xml();
+      }
+      else
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "xml_res")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_res_xml.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_res_xml.class.php"); 
+          } 
+          $this->xml  = new LancamentoReceita_Boleto_Lst_res_xml();
+          $this->prep_modulos("xml");
+          $this->xml->monta_xml();
+      }
+      else
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "json")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_json.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_json.class.php"); 
+          } 
+          $this->json  = new LancamentoReceita_Boleto_Lst_json();
+          $this->prep_modulos("json");
+          $this->json->monta_json();
+      }
+      else
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "json_res")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_res_json.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_res_json.class.php"); 
+          } 
+          $this->json  = new LancamentoReceita_Boleto_Lst_res_json();
+          $this->prep_modulos("json");
+          $this->json->monta_json();
+      }
+      else
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "csv")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_csv.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_csv.class.php"); 
+          } 
+          $this->csv  = new LancamentoReceita_Boleto_Lst_csv();
+          $this->prep_modulos("csv");
+          $this->csv->monta_csv();
+      }
+      else   
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "csv_res")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_res_csv.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_res_csv.class.php"); 
+          } 
+          $this->csv  = new LancamentoReceita_Boleto_Lst_res_csv();
+          $this->prep_modulos("csv");
+          $this->csv->monta_csv();
+      }
+      else   
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "rtf")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_rtf.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_rtf.class.php"); 
+          } 
+          $this->rtf  = new LancamentoReceita_Boleto_Lst_rtf();
+          $this->prep_modulos("rtf");
+          $this->rtf->monta_rtf();
+      }
+      else
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "rtf_res")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_res_rtf.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_res_rtf.class.php"); 
+          } 
+          $this->rtf  = new LancamentoReceita_Boleto_Lst_res_rtf();
+          $this->prep_modulos("rtf");
+          $this->rtf->monta_rtf();
+      }
+      else
+    if (isset($_POST['chartapp_action']) && 'Y' == $_POST['chartapp_action']) {
+        if (isset($_POST['chartapp_chart_type']) && 'Y' == $_POST['chartapp_chart_type'] && isset($_POST['chart_md5']) && isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['chart_info'][$_POST['chart_md5']])) {
+            if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida']) {
+                require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst" . $this->Ini->Apl_resumo);
+            } else {
+                require_once($this->Ini->path_aplicacao . $this->Ini->Apl_resumo);
+            }
+            $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['chart_app_change_type'] = true;
+            $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['chart_app_md5'] = $_POST['chart_md5'];
+            $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['chart_app_type'] = $_POST['chart_type'];
+            $this->Res = new LancamentoReceita_Boleto_Lst_resumo("out");
+            $this->prep_modulos("Res");
+            $this->Res->monta_resumo();
+        } else {
+            if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida']) {
+                require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst" . $this->Ini->Apl_grafico);
+            } else {
+                require_once($this->Ini->path_aplicacao . $this->Ini->Apl_grafico);
+            }
+            $this->Graf = new LancamentoReceita_Boleto_Lst_grafico();
+            $this->prep_modulos("Graf");
+            $this->Graf->display_chartApp_type($_POST['chart_md5'], $_POST['chart_type']);
+        }
+    }
+    else
+      if (substr($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'], 0, 7) == "grafico")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . " . LancamentoReceita_Boleto_Lst . /" . $this->Ini->Apl_grafico); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . $this->Ini->Apl_grafico); 
+          } 
+          $this->Graf  = new LancamentoReceita_Boleto_Lst_grafico();
+          $this->prep_modulos("Graf");
+          if (substr($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'], 7, 1) == "_")  
+          { 
+              $this->Graf->grafico_col(substr($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'], 8));
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "grid";
+          }
+          else
+          { 
+              if (isset($_POST['summary_chart_data']) && 'Y' == $_POST['summary_chart_data'] && isset($_POST['chart_md5']) && isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['chart_info'][$_POST['chart_md5']])) {
+                  $this->Graf->display_summaryChart_data($_POST['chart_md5']);
+              }
+              elseif (isset($_POST['summary_chart']) && 'Y' == $_POST['summary_chart'] && isset($_POST['chart_md5']) && isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['chart_info'][$_POST['chart_md5']])) {
+                  $this->Graf->display_summaryChart_newPage($_POST['chart_md5']);
+              }
+              elseif (isset($_POST['chart_inline_create']) && 'Y' == $_POST['chart_inline_create'] && isset($_POST['chart_md5'])) {
+                  $this->Graf->display_summaryChart_inline_initialAjaxResponse($_POST['chart_md5']);
+              }
+              elseif (isset($_POST['chart_inline_update']) && 'Y' == $_POST['chart_inline_update'] && isset($_POST['chart_md5']) && isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['chart_info'][$_POST['chart_md5']])) {
+                  $this->Graf->display_summaryChart_inline_updateAjaxResponse($_POST['chart_md5']);
+              }
+              elseif (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_refresh_after_chart'])) {
+                  $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_refresh_after_chart'];
+                  unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['dashboard_refresh_after_chart']);
+              }
+              else {
+                  $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] = "grid";
+              }
+              $this->Graf->monta_grafico();
+          }
+      }
+      else 
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "busca")  
+      { 
+          if (!$_SESSION['scriptcase']['proc_mobile']) 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_pesq.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_mobile_pesq.class.php"); 
+          } 
+          $this->pesq  = new LancamentoReceita_Boleto_Lst_pesq();
+          $this->prep_modulos("pesq");
+          $this->pesq->NM_ajax_flag    = $this->NM_ajax_flag;
+          $this->pesq->NM_ajax_opcao   = $this->NM_ajax_opcao;
+          $this->pesq->monta_busca();
+      }
+      else 
+      if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "resumo")  
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/" . $this->Ini->Apl_resumo); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . $this->Ini->Apl_resumo); 
+          } 
+          $this->Res = new LancamentoReceita_Boleto_Lst_resumo("out");
+          $this->prep_modulos("Res");
+          $this->Res->monta_resumo();
+      }
+      else 
+      { 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "print" && $nmgp_tipo_print == "RC")
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['print_navigator'] = $nmgp_navegator_print;
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['print_all'] = true;
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao']     = "pdf";
+              $GLOBALS['nmgp_tipo_pdf'] = strtolower($nmgp_cor_print);
+          } 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] == "doc_word")
+          { 
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['print_navigator'] = "Microsoft Internet Explorer";
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['print_all'] = true;
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['doc_word']  = true;
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao']     = "pdf";
+              $_SESSION['scriptcase']['saida_word'] = true;
+              if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_name']))
+              {
+                  $Pos = strrpos($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_name'], ".");
+                  if ($Pos === false) {
+                      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_name'] .= ".doc";
+                  }
+                  $nm_arquivo_doc_word =  "/" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_name'];
+              }
+              else
+              {
+                  $nm_arquivo_doc_word = "/sc_LancamentoReceita_Boleto_Lst_" . session_id() . ".doc";
+              }
+              $nm_saida->seta_arquivo($this->Ini->root . $this->Ini->path_imag_temp . $nm_arquivo_doc_word);
+              $this->Ini->nm_limite_lin_prt = 0;
+              $GLOBALS['nmgp_tipo_pdf'] = $nmgp_cor_word;
+          } 
+          if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+          { 
+              require_once($this->Ini->path_embutida . "LancamentoReceita_Boleto_Lst/LancamentoReceita_Boleto_Lst_grid.class.php"); 
+          } 
+          else 
+          { 
+              require_once($this->Ini->path_aplicacao . "LancamentoReceita_Boleto_Lst_grid.class.php"); 
+          } 
+          $this->grid  = new LancamentoReceita_Boleto_Lst_grid();
+          $this->prep_modulos("grid");
+          $this->grid->monta_grid($linhas);
+      }   
+//--- 
+      if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'])
+      {
+           $this->Db->Close(); 
+      }
+      if ($this->Change_Menu)
+      {
+          $apl_menu  = $_SESSION['scriptcase']['menu_atual'];
+          $Arr_rastro = array();
+          if (isset($_SESSION['scriptcase']['menu_apls'][$apl_menu][$this->sc_init_menu]) && count($_SESSION['scriptcase']['menu_apls'][$apl_menu][$this->sc_init_menu]) > 1)
+          {
+              foreach ($_SESSION['scriptcase']['menu_apls'][$apl_menu][$this->sc_init_menu] as $menu => $apls)
+              {
+                 $Arr_rastro[] = "'<a href=\"" . $apls['link'] . "?script_case_init=" . $this->sc_init_menu . "\" target=\"#NMIframe#\">" . $apls['label'] . "</a>'";
+              }
+              $ult_apl = count($Arr_rastro) - 1;
+              unset($Arr_rastro[$ult_apl]);
+              $rastro = implode(",", $Arr_rastro);
+?>
+  <script type="text/javascript">
+     link_atual = new Array (<?php echo $rastro ?>);
+    if (parent.writeFastMenu)
+    {
+         parent.writeFastMenu(link_atual);
+     }
+  </script>
+<?php
+          }
+          else
+          {
+?>
+  <script type="text/javascript">
+    if (parent.clearFastMenu)
+    {
+         parent.clearFastMenu();
+     }
+  </script>
+<?php
+          }
+      }
+      if (!$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida'])
+      {
+         $nm_saida->finaliza();
+         if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['ajax_nav'])
+         {
+             $Temp = ob_get_clean();
+             if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['opcao'] != "ajax_detalhe")  
+             {
+                 $this->Ini->Arr_result['setVar'][] = array('var' => 'scQtReg', 'value' => $this->Ini->Qtd_reg_ajax_grid);
+             }
+             $_SESSION['scriptcase']['saida_var'] = false;
+             $oJson = new Services_JSON();
+             echo $oJson->encode($this->Ini->Arr_result);
+             exit;
+         }
+            if(isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['export_sel_columns']['field_order']))
+            {
+                $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['field_order'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['export_sel_columns']['field_order'];
+                unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['export_sel_columns']['field_order']);
+            }
+            if(isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['export_sel_columns']['usr_cmp_sel']))
+            {
+                $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['usr_cmp_sel'] = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['export_sel_columns']['usr_cmp_sel'];
+                unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['export_sel_columns']['usr_cmp_sel']);
+            }
+         if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['doc_word'])
+         {
+             $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_file'] = $this->Ini->root . $this->Ini->path_imag_temp . $nm_arquivo_doc_word;
+             $this->html_doc_word($nm_arquivo_doc_word, $nmgp_password);
+         }
+         if ($this->Ini->Export_html_zip)
+         {
+             $this->html_export_print($nm_arquivo_html, $nmgp_password);
+         }
+         if ($ajax_opc_print)
+         {
+             $this->Arr_result['file_export']  = NM_charset_to_utf8($this->Ini->root . $this->Ini->path_imag_temp . $nm_arquivo_print . ".html");
+             $this->Arr_result['title_export'] = NM_charset_to_utf8($nm_arquivo_print);
+             $Temp = ob_get_clean();
+             $oJson = new Services_JSON();
+             echo $oJson->encode($this->Arr_result);
+             exit;
+        }
+         if ($nm_flag_pdf && $nm_vendo_pdf)
+         {
+            if (isset($nmgp_parms_pdf) && !empty($nmgp_parms_pdf))
+            {
+                $str_pd4ml = " ";
+                $Tps_pap   = array('Letter','Legal','Ledger','A0','A1','A2','A3','A4','A5','A6','B5','Tabloid','A7','A8','A9','B0','B1','B2','B3','B4','Executive','B6','B7','B8','B9','B10','C5E','Comm10E','DLE','Folio');
+                $Tmp = explode ("__SC__", $nmgp_parms_pdf);
+                foreach ($Tmp as $cada_p) {
+                    if (substr($cada_p, 0, 1) == "p" && in_array(substr($cada_p, 1), $Tps_pap)) {
+                        $str_pd4ml .= " --page-size " . substr($cada_p, 1);
+                    }
+                    if ($cada_p == "op") {
+                        $str_pd4ml .= " --orientation Portrait";
+                    }
+                    if ($cada_p == "ol") {
+                        $str_pd4ml .= " --orientation Landscape";
+                    }
+                    if ($cada_p == "bn") {
+                        $str_pd4ml .= " --outline-depth 0";
+                    }
+                }
+            }
+            else
+            {
+                $str_pd4ml    = " --page-size Letter --orientation Portrait";
+            }
+            if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_res'])
+            { 
+                $str_pd4ml .= " --outline-depth 0";
+            }
+            if (!$this->Ini->sc_export_ajax && !$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_det'])
+            {
+                if (-1 < $this->grid->progress_grid && $this->grid->progress_fp)
+                {
+                    $lang_protect = $this->Ini->Nm_lang['lang_pdff_gnrt'];
+                    if (!NM_is_utf8($lang_protect))
+                    {
+                        $lang_protect = sc_convert_encoding($lang_protect, "UTF-8", $_SESSION['scriptcase']['charset']);
+                    }
+                    LancamentoReceita_Boleto_Lst_pdf_progress_call($this->grid->progress_tot . "_#NM#_" . $this->grid->progress_tot . "_#NM#_" . $lang_protect . "...\n", $this->Ini->Nm_lang);
+                    fwrite($this->grid->progress_fp, ($this->grid->progress_tot) . "_#NM#_" . $lang_protect . "...\n");
+                    fclose($this->grid->progress_fp);
+                }
+            }
+            if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_name']))
+            {
+                $Pos = strrpos($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_name'], ".");
+                if ($Pos === false) {
+                    $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_name'] .= ".pdf";
+                }
+                if ('/' == substr($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_name'], 0, 1)) {
+                    $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_name'] = substr($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_name'], 1);
+                }
+                $nm_arquivo_pdf_serv = $this->Ini->root .  $this->Ini->path_imag_temp . "/" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_name'];
+                $nm_arquivo_pdf_url  = $this->Ini->path_imag_temp . "/" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_name'];
+                $nm_arquivo_pdf_base = "/" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_name'];
+                unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_name']);
+            }
+            $arq_pdf_out  = (FALSE !== strpos($nm_arquivo_pdf_serv, ' ')) ? " \"" . $nm_arquivo_pdf_serv . "\"" :  $nm_arquivo_pdf_serv;
+            $arq_pdf_in   = (FALSE !== strpos($nm_url_de_saida, ' '))     ? " \"" . $nm_url_de_saida . "\""     :  $nm_url_de_saida;
+            if (FALSE !== strpos(strtolower(php_uname()), 'windows')) 
+            {
+                $dir_qpdf = "/qpdf/win/bin";
+            }
+            elseif (FALSE !== strpos(strtolower(php_uname()), 'linux')) 
+            {
+                if (FALSE !== strpos(strtolower(php_uname()), 'i686')) 
+                {
+                    $dir_qpdf = "/qpdf/linux-i386";
+                }
+                else
+                {
+                    $dir_qpdf = "/qpdf/linux-amd64";
+                }
+            }
+            elseif (FALSE !== strpos(strtolower(php_uname()), 'darwin'))
+            {
+                $dir_qpdf = "/qpdf/osx";
+            }
+            if ($this->pdf_zip == "S")
+            {
+                $arq_pdf_final = str_replace(".pdf", ".zip", $arq_pdf_out);
+            }
+            elseif (is_dir($this->Ini->path_third . $dir_qpdf) && isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['use_pass_pdf']) && !empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['use_pass_pdf']))
+            {
+                $arq_pdf_final = $arq_pdf_out;
+                $arq_pdf_out   = str_replace(".pdf", "_wk.pdf", $arq_pdf_out);
+            }
+            $Win_autentication = "";
+            if (isset($_SESSION['sc_pdf_usr']) && !empty($_SESSION['sc_pdf_usr']))
+            {
+                $_SESSION['sc_iis_usr'] = $_SESSION['sc_pdf_usr'];
+            }
+            if (isset($_SESSION['sc_iis_usr']) && !empty($_SESSION['sc_iis_usr']))
+            {
+                $Win_autentication .= " --username " . $_SESSION['sc_iis_usr'];
+            }
+            if (isset($_SESSION['sc_pdf_pw']) && !empty($_SESSION['sc_pdf_pw']))
+            {
+                $_SESSION['sc_iis_pw'] = $_SESSION['sc_pdf_pw'];
+            }
+            if (isset($_SESSION['sc_iis_pw']) && !empty($_SESSION['sc_iis_pw']))
+            {
+                $Win_autentication .= " --password " . $_SESSION['sc_iis_pw'];
+            }
+            if (FALSE !== strpos(strtolower(php_uname()), 'windows')) 
+            {
+                chdir($this->Ini->path_third . "/wkhtmltopdf/win");
+                $str_execcmd2 = 'wkhtmltopdf ' . $str_pd4ml . $Win_autentication . ' --header-right "[page]"';
+            }
+            elseif (FALSE !== strpos(strtolower(php_uname()), 'linux')) 
+            {
+                if (isset($_SERVER['NM_SC_SYS_CONFIG']) && $_SERVER['NM_SC_SYS_CONFIG'] == 1) 
+                {
+                    chdir($this->Ini->path_third . "/wkhtmltopdf/linux-amd64");
+                    $str_execcmd2 = './wkhtmltopdf-amd64 ' . $str_pd4ml . $Win_autentication . ' --header-right "[page]"';
+                }
+                elseif (FALSE !== strpos(strtolower(php_uname()), 'i686')) 
+                {
+                    if (FALSE !== strpos(php_uname(), 'Debian 4.19')) 
+                    {
+                        chdir($this->Ini->path_third . "/wkhtmltopdf/buster");
+                    }
+                    elseif (FALSE !== strpos(php_uname(), 'Debian 4.9')) 
+                    {
+                        chdir($this->Ini->path_third . "/wkhtmltopdf/stretch");
+                    }
+                    else
+                    {
+                        chdir($this->Ini->path_third . "/wkhtmltopdf/linux-i386");
+                    }
+                    $str_execcmd2 = './wkhtmltopdf-i386 ' . $str_pd4ml . $Win_autentication . ' --header-right "[page]"';
+                }
+                else
+                {
+                    if (FALSE !== strpos(strtolower(php_uname()), 'debian 4.19')) 
+                    {
+                        chdir($this->Ini->path_third . "/wkhtmltopdf/buster");
+                    }
+                    elseif (FALSE !== strpos(strtolower(php_uname()), 'debian 4.9')) 
+                    {
+                        chdir($this->Ini->path_third . "/wkhtmltopdf/stretch");
+                    }
+                    elseif (FALSE !== strpos(strtolower(php_uname()), 'debian 5.10') ) 
+                    {
+                        chdir($this->Ini->path_third . "/wkhtmltopdf/bullseye");
+                    }
+                    elseif (FALSE !== strpos(strtolower(php_uname()), 'debian 6.1') ) 
+                    {
+                        chdir($this->Ini->path_third . "/wkhtmltopdf/bookworm");
+                    }
+                    elseif (FALSE !== strpos(strtolower(php_uname()), '.el8.') || preg_match('/.el8_\d+./', strtolower(php_uname())) ) 
+                    {
+                        chdir($this->Ini->path_third . "/wkhtmltopdf/centos8");
+                    }
+                    elseif (FALSE !== strpos(strtolower(php_uname()), '.el9.') || preg_match('/.el9_\d+./', strtolower(php_uname())) ) 
+                    {
+                        chdir($this->Ini->path_third . "/wkhtmltopdf/centos9");
+                    }
+                    else
+                    {
+                        chdir($this->Ini->path_third . "/wkhtmltopdf/linux-amd64");
+                    }
+                    $str_execcmd2 = './wkhtmltopdf-amd64 ' . $str_pd4ml . $Win_autentication . ' --header-right "[page]"';
+                }
+            }
+            elseif (FALSE !== strpos(strtolower(php_uname()), 'darwin'))
+            {
+                chdir($this->Ini->path_third . "/wkhtmltopdf/osx/Contents/MacOS");
+                $str_execcmd2 = './wkhtmltopdf ' . $str_pd4ml . $Win_autentication . ' --header-right "[page]"';
+            }
+
+            if (!isset($_SESSION['scriptcase']['phantomjs_charts']) || !$_SESSION['scriptcase']['phantomjs_charts'])
+            {
+                $str_execcmd2 .= ' --javascript-delay ' . 2000;
+            }
+
+            $str_execcmd2 .= ' --disable-local-file-access ' . $arq_pdf_in . ' ' . $arq_pdf_out;
+
+            $arr_execcmd = array();
+            $str_execcmd = $str_execcmd2;
+            exec($str_execcmd2);
+            $str_cmd_qpdf = "";
+            $str_zip      = "";
+            if ($this->pdf_zip == "S")
+            {
+                $pdf_pass = (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['use_pass_pdf'])) ? $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['use_pass_pdf'] : "";
+                $opt_pass = (!empty($pdf_pass)) ? " -p" : "";
+                if (is_file($arq_pdf_final)) {
+                    unlink($arq_pdf_final);
+                }
+                if (FALSE !== strpos(strtolower(php_uname()), 'windows')) 
+                {
+                    chdir($this->Ini->path_third . "/zip/windows");
+                    $str_zip = "zip.exe" . strtoupper($opt_pass) . " -j " . $pdf_pass . " " . $arq_pdf_final . " " . $arq_pdf_out;
+                }
+                elseif (FALSE !== strpos(strtolower(php_uname()), 'linux')) 
+                {
+                      if (FALSE !== strpos(strtolower(php_uname()), 'i686')) 
+                      {
+                          chdir($this->Ini->path_third . "/zip/linux-i386/bin");
+                      }
+                      else
+                      {
+                          chdir($this->Ini->path_third . "/zip/linux-amd64/bin");
+                      }
+                      $str_zip = "./7za" . $opt_pass . $pdf_pass . " a " . $arq_pdf_final . " " . $arq_pdf_out;
+                }
+                elseif (FALSE !== strpos(strtolower(php_uname()), 'darwin'))
+                {
+                    chdir($this->Ini->path_third . "/zip/mac/bin");
+                    $str_zip = "./7za" . $opt_pass . $pdf_pass . " a " . $arq_pdf_final . " " . $arq_pdf_out;
+                }
+                if (!empty($str_zip)) {
+                    exec($str_zip);
+                }
+                if (is_file($arq_pdf_final)) 
+                {
+                    unlink($arq_pdf_out);
+                }
+            }
+            elseif (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['use_pass_pdf']) && !empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['use_pass_pdf']))
+            {
+                if (FALSE !== strpos(strtolower(php_uname()), 'windows')) 
+                {
+                    $dir_qpdf = "/qpdf/win/bin";
+                    $str_cmd_qpdf = "qpdf.exe ";
+                }
+                elseif (FALSE !== strpos(strtolower(php_uname()), 'linux')) 
+                {
+                    if (FALSE !== strpos(strtolower(php_uname()), 'i686')) 
+                    {
+                        $dir_qpdf = "/qpdf/linux-i386";
+                        $str_cmd_qpdf = "./qpdf-linux-x86 ";
+                    }
+                    else
+                    {
+                        $dir_qpdf = "/qpdf/linux-amd64";
+                        $str_cmd_qpdf = "./qpdf-linux-amd64 ";
+                    }
+                }
+                elseif (FALSE !== strpos(strtolower(php_uname()), 'darwin'))
+                {
+                    $dir_qpdf = "/qpdf/osx";
+                    $str_cmd_qpdf = "./qpdf-darwin-x86 ";
+                }
+                if (is_dir($this->Ini->path_third . $dir_qpdf)) 
+                {
+                    chdir($this->Ini->path_third . $dir_qpdf);
+                    $pdf_pass  = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['use_pass_pdf'];
+                    $str_cmd_qpdf .= "--encrypt " . $pdf_pass . " " . $pdf_pass . " 256 -- " . $arq_pdf_out . " " . $arq_pdf_final;
+                    exec($str_cmd_qpdf);
+                    if (is_file($arq_pdf_final)) 
+                    {
+                        unlink($arq_pdf_out);
+                    }
+                }
+            }
+            $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['contr_array_resumo'] = '';
+            $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['contr_total_geral']  = '';
+            // ----- PDF log
+            $fp = @fopen($this->Ini->root . $this->Ini->path_imag_temp . str_replace(array(".pdf",".zip"), array("",""), $nm_arquivo_pdf_base) . '.log', 'w');
+            if ($fp)
+            {
+                @fwrite($fp, $str_execcmd . "\r\n\r\n");
+                @fwrite($fp, implode("\r\n", $arr_execcmd));
+                @fwrite($fp, $str_cmd_qpdf . "\r\n\r\n");
+                @fwrite($fp, $str_zip . "\r\n\r\n");
+                @fclose($fp);
+            }
+            if ($this->Ini->sc_export_ajax)
+            {
+                $this->Arr_result['file_export']  = NM_charset_to_utf8($nm_arquivo_pdf_serv);
+                $this->Arr_result['title_export'] = NM_charset_to_utf8(substr($nm_arquivo_pdf_base, 1));
+                $Temp = ob_get_clean();
+                $oJson = new Services_JSON();
+                echo $oJson->encode($this->Arr_result);
+                exit;
+            }
+            if (in_array(trim($this->Ini->str_lang), $this->Ini->nm_font_ttf) && strtolower($_SESSION['scriptcase']['charset']) != "utf-8")
+            { 
+               $_SESSION['scriptcase']['charset_html'] = (isset($this->Ini->sc_charset[$_SESSION['scriptcase']['charset']])) ? $this->Ini->sc_charset[$_SESSION['scriptcase']['charset']] : $_SESSION['scriptcase']['charset'];
+            }
+            if (!$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_det'])
+            {
+                if (-1 < $this->grid->progress_grid && $this->grid->progress_fp)
+                {
+                    $this->grid->progress_fp = fopen($this->Ini->root . $this->Ini->path_imag_temp . '/sc_pb_' . session_id() . '.tmp', 'a');
+                    if ($this->grid->progress_fp)
+                    {
+                         $lang_protect = $this->Ini->Nm_lang['lang_pdff_fnsh'];
+                         if (!NM_is_utf8($lang_protect))
+                         {
+                             $lang_protect = sc_convert_encoding($lang_protect, "UTF-8", $_SESSION['scriptcase']['charset']);
+                          }
+                        LancamentoReceita_Boleto_Lst_pdf_progress_call($this->grid->progress_tot . "_#NM#_" . ($this->grid->progress_now + 1 + $this->grid->progress_pdf) . "_#NM#_" . $lang_protect . "...\n", $this->Ini->Nm_lang);
+                        LancamentoReceita_Boleto_Lst_pdf_progress_call("off\n", $this->Ini->Nm_lang);
+                        fwrite($this->grid->progress_fp, ($this->grid->progress_now + 1 + $this->grid->progress_pdf) . "_#NM#_" . $lang_protect . "...\n");
+                        fwrite($this->grid->progress_fp, "off\n");
+                        fclose($this->grid->progress_fp);
+                    }
+                }
+            }
+unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_file']);
+if (is_file($nm_arquivo_pdf_serv))
+{
+    $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['pdf_file'] = $nm_arquivo_pdf_serv;
+}
+$NM_volta  = "volta_grid";
+$NM_target = "_parent";
+if ($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['pdf_res'])
+{
+  $NM_volta  = "resumo";
+  $NM_target = "_self";
+?>
+<!DOCTYPE html>
+<HTML<?php echo $_SESSION['scriptcase']['reg_conf']['html_dir'] ?>>
+<HEAD>
+ <TITLE><?php echo $this->Ini->Nm_lang['lang_othr_grid_titl'] ?> Geração de Boletos e CNAB :: PDF</TITLE>
+ <META http-equiv="Expires" content="Fri, Jan 01 1900 00:00:00 GMT">
+ <META http-equiv="Last-Modified" content="<?php echo gmdate("D, d M Y H:i:s"); ?>" GMT">
+ <META http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+ <META http-equiv="Pragma" content="no-cache">
+ <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->Ini->str_schema_all ?>_grid.css" /> 
+ <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->Ini->str_schema_all ?>_grid<?php echo $_SESSION['scriptcase']['reg_conf']['css_dir'] ?>.css" /> 
+ <?php 
+ if(isset($this->Ini->str_google_fonts) && !empty($this->Ini->str_google_fonts)) 
+ { 
+ ?> 
+ <link href="<?php echo $this->Ini->str_google_fonts ?>" rel="stylesheet" /> 
+ <?php 
+ } 
+ ?> 
+ <link rel="stylesheet" type="text/css" href="../_lib/buttons/<?php echo $this->Ini->Str_btn_css ?>" /> 
+</HEAD>
+<BODY>
+<?php echo $this->Ini->Ajax_result_set ?>
+<table class="scGridTabela" valign="top"><tr class="scGridFieldOddVert"><td>
+<?php
+}
+                    $rRFP = fopen($this->Ini->root . $this->Ini->path_imag_temp . '/sc_pb_' . session_id() . '.tmp', "w");
+                    fwrite($rRFP, "PDF\n");
+                    fwrite($rRFP, "\n");
+                    fwrite($rRFP, "\n");
+                    fwrite($rRFP, "100\n");
+                    fwrite($rRFP, 1 . "_#NM#_" . $this->Ini->Nm_lang['lang_pdff_gnrt'] . "...\n");
+                    fwrite($rRFP, 100 . "_#NM#_" . $this->Ini->Nm_lang['lang_pdff_fnsh'] . "...\n");
+                    fwrite($rRFP, "off\n");
+                    fclose($rRFP);
+$downloadFileName = "LancamentoReceita_Boleto_Lst.pdf";
+if ($this->pdf_zip == 'S') {
+    $nm_arquivo_pdf_serv = str_replace('.pdf', '.zip', $nm_arquivo_pdf_serv);
+    $nm_arquivo_pdf_url = str_replace('.pdf', '.zip', $nm_arquivo_pdf_url);
+    $downloadFileName = str_replace('.pdf', '.zip', $downloadFileName);
+}
+if (!is_file($nm_arquivo_pdf_serv))
+{
+?>
+  <br><b><?php echo $this->Ini->Nm_lang['lang_pdff_errg']; ?></b></td></tr></table>
+<script type="text/javascript">
+if (window.parent && typeof window.parent.displayErrorPdf === "function") {
+    window.parent.displayErrorPdf("<?php echo $this->Ini->Nm_lang['lang_pdff_errg']; ?>");
+}
+</script>
+<?php
+}
+else
+{
+?>
+<?php echo $this->Ini->Nm_lang['lang_pdff_file_loct']; ?>
+<BR>
+<A href="<?php echo $nm_arquivo_pdf_url; ?>" target="_blank" class="scGridPageLink"><B><?php echo $nm_arquivo_pdf_url; ?></B></A>.
+<BR>
+<?php echo $this->Ini->Nm_lang['lang_pdff_clck_mesg']; ?>
+</td></tr></table>
+<script type="text/javascript">
+if (window.parent && typeof window.parent.updateGeneratedPdfFile === "function") {
+    window.parent.updateGeneratedPdfFile("<?php echo $nm_arquivo_pdf_url; ?>");
+}
+</script>
+<?php
+    $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst'][md5("newpdf_" . $downloadFileName)][0] = $nm_arquivo_pdf_url;
+    $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst'][md5("newpdf_" . $downloadFileName)][1] = $downloadFileName;
+}
+   echo nmButtonOutput($this->arr_buttons, "bvoltar", "document.F0.submit()", "document.F0.submit()", "sc_b_sai", "", "", "", "absmiddle", "", "0px", $this->Ini->path_botoes, "", "", "", "", "", "only_text", "text_right", "", "", "", "", "", "", "");
+?>
+<FORM name="F0" method=post action="LancamentoReceita_Boleto_Lst.php" target="<?php echo $NM_target; ?>"> 
+<INPUT type="hidden" name="script_case_init" value="<?php echo NM_encode_input($this->Ini->sc_page); ?>"> 
+<INPUT type="hidden" name="nmgp_opcao" value="<?php echo NM_encode_input($NM_volta); ?>"> 
+<INPUT type="hidden" name="nm_grid_submit" value="1"/> 
+<INPUT type="hidden" name="csrf_token" value="<?php echo $this->Ini->scCsrfGetToken() ?>"/> 
+</FORM>
+</td></tr></table>
+</BODY>
+</HTML>
+<?php
+         }
+      }
+   } 
+   function SC_btn_0() 
+   {
+      global 
+      $nm_apl_dependente;
+      $this->SC_redir_btn = true;
+      $nm_f_saida = "LancamentoReceita_Boleto_Lst.php";
+?>
+     <!DOCTYPE html>
+      <html<?php echo $_SESSION['scriptcase']['reg_conf']['html_dir'] ?>>
+      <head>
+       <META http-equiv="Content-Type" content="text/html; charset=<?php echo $_SESSION['scriptcase']['charset_html'] ?>" />
+<?php
+if ($_SESSION['scriptcase']['proc_mobile'])
+{
+?>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<?php
+}
+?>
+        <script type="text/javascript" src="<?php echo $this->Ini->path_prod ?>/third/jquery/js/jquery.js"></script>
+        <script type="text/javascript" src="<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/malsup-blockui/jquery.blockUI.js"></script>
+        <script type="text/javascript">
+          var sc_pathToTB = '<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/thickbox/';
+          var sc_tbLangClose = "<?php echo html_entity_decode($this->Ini->Nm_lang['lang_tb_close'], ENT_COMPAT, $_SESSION['scriptcase']['charset']) ?>";
+          var sc_tbLangEsc = "<?php echo html_entity_decode($this->Ini->Nm_lang['lang_tb_esc'], ENT_COMPAT, $_SESSION['scriptcase']['charset']) ?>";
+        </script>
+        <script type="text/javascript" src="<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/thickbox/thickbox-compressed.js"></script>
+        <link rel="shortcut icon" href="../_lib/img/scriptcase__NM__ico__NM__favicon.ico">
+        <link rel="stylesheet" href="<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/thickbox/thickbox.css" type="text/css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->Ini->str_schema_all ?>_grid.css" /> 
+        <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->Ini->str_schema_all ?>_grid<?php echo $_SESSION['scriptcase']['reg_conf']['css_dir'] ?>.css" /> 
+      </head>
+      <body class="scGridPage">
+      <table class="scGridTabela" align="center"><tr><td>
+<?php
+ob_start();
+$NM_cont_reg  = 0;
+$NM_index_reg = (isset($_POST['nm_run_opt_sel'])) ? explode(";", $_POST['nm_run_opt_sel']) : array();
+if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['sc_sql_btn_run']))
+{
+    foreach ($NM_index_reg as $Run_register)
+    {
+       if (!is_numeric($Run_register)) { continue; }
+       $Temp_fields = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['sc_sql_btn_run'][$Run_register];
+       $this->nomefantasia = $Temp_fields[0] ;  
+       $this->dataprevisao = $Temp_fields[1] ;  
+       $this->valorprevisao = $Temp_fields[2] ;  
+       $this->valorprevisao =  str_replace(",", ".", $this->valorprevisao);
+       $this->valorprevisao = (strpos(strtolower($this->valorprevisao), "e")) ? (float)$this->valorprevisao : $this->valorprevisao; 
+       $this->valorprevisao = (string)$this->valorprevisao;
+       $this->parcela = $Temp_fields[3] ;  
+       $this->parcela = (string)$this->parcela;
+       $this->idnotafiscal = $Temp_fields[4] ;  
+       $this->idnotafiscal = (string)$this->idnotafiscal;
+       $this->nossonumero = $Temp_fields[5] ;  
+       $this->nossonumero = (string)$this->nossonumero;
+       $this->enviouemail = $Temp_fields[6] ;  
+       $this->idlancamentoreceita = $Temp_fields[7] ;  
+       $this->idlancamentoreceita = (string)$this->idlancamentoreceita;
+       $this->idcliente = $Temp_fields[8] ;  
+       $this->idcliente = (string)$this->idcliente;
+       $this->idcontacaixa = $Temp_fields[9] ;  
+       $this->idcontacaixa = (string)$this->idcontacaixa;
+       $this->razaosocial = $Temp_fields[10] ;  
+       $this->idsituacaodocumento = $Temp_fields[11] ;  
+       $this->idsituacaodocumento = (string)$this->idsituacaodocumento;
+      
+/*----- Scriptcase Locale: Button SC_btn_0 - onRecord ------*/
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+if (!isset($_SESSION['i'])) {$_SESSION['i'] = "";}
+if (!isset($this->sc_temp_i)) {$this->sc_temp_i = (isset($_SESSION['i'])) ? $_SESSION['i'] : "";}
+if (!isset($_SESSION['total_chked'])) {$_SESSION['total_chked'] = "";}
+if (!isset($this->sc_temp_total_chked)) {$this->sc_temp_total_chked = (isset($_SESSION['total_chked'])) ? $_SESSION['total_chked'] : "";}
+  $arr=$this->sc_temp_i;
+$this->sc_temp_total_chked[$arr] = $this->idlancamentoreceita ;
+$this->sc_temp_i++;
+if (isset($this->sc_temp_total_chked)) {$_SESSION['total_chked'] = $this->sc_temp_total_chked;}
+if (isset($this->sc_temp_i)) {$_SESSION['i'] = $this->sc_temp_i;}
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+/*----- END - Scriptcase Locale: Button SC_btn_0 - onRecord ------*/
+ 
+    }  
+    
+/*----- Scriptcase Locale: Button SC_btn_0 - onFinish ------*/
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+if (!isset($_SESSION['i'])) {$_SESSION['i'] = "";}
+if (!isset($this->sc_temp_i)) {$this->sc_temp_i = (isset($_SESSION['i'])) ? $_SESSION['i'] : "";}
+if (!isset($_SESSION['varDiretorioArquivo'])) {$_SESSION['varDiretorioArquivo'] = "";}
+if (!isset($this->sc_temp_varDiretorioArquivo)) {$this->sc_temp_varDiretorioArquivo = (isset($_SESSION['varDiretorioArquivo'])) ? $_SESSION['varDiretorioArquivo'] : "";}
+if (!isset($_SESSION['total_chked'])) {$_SESSION['total_chked'] = "";}
+if (!isset($this->sc_temp_total_chked)) {$this->sc_temp_total_chked = (isset($_SESSION['total_chked'])) ? $_SESSION['total_chked'] : "";}
+if (!isset($_SESSION['varIdTenacidade'])) {$_SESSION['varIdTenacidade'] = "";}
+if (!isset($this->sc_temp_varIdTenacidade)) {$this->sc_temp_varIdTenacidade = (isset($_SESSION['varIdTenacidade'])) ? $_SESSION['varIdTenacidade'] : "";}
+  $tot = count($this->sc_temp_total_chked);
+if ($tot <= 0) {
+	echo "Atenção: Nenhum registro selecionado.";
+	 if (isset($this->sc_temp_varIdTenacidade)) {$_SESSION['varIdTenacidade'] = $this->sc_temp_varIdTenacidade;}
+ if (isset($this->sc_temp_total_chked)) {$_SESSION['total_chked'] = $this->sc_temp_total_chked;}
+ if (isset($this->sc_temp_varDiretorioArquivo)) {$_SESSION['varDiretorioArquivo'] = $this->sc_temp_varDiretorioArquivo;}
+ if (isset($this->sc_temp_i)) {$_SESSION['i'] = $this->sc_temp_i;}
+ if (!isset($this->Campos_Mens_erro) || empty($this->Campos_Mens_erro))
+ {
+$this->nmgp_redireciona_form($this->Ini->path_link . "" . SC_dir_app_name('ContaReceber_Gde') . "/ContaReceber_Gde.php", $this->nm_location, "","_self", 440, 630);
+ };
+}
+
+$selecao_multipla = "";
+
+for($x=0;$x<$tot;$x++)
+{
+	if ($x == $tot-1)
+		 $selecao_multipla.= preg_replace("[^a-zA-Z0-9_]", "",$this->sc_temp_total_chked[$x]);
+	else
+ 		 $selecao_multipla.= preg_replace("[^a-zA-Z0-9_]", "",$this->sc_temp_total_chked[$x]).",";
+}
+$this->sc_temp_i=0;
+
+
+
+
+
+ 
+      $nm_select = "SELECT 
+    b.AgenciaBoleto,
+    b.ContaBoleto,
+	b.DigitoContaBoleto,
+	b.CodigoBancoBoleto,
+	b.NomeBancoBoleto,
+	b.ConvenioBoleto,
+	b.NomeEmpresaBoleto,
+	b.CNPJBoleto,
+	b.CarteiraBoleto,
+    b.VariacaoCarteiraBoleto,
+	b.ContratoBoleto
+FROM 
+    banco b        
+WHERE
+    b.IdTenacidade = '".$this->sc_temp_varIdTenacidade."' and b.EmiteBoleto = 'S'"; 
+      $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select; 
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+      $this->datasetbanco = array();
+      if ($SCrx = $this->Db->Execute($nm_select)) 
+      { 
+          $SCy = 0; 
+          $nm_count = $SCrx->FieldCount();
+          while (!$SCrx->EOF)
+          { 
+                 $SCrx->fields[0] = str_replace(',', '.', $SCrx->fields[0]);
+                 $SCrx->fields[1] = str_replace(',', '.', $SCrx->fields[1]);
+                 $SCrx->fields[2] = str_replace(',', '.', $SCrx->fields[2]);
+                 $SCrx->fields[3] = str_replace(',', '.', $SCrx->fields[3]);
+                 $SCrx->fields[5] = str_replace(',', '.', $SCrx->fields[5]);
+                 $SCrx->fields[8] = str_replace(',', '.', $SCrx->fields[8]);
+                 $SCrx->fields[9] = str_replace(',', '.', $SCrx->fields[9]);
+                 $SCrx->fields[10] = str_replace(',', '.', $SCrx->fields[10]);
+                 $SCrx->fields[0] = (strpos(strtolower($SCrx->fields[0]), "e")) ? (float)$SCrx->fields[0] : $SCrx->fields[0];
+                 $SCrx->fields[0] = (string)$SCrx->fields[0];
+                 $SCrx->fields[1] = (strpos(strtolower($SCrx->fields[1]), "e")) ? (float)$SCrx->fields[1] : $SCrx->fields[1];
+                 $SCrx->fields[1] = (string)$SCrx->fields[1];
+                 $SCrx->fields[2] = (strpos(strtolower($SCrx->fields[2]), "e")) ? (float)$SCrx->fields[2] : $SCrx->fields[2];
+                 $SCrx->fields[2] = (string)$SCrx->fields[2];
+                 $SCrx->fields[3] = (strpos(strtolower($SCrx->fields[3]), "e")) ? (float)$SCrx->fields[3] : $SCrx->fields[3];
+                 $SCrx->fields[3] = (string)$SCrx->fields[3];
+                 $SCrx->fields[5] = (strpos(strtolower($SCrx->fields[5]), "e")) ? (float)$SCrx->fields[5] : $SCrx->fields[5];
+                 $SCrx->fields[5] = (string)$SCrx->fields[5];
+                 $SCrx->fields[8] = (strpos(strtolower($SCrx->fields[8]), "e")) ? (float)$SCrx->fields[8] : $SCrx->fields[8];
+                 $SCrx->fields[8] = (string)$SCrx->fields[8];
+                 $SCrx->fields[9] = (strpos(strtolower($SCrx->fields[9]), "e")) ? (float)$SCrx->fields[9] : $SCrx->fields[9];
+                 $SCrx->fields[9] = (string)$SCrx->fields[9];
+                 $SCrx->fields[10] = (strpos(strtolower($SCrx->fields[10]), "e")) ? (float)$SCrx->fields[10] : $SCrx->fields[10];
+                 $SCrx->fields[10] = (string)$SCrx->fields[10];
+                 for ($SCx = 0; $SCx < $nm_count; $SCx++)
+                 { 
+                        $this->datasetbanco[$SCy] [$SCx] = $SCrx->fields[$SCx];
+                 }
+                 $SCy++; 
+                 $SCrx->MoveNext();
+          } 
+          $SCrx->Close();
+      } 
+      elseif (isset($GLOBALS["NM_ERRO_IBASE"]) && $GLOBALS["NM_ERRO_IBASE"] != 1)  
+      { 
+          $this->datasetbanco = false;
+          $this->datasetbanco_erro = $this->Db->ErrorMsg();
+      } 
+
+
+
+$querya = "SELECT 
+    c.NomeFantasia,
+    c.RazaoSocial,
+	c.Cnpj,
+	c.TipoLogradouro,
+	c.Logradouro,
+	c.Numero,
+	c.Complemento,
+	c.Bairro,
+	c.Cidade,
+	c.Estado,
+	c.Cep,
+    l.IdLancamentoReceita,
+    l.Parcela,
+    DATE_FORMAT(l.DataPrevisao, '%d/%m/%Y'),
+    l.ValorPrevisao,
+    l.NumeroDocumento,
+	l.NossoNumero,
+    n.Discriminacao, 
+	n.IdNotaFiscal,
+	n.NumeroNotaFiscal,
+	l.IdCliente
+FROM 
+    lancamentoreceita l        
+LEFT JOIN cliente c on (c.IdCliente = l.IdCliente)
+LEFT JOIN notafiscal n on (n.IdNotaFiscal = l.IdNotaFiscal)
+WHERE
+    l.IdTenacidade = '".$this->sc_temp_varIdTenacidade."' and l.IdLancamentoReceita in (".$selecao_multipla.")";
+
+ 
+      $nm_select = $querya; 
+      $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select; 
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+      $this->dataset = array();
+      if ($SCrx = $this->Db->Execute($nm_select)) 
+      { 
+          $SCy = 0; 
+          $nm_count = $SCrx->FieldCount();
+          while (!$SCrx->EOF)
+          { 
+                 for ($SCx = 0; $SCx < $nm_count; $SCx++)
+                 { 
+                        $this->dataset[$SCy] [$SCx] = $SCrx->fields[$SCx];
+                 }
+                 $SCy++; 
+                 $SCrx->MoveNext();
+          } 
+          $SCrx->Close();
+      } 
+      elseif (isset($GLOBALS["NM_ERRO_IBASE"]) && $GLOBALS["NM_ERRO_IBASE"] != 1)  
+      { 
+          $this->dataset = false;
+          $this->dataset_erro = $this->Db->ErrorMsg();
+      } 
+
+
+## Criando arquivo ZIP
+
+$DATA['DIA'] = gmdate("d",$timestamp);
+$DATA['MES'] = gmdate("m",$timestamp);
+$DATA['ANO'] = gmdate("y",$timestamp);
+
+$filenameZIP = "CNAB_BOLETO_ITAU_".$DATA['DIA'].$DATA['MES'].$DATA['ANO'].".zip";
+
+$zip = new ZipArchive();
+
+require_once('../html2pdf/vendor/autoload.php');
+
+### DADOS DOS CLIENTES PARA TESTE -> IDBOLETO - NOME CLIENTE - CPF/CNPJ - VALOR DO BOLETO - JUROS DE MORA POR DIA DE ATRASO - DATA DE VENCIMENTO - PERCENTUAL DE MULTA - ENDEREÇO DO SACADO - BAIRRO - CEP - CIDADE - UF - NOSSO NUMERO - ID ATRIBUIDO LIGA
+
+for($x=0;$x<$tot;$x++) {
+	
+	$clientes[] = array($this->dataset[$x][11],$this->dataset[$x][1],$this->dataset[$x][2],$this->dataset[$x][14],"0,033",$this->dataset[$x][13],"5,00",$this->dataset[$x][3].$this->dataset[$x][4].$this->dataset[$x][5].$this->dataset[$x][6],$this->dataset[$x][7],$this->dataset[$x][10],$this->dataset[$x][8],$this->dataset[$x][9],$this->dataset[$x][11],$this->dataset[$x][11]);
+	
+##BOLETOS##
+	
+ob_start();	
+
+$dias_de_prazo_para_pagamento = 0;
+$taxa_boleto = 0;
+	
+$data_venc = $this->dataset[$x][13];
+	
+$valor_cobrado = $this->dataset[$x][14]; 
+$valor_cobrado = str_replace(",", ".",$valor_cobrado);
+$valor_boleto=number_format($valor_cobrado+$taxa_boleto, 2, ',', '');
+	
+$dadosboleto["nosso_numero"] = $this->dataset[$x][11];
+$dadosboleto["numero_documento"] = $this->dataset[$x][11];	
+	
+
+$dadosboleto["data_vencimento"] = $data_venc; 
+$dadosboleto["data_documento"] = date("d/m/Y"); 
+$dadosboleto["data_processamento"] = date("d/m/Y"); 
+$dadosboleto["valor_boleto"] = $valor_boleto; 	
+	
+
+$dadosboleto["sacado"] = $this->removeAcentos($this->dataset[$x][1]);
+	
+$dadosboleto["sacado"] = str_replace("/", "", $dadosboleto["sacado"]);
+	
+$dadosboleto["endereco1"] = $this->removeAcentos($this->dataset[$x][3])." ".$this->removeAcentos($this->dataset[$x][4])." ".$this->removeAcentos($this->dataset[$x][5])." ".$this->removeAcentos($this->dataset[$x][6]);
+$dadosboleto["endereco2"] = $this->removeAcentos($this->dataset[$x][7])." ".$this->removeAcentos($this->dataset[$x][8])." ".$this->removeAcentos($this->dataset[$x][9])." CEP: ".$this->removeAcentos($this->dataset[$x][10]);
+
+	
+$valorJurosDemonstrativo = 0.033;
+$ValorMultaDemonstrativo = 5.00;
+	
+$valorDiaJurosD = number_format(($valor_cobrado*$valorJurosDemonstrativo)/100,2);	
+$valorMultaD = number_format(($valor_cobrado*$ValorMultaDemonstrativo)/100,2);
+if ($valorDiaJurosD < 0.01)
+	$valorDiaJurosD = 0.01;
+	
+$dadosboleto["demonstrativo1"] = "- APÓS O VENCIMENTO MULTA DE..........R$ ".$valorMultaD;
+$dadosboleto["demonstrativo2"] = "- APÓS O VENCIMENTO JUROS DE..........R$ ".$valorDiaJurosD." AO DIA";
+$dadosboleto["demonstrativo3"] = "<br>- Após 5 dias de atraso, o sistema expira automaticamente.<br><br>- Referente a: vide nota fiscal ".$this->dataset[$x][19]." enviada por email. www.liga.inf.br";
+
+$dadosboleto["instrucoes1"] = "- APÓS O VENCIMENTO MULTA DE..........R$ ".$valorMultaD;
+$dadosboleto["instrucoes2"] = "- APÓS O VENCIMENTO JUROS DE..........R$ ".$valorDiaJurosD." AO DIA";	
+$dadosboleto["instrucoes3"] = "<br>- Sr. Caixa, não aceite após o vencimento.";
+$dadosboleto["instrucoes4"] = "- Após 5 dias de atraso, o sistema expira automaticamente. <br>- Em caso de dúvidas, entre em contato conosco: liga@liga.inf.br<br>- Emitido pelo sistema InfoTIME - https://ligacloud.com.br/liga_infotime";	
+	
+$dadosboleto["quantidade"] = "";
+$dadosboleto["valor_unitario"] = "";
+$dadosboleto["aceite"] = "N";		
+$dadosboleto["especie"] = "R$";
+$dadosboleto["especie_doc"] = "DMI";
+$dadosboleto["agencia"] = "2979"; 
+$dadosboleto["conta"] = "31481";	
+$dadosboleto["conta_dv"] = "8"; 	
+$dadosboleto["carteira"] = "109";  
+$dadosboleto["identificacao"] = "LIGA SISTEMAS";
+$dadosboleto["cpf_cnpj"] = "00325244000144";
+$dadosboleto["endereco"] = "R PAULO FREIRE DE ARAUJO, 322, SL 10 ESTORIL";
+$dadosboleto["cidade_uf"] = "BELO HORIZONTE MG";
+$dadosboleto["cedente"] = "LIGA SISTEMAS DE INF LTDA ME - CNPJ: 00325244/0001-44";
+	
+
+$codigobanco = "341";
+$codigo_banco_com_dv = $this->geraCodigoBanco($codigobanco);
+$nossonumeroLIGA = "";
+$nummoeda = "9";
+$fator_vencimento = $this->fator_vencimento($dadosboleto["data_vencimento"]);
+$valor = $this->formata_numero($dadosboleto["valor_boleto"],10,0,"valor");
+$agencia = $this->formata_numero($dadosboleto["agencia"],4,0);
+$conta = $this->formata_numero($dadosboleto["conta"],5,0);
+$conta_dv = $this->formata_numero($dadosboleto["conta_dv"],1,0);
+$carteira = $dadosboleto["carteira"];
+$nnum = $this->formata_numero($dadosboleto["nosso_numero"],8,0);
+$codigo_barras = $codigobanco.$nummoeda.$fator_vencimento.$valor.$carteira.$nnum.$this->modulo_10($agencia.$conta.$carteira.$nnum).$agencia.$conta.$this->modulo_10($agencia.$conta).'000';
+
+$dv = $this->digitoVerificador_barra($codigo_barras);
+$linha = substr($codigo_barras,0,4).$dv.substr($codigo_barras,4,43);
+$this->nossonumero = $carteira.'/'.$nnum.'-'.$this->modulo_10($agencia.$conta.$carteira.$nnum);
+$agencia_codigo = $agencia." / ". $conta."-".$this->modulo_10($agencia.$conta);
+$dadosboleto["codigo_barras"] = $linha;
+$dadosboleto["linha_digitavel"] = $this->monta_linha_digitavel($linha); 
+$dadosboleto["agencia_codigo"] = $agencia_codigo ;
+$dadosboleto["nosso_numero"] = $this->nossonumero;
+$dadosboleto["codigo_banco_com_dv"] = $codigo_banco_com_dv;
+
+
+ 
+
+
+
+
+
+
+
+
+;
+	  ob_start();
+?>
+<style type="text/css">
+<!--	
+	.cp {  
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 10px;
+		color: #000;
+		  font-weight:normal;
+	};
+	
+	.ti {  
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 9px;
+		color: #000;
+		font-weight:normal;
+	};
+	
+	.ld {  
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 15px;
+		color: #000;
+		font-weight:normal;
+	};
+	
+	.ct {  
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 9px;
+		color: #000033;
+		font-weight:normal;
+	};
+	
+	.cn {  
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 20px;
+		color: #000000;
+		font-weight:bold;
+	};
+	
+	table, td
+	{
+		padding:0;
+	}
+	
+-->
+</style>
+<page backtop="7mm" backbottom="7mm" backleft="8mm" backright="5mm" style="font-size: 9px; font-weight: normal; color:#000033;">
+  <table width="704" cellspacing="0" cellpadding="0" border="0">
+		<tr>
+			<td valign="top" class="cp">
+				<div align="center">
+					Instru&ccedil;&otilde;es de Impress&atilde;o
+				</div>
+			</td>
+		</tr>
+		<tr>
+				<td valign="top" class="cp">
+				<div align="left" class="cabecalho">
+					<br> Imprima em impressora jato de tinta ou laser em qualidade normal ou alta.
+					<br> Utilize folha A4 (210 x 297 mm) ou Carta (216 x 279 mm) e margens maximas a esquerda e a direita do formulario. 
+					<br> Caso tenha problemas ao imprimir, copie a seq&uuml;encia num&eacute;rica abaixo e pague no caixa eletr&ocirc;nico ou no internet banking:
+					<br> Corte na linha indicada. Nao rasure, risque, fure ou dobre a regiao onde se encontra o codigo de barras.
+					<br>
+					<br>
+					<span style="font-size: 13px; font-weight: normal; color:#000033; padding:10px;">
+						<div>Linha Digit&aacute;vel: &nbsp;<?php echo $dadosboleto["linha_digitavel"]?></div>
+						<div>Valor: &nbsp;&nbsp;R$ <?php echo $dadosboleto["valor_boleto"]?></div>
+					</span>				
+				</div>
+			</td>
+		</tr>
+	</table>
+	<br />
+	<br />
+	<table cellspacing=0 cellpadding=0 border=0>
+		<tr>
+			<td width=140 class=cp><img src="../_lib/img/logoitau.jpg" alt="Itau" width="150" height="40"></td>
+			<td width=3 valign=bottom><img height=22 src='../_lib/img/3.png' width=2></td>
+			<td width=65 class=bc valign=bottom align=center>
+				<span align="center" style="font-size: 20px; font-weight: bold; font-family: Arial, Helvetica, sans-serif; color:#000;">
+					<?php echo $dadosboleto["codigo_banco_com_dv"]; ?>
+				</span>
+			</td>
+			<td width=3 valign=bottom><img height=22 src='../_lib/img/3.png' width=2></td>
+			<td width=450 class=ld align=right valign=bottom>
+				<span style="font-size: 15px; font-weight: normal; color:#000; font-weight: normal; font-family: Arial, Helvetica, sans-serif;">
+					<b>RECIBO DO PAGADOR</b>
+				</span>
+			</td>
+		</tr>
+		<tr><td colspan=5><img height=1 src='../_lib/img/2.png' width=666></td></tr>
+	</table>
+	<table cellspacing=0 cellpadding=0 border=0 height="2">
+		<tr>
+			<td width=7 height=1><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=100><img src='../_lib/img/2.png' width=100 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=74><img src='../_lib/img/2.png' width=74 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=73><img src='../_lib/img/2.png' width=73 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=55><img src='../_lib/img/2.png' width=55 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=35><img src='../_lib/img/2.png' width=35 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=100><img src='../_lib/img/2.png' width=100 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=180><img src='../_lib/img/2.png' width=180 height=1></td>
+		</tr>
+		<tr>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td colspan=11 class=ct>Local de pagamento</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Vencimento</td>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+		</tr>
+		<tr>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td colspan=11 class=cp>Pag&aacute;vel em qualquer Banco at&eacute; o vencimento.</td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp align=right><?php echo $dadosboleto["data_vencimento"]?></td>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+		</tr>
+		<tr><td colspan=14 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+		<tr>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td colspan=11 class=ct>Beneficiário</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Ag&ecirc;ncia/C&oacute;digo Beneficiário</td>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+		</tr>
+		<tr>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td colspan=11  class=cp><?php echo $dadosboleto["cedente"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp align=right><?php echo $dadosboleto["agencia_codigo"]?></td>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>			
+		</tr>
+		<tr><td colspan=14 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+		<tr>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td colspan=11 class=ct>Endereço Beneficiário/Sacador Avalista</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct></td>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+		</tr>
+		
+		<tr>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td colspan=11  class=cp><?php echo $dadosboleto["endereco"]." ".$dadosboleto["cidade_uf"] ?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp align=right></td>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>			
+		</tr>
+		<tr><td colspan=14 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+		<tr>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Data do documento</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td colspan=3 class=ct>N&uacute;mero do documento</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Esp&eacute;cie doc.</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Aceite</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Data processamento</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Nosso n&uacute;mero</td>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+		</tr>
+		<tr>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["data_documento"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td colspan=3 class=cp><?php echo $dadosboleto["numero_documento"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["especie_doc"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["aceite"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["data_processamento"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp align=right><?php echo $dadosboleto["nosso_numero"]?></td>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+		</tr>
+		<tr><td colspan=14 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+		<tr>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Uso do banco</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Carteira</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Esp&eacute;cie</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td colspan=3 class=ct>Quantidade</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Valor</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>(=) Valor documento</td>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+		</tr>
+		<tr>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp height=12>&nbsp;</td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["carteira"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["especie"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td colspan=3 class=cp><?php echo $dadosboleto["quantidade"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["valor_unitario"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp align=right><?php echo $dadosboleto["valor_boleto"]?></td>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+		</tr>
+		<tr><td colspan=14 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+	</table>
+	<table cellspacing=0 cellpadding=0 border=0>
+		<tr>
+			<td width=7 height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+			<td width=472 rowspan=9 valign=top>
+				<span class=ct>Instru&ccedil;&otilde;es (Texto de responsabilidade do Beneficiario)</span><br>
+				&nbsp;<br>
+				<span class=cp><?php echo $dadosboleto["demonstrativo1"] . '<br>' . $dadosboleto["demonstrativo2"] . '<br>' . $dadosboleto["demonstrativo3"] ?></span>
+			</td>
+			<td width=7><img src='../_lib/img/2.png' width=1 height=26></td>
+			<td width=180 class=ct>(-) Desconto / Abatimentos</td>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+		</tr>
+		<tr><td height=1><img src='../_lib/img/2.png' width=1 height=1></td><td><img src='../_lib/img/2.png' width=7 height=1></td><td><img src='../_lib/img/2.png' width=180 height=1></td></tr>
+		<tr>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+			<td><img src='../_lib/img/2.png' width=1 height=26></td>
+			<td class=ct>(-) Outras dedu&ccedil;&otilde;es</td>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+		</tr>
+		<tr><td height=1><img src='../_lib/img/1.png' width=1 height=1></td><td><img src='../_lib/img/2.png' width=7 height=1></td><td><img src='../_lib/img/2.png' width=180 height=1></td></tr>
+		<tr>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+			<td><img src='../_lib/img/2.png' width=1 height=26></td>
+			<td class=ct>(+) Mora / Multa</td>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+		</tr>
+		<tr><td height=1><img src='../_lib/img/1.png' width=1 height=1></td><td><img src='../_lib/img/2.png' width=7 height=1></td><td><img src='../_lib/img/2.png' width=180 height=1></td></tr>
+		<tr>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+			<td><img src='../_lib/img/2.png' width=1 height=26></td>
+			<td class=ct>(+) Outros acr&eacute;scimos</td>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+		</tr>
+		<tr><td height=1><img src='../_lib/img/1.png' width=1 height=1></td><td><img src='../_lib/img/2.png' width=7 height=1></td><td><img src='../_lib/img/2.png' width=180 height=1></td></tr>
+		<tr>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+			<td><img src='../_lib/img/2.png' width=1 height=26></td>
+			<td class=ct>(=) Valor cobrado</td>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+		</tr>
+		<tr><td colspan=4 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+	
+		
+		
+		
+		
+		<tr>
+			<td height=49><img src='../_lib/img/1.png' width=1 height=49></td>
+			<td class=cp><?php echo " Pagador: ".$dadosboleto["sacado"] . '<br> Endereço: '.$dadosboleto["endereco1"].'<br>'.$dadosboleto["endereco2"].'<br> Sacador/Avalista:'; ?></td>
+			<td height=1><img src='../_lib/img/1.png' width=1 height=1></td>
+			<td valign=bottom><span class=ct>C&oacute;d. baixa</span></td>
+			<td height=49><img src='../_lib/img/1.png' width=1 height=49></td>			
+		</tr>
+		<tr><td colspan=4 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+	</table>
+	<br />
+	<table cellspacing=0 cellpadding=0 border=0>
+		<tr>
+			<td width=333 class=ct></td>
+			<td width=333 class=ct align=right>Autentica&ccedil;&atilde;o mec&acirc;nica</td>
+		</tr>
+		<tr><td height=50 colspan=2></td></tr>
+		<tr><td colspan=2 class=ct align=right>Corte na linha pontilhada</td></tr>
+		<tr><td colspan=2 height=1><img src='../_lib/img/6.png'  width=665 height=1></td></tr>
+	</table>
+	&nbsp;<br>
+	<table cellspacing=0 cellpadding=0 border=0>
+		<tr>
+			<td width=140 class=cp><img src="../_lib/img/logoitau.jpg" alt="Itau" width="150" height="40"></td>
+			<td width=3 valign=bottom><img height=22 src='../_lib/img/3.png' width=2></td>
+			<td width=65 class=bc valign=bottom align=center>
+				<span align="center" style="font-size: 20px; font-weight: bold; font-family: Arial, Helvetica, sans-serif; color:#000;">
+					<?php echo $dadosboleto["codigo_banco_com_dv"]; ?>
+				</span>
+			</td>
+			<td width=3 valign=bottom><img height=22 src='../_lib/img/3.png' width=2></td>
+			<td width=450 class=ld align=right valign=bottom>
+				<span style="font-size: 15px; font-weight: normal; color:#000; font-weight: normal; font-family: Arial, Helvetica, sans-serif;">
+					<?php echo $dadosboleto["linha_digitavel"]?>
+				</span>
+			</td>
+		</tr>
+		<tr><td colspan=5><img height=1 src='../_lib/img/2.png' width=666></td></tr>
+	</table>
+	<table cellspacing=0 cellpadding=0 border=0 height="2">
+		<tr>
+			<td width=7 height=1><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=100><img src='../_lib/img/2.png' width=100 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=74><img src='../_lib/img/2.png' width=74 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=73><img src='../_lib/img/2.png' width=73 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=55><img src='../_lib/img/2.png' width=55 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=35><img src='../_lib/img/2.png' width=35 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=100><img src='../_lib/img/2.png' width=100 height=1></td>
+			<td width=7><img src='../_lib/img/2.png' width=7 height=1></td>
+			<td width=180><img src='../_lib/img/2.png' width=180 height=1></td>
+		</tr>
+		<tr>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td colspan=11 class=ct>Local de pagamento</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Vencimento</td>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+		</tr>
+		<tr>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td colspan=11 class=cp>Pag&aacute;vel em qualquer Banco at&eacute; o vencimento.</td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp align=right><?php echo $dadosboleto["data_vencimento"]?></td>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+		</tr>
+		<tr><td colspan=14 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+		<tr>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td colspan=11 class=ct>Beneficiário</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Ag&ecirc;ncia/C&oacute;digo Beneficiário</td>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+		</tr>
+		<tr>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td colspan=11  class=cp><?php echo $dadosboleto["cedente"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp align=right><?php echo $dadosboleto["agencia_codigo"]?></td>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+		</tr>
+		<tr><td colspan=14 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+		<tr>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Data do documento</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td colspan=3 class=ct>N&uacute;mero do documento</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Esp&eacute;cie doc.</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Aceite</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Data processamento</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Nosso n&uacute;mero</td>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+		</tr>
+		<tr>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["data_documento"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td colspan=3 class=cp><?php echo $dadosboleto["numero_documento"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["especie_doc"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["aceite"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["data_processamento"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp align=right><?php echo $dadosboleto["nosso_numero"]?></td>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+		</tr>
+		<tr><td colspan=14 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+		<tr>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Uso do banco</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Carteira</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Esp&eacute;cie</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td colspan=3 class=ct>Quantidade</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>Valor</td>
+			<td><img src='../_lib/img/1.png' width=1 height=13></td>
+			<td class=ct>(=) Valor documento</td>
+			<td height=13><img src='../_lib/img/1.png' width=1 height=13></td>
+		</tr>
+		<tr>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp height=12>&nbsp;</td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["carteira"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["especie"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td colspan=3 class=cp><?php echo $dadosboleto["quantidade"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp><?php echo $dadosboleto["valor_unitario"]?></td>
+			<td><img src='../_lib/img/1.png' width=1 height=12></td>
+			<td class=cp align=right><?php echo $dadosboleto["valor_boleto"]?></td>
+			<td height=12><img src='../_lib/img/1.png' width=1 height=12></td>
+		</tr>
+		<tr><td colspan=14 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+	</table>
+	<table cellspacing=0 cellpadding=0 border=0>
+		<tr>
+			<td width=7 height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+			<td width=472 rowspan=9 valign=top>
+				<span class=ct>Instru&ccedil;&otilde;es (Texto de responsabilidade do Beneficiario)</span><br>
+				&nbsp;<br>
+				<span class=cp><?php echo $dadosboleto["instrucoes1"] . '<br>' . $dadosboleto["instrucoes2"] . '<br>' . $dadosboleto["instrucoes3"] . '<br>' . $dadosboleto["instrucoes4"]?></span>
+			</td>
+			<td width=7><img src='../_lib/img/2.png' width=1 height=26></td>
+			<td width=180 class=ct>(-) Desconto / Abatimentos</td>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+		</tr>
+		<tr><td height=1><img src='../_lib/img/2.png' width=1 height=1></td><td><img src='../_lib/img/2.png' width=7 height=1></td><td><img src='../_lib/img/2.png' width=180 height=1></td></tr>
+		<tr>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+			<td><img src='../_lib/img/2.png' width=1 height=26></td>
+			<td class=ct>(-) Outras dedu&ccedil;&otilde;es</td>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+		</tr>
+		<tr><td height=1><img src='../_lib/img/1.png' width=1 height=1></td><td><img src='../_lib/img/2.png' width=7 height=1></td><td><img src='../_lib/img/2.png' width=180 height=1></td></tr>
+		<tr>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+			<td><img src='../_lib/img/2.png' width=1 height=26></td>
+			<td class=ct>(+) Mora / Multa</td>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+		</tr>
+		<tr><td height=1><img src='../_lib/img/1.png' width=1 height=1></td><td><img src='../_lib/img/2.png' width=7 height=1></td><td><img src='../_lib/img/2.png' width=180 height=1></td></tr>
+		<tr>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+			<td><img src='../_lib/img/2.png' width=1 height=26></td>
+			<td class=ct>(+) Outros acr&eacute;scimos</td>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+		</tr>
+		<tr><td height=1><img src='../_lib/img/1.png' width=1 height=1></td><td><img src='../_lib/img/2.png' width=7 height=1></td><td><img src='../_lib/img/2.png' width=180 height=1></td></tr>
+		<tr>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+			<td><img src='../_lib/img/2.png' width=1 height=26></td>
+			<td class=ct>(=) Valor cobrado</td>
+			<td height=26><img src='../_lib/img/1.png' width=1 height=26></td>
+		</tr>
+		<tr><td colspan=4 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+		
+		<tr>
+			<td height=49><img src='../_lib/img/1.png' width=1 height=49></td>
+			<td class=cp><?php echo "Pagador: ".$dadosboleto["sacado"] . '<br>Endereço: ' . $dadosboleto["endereco1"] . '<br>' . $dadosboleto["endereco2"].'<br> Sacador/Avalista:' ?></td>
+			<td height=1><img src='../_lib/img/1.png' width=1 height=1></td>
+			<td valign=bottom><span class=ct>C&oacute;d. baixa</span></td>
+			<td height=49><img src='../_lib/img/1.png' width=1 height=49></td>
+		</tr>
+		<tr><td colspan=4 height=1><img src='../_lib/img/2.png' width=666 height=1></td></tr>
+	</table>
+	<br />
+	<table cellspacing=0 cellpadding=0 border=0>
+		<tr>
+			<td width=333 class=ct></td>
+			<td width=333 class=ct align=right>Autentica&ccedil;&atilde;o mec&acirc;nica - <span class=cp><b>Ficha de Compensa&ccedil;&atilde;o</b></span></td>
+		</tr>
+		<tr><td height=50 colspan=2><?php  $this->fbarcode($dadosboleto["codigo_barras"]); ?></td></tr>
+		<tr><td colspan=2 class=ct align=right>Corte na linha pontilhada</td></tr>
+		<tr><td colspan=2 height=1><img src='../_lib/img/6.png'  width=665 height=1></td></tr>
+	</table>	
+</page>          
+     
+<?php
+$this->dataset[$x][0] = str_replace("/", "", $this->dataset[$x][0]);
+$arquivoGerado = "Boleto_".$this->dataset[$x][0].".html";
+file_put_contents($arquivoGerado, ob_get_contents());
+ob_end_flush();
+
+?>
+<?php ?>;
+	
+<?php
+	
+	ob_start();   	
+   
+	$html = file_get_contents($arquivoGerado);	
+		
+    $html2pdf = new HTML2PDF('P','A4','pt');
+	
+    $html2pdf->WriteHTML($html);	
+	
+	$NomeArquivoPdf = 'BO'.'_'.$this->dataset[$x][19].'-'.$this->dataset[$x][11].'.pdf';	
+	
+    $html2pdf->output(getcwd().'/'.$NomeArquivoPdf, 'F');
+	
+	copy($NomeArquivoPdf, $this->sc_temp_varDiretorioArquivo."/".$this->sc_temp_varIdTenacidade."/".$NomeArquivoPdf);
+	
+	if( $zip->open( $filenameZIP , ZipArchive::CREATE )  === true){
+     
+    	$zip->addFile($NomeArquivoPdf , $NomeArquivoPdf);    
+    	  
+    	$zip->close();
+	}	
+
+	$sql = "UPDATE lancamentoreceita SET NossoNumero = ".$nnum." WHERE IdLancamentoReceita = ".$this->dataset[$x][11]; 
+    
+     $nm_select = $sql; 
+         $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select;
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+         $rf = $this->Db->Execute($nm_select);
+         if ($rf === false)
+         {
+             $this->Erro->mensagem (__FILE__, __LINE__, "banco", $this->Ini->Nm_lang['lang_errm_dber'], $this->Db->ErrorMsg());
+             if ($this->Ini->sc_tem_trans_banco)
+             {
+                 $this->Db->RollbackTrans(); 
+                 $this->Ini->sc_tem_trans_banco = false;
+             }
+             exit;
+         }
+         $rf->Close();
+      	
+
+	
+	$dataVencimento = explode("/",$dadosboleto["data_vencimento"]);	
+	
+	$sql = "UPDATE notafiscal SET NomeArquivoBoleto = '".$NomeArquivoPdf."', NomeReferenciaBoleto = '".$NomeArquivoPdf."' WHERE IdNotaFiscal = ".$this->dataset[$x][18] ; 
+    
+     $nm_select = $sql; 
+         $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select;
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+         $rf = $this->Db->Execute($nm_select);
+         if ($rf === false)
+         {
+             $this->Erro->mensagem (__FILE__, __LINE__, "banco", $this->Ini->Nm_lang['lang_errm_dber'], $this->Db->ErrorMsg());
+             if ($this->Ini->sc_tem_trans_banco)
+             {
+                 $this->Db->RollbackTrans(); 
+                 $this->Ini->sc_tem_trans_banco = false;
+             }
+             exit;
+         }
+         $rf->Close();
+      	
+}	
+
+$selecao_multipla = "";
+$tot = 0;
+
+$i=0;
+
+
+
+
+
+
+
+
+
+
+$fusohorario = 3; 
+$timestamp = mktime(date("H") - $fusohorario, date("i"), date("s"), date("m"), date("d"), date("Y"));
+
+$DATAHORA['PT'] = gmdate("d/m/Y H:i:s", $timestamp);
+$DATAHORA['EN'] = gmdate("Y-m-d H:i:s", $timestamp);
+$DATA['PT'] = gmdate("d/m/Y", $timestamp);
+$DATA['EN'] = gmdate("Y-m-d", $timestamp);
+$DATA['DIA'] = gmdate("d",$timestamp);
+$DATA['MES'] = gmdate("m",$timestamp);
+$DATA['ANO'] = gmdate("y",$timestamp);
+$DATA['SEGUNDO'] = gmdate("s",$timestamp);
+$HORA = gmdate("H:i:s", $timestamp);
+
+define("REMESSA","",true);
+
+$filename = REMESSA.$DATA['DIA'].$DATA['MES'].$DATA['ANO'].".rem";
+$conteudo = '';
+
+## REGISTRO HEADER
+#NOME DO CAMPO        #SIGNIFICADO            #POSICAO    #PICTURE
+$conteudo .= '0';             
+$conteudo .= 1;             
+$conteudo .= 'REMESSA';        
+$conteudo .= '01';            
+$conteudo .= $this->limit('COBRANCA',15);    
+$conteudo .= $this->datasetbanco[0][0];            
+$conteudo .= $this->complementoRegistro(2,"zeros");
+$conteudo .= $this->datasetbanco[0][1];
+$conteudo .= $this->datasetbanco[0][2];
+$conteudo .= $this->complementoRegistro(8,"brancos");
+$conteudo .= $this->limit($this->datasetbanco[0][6],30);
+$conteudo .= $this->datasetbanco[0][3];
+$conteudo .= $this->limit($this->datasetbanco[0][4],15);            
+$conteudo .= $DATA['DIA'].$DATA['MES'].$DATA['ANO'];
+$conteudo .= $this->complementoRegistro(294,"brancos");
+$conteudo .= $this->sequencial(1);        
+
+$conteudo .= chr(13).chr(10); 
+
+$i = 2;
+foreach($clientes as $cliente)
+{	
+## REGISTRO DETALHE (OBRIGATORIO)                         #NOME DO CAMPO                #SIGNIFICADO            #POSICAO    
+    $conteudo .= 1;                                 
+    $conteudo .= '02';                              
+    $conteudo .= $this->datasetbanco[0][7];              
+    $conteudo .= $this->datasetbanco[0][0];              
+    $conteudo .= '00';                              
+    $conteudo .= $this->datasetbanco[0][1];              
+    $conteudo .= $this->datasetbanco[0][2];              
+	$conteudo .= $this->complementoRegistro(4,"brancos");
+	$conteudo .= $this->complementoRegistro(4,"zeros");
+	$conteudo .= $this->limit($cliente[1],25); 
+	$conteudo .= str_pad($cliente[12], 8, "0", STR_PAD_LEFT);	
+	$conteudo .= $this->complementoRegistro(13,"zeros");	
+	$conteudo .= $this->datasetbanco[0][8]; 
+	$conteudo .= $this->complementoRegistro(21,"brancos");
+	$conteudo .= 'I';   
+	$conteudo .= '01'; 
+	$conteudo .= str_pad($cliente[12], 10, "0", STR_PAD_LEFT);
+	
+	$dataVencimento = explode("/",$cliente[5]);	
+	$conteudo .= $dataVencimento[0].$dataVencimento[1].substr($dataVencimento[2],-2); 
+	
+	$valorFinal = str_replace(',','', $cliente[3]);	
+	$valorFinal = str_replace('.','', $cliente[3]);	
+	$conteudo .= str_pad($valorFinal, 13, "0", STR_PAD_LEFT); 
+	$conteudo .= $this->datasetbanco[0][3]; 
+	$conteudo .= $this->complementoRegistro(5,"zeros"); 
+	$conteudo .= '01';   
+	$conteudo .= 'N'; 
+	$conteudo .= $DATA['DIA'].$DATA['MES'].$DATA['ANO'];
+	$conteudo .= '00';
+	$conteudo .= '00';
+	$valorFinalJuros = str_replace(',','.', $cliente[4]);
+	$valor1DiaJuros = number_format (($cliente[3]*$valorFinalJuros)/100,2);	
+	$valorFinalJuros = str_replace('.','', $valor1DiaJuros);		
+	$conteudo .= str_pad($valorFinalJuros, 13, "0", STR_PAD_LEFT);	
+	$dataVencimento = explode("/",$cliente[5]);	
+	$conteudo .= $dataVencimento[0].$dataVencimento[1].substr($dataVencimento[2],-2); 
+	$conteudo .= '0000000000000';
+	$conteudo .= '0000000000000';
+	$conteudo .= '0000000000000';
+	$conteudo .= '02';
+	$conteudo .= str_pad($cliente[2], 14, "0", STR_PAD_LEFT);
+	$conteudo .= $this->limit($cliente[1],30);
+	$conteudo .= $this->complementoRegistro(10,"brancos");
+	$conteudo .= $this->limit($cliente[7],40);
+	$conteudo .= $this->limit($cliente[8],12);
+	$conteudo .= $this->limit($cliente[9],8);
+	$conteudo .= $this->limit($cliente[10],15);
+	$conteudo .= $this->limit($cliente[11],2);
+	$conteudo .= $this->limit($cliente[1],30);
+	$conteudo .= $this->complementoRegistro(4,"brancos");  
+	$dataVencimento = explode("/",$cliente[5]);	
+	$conteudo .= $dataVencimento[0].$dataVencimento[1].substr($dataVencimento[2],-2); 
+	$conteudo .= $this->complementoRegistro(2,"zeros");  
+	$conteudo .= $this->complementoRegistro(1,"brancos");
+	$conteudo .= $this->sequencial($i++);            
+    $conteudo .= chr(13).chr(10); 
+	
+## REGISTRO MULTA
+	$conteudo .= '2'; 
+	$conteudo .= '1'; 
+	$dataMulta = explode("/",$this->dia_seguinte($cliente[5]));
+	$conteudo .= $dataMulta[0].$dataMulta[1].substr($dataMulta[2],0); 
+	
+	$valorMulta = str_replace(',','.', $cliente[6]);
+	$ValorFinalMulta = number_format (($cliente[3]*$valorMulta)/100,2);		
+	$valorMulta = str_replace('.','', $ValorFinalMulta);		
+	$conteudo .= str_pad($valorMulta, 13, "0", STR_PAD_LEFT);	
+	$conteudo .= $this->complementoRegistro(371,"brancos");
+	$conteudo .= $this->sequencial($i++);            
+    $conteudo .= chr(13).chr(10); 
+	
+}
+
+
+## REGISTRO TRAILLER
+                 
+$conteudo .= '9';             
+$conteudo .= $this->complementoRegistro(393,"brancos");
+$conteudo .= $this->sequencial($i++);        
+$conteudo .= chr(13).chr(10); 
+
+if (!$handle = fopen($filename, 'w+')) 
+{
+     echo("Não foi possível abrir o arquivo ($filename)");
+}
+if (fwrite($handle, "$conteudo") === FALSE) 
+{
+    echo("Não foi possível escrever no arquivo ($filename)");
+}
+fclose($handle);
+
+ 
+if( $zip->open( $filenameZIP , ZipArchive::CREATE )  === true){
+     
+    $zip->addFile($filename , $DATA['DIA'].$DATA['MES'].$DATA['ANO'].$DATA['SEGUNDO'].".rem" );    
+      
+    $zip->close();
+}
+header('Content-type: application/zip');
+header('Content-disposition: attachment; filename="'."CNAB_".$DATA['DIA'].$DATA['MES'].$DATA['ANO'].$DATA['SEGUNDO'].'.zip"');
+header( "refresh:2;url=ContaReceber_Gde.php" );
+readfile($filenameZIP); 
+unlink($filenameZIP);
+if (isset($this->sc_temp_varIdTenacidade)) {$_SESSION['varIdTenacidade'] = $this->sc_temp_varIdTenacidade;}
+if (isset($this->sc_temp_total_chked)) {$_SESSION['total_chked'] = $this->sc_temp_total_chked;}
+if (isset($this->sc_temp_varDiretorioArquivo)) {$_SESSION['varDiretorioArquivo'] = $this->sc_temp_varDiretorioArquivo;}
+if (isset($this->sc_temp_i)) {$_SESSION['i'] = $this->sc_temp_i;}
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+/*----- END - Scriptcase Locale: Button SC_btn_0 - onFinish ------*/
+ 
+}  
+    $this->NM_buffer = ob_get_contents();
+    if (!empty($this->NM_buffer))
+    {
+        ob_end_flush();
+    }
+?>
+      </td></tr><tr><td align="center">
+      <form name="F4" method="post" 
+                        action="<?php echo $nm_f_saida ?>" 
+                        target="_self">
+      <input type=hidden name="nmgp_opcao" value="volta_grid"/>
+      <input type=hidden name="script_case_init" value="<?php echo NM_encode_input($this->Ini->sc_page);?>"/>
+<?php
+    if (!empty($this->NM_buffer))
+    {
+        echo "<input type=submit name=\"nmgp_bok\" value=\"" . $this->Ini->Nm_lang['lang_btns_cfrm'] . "\"/>";
+        echo "</form>";
+    }
+    else
+    {
+        echo "</form>";
+        echo "<script type=\"text/javascript\">";
+        echo "document.F4.submit();";
+        echo "</script>";
+    }
+?>
+      </td></tr></table>
+      </body>
+      </html>
+<?php
+       if (isset($this->redir_modal) && !empty($this->redir_modal))
+       {
+           echo "<script type=\"text/javascript\">" . $this->redir_modal . "</script>";
+           $this->redir_modal = "";
+       }
+      $this->SC_redir_btn = false;
+   }
+   function SC_btn_1() 
+   {
+      global 
+      $nm_apl_dependente;
+      $this->SC_redir_btn = true;
+      $this->sc_where_orig   = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig'];
+      $this->sc_where_atual  = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq'];
+      $this->sc_where_filtro = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'];
+      $nm_f_saida = "LancamentoReceita_Boleto_Lst.php";
+?>
+     <!DOCTYPE html>
+      <html<?php echo $_SESSION['scriptcase']['reg_conf']['html_dir'] ?>>
+      <head>
+       <META http-equiv="Content-Type" content="text/html; charset=<?php echo $_SESSION['scriptcase']['charset_html'] ?>" />
+<?php
+if ($_SESSION['scriptcase']['proc_mobile'])
+{
+?>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<?php
+}
+?>
+        <script type="text/javascript" src="<?php echo $this->Ini->path_prod ?>/third/jquery/js/jquery.js"></script>
+        <script type="text/javascript" src="<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/malsup-blockui/jquery.blockUI.js"></script>
+        <script type="text/javascript">
+          var sc_pathToTB = '<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/thickbox/';
+          var sc_tbLangClose = "<?php echo html_entity_decode($this->Ini->Nm_lang['lang_tb_close'], ENT_COMPAT, $_SESSION['scriptcase']['charset']) ?>";
+          var sc_tbLangEsc = "<?php echo html_entity_decode($this->Ini->Nm_lang['lang_tb_esc'], ENT_COMPAT, $_SESSION['scriptcase']['charset']) ?>";
+        </script>
+        <script type="text/javascript" src="<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/thickbox/thickbox-compressed.js"></script>
+        <link rel="shortcut icon" href="../_lib/img/scriptcase__NM__ico__NM__favicon.ico">
+        <link rel="stylesheet" href="<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/thickbox/thickbox.css" type="text/css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->Ini->str_schema_all ?>_grid.css" /> 
+        <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->Ini->str_schema_all ?>_grid<?php echo $_SESSION['scriptcase']['reg_conf']['css_dir'] ?>.css" /> 
+      </head>
+      <body class="scGridPage">
+      <table class="scGridTabela" align="center"><tr><td>
+<?php
+      
+/*----- Scriptcase Locale: Button SC_btn_1 ------*/
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  $check_sql = "SELECT IdAplicacao FROM aplicacao WHERE Nome = '" . $this->Ini->nm_cod_apl . "'";
+
+ 
+      $nm_select = $check_sql; 
+      $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select; 
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+      $rs = array();
+      if ($SCrx = $this->Db->Execute($nm_select)) 
+      { 
+          $SCy = 0; 
+          $nm_count = $SCrx->FieldCount();
+          while (!$SCrx->EOF)
+          { 
+                 for ($SCx = 0; $SCx < $nm_count; $SCx++)
+                 { 
+                        $rs[$SCy] [$SCx] = $SCrx->fields[$SCx];
+                 }
+                 $SCy++; 
+                 $SCrx->MoveNext();
+          } 
+          $SCrx->Close();
+      } 
+      elseif (isset($GLOBALS["NM_ERRO_IBASE"]) && $GLOBALS["NM_ERRO_IBASE"] != 1)  
+      { 
+          $rs = false;
+          $rs_erro = $this->Db->ErrorMsg();
+      } 
+
+if (isset($rs[0][0])) {
+    $idAplicacao = $rs[0][0];
+}
+else {
+	
+ if (!isset($this->Campos_Mens_erro)){$this->Campos_Mens_erro = "";}
+ if (!empty($this->Campos_Mens_erro)){$this->Campos_Mens_erro .= "<br>";}$this->Campos_Mens_erro .= "Aplicação não cadastrada. Por favor, informe ao Administrador do sistema.";
+;
+}
+
+ if (!isset($this->Campos_Mens_erro) || empty($this->Campos_Mens_erro))
+ {
+$this->nmgp_redireciona_form($this->Ini->path_link . "" . SC_dir_app_name('GrupoUsuarioAplicacao_Gde') . "/GrupoUsuarioAplicacao_Gde.php", $this->nm_location, "varIdGrupoUsuario?#?" . NM_encode_input("") . "?@?" . "varIdAplicacao?#?" . NM_encode_input($idAplicacao) . "?@?","_self", 440, 630);
+ };
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+/*----- END - Scriptcase Locale: Button SC_btn_1 ------*/
+ 
+?>
+      </td></tr><tr><td align="center">
+      <form name="F4" method="post" 
+                        action="<?php echo $nm_f_saida ?>" 
+                        target="_self">
+      <input type=hidden name="nmgp_opcao" value="volta_grid"/>
+      <input type=hidden name="script_case_init" value="<?php echo NM_encode_input($this->Ini->sc_page);?>"/>
+      <input type=submit name="nmgp_bok" value="<?php echo $this->Ini->Nm_lang['lang_btns_cfrm'] ?>"/>
+      </form>
+      </td></tr></table>
+      </body>
+      </html>
+<?php
+       if (isset($this->redir_modal) && !empty($this->redir_modal))
+       {
+           echo "<script type=\"text/javascript\">" . $this->redir_modal . "</script>";
+           $this->redir_modal = "";
+       }
+      $this->SC_redir_btn = false;
+   }
+   function SC_btn_2() 
+   {
+      global 
+      $nm_apl_dependente;
+      $this->SC_redir_btn = true;
+      $nm_f_saida = "LancamentoReceita_Boleto_Lst.php";
+?>
+     <!DOCTYPE html>
+      <html<?php echo $_SESSION['scriptcase']['reg_conf']['html_dir'] ?>>
+      <head>
+       <META http-equiv="Content-Type" content="text/html; charset=<?php echo $_SESSION['scriptcase']['charset_html'] ?>" />
+<?php
+if ($_SESSION['scriptcase']['proc_mobile'])
+{
+?>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<?php
+}
+?>
+        <script type="text/javascript" src="<?php echo $this->Ini->path_prod ?>/third/jquery/js/jquery.js"></script>
+        <script type="text/javascript" src="<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/malsup-blockui/jquery.blockUI.js"></script>
+        <script type="text/javascript">
+          var sc_pathToTB = '<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/thickbox/';
+          var sc_tbLangClose = "<?php echo html_entity_decode($this->Ini->Nm_lang['lang_tb_close'], ENT_COMPAT, $_SESSION['scriptcase']['charset']) ?>";
+          var sc_tbLangEsc = "<?php echo html_entity_decode($this->Ini->Nm_lang['lang_tb_esc'], ENT_COMPAT, $_SESSION['scriptcase']['charset']) ?>";
+        </script>
+        <script type="text/javascript" src="<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/thickbox/thickbox-compressed.js"></script>
+        <link rel="shortcut icon" href="../_lib/img/scriptcase__NM__ico__NM__favicon.ico">
+        <link rel="stylesheet" href="<?php echo $this->Ini->path_prod ?>/third/jquery_plugin/thickbox/thickbox.css" type="text/css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->Ini->str_schema_all ?>_grid.css" /> 
+        <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->Ini->str_schema_all ?>_grid<?php echo $_SESSION['scriptcase']['reg_conf']['css_dir'] ?>.css" /> 
+      </head>
+      <body class="scGridPage">
+      <table class="scGridTabela" align="center"><tr><td>
+<?php
+ob_start();
+$NM_cont_reg  = 0;
+$NM_index_reg = (isset($_POST['nm_run_opt_sel'])) ? explode(";", $_POST['nm_run_opt_sel']) : array();
+if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['sc_sql_btn_run']))
+{
+    foreach ($NM_index_reg as $Run_register)
+    {
+       if (!is_numeric($Run_register)) { continue; }
+       $Temp_fields = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['sc_sql_btn_run'][$Run_register];
+       $this->nomefantasia = $Temp_fields[0] ;  
+       $this->dataprevisao = $Temp_fields[1] ;  
+       $this->valorprevisao = $Temp_fields[2] ;  
+       $this->valorprevisao =  str_replace(",", ".", $this->valorprevisao);
+       $this->valorprevisao = (strpos(strtolower($this->valorprevisao), "e")) ? (float)$this->valorprevisao : $this->valorprevisao; 
+       $this->valorprevisao = (string)$this->valorprevisao;
+       $this->parcela = $Temp_fields[3] ;  
+       $this->parcela = (string)$this->parcela;
+       $this->idnotafiscal = $Temp_fields[4] ;  
+       $this->idnotafiscal = (string)$this->idnotafiscal;
+       $this->nossonumero = $Temp_fields[5] ;  
+       $this->nossonumero = (string)$this->nossonumero;
+       $this->enviouemail = $Temp_fields[6] ;  
+       $this->idlancamentoreceita = $Temp_fields[7] ;  
+       $this->idlancamentoreceita = (string)$this->idlancamentoreceita;
+       $this->idcliente = $Temp_fields[8] ;  
+       $this->idcliente = (string)$this->idcliente;
+       $this->idcontacaixa = $Temp_fields[9] ;  
+       $this->idcontacaixa = (string)$this->idcontacaixa;
+       $this->razaosocial = $Temp_fields[10] ;  
+       $this->idsituacaodocumento = $Temp_fields[11] ;  
+       $this->idsituacaodocumento = (string)$this->idsituacaodocumento;
+      
+/*----- Scriptcase Locale: Button SC_btn_2 - onRecord ------*/
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+if (!isset($_SESSION['i'])) {$_SESSION['i'] = "";}
+if (!isset($this->sc_temp_i)) {$this->sc_temp_i = (isset($_SESSION['i'])) ? $_SESSION['i'] : "";}
+if (!isset($_SESSION['total_chked'])) {$_SESSION['total_chked'] = "";}
+if (!isset($this->sc_temp_total_chked)) {$this->sc_temp_total_chked = (isset($_SESSION['total_chked'])) ? $_SESSION['total_chked'] : "";}
+  $arr=$this->sc_temp_i;
+$this->sc_temp_total_chked[$arr] = $this->idlancamentoreceita ;
+$this->sc_temp_i++;
+if (isset($this->sc_temp_total_chked)) {$_SESSION['total_chked'] = $this->sc_temp_total_chked;}
+if (isset($this->sc_temp_i)) {$_SESSION['i'] = $this->sc_temp_i;}
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+/*----- END - Scriptcase Locale: Button SC_btn_2 - onRecord ------*/
+ 
+    }  
+    
+/*----- Scriptcase Locale: Button SC_btn_2 - onFinish ------*/
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+if (!isset($_SESSION['i'])) {$_SESSION['i'] = "";}
+if (!isset($this->sc_temp_i)) {$this->sc_temp_i = (isset($_SESSION['i'])) ? $_SESSION['i'] : "";}
+if (!isset($_SESSION['varIdUsuario'])) {$_SESSION['varIdUsuario'] = "";}
+if (!isset($this->sc_temp_varIdUsuario)) {$this->sc_temp_varIdUsuario = (isset($_SESSION['varIdUsuario'])) ? $_SESSION['varIdUsuario'] : "";}
+if (!isset($_SESSION['varIdTenacidade'])) {$_SESSION['varIdTenacidade'] = "";}
+if (!isset($this->sc_temp_varIdTenacidade)) {$this->sc_temp_varIdTenacidade = (isset($_SESSION['varIdTenacidade'])) ? $_SESSION['varIdTenacidade'] : "";}
+if (!isset($_SESSION['varDiretorioArquivo'])) {$_SESSION['varDiretorioArquivo'] = "";}
+if (!isset($this->sc_temp_varDiretorioArquivo)) {$this->sc_temp_varDiretorioArquivo = (isset($_SESSION['varDiretorioArquivo'])) ? $_SESSION['varDiretorioArquivo'] : "";}
+if (!isset($_SESSION['varRemetente'])) {$_SESSION['varRemetente'] = "";}
+if (!isset($this->sc_temp_varRemetente)) {$this->sc_temp_varRemetente = (isset($_SESSION['varRemetente'])) ? $_SESSION['varRemetente'] : "";}
+if (!isset($_SESSION['varSenhaSMTP'])) {$_SESSION['varSenhaSMTP'] = "";}
+if (!isset($this->sc_temp_varSenhaSMTP)) {$this->sc_temp_varSenhaSMTP = (isset($_SESSION['varSenhaSMTP'])) ? $_SESSION['varSenhaSMTP'] : "";}
+if (!isset($_SESSION['varUsuarioSMTP'])) {$_SESSION['varUsuarioSMTP'] = "";}
+if (!isset($this->sc_temp_varUsuarioSMTP)) {$this->sc_temp_varUsuarioSMTP = (isset($_SESSION['varUsuarioSMTP'])) ? $_SESSION['varUsuarioSMTP'] : "";}
+if (!isset($_SESSION['varServidorSMTP'])) {$_SESSION['varServidorSMTP'] = "";}
+if (!isset($this->sc_temp_varServidorSMTP)) {$this->sc_temp_varServidorSMTP = (isset($_SESSION['varServidorSMTP'])) ? $_SESSION['varServidorSMTP'] : "";}
+if (!isset($_SESSION['total_chked'])) {$_SESSION['total_chked'] = "";}
+if (!isset($this->sc_temp_total_chked)) {$this->sc_temp_total_chked = (isset($_SESSION['total_chked'])) ? $_SESSION['total_chked'] : "";}
+  $tot = count($this->sc_temp_total_chked);
+if ($tot <= 0) {
+	
+	echo "Atenção: Nenhum registro selecionado.";
+	 if (isset($this->sc_temp_total_chked)) {$_SESSION['total_chked'] = $this->sc_temp_total_chked;}
+ if (isset($this->sc_temp_varServidorSMTP)) {$_SESSION['varServidorSMTP'] = $this->sc_temp_varServidorSMTP;}
+ if (isset($this->sc_temp_varUsuarioSMTP)) {$_SESSION['varUsuarioSMTP'] = $this->sc_temp_varUsuarioSMTP;}
+ if (isset($this->sc_temp_varSenhaSMTP)) {$_SESSION['varSenhaSMTP'] = $this->sc_temp_varSenhaSMTP;}
+ if (isset($this->sc_temp_varRemetente)) {$_SESSION['varRemetente'] = $this->sc_temp_varRemetente;}
+ if (isset($this->sc_temp_varDiretorioArquivo)) {$_SESSION['varDiretorioArquivo'] = $this->sc_temp_varDiretorioArquivo;}
+ if (isset($this->sc_temp_varIdTenacidade)) {$_SESSION['varIdTenacidade'] = $this->sc_temp_varIdTenacidade;}
+ if (isset($this->sc_temp_varIdUsuario)) {$_SESSION['varIdUsuario'] = $this->sc_temp_varIdUsuario;}
+ if (isset($this->sc_temp_i)) {$_SESSION['i'] = $this->sc_temp_i;}
+ if (!isset($this->Campos_Mens_erro) || empty($this->Campos_Mens_erro))
+ {
+$this->nmgp_redireciona_form($this->Ini->path_link . "" . SC_dir_app_name('LancamentoReceita_Boleto_Lst') . "/LancamentoReceita_Boleto_Lst.php", $this->nm_location, "parm1?#?" . NM_encode_input('1') . "?@?","_self", 440, 630);
+ };
+	
+} elseif ($tot > 10) {
+	
+	echo "Atenção: Não selecione mais que 10 registros.";
+	 if (isset($this->sc_temp_total_chked)) {$_SESSION['total_chked'] = $this->sc_temp_total_chked;}
+ if (isset($this->sc_temp_varServidorSMTP)) {$_SESSION['varServidorSMTP'] = $this->sc_temp_varServidorSMTP;}
+ if (isset($this->sc_temp_varUsuarioSMTP)) {$_SESSION['varUsuarioSMTP'] = $this->sc_temp_varUsuarioSMTP;}
+ if (isset($this->sc_temp_varSenhaSMTP)) {$_SESSION['varSenhaSMTP'] = $this->sc_temp_varSenhaSMTP;}
+ if (isset($this->sc_temp_varRemetente)) {$_SESSION['varRemetente'] = $this->sc_temp_varRemetente;}
+ if (isset($this->sc_temp_varDiretorioArquivo)) {$_SESSION['varDiretorioArquivo'] = $this->sc_temp_varDiretorioArquivo;}
+ if (isset($this->sc_temp_varIdTenacidade)) {$_SESSION['varIdTenacidade'] = $this->sc_temp_varIdTenacidade;}
+ if (isset($this->sc_temp_varIdUsuario)) {$_SESSION['varIdUsuario'] = $this->sc_temp_varIdUsuario;}
+ if (isset($this->sc_temp_i)) {$_SESSION['i'] = $this->sc_temp_i;}
+ if (!isset($this->Campos_Mens_erro) || empty($this->Campos_Mens_erro))
+ {
+$this->nmgp_redireciona_form($this->Ini->path_link . "" . SC_dir_app_name('LancamentoReceita_Boleto_Lst') . "/LancamentoReceita_Boleto_Lst.php", $this->nm_location, "parm1?#?" . NM_encode_input('2') . "?@?","_self", 440, 630);
+ };
+	
+}
+
+$selecao_multipla = "";
+
+for($x=0;$x<$tot;$x++)
+{
+	if ($x == $tot-1)
+		 $selecao_multipla.= preg_replace("[^a-zA-Z0-9_]", "",$this->sc_temp_total_chked[$x]);
+	else
+ 		 $selecao_multipla.= preg_replace("[^a-zA-Z0-9_]", "",$this->sc_temp_total_chked[$x]).",";
+}
+$this->sc_temp_i=0;
+
+
+
+
+$enviadoSucesso = 0;
+
+$varIdReceita = explode(",", $selecao_multipla);
+
+for($x=0;$x<$tot;$x++) {
+	
+	$sql = "SELECT nf.NomeReferencia, nf.NomeArquivo, ct.email, cl.NomeFantasia, nf.NomeArquivoBoleto, nf.NomeReferenciaXml, cl.Cnpj
+					FROM lancamentoreceita lr
+					INNER JOIN notafiscal nf on (lr.IdNotaFiscal = nf.IdNotaFiscal)
+					INNER JOIN clientecontato ct on (ct.IdCliente = lr.IdCliente and ct.RecebeCobranca = 'S')
+					INNER JOIN cliente cl on (cl.IdCliente = lr.IdCliente)
+					WHERE 
+					lr.IdLancamentoReceita = ".$varIdReceita[$x];	
+	
+	 
+      $nm_select = $sql; 
+      $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select; 
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+      if ($this->meus_dados = $this->Db->Execute($nm_select)) 
+      { }
+      elseif (isset($GLOBALS["NM_ERRO_IBASE"]) && $GLOBALS["NM_ERRO_IBASE"] != 1)  
+      { 
+          $this->meus_dados = false;
+          $this->meus_dados_erro = $this->Db->ErrorMsg();
+      } 
+
+	
+	if ($this->meus_dados  === false) {
+		
+		echo "Erro de acesso. Mensagem = " . $this->meus_dados_erro ;
+		
+	} else {
+		
+		while (!$this->meus_dados->EOF) {
+			
+			$emailEnviar = $this->meus_dados->fields[2];
+			
+			$mail_smtp_server 		= $this->sc_temp_varServidorSMTP;        				
+			$mail_smtp_user   		= $this->sc_temp_varUsuarioSMTP;                 		
+			$mail_smtp_pass   		= $this->sc_temp_varSenhaSMTP;                			
+			$mail_from        		= $this->sc_temp_varRemetente;          					
+			$mail_to          		= trim($emailEnviar); 					  	
+			$mail_subject     		= 'Nota fiscal e Boleto - LIGA Sistemas';   
+			
+			$varCnpj = $this->meus_dados->fields[6];
+
+			$mail_message = "<html><head></head><body>";
+			$mail_message .= "Prezado ".$this->meus_dados->fields[3].",".				             
+							 "Segue anexo: <br><br>".
+							 "<strong>- Nota Fiscal Eletrônica de Serviços - NFs-e; <br>".
+							 "- Boleto bancário para pagamento.</strong><br><br>".
+							 "Gentileza conferir todos os dados discriminados na NFs-e.<br>".
+							 "Caso tenha alguma divergência, por favor, entre em contato imediatamente.<br><br>".
+							 "Você pode também acessar a sua fatura e boleto de forma rápida e segura diretamente pelo <strong>Portal do Cliente em nosso site</strong>.<br><br>Para acessar, basta acessar <strong>www.liga.inf.br</strong> e clicar no menu <strong>Área do cliente</strong><br><br>. O LOGIN e SENHA inicial será o <strong>CNPJ</strong> sem utilizar a pontuação, colocar apenas os números. No primeiro acesso, indicamos fazer alteração da sua senha.<br><br>".
+							 "<strong>CUIDADO COM FRAUDES:</strong> <br> - Antes de confirmar o pagamento deste boleto, CONFIRA se o banco emissor é o Itaú, nº 341 e se o BENEFICIÁRIO é a LIGA SISTEMAS DE INF. LTDA ME - CNPJ: 00.325.244/0001-44.<br><br>".
+							"<img src='https://ligacloud.com.br/liga_infotime/_lib/img/grp__NM__img__NM__aviso.png'/><br>".
+							 "Para atualização do boleto, por favor, <a href='https://www.itau.com.br/servicos/boletos/atualizar/'> CLIQUE AQUI</a> e digite o código de barras do boleto enviado. 							 <br>";	
+			$mail_message .= "</body></html>";
+
+			$mail_format      		= 'H';                       				
+			$mail_copies         	= 'joao.normanha@liga.inf.br;william.braga@liga.inf.br';                        				
+			$mail_tp_copies      	= '';                        				
+			$mail_port           	= '465';                     				
+			$mail_tp_connection  	= 'S';                       				
+			$mail_attachments 		= array(                     				
+									$this->sc_temp_varDiretorioArquivo."/".$this->sc_temp_varIdTenacidade."/".$this->meus_dados->fields[0], $this->sc_temp_varDiretorioArquivo."/".$this->sc_temp_varIdTenacidade."/".$this->meus_dados->fields[4], $this->sc_temp_varDiretorioArquivo."/".$this->sc_temp_varIdTenacidade."/".$this->meus_dados->fields[5]
+									);
+			
+			    include_once($this->Ini->path_third . "/swift/swift_required.php");
+    $sc_mail_port     = "$mail_port";
+    $sc_mail_tp_port  = "$mail_tp_connection";
+    $sc_mail_tp_mens  = "$mail_format";
+    $sc_mail_tp_copy  = "$mail_tp_copies";
+    $this->sc_mail_count = 0;
+    $this->sc_mail_erro  = "";
+    $this->sc_mail_ok    = true;
+    if ($sc_mail_tp_port == "S" || $sc_mail_tp_port == "Y")
+    {
+        $sc_mail_port = !empty($sc_mail_port) ? $sc_mail_port : 465;
+        $Con_Mail = Swift_SmtpTransport::newInstance($mail_smtp_server, $sc_mail_port, 'ssl');
+    }
+    elseif ($sc_mail_tp_port == "T")
+    {
+        $sc_mail_port = !empty($sc_mail_port) ? $sc_mail_port : 587;
+        $Con_Mail = Swift_SmtpTransport::newInstance($mail_smtp_server, $sc_mail_port, 'tls');
+    }
+    else
+    {
+        $sc_mail_port = !empty($sc_mail_port) ? $sc_mail_port : 25;
+        $Con_Mail = Swift_SmtpTransport::newInstance($mail_smtp_server, $sc_mail_port);
+    }
+    $Con_Mail->setUsername($mail_smtp_user);
+    $Con_Mail->setpassword($mail_smtp_pass);
+    $Send_Mail = Swift_Mailer::newInstance($Con_Mail);
+    if ($sc_mail_tp_mens == "H")
+    {
+        $Mens_Mail = Swift_Message::newInstance($mail_subject)->setBody($mail_message)->setContentType("text/html");
+    }
+    else
+    {
+        $Mens_Mail = Swift_Message::newInstance($mail_subject)->setBody($mail_message);
+    }
+    if (!empty($_SESSION['scriptcase']['charset']))
+    {
+        $Mens_Mail->setCharset($_SESSION['scriptcase']['charset']);
+    }
+    $Temp_mail = $mail_attachments;
+    if (!is_array($Temp_mail))
+    {
+        $Temp_mail = explode(";", $mail_attachments);
+    }
+    foreach ($Temp_mail as $NM_dest)
+    {
+        if (!empty($NM_dest))
+        {
+            $Mens_Mail->attach(Swift_Attachment::fromPath($NM_dest));
+        }
+    }
+    $Temp_mail = $mail_to;
+    if (!is_array($Temp_mail))
+    {
+        $Temp_mail = explode(";", $mail_to);
+    }
+    foreach ($Temp_mail as $NM_dest)
+    {
+        if (!empty($NM_dest))
+        {
+            $Arr_addr = SC_Mail_Address($NM_dest);
+            $Mens_Mail->addTo($Arr_addr[0], $Arr_addr[1]);
+        }
+    }
+    $Temp_mail = $mail_copies;
+    if (!is_array($Temp_mail))
+    {
+        $Temp_mail = explode(";", $mail_copies);
+    }
+    foreach ($Temp_mail as $NM_dest)
+    {
+        if (!empty($NM_dest))
+        {
+            $Arr_addr = SC_Mail_Address($NM_dest);
+            if (strtoupper(substr($sc_mail_tp_copy, 0, 2)) == "CC")
+            {
+                $Mens_Mail->addCc($Arr_addr[0], $Arr_addr[1]);
+            }
+            else
+            {
+                $Mens_Mail->addBcc($Arr_addr[0], $Arr_addr[1]);
+            }
+        }
+    }
+    $Arr_addr = SC_Mail_Address($mail_from);
+    $Err_mail = array();
+    $this->sc_mail_count = $Send_Mail->send($Mens_Mail->setFrom($Arr_addr[0], $Arr_addr[1]), $Err_mail);
+    if (!empty($Err_mail))
+    {
+        $this->sc_mail_erro = $Err_mail;
+        $this->sc_mail_ok   = false;
+    }
+;	
+			
+			if ($this->sc_mail_ok ) {
+				
+				$update_sql = "UPDATE lancamentoreceita SET EnviouEmail = 'S' WHERE IdLancamentoReceita = ".$varIdReceita[$x];
+				
+     $nm_select = $update_sql; 
+         $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select;
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+         $rf = $this->Db->Execute($nm_select);
+         if ($rf === false)
+         {
+             $this->Erro->mensagem (__FILE__, __LINE__, "banco", $this->Ini->Nm_lang['lang_errm_dber'], $this->Db->ErrorMsg());
+             if ($this->Ini->sc_tem_trans_banco)
+             {
+                 $this->Db->RollbackTrans(); 
+                 $this->Ini->sc_tem_trans_banco = false;
+             }
+             exit;
+         }
+         $rf->Close();
+      
+				if ($this->Ini->sc_tem_trans_banco)
+{
+    $this->Db->CommitTrans();
+    $this->Ini->sc_tem_trans_banco = false;
+}
+
+				$insert_sql = "INSERT INTO emailenviado (IdTenacidade, IdLancamentoReceita, IdUsuarioEnvio, DataHoraEnvio) VALUES (".$this->sc_temp_varIdTenacidade.",". $varIdReceita[$x].",". $this->sc_temp_varIdUsuario.", now())";
+				
+     $nm_select = $insert_sql; 
+         $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select;
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+         $rf = $this->Db->Execute($nm_select);
+         if ($rf === false)
+         {
+             $this->Erro->mensagem (__FILE__, __LINE__, "banco", $this->Ini->Nm_lang['lang_errm_dber'], $this->Db->ErrorMsg());
+             if ($this->Ini->sc_tem_trans_banco)
+             {
+                 $this->Db->RollbackTrans(); 
+                 $this->Ini->sc_tem_trans_banco = false;
+             }
+             exit;
+         }
+         $rf->Close();
+      
+				if ($this->Ini->sc_tem_trans_banco)
+{
+    $this->Db->CommitTrans();
+    $this->Ini->sc_tem_trans_banco = false;
+}
+
+				$enviadoSucesso = $enviadoSucesso + 1;
+				
+			} else {
+				
+				$update_sql = "UPDATE lancamentoreceita SET EnviouEmail = 'N' WHERE IdLancamentoReceita = ".$varIdReceita[$x];
+				
+     $nm_select = $update_sql; 
+         $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select;
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+         $rf = $this->Db->Execute($nm_select);
+         if ($rf === false)
+         {
+             $this->Erro->mensagem (__FILE__, __LINE__, "banco", $this->Ini->Nm_lang['lang_errm_dber'], $this->Db->ErrorMsg());
+             if ($this->Ini->sc_tem_trans_banco)
+             {
+                 $this->Db->RollbackTrans(); 
+                 $this->Ini->sc_tem_trans_banco = false;
+             }
+             exit;
+         }
+         $rf->Close();
+      
+				if ($this->Ini->sc_tem_trans_banco)
+{
+    $this->Db->CommitTrans();
+    $this->Ini->sc_tem_trans_banco = false;
+}
+	
+				
+				
+ if (!isset($this->Campos_Mens_erro)){$this->Campos_Mens_erro = "";}
+ if (!empty($this->Campos_Mens_erro)){$this->Campos_Mens_erro .= "<br>";}$this->Campos_Mens_erro .= $this->sc_mail_erro ;
+;			
+			}
+			
+			$this->meus_dados->MoveNext();
+		}
+		
+		$this->meus_dados->Close();		
+	}	
+}
+
+ if (isset($this->sc_temp_total_chked)) {$_SESSION['total_chked'] = $this->sc_temp_total_chked;}
+ if (isset($this->sc_temp_varServidorSMTP)) {$_SESSION['varServidorSMTP'] = $this->sc_temp_varServidorSMTP;}
+ if (isset($this->sc_temp_varUsuarioSMTP)) {$_SESSION['varUsuarioSMTP'] = $this->sc_temp_varUsuarioSMTP;}
+ if (isset($this->sc_temp_varSenhaSMTP)) {$_SESSION['varSenhaSMTP'] = $this->sc_temp_varSenhaSMTP;}
+ if (isset($this->sc_temp_varRemetente)) {$_SESSION['varRemetente'] = $this->sc_temp_varRemetente;}
+ if (isset($this->sc_temp_varDiretorioArquivo)) {$_SESSION['varDiretorioArquivo'] = $this->sc_temp_varDiretorioArquivo;}
+ if (isset($this->sc_temp_varIdTenacidade)) {$_SESSION['varIdTenacidade'] = $this->sc_temp_varIdTenacidade;}
+ if (isset($this->sc_temp_varIdUsuario)) {$_SESSION['varIdUsuario'] = $this->sc_temp_varIdUsuario;}
+ if (isset($this->sc_temp_i)) {$_SESSION['i'] = $this->sc_temp_i;}
+ if (!isset($this->Campos_Mens_erro) || empty($this->Campos_Mens_erro))
+ {
+$this->nmgp_redireciona_form($this->Ini->path_link . "" . SC_dir_app_name('LancamentoReceita_Boleto_Lst') . "/LancamentoReceita_Boleto_Lst.php", $this->nm_location, "parm1?#?" . NM_encode_input('1') . "?@?","_self", 440, 630);
+ };
+if (isset($this->sc_temp_total_chked)) {$_SESSION['total_chked'] = $this->sc_temp_total_chked;}
+if (isset($this->sc_temp_varServidorSMTP)) {$_SESSION['varServidorSMTP'] = $this->sc_temp_varServidorSMTP;}
+if (isset($this->sc_temp_varUsuarioSMTP)) {$_SESSION['varUsuarioSMTP'] = $this->sc_temp_varUsuarioSMTP;}
+if (isset($this->sc_temp_varSenhaSMTP)) {$_SESSION['varSenhaSMTP'] = $this->sc_temp_varSenhaSMTP;}
+if (isset($this->sc_temp_varRemetente)) {$_SESSION['varRemetente'] = $this->sc_temp_varRemetente;}
+if (isset($this->sc_temp_varDiretorioArquivo)) {$_SESSION['varDiretorioArquivo'] = $this->sc_temp_varDiretorioArquivo;}
+if (isset($this->sc_temp_varIdTenacidade)) {$_SESSION['varIdTenacidade'] = $this->sc_temp_varIdTenacidade;}
+if (isset($this->sc_temp_varIdUsuario)) {$_SESSION['varIdUsuario'] = $this->sc_temp_varIdUsuario;}
+if (isset($this->sc_temp_i)) {$_SESSION['i'] = $this->sc_temp_i;}
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+/*----- END - Scriptcase Locale: Button SC_btn_2 - onFinish ------*/
+ 
+}  
+    $this->NM_buffer = ob_get_contents();
+    if (!empty($this->NM_buffer))
+    {
+        ob_end_flush();
+    }
+?>
+      </td></tr><tr><td align="center">
+      <form name="F4" method="post" 
+                        action="<?php echo $nm_f_saida ?>" 
+                        target="_self">
+      <input type=hidden name="nmgp_opcao" value="volta_grid"/>
+      <input type=hidden name="script_case_init" value="<?php echo NM_encode_input($this->Ini->sc_page);?>"/>
+<?php
+    if (!empty($this->NM_buffer))
+    {
+        echo "<input type=submit name=\"nmgp_bok\" value=\"" . $this->Ini->Nm_lang['lang_btns_cfrm'] . "\"/>";
+        echo "</form>";
+    }
+    else
+    {
+        echo "</form>";
+        echo "<script type=\"text/javascript\">";
+        echo "document.F4.submit();";
+        echo "</script>";
+    }
+?>
+      </td></tr></table>
+      </body>
+      </html>
+<?php
+       if (isset($this->redir_modal) && !empty($this->redir_modal))
+       {
+           echo "<script type=\"text/javascript\">" . $this->redir_modal . "</script>";
+           $this->redir_modal = "";
+       }
+      $this->SC_redir_btn = false;
+   }
+
+/*----- Scriptcase Locale: PHP Method: data_uri ------*/
+
+function data_uri($file, $mine)
+{
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+$contents = file_get_contents($file);
+$base64 = base64_encode($contents);
+
+return "data:$mime;base64,$base64";
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: data_uri ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: removeAcentos ------*/
+
+function removeAcentos($texto)
+{
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+$String = $texto;
+    	return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/","/(É|È|Ê|Ë)/","/(Ç)/","/(ç)/"),explode(" ","a A e i I o O u U n N E C c"),$String);
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: removeAcentos ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: Gravar_Tabela_Auditoria.php => function Gravar_Tabela_Auditoria ------*/
+
+function Gravar_Tabela_Auditoria($parNomeAplicacao, $parValorIdChavePrimaria = NULL) {
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+if (!isset($_SESSION['varIdUsuario'])) {$_SESSION['varIdUsuario'] = "";}
+if (!isset($this->sc_temp_varIdUsuario)) {$this->sc_temp_varIdUsuario = (isset($_SESSION['varIdUsuario'])) ? $_SESSION['varIdUsuario'] : "";}
+if (!isset($_SESSION['varIdTenacidade'])) {$_SESSION['varIdTenacidade'] = "";}
+if (!isset($this->sc_temp_varIdTenacidade)) {$this->sc_temp_varIdTenacidade = (isset($_SESSION['varIdTenacidade'])) ? $_SESSION['varIdTenacidade'] : "";}
+  
+	
+	$posicao = strpos($parNomeAplicacao, '_');
+	$nomeTabela =  strtolower(substr($parNomeAplicacao, 0, $posicao));
+	if ($parValorIdChavePrimaria == NULL) {
+		$Sql = "CALL GravarAuditoria('$this->sc_temp_varIdTenacidade', '$this->sc_temp_varIdUsuario', '" .  
+				$parNomeAplicacao . "', '" .  $nomeTabela . "' , NULL, 'A', '" . $_SERVER['REMOTE_ADDR'] . "')";
+	}
+	else {
+		$Sql = "CALL GravarAuditoria('$this->sc_temp_varIdTenacidade', '$this->sc_temp_varIdUsuario', '" .  
+				$parNomeAplicacao . "', '" .  $nomeTabela . "' , " . $parValorIdChavePrimaria . ", 'A', '" . $_SERVER['REMOTE_ADDR'] . "')";
+	}
+	
+     $nm_select = $Sql; 
+         $_SESSION['scriptcase']['sc_sql_ult_comando'] = $nm_select;
+      $_SESSION['scriptcase']['sc_sql_ult_conexao'] = ''; 
+         $rf = $this->Db->Execute($nm_select);
+         if ($rf === false)
+         {
+             $this->Erro->mensagem (__FILE__, __LINE__, "banco", $this->Ini->Nm_lang['lang_errm_dber'], $this->Db->ErrorMsg());
+             if ($this->Ini->sc_tem_trans_banco)
+             {
+                 $this->Db->RollbackTrans(); 
+                 $this->Ini->sc_tem_trans_banco = false;
+             }
+             exit;
+         }
+         $rf->Close();
+      
+	if ($this->Ini->sc_tem_trans_banco)
+{
+    $this->Db->CommitTrans();
+    $this->Ini->sc_tem_trans_banco = false;
+}
+	
+
+	return true;
+if (isset($this->sc_temp_varIdTenacidade)) {$_SESSION['varIdTenacidade'] = $this->sc_temp_varIdTenacidade;}
+if (isset($this->sc_temp_varIdUsuario)) {$_SESSION['varIdUsuario'] = $this->sc_temp_varIdUsuario;}
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: Gravar_Tabela_Auditoria.php => function Gravar_Tabela_Auditoria ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: Preparar_LstFrm_OnSrip_OnLoad_Auditoria.php => function Preparar_LstFrm_OnSrip_OnLoad_Auditoria ------*/
+
+function Preparar_LstFrm_OnSrip_OnLoad_Auditoria($parNomeAplicacao, $parValorIdChavePrimaria = NULL) {
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+if (!isset($_SESSION['varPrimeiraVez'])) {$_SESSION['varPrimeiraVez'] = "";}
+if (!isset($this->sc_temp_varPrimeiraVez)) {$this->sc_temp_varPrimeiraVez = (isset($_SESSION['varPrimeiraVez'])) ? $_SESSION['varPrimeiraVez'] : "";}
+if (!isset($_SESSION['varIdUsuario'])) {$_SESSION['varIdUsuario'] = "";}
+if (!isset($this->sc_temp_varIdUsuario)) {$this->sc_temp_varIdUsuario = (isset($_SESSION['varIdUsuario'])) ? $_SESSION['varIdUsuario'] : "";}
+if (!isset($_SESSION['varAcessoAutorizacoes'])) {$_SESSION['varAcessoAutorizacoes'] = "";}
+if (!isset($this->sc_temp_varAcessoAutorizacoes)) {$this->sc_temp_varAcessoAutorizacoes = (isset($_SESSION['varAcessoAutorizacoes'])) ? $_SESSION['varAcessoAutorizacoes'] : "";}
+if (!isset($_SESSION['varAcessoAuditoria'])) {$_SESSION['varAcessoAuditoria'] = "";}
+if (!isset($this->sc_temp_varAcessoAuditoria)) {$this->sc_temp_varAcessoAuditoria = (isset($_SESSION['varAcessoAuditoria'])) ? $_SESSION['varAcessoAuditoria'] : "";}
+if (!isset($_SESSION['varPrivAdmin'])) {$_SESSION['varPrivAdmin'] = "";}
+if (!isset($this->sc_temp_varPrivAdmin)) {$this->sc_temp_varPrivAdmin = (isset($_SESSION['varPrivAdmin'])) ? $_SESSION['varPrivAdmin'] : "";}
+  
+	$pos = strripos($parNomeAplicacao, '_');
+	if ($pos !== false) {
+		$tipoAplicacao = substr($parNomeAplicacao, $pos + 1);
+	}
+	else {
+		sc_erro_message("Nome da aplicação inválido (" . $parNomeAplicacao . ").");
+	}
+
+	if (is_file($_SESSION['scriptcase']['dir_temp'] . "/sc_apl_default_LIGA_InfoTIME.txt")) {
+    unlink($_SESSION['scriptcase']['dir_temp'] . "/sc_apl_default_LIGA_InfoTIME.txt");
+}
+if (is_file("../_lib/_app_data/Login_Ctr_ini.php")) {
+   $SC_arq_def = fopen($_SESSION['scriptcase']['dir_temp'] . "/sc_apl_default_LIGA_InfoTIME.txt", "w");
+   fwrite ($SC_arq_def, 'Login_Ctr,M');
+   fclose ($SC_arq_def);
+   setcookie('sc_apl_default_LIGA_InfoTIME','Login_Ctr,M','0','/', '', ini_get('session.cookie_secure'), ini_get('session.cookie_httponly'));
+}
+;	
+
+	switch(strtoupper($tipoAplicacao)) {
+		case 'FRM':
+			$this->nmgp_botoes["first"] = 'off';;	
+			$this->nmgp_botoes["back"] = 'off';;	
+			$this->nmgp_botoes["forward"] = 'off';;	
+			$this->nmgp_botoes["last"] = 'off';;
+
+			$this->nmgp_cmp_readonly["idtenacidade"] = "on";
+			$this->nmgp_cmp_readonly["idusuarioauditoria"] = "on";
+			$this->nmgp_cmp_readonly["enderecoipauditoria"] = "on";
+			$this->nmgp_cmp_readonly["nomeaplicacaoauditoria"] = "on";
+
+			if ($this->sc_temp_varPrivAdmin != 1) {
+				if ($this->sc_temp_varAcessoAuditoria != "S") {
+					$this->nmgp_botoes["Auditoria"] = 'off';;
+				}
+				if ($this->sc_temp_varAcessoAutorizacoes != "S") {
+					$this->nmgp_botoes["SC_btn_1"] = 'off';;
+				}
+				;
+			} elseif ($this->sc_temp_varPrivAdmin == 1) {				
+				
+				echo '<span title="' . htmlspecialchars($parNomeAplicacao, ENT_QUOTES, 'UTF-8') . '" style="
+				display:inline-block;
+				font-size:11px;
+				line-height:11px;
+				color:#fff;
+				margin-left:4px;
+				vertical-align:middle;
+				cursor:help;
+				">▣</span>';				
+				
+			}
+			$idusuarioauditoria  		= $this->sc_temp_varIdUsuario;
+			$enderecoipauditoria  		= $_SERVER['REMOTE_ADDR'];
+			$nomeaplicacaoauditoria 	= $parNomeAplicacao;
+
+			$pos = strpos($this->sc_temp_varPrimeiraVez, "," . $parNomeAplicacao . ",");
+			if ($pos === false) {
+				$this->sc_temp_varPrimeiraVez = $this->sc_temp_varPrimeiraVez . "," . $parNomeAplicacao  . ",";
+			}				
+		break;
+		case 'CAL':
+		break;
+		case 'LST':
+			$pos = strpos($this->sc_temp_varPrimeiraVez, "," . $parNomeAplicacao . ",");
+			if ($pos === false) {
+				$this->sc_temp_varPrimeiraVez = $this->sc_temp_varPrimeiraVez . "," . $parNomeAplicacao  . ",";
+			}
+			
+		break;
+		default:
+		break;
+	}
+	
+	return true;
+if (isset($this->sc_temp_varPrivAdmin)) {$_SESSION['varPrivAdmin'] = $this->sc_temp_varPrivAdmin;}
+if (isset($this->sc_temp_varAcessoAuditoria)) {$_SESSION['varAcessoAuditoria'] = $this->sc_temp_varAcessoAuditoria;}
+if (isset($this->sc_temp_varAcessoAutorizacoes)) {$_SESSION['varAcessoAutorizacoes'] = $this->sc_temp_varAcessoAutorizacoes;}
+if (isset($this->sc_temp_varIdUsuario)) {$_SESSION['varIdUsuario'] = $this->sc_temp_varIdUsuario;}
+if (isset($this->sc_temp_varPrimeiraVez)) {$_SESSION['varPrimeiraVez'] = $this->sc_temp_varPrimeiraVez;}
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: Preparar_LstFrm_OnSrip_OnLoad_Auditoria.php => function Preparar_LstFrm_OnSrip_OnLoad_Auditoria ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function digitoVerificador_barra ------*/
+
+function digitoVerificador_barra($numero) {
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+	$resto2 = $this->modulo_11($numero, 9, 1);
+	$digito = 11 - $resto2;
+     if ($digito == 0 || $digito == 1 || $digito == 10  || $digito == 11) {
+        $dv = 1;
+     } else {
+        $dv = $digito;
+     }
+	 return $dv;
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function digitoVerificador_barra ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function formata_numero ------*/
+
+function formata_numero($numero,$loop,$insert,$tipo = "geral") {
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+	if ($tipo == "geral") {
+		$numero = str_replace(",","",$numero);
+		while(strlen($numero)<$loop){
+			$numero = $insert . $numero;
+		}
+	}
+	if ($tipo == "valor") {
+		
+		$numero = str_replace(",","",$numero);
+		while(strlen($numero)<$loop){
+			$numero = $insert . $numero;
+		}
+	}
+	if ($tipo == "convenio") {
+		while(strlen($numero)<$loop){
+			$numero = $numero . $insert;
+		}
+	}
+	return $numero;
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function formata_numero ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function fbarcode ------*/
+
+function fbarcode($valor){
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+$fino = 1 ;
+$largo = 3 ;
+$altura = 50 ;
+  $barcodes[0] = "00110" ;
+  $barcodes[1] = "10001" ;
+  $barcodes[2] = "01001" ;
+  $barcodes[3] = "11000" ;
+  $barcodes[4] = "00101" ;
+  $barcodes[5] = "10100" ;
+  $barcodes[6] = "01100" ;
+  $barcodes[7] = "00011" ;
+  $barcodes[8] = "10010" ;
+  $barcodes[9] = "01010" ;
+  for($f1=9;$f1>=0;$f1--){ 
+    for($f2=9;$f2>=0;$f2--){  
+      $f = ($f1 * 10) + $f2 ;
+      $texto = "" ;
+      for($i=1;$i<6;$i++){ 
+        $texto .=  substr($barcodes[$f1],($i-1),1) . substr($barcodes[$f2],($i-1),1);
+      }
+      $barcodes[$f] = $texto;
+    }
+  }
+?><img src=../_lib/img/p.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+src=../_lib/img/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+src=../_lib/img/p.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+src=../_lib/img/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+<?php
+$texto = $valor ;
+if((strlen($texto) % 2) <> 0){
+	$texto = "0" . $texto;
+}
+
+while (strlen($texto) > 0) {
+  $i = round($this->esquerda($texto,2));
+  $texto = $this->direita($texto,strlen($texto)-2);
+  $f = $barcodes[$i];
+  for($i=1;$i<11;$i+=2){
+    if (substr($f,($i-1),1) == "0") {
+      $f1 = $fino ;
+    }else{
+      $f1 = $largo ;
+    }
+?>
+    src=../_lib/img/p.png width=<?php echo $f1?> height=<?php echo $altura?> border=0><img 
+<?php
+    if (substr($f,$i,1) == "0") {
+      $f2 = $fino ;
+    }else{
+      $f2 = $largo ;
+    }
+?>
+    src=../_lib/img/b.png width=<?php echo $f2?> height=<?php echo $altura?> border=0><img 
+<?php
+  }
+}
+
+?>
+src=../_lib/img/p.png width=<?php echo $largo?> height=<?php echo $altura?> border=0><img 
+src=../_lib/img/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+src=../_lib/img/p.png width=<?php echo 1?> height=<?php echo $altura?> border=0> 
+  <?php
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function fbarcode ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function esquerda ------*/
+
+function esquerda($entra,$comp){
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+	return substr($entra,0,$comp);
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function esquerda ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function direita ------*/
+
+function direita($entra,$comp){
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+	return substr($entra,strlen($entra)-$comp,$comp);
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function direita ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function fator_vencimento ------*/
+
+function fator_vencimento($data) {
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+	$data = explode("/",$data);
+	$ano = $data[2];
+	$mes = $data[1];
+	$dia = $data[0];
+	return(abs(($this->_dateToDays("2022","05","29")) - ($this->_dateToDays($ano, $mes, $dia))));
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function fator_vencimento ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function _dateToDays ------*/
+
+function _dateToDays($year,$month,$day) {
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+    $century = substr($year, 0, 2);
+    $year = substr($year, 2, 2);
+    if ($month > 2) {
+        $month -= 3;
+    } else {
+        $month += 9;
+        if ($year) {
+            $year--;
+        } else {
+            $year = 99;
+            $century --;
+        }
+    }
+    return ( floor((  146097 * $century)    /  4 ) +
+            floor(( 1461 * $year)        /  4 ) +
+            floor(( 153 * $month +  2) /  5 ) +
+                $day +  1721119);
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function _dateToDays ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function modulo_10 ------*/
+
+function modulo_10($num) {
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+   
+		$numtotal10 = 0;
+        $fator = 2;
+        for ($i = strlen($num); $i > 0; $i--) {
+            $numeros[$i] = substr($num,$i-1,1);
+            $temp = $numeros[$i] * $fator; 
+            $temp0=0;
+            foreach (preg_split('//',$temp,-1,PREG_SPLIT_NO_EMPTY) as $k=>$v){ $temp0+=$v; }
+            $parcial10[$i] = $temp0; 
+            $numtotal10 += $parcial10[$i];
+            if ($fator == 2) {
+                $fator = 1;
+            } else {
+                $fator = 2; 
+            }
+        }
+		
+        $resto = $numtotal10 % 10;
+        $digito = 10 - $resto;
+        if ($resto == 0) {
+            $digito = 0;
+        }
+		
+        return $digito;
+		
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function modulo_10 ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function modulo_11 ------*/
+
+function modulo_11($num, $base=9, $r=0)  {
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+                                            
+    $soma = 0;
+    $fator = 2;
+    
+    for ($i = strlen($num); $i > 0; $i--) {
+        $numeros[$i] = substr($num,$i-1,1);
+        $parcial[$i] = $numeros[$i] * $fator;
+        $soma += $parcial[$i];
+        if ($fator == $base) {
+            $fator = 1;
+        }
+        $fator++;
+    }
+    
+    if ($r == 0) {
+        $soma *= 10;
+        $digito = $soma % 11;
+        if ($digito == 10) {
+            $digito = 0;
+        }
+        return $digito;
+    } elseif ($r == 1){
+        $resto = $soma % 11;
+        return $resto;
+    }
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function modulo_11 ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function monta_linha_digitavel ------*/
+
+function monta_linha_digitavel($codigo) {
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  	
+
+        $banco    = substr($codigo,0,3);
+        $moeda    = substr($codigo,3,1);
+        $ccc      = substr($codigo,19,3);
+		$ddnnum   = substr($codigo,22,2);
+		$dv1      = $this->modulo_10($banco.$moeda.$ccc.$ddnnum);
+		$resnnum  = substr($codigo,24,6);
+		$dac1     = substr($codigo,30,1);
+		$dddag    = substr($codigo,31,3);
+		$dv2      = $this->modulo_10($resnnum.$dac1.$dddag);
+		$resag    = substr($codigo,34,1);
+		$contadac = substr($codigo,35,6); 
+		$zeros    = substr($codigo,41,3);
+		$dv3      = $this->modulo_10($resag.$contadac.$zeros);
+		$dv4      = substr($codigo,4,1);
+        $fator    = substr($codigo,5,4);
+        $valor    = substr($codigo,9,10);
+		
+        $campo1 = substr($banco.$moeda.$ccc.$ddnnum.$dv1,0,5) . '.' . substr($banco.$moeda.$ccc.$ddnnum.$dv1,5,5);
+        $campo2 = substr($resnnum.$dac1.$dddag.$dv2,0,5) . '.' . substr($resnnum.$dac1.$dddag.$dv2,5,6);
+        $campo3 = substr($resag.$contadac.$zeros.$dv3,0,5) . '.' . substr($resag.$contadac.$zeros.$dv3,5,6);
+        $campo4 = $dv4;
+        $campo5 = $fator.$valor;
+		
+        return "$campo1 $campo2 $campo3 $campo4 $campo5"; 
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function monta_linha_digitavel ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function geraCodigoBanco ------*/
+
+function geraCodigoBanco($numero) {
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+    $parte1 = substr($numero, 0, 3);
+    $parte2 = $this->modulo_11($parte1);
+    return $parte1 . "-" . $parte2;
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function geraCodigoBanco ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function limit ------*/
+
+function limit($palavra,$limite)
+{
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+    if(strlen($palavra) >= $limite)
+    {
+        $var = substr($palavra, 0,$limite);
+    }
+    else
+    {
+        $max = (int)($limite-strlen($palavra));
+        $var = $palavra.$this->complementoRegistro($max,"brancos");
+    }
+    return $var;
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function limit ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function dia_seguinte ------*/
+
+function dia_seguinte($data){
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+  $temp = explode("/", $data);
+  return date("d/m/Y", mktime(0, 0, 0, $temp[1], 
+     $temp[0] + 1, $temp[2]));
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function dia_seguinte ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function sequencial ------*/
+
+function sequencial($i)
+{
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+    if($i < 10)
+    {
+        return $this->zeros(0,5).$i;
+    }
+    else if($i >= 10 && $i < 100)
+    {
+        return $this->zeros(0,4).$i;
+    }
+    else if($i > 100 && $i < 1000)
+    {
+        return $this->zeros(0,3).$i;
+    }
+    else if($i > 1000 && $i < 10000)
+    {
+        return $this->zeros(0,2).$i;
+    }
+    else if($i > 10000 && $i < 100000)
+    {
+        return $this->zeros(0,1).$i;
+    }
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function sequencial ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function zeros ------*/
+
+function zeros($min,$max)
+{
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+    $x = ($max - strlen($min));
+    for($i = 0; $i < $x; $i++)
+    {
+        $zeros .= '0';
+    }
+    return $zeros.$min;
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function zeros ------*/
+
+
+/*----- Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function complementoRegistro ------*/
+
+function complementoRegistro($int,$tipo)
+{
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'on';
+  
+    if($tipo == "zeros")
+    {
+        $space = '';
+        for($i = 1; $i <= $int; $i++)
+        {
+            $space .= '0';
+        }
+    }
+    else if($tipo == "brancos")
+    {
+        $space = '';
+        for($i = 1; $i <= $int; $i++)
+        {
+            $space .= ' ';
+        }
+    }
+    
+    return $space;
+
+$_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+}
+
+/*----- END - Scriptcase Locale: PHP Method: BtnF_sc_btn_0 => function complementoRegistro ------*/
+
+   function nmgp_redireciona_form($nm_apl_dest, $nm_apl_retorno, $nm_apl_parms, $nm_target="", $alt_modal=0, $larg_modal=0, $opc="")
+   {
+      if (is_array($nm_apl_parms))
+      {
+          $tmp_parms = "";
+          foreach ($nm_apl_parms as $par => $val)
+          {
+              $par = trim($par);
+              $val = trim($val);
+              $tmp_parms .= str_replace(".", "_", $par) . "?#?";
+              if (substr($val, 0, 1) == "$")
+              {
+                  $tmp_parms .= $$val;
+              }
+              elseif (substr($val, 0, 1) == "{")
+              {
+                  $val        = substr($val, 1, -1);
+                  $tmp_parms .= $this->$val;
+              }
+              elseif (substr($val, 0, 1) == "[")
+              {
+                  $tmp_parms .= $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst'][substr($val, 1, -1)];
+              }
+              else
+              {
+                  $tmp_parms .= $val;
+              }
+              $tmp_parms .= "?@?";
+          }
+          $nm_apl_parms = $tmp_parms;
+      }
+      $target = (empty($nm_target)) ? "_self" : $nm_target;
+      if (strtolower(substr($nm_apl_dest, 0, 7)) == "http://" || strtolower(substr($nm_apl_dest, 0, 8)) == "https://" || strtolower(substr($nm_apl_dest, 0, 3)) == "../")
+      {
+          echo "<SCRIPT language=\"javascript\">";
+          if (strtolower($target) == "_blank")
+          {
+              echo "window.open ('" . $nm_apl_dest . "');";
+              echo "</SCRIPT>";
+              return;
+          }
+          else
+          {
+              echo "window.location='" . $nm_apl_dest . "';";
+              echo "</SCRIPT>";
+              exit;
+          }
+      }
+      $dir = explode("/", $nm_apl_dest);
+      if (count($dir) == 1)
+      {
+          $nm_apl_dest = str_replace(".php", "", $nm_apl_dest);
+          $nm_apl_dest = $this->Ini->path_link . SC_dir_app_name($nm_apl_dest) . "/" . $nm_apl_dest . ".php";
+      }
+      if ($nm_target == "modal")
+      {
+          if (!empty($nm_apl_parms))
+          {
+              $nm_apl_parms = str_replace("?#?", "*scin", $nm_apl_parms);
+              $nm_apl_parms = str_replace("?@?", "*scout", $nm_apl_parms);
+              $nm_apl_parms = "nmgp_parms=" . $nm_apl_parms . "&";
+          }
+          $par_modal = "?script_case_init=" . NM_encode_input($this->Ini->sc_page) . "&nmgp_outra_jan=true&nmgp_url_saida=modal&NMSC_modal=ok&";
+           if ((isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_form_full']) && $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['embutida_form_full']) || (isset($this->grid_emb_form_full) && $this->grid_emb_form_full))
+           {
+              $this->redir_modal = "$(function() { parent.tb_show('', '" . $nm_apl_dest . $par_modal . $nm_apl_parms . "TB_iframe=true&modal=true&height=" . $alt_modal . "&width=" . $larg_modal . "', '') }) \r\n";
+           }
+           else
+           {
+              $this->redir_modal = "$(function() { tb_show('', '" . $nm_apl_dest . $par_modal . $nm_apl_parms . "TB_iframe=true&modal=true&height=" . $alt_modal . "&width=" . $larg_modal . "', '') }) \r\n";
+           }
+          return;
+      }
+      if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['iframe_print']) && $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['iframe_print'] )
+      {
+          $target = "_parent";
+      }
+      if (!isset($this->SC_redir_btn) || !$this->SC_redir_btn)
+      {
+   ?>
+     <!DOCTYPE html>
+      <HTML>
+      <HEAD>
+      <META http-equiv="Content-Type" content="text/html; charset=<?php echo $_SESSION['scriptcase']['charset_html'] ?>" />
+<?php
+if ($_SESSION['scriptcase']['proc_mobile'])
+{
+?>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0," />
+<?php
+}
+?>
+       <META http-equiv="Expires" content="Fri, Jan 01 1900 00:00:00 GMT"/>
+       <META http-equiv="Last-Modified" content="<?php echo gmdate("D, d M Y H:i:s"); ?> GMT"/>
+       <META http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate"/>
+       <META http-equiv="Pragma" content="no-cache"/>
+      </HEAD>
+      <link rel="shortcut icon" href="../_lib/img/scriptcase__NM__ico__NM__favicon.ico">
+      <BODY>
+   <?php
+      }
+   ?>
+   <form name="Fredir" method="post" 
+                     target="_self"> 
+     <input type="hidden" name="nmgp_parms" value="<?php echo NM_encode_input($nm_apl_parms) ?>"/>
+<?php
+   if ($target == "_blank")
+   {
+?>
+       <input type="hidden" name="nmgp_outra_jan" value="true"/> 
+<?php
+   }
+   else
+   {
+?>
+     <input type="hidden" name="nmgp_url_saida" value="<?php echo NM_encode_input($nm_apl_retorno) ?>">
+     <input type="hidden" name="script_case_init" value="<?php echo NM_encode_input($this->Ini->sc_page) ?>"/> 
+<?php
+   }
+?>
+   </form> 
+      <SCRIPT type="text/javascript">
+          window.onload = function(){
+             submit_Fredir();
+          };
+          function submit_Fredir()
+          {
+              document.Fredir.target = "<?php echo $target ?>"; 
+              document.Fredir.action = "<?php echo $nm_apl_dest ?>";
+              document.Fredir.submit();
+          }
+      </SCRIPT>
+   <?php
+      if (!isset($this->SC_redir_btn) || !$this->SC_redir_btn)
+      {
+   ?>
+      </BODY>
+      </HTML>
+   <?php
+      }
+      if ($target != "_blank")
+      {
+          exit;
+      }
+   }
+   function nm_conv_data_db($dt_in, $form_in, $form_out)
+   {
+       $dt_out = $dt_in;
+       if (strtoupper($form_in) == "DB_FORMAT") {
+           if ($dt_out == "null" || $dt_out == "")
+           {
+               $dt_out = "";
+               return $dt_out;
+           }
+           $form_in = "AAAA-MM-DD";
+       }
+       if (strtoupper($form_out) == "DB_FORMAT") {
+           if (empty($dt_out))
+           {
+               $dt_out = "null";
+               return $dt_out;
+           }
+           $form_out = "AAAA-MM-DD";
+       }
+       if (strtoupper($form_out) == "SC_FORMAT_REGION") {
+           $this->nm_data->SetaData($dt_in, strtoupper($form_in));
+           $prep_out  = (strpos(strtolower($form_in), "dd") !== false) ? "dd" : "";
+           $prep_out .= (strpos(strtolower($form_in), "mm") !== false) ? "mm" : "";
+           $prep_out .= (strpos(strtolower($form_in), "aa") !== false) ? "aaaa" : "";
+           $prep_out .= (strpos(strtolower($form_in), "yy") !== false) ? "aaaa" : "";
+           return $this->nm_data->FormataSaida($this->nm_data->FormatRegion("DT", $prep_out));
+       }
+       else {
+           nm_conv_form_data($dt_out, $form_in, $form_out);
+           return $dt_out;
+       }
+   }
+  function close_emb()
+  {
+      if ($this->Db)
+      {
+          $this->Db->Close(); 
+      }
+  }
+   function SC_fast_search($in_fields, $arg_search, $data_search)
+   {
+      $fields = (strpos($in_fields, "SC_all_Cmp") !== false) ? array("SC_all_Cmp") : explode("_VLS_", $in_fields);
+      $this->NM_case_insensitive = true;
+      if (empty($data_search)) 
+      {
+          $tmp_cmd = "";
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_fast'] = "";
+          if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig'])) 
+          {
+              $tmp_cmd = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig']; 
+          }
+          if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'])) 
+          {
+              if (!empty($tmp_cmd)) 
+              {
+                  $tmp_cmd .= " and (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'] . ")"; 
+              }
+              else
+              {
+                  $tmp_cmd = " where (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'] . ")"; 
+              }
+          }
+          if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'])) 
+          {
+              if (!empty($tmp_cmd)) 
+              {
+                  $tmp_cmd .= " and (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'] . ")"; 
+              }
+              else
+              {
+                  $tmp_cmd = " where (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'] . ")"; 
+              }
+          }
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq'] = $tmp_cmd;
+          unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['fast_search']);
+          return;
+      }
+      $comando = "";
+      if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($data_search))
+      {
+          $data_search = NM_conv_charset($data_search, $_SESSION['scriptcase']['charset'], "UTF-8");
+      }
+      $sv_data = $data_search;
+      foreach ($fields as $field) {
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "IdLancamentoReceita", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "IdCliente", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "IdContaCaixa", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "NomeFantasia", $arg_search, $data_search, "VARCHAR", false);
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "RazaoSocial", $arg_search, $data_search, "VARCHAR", false);
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "IdSituacaoDocumento", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "IdPlanoConta", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "IdLancamentoReceitaPai", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "Parcela", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "DataPrevisao", $arg_search, $data_search, "DATETIME", false);
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "ValorPrevisao", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "DataRealizacao", $arg_search, $data_search, "DATETIME", false);
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "ValorRealizacao", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "NumeroDocumento", $arg_search, $data_search, "VARCHAR", false);
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "DataBaixa", $arg_search, $data_search, "DATETIME", false);
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "IdTipoEspecie", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "IdNotaFiscal", $arg_search, str_replace(",", ".", $data_search));
+          }
+          if ($field == "SC_all_Cmp") 
+          {
+              $this->SC_monta_condicao($comando, "Historico", $arg_search, $data_search, "VARCHAR", false);
+          }
+      }
+      if ($this->NM_case_insensitive)
+      {
+          if (in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_access))
+          {
+              $comando = str_replace("#lowerI#", "UCase(", $comando);
+          }
+          else
+          {
+              $comando = str_replace("#lowerI#", "Upper(", $comando);
+          }
+          $comando = str_replace("#lowerF#", ")", $comando);
+      }
+      else
+      {
+          $comando = str_replace("#lowerI#", "", $comando);
+          $comando = str_replace("#lowerF#", "", $comando);
+      }
+      if (empty($comando)) 
+      {
+          $comando = " 1 <> 1 "; 
+      }
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_fast'] = $comando;
+      $tmp_cmd = "";
+      if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig'])) 
+      {
+          $tmp_cmd = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig']; 
+      }
+      if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'])) 
+      {
+          if (!empty($tmp_cmd)) 
+          {
+              $tmp_cmd .= " and (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'] . ")"; 
+          }
+          else
+          {
+              $tmp_cmd = " where (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'] . ")"; 
+          }
+      }
+      if (!empty($tmp_cmd)) 
+      {
+          $comando = $tmp_cmd . " and (" . $comando . ")"; 
+      }
+      else
+      {
+          $comando = " where (" . $comando . ")"; 
+      }
+      if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'])) 
+      {
+          $comando .= " and (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'] . ")";
+      }
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq'] = $comando;
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['fast_search'][0] = $in_fields;
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['fast_search'][1] = $arg_search;
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['fast_search'][2] = $sv_data;
+   }
+   function SC_monta_condicao(&$comando, $nome, $condicao, $campo, $tp_campo="", $tp_unaccent=false)
+   {
+      $nm_aspas   = "'";
+      $nm_aspas1  = "'";
+      $nm_numeric = array();
+      $Nm_datas   = array();
+      $nm_esp_postgres = array();
+      $campo_join = strtolower(str_replace(".", "_", $nome));
+      $nm_ini_lower = " #lowerI#";
+      $nm_fim_lower = "#lowerF#";
+      $Nm_accent = $this->Ini->Nm_accent_no;
+      if ($tp_unaccent) {
+          $Nm_accent = $this->Ini->Nm_accent_yes;
+      }
+      $nm_numeric[] = "idlancamentoreceita";$nm_numeric[] = "idcliente";$nm_numeric[] = "idcontacaixa";$nm_numeric[] = "idsituacaodocumento";$nm_numeric[] = "idplanoconta";$nm_numeric[] = "idlancamentoreceitapai";$nm_numeric[] = "parcela";$nm_numeric[] = "valorprevisao";$nm_numeric[] = "valorrealizacao";$nm_numeric[] = "idtipoespecie";$nm_numeric[] = "idnotafiscal";$nm_numeric[] = "nossonumero";
+      if (in_array($campo_join, $nm_numeric))
+      {
+         if ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['decimal_db'] == ".")
+         {
+             $nm_aspas  = "";
+             $nm_aspas1 = "";
+         }
+         if (is_array($campo))
+         {
+             foreach ($campo as $Ind => $Cmp)
+             {
+                if (!is_numeric($Cmp))
+                {
+                    return;
+                }
+                if ($Cmp == "")
+                {
+                    $campo[$Ind] = 0;
+                }
+             }
+         }
+         else
+         {
+             if (!is_numeric($campo))
+             {
+                 return;
+             }
+             if ($campo == "")
+             {
+                $campo = 0;
+             }
+         }
+         $nm_ini_lower = "";
+         $nm_fim_lower = "";
+      }
+      if (is_array($campo)) {
+          foreach ($campo as $Ind => $Cmp) {
+             if ($Cmp != null) {
+                 $campo[$Ind] = substr($this->Ini->Db->qstr($Cmp), 1, -1);
+             }
+          }
+      }
+      else {
+          $campo = substr($this->Ini->Db->qstr($campo), 1, -1);
+      }
+      if (in_array($campo_join, $nm_numeric) && in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_postgres) && (strtoupper($condicao) == "II" || strtoupper($condicao) == "QP" || strtoupper($condicao) == "NP"))
+      {
+          $nome      = "CAST ($nome AS TEXT)";
+          $nm_aspas  = "'";
+          $nm_aspas1 = "'";
+      }
+      if (in_array($campo_join, $nm_esp_postgres) && in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_postgres))
+      {
+          $nome      = "CAST ($nome AS TEXT)";
+          $nm_aspas  = "'";
+          $nm_aspas1 = "'";
+      }
+      $Nm_datas['DataPrevisao'] = 'datetime';$Nm_datas['DataRealizacao'] = 'datetime';$Nm_datas['DataBaixa'] = 'datetime';
+      if (isset($Nm_datas[$nome]))
+      {
+          for ($x = 0; $x < strlen($campo); $x++)
+          {
+              $tst = substr($campo, $x, 1);
+              if (!is_numeric($tst) && ($tst != "-" && $tst != ":" && $tst != " "))
+              {
+                  return;
+              }
+          }
+      }
+      if (isset($Nm_datas[$campo_join]))
+      {
+         $nm_ini_lower = "";
+         $nm_fim_lower = "";
+      }
+      if (isset($Nm_datas[$campo_join]) && in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_access))
+      {
+         $nm_aspas  = "#";
+         $nm_aspas1 = "#";
+      }
+      if (isset($Nm_datas[$campo_join]) && isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date']) && !empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date']))
+      {
+          $nm_aspas  = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date'];
+          $nm_aspas1 = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date1'];
+      }
+      if (isset($Nm_datas[$campo_join]) && (strtoupper($condicao) == "II" || strtoupper($condicao) == "QP" || strtoupper($condicao) == "NP" || strtoupper($condicao) == "DF"))
+      {
+          if (strtoupper($condicao) == "DF")
+          {
+              $condicao = "NP";
+          }
+          if (($Nm_datas[$campo_join] == "datetime" || $Nm_datas[$campo_join] == "timestamp") && in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_postgres))
+          {
+              $nome = "to_char (" . $nome . ", 'YYYY-MM-DD hh24:mi:ss')";
+          }
+          elseif ($Nm_datas[$campo_join] == "date" && in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_postgres))
+          {
+              $nome = "to_char (" . $nome . ", 'YYYY-MM-DD')";
+          }
+          elseif ($Nm_datas[$campo_join] == "time" && in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_postgres))
+          {
+              $nome = "to_char (" . $nome . ", 'hh24:mi:ss')";
+          }
+      }
+         $comando .= (!empty($comando) ? " or " : "");
+         if (is_array($campo))
+         {
+             $prep = "";
+             foreach ($campo as $Ind => $Cmp)
+             {
+                 $prep .= (!empty($prep)) ? "," : "";
+                 $Cmp   = substr($this->Db->qstr($Cmp), 1, -1);
+                 $prep .= $nm_ini_lower . $nm_aspas . $Cmp . $nm_aspas1 . $nm_fim_lower;
+             }
+             $prep .= (empty($prep)) ? $nm_aspas . $nm_aspas1 : "";
+             $comando .= $nm_ini_lower . $nome . $nm_fim_lower . " in (" . $prep . ")";
+             return;
+         }
+         $campo  = substr($this->Db->qstr($campo), 1, -1);
+         $cond_tst = strtoupper($condicao);
+         if ($cond_tst == "II" || $cond_tst == "QP" || $cond_tst == "NP")
+         {
+             if (in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_postgres) && $this->NM_case_insensitive)
+             {
+                 $op_like      = " ilike ";
+                 $nm_ini_lower = "";
+                 $nm_fim_lower = "";
+             }
+             else
+             {
+                 $op_like = " like ";
+             }
+         }
+         switch ($cond_tst)
+         {
+            case "EQ":     // 
+               $comando        .= $nm_ini_lower . $nome . $nm_fim_lower . " = " . $nm_ini_lower . $nm_aspas . $campo . $nm_aspas1 . $nm_fim_lower;
+            break;
+            case "II":     // 
+               $comando        .= $nm_ini_lower . $Nm_accent['cmp_i'] . $nome . $Nm_accent['cmp_f'] . $nm_fim_lower . $Nm_accent['cmp_apos'] . $op_like . $nm_ini_lower . "'" . $Nm_accent['arg_i'] . sc_sql_escape($this->Ini->nm_tpbanco, $campo) . $Nm_accent['arg_f'] . "%'" . $nm_fim_lower . $Nm_accent['arg_apos'] . $_SESSION['sc_session']['sc_sql_escape'];
+            break;
+            case "QP":     // 
+               $comando        .= $nm_ini_lower . $Nm_accent['cmp_i'] . $nome . $Nm_accent['cmp_f'] . $nm_fim_lower . $Nm_accent['cmp_apos'] . $op_like . $nm_ini_lower . "'%" . $Nm_accent['arg_i'] . sc_sql_escape($this->Ini->nm_tpbanco, $campo) . $Nm_accent['arg_f'] . "%'" . $nm_fim_lower . $Nm_accent['arg_apos'] . $_SESSION['sc_session']['sc_sql_escape'];
+            break;
+            case "NP":     // 
+               $comando        .= $nm_ini_lower . $Nm_accent['cmp_i'] . $nome . $Nm_accent['cmp_f'] . $nm_fim_lower . $Nm_accent['cmp_apos'] . " not" . $op_like . $nm_ini_lower . "'%" . $Nm_accent['arg_i'] . sc_sql_escape($this->Ini->nm_tpbanco, $campo) . $Nm_accent['arg_f'] . "%'" . $nm_fim_lower . $Nm_accent['arg_apos'] . $_SESSION['sc_session']['sc_sql_escape'];
+            break;
+            case "DF":     // 
+               $comando        .= $nm_ini_lower . $nome . $nm_fim_lower . " <> " . $nm_ini_lower . $nm_aspas . $campo . $nm_aspas1 . $nm_fim_lower;
+            break;
+            case "GT":     // 
+               $comando        .= $nm_ini_lower . $nome . $nm_fim_lower . " > " . $nm_ini_lower . $nm_aspas . $campo . $nm_aspas1 . $nm_fim_lower;
+            break;
+            case "GE":     // 
+               $comando        .= $nm_ini_lower . $nome . $nm_fim_lower . " >= " . $nm_ini_lower . $nm_aspas . $campo . $nm_aspas1 . $nm_fim_lower;
+            break;
+            case "LT":     // 
+               $comando        .= $nm_ini_lower . $nome . $nm_fim_lower . " < " . $nm_ini_lower . $nm_aspas . $campo . $nm_aspas1 . $nm_fim_lower;
+            break;
+            case "LE":     // 
+               $comando        .= $nm_ini_lower . $nome . $nm_fim_lower . " <= " . $nm_ini_lower . $nm_aspas . $campo . $nm_aspas1 . $nm_fim_lower;
+            break;
+         }
+   }
+   function SC_proc_interativ_search($Parms)
+   {
+       $Parms = str_replace("__NM_PLUS__", "+", $Parms);
+       $Parms = str_replace("__NM_AMP__", "&", $Parms);
+       $Parms = str_replace("__NM_PRC__", "%", $Parms);
+       $range_bw = array();
+       if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($Parms))
+       {
+           $Parms = NM_conv_charset($Parms, $_SESSION['scriptcase']['charset'], "UTF-8");
+       }
+       $tmp     = explode("__DL__", $Parms);
+       $cmd_sql = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['int_search_sql'][$tmp[0]];
+       $vls     = "";
+       $bol_numeric = false;
+       if ($tmp[3] == "clear_interativ_all") {
+           $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'] = array();
+       }
+       else {
+           unset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'][$tmp[0]]);
+           if ($tmp[3] != "clear_interativ")
+           {
+               $vls  = explode("_VLS_", $tmp[3]);
+               if($tmp[2] == "nn" || $tmp[2] == "bw")
+               {
+                   $bol_numeric = true;
+                   $delim  = "";
+                   $delim1 = "";
+               }
+               else
+               {
+                   $delim  = "'";
+                   $delim1 = "'";
+               }
+               if ($tmp[2] == "dt" || $tmp[2] == "dh" || $tmp[2] == "hh")
+               {
+                   if (in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_access))
+                   {
+                       $delim  = "#";
+                       $delim1 = "#";
+                   }
+                   if (isset($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date']) && !empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date']))
+                   {
+                       $delim  = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date'];
+                       $delim1 = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['SC_sep_date1'];
+                   }
+               }
+           }
+       }
+       if (!empty($vls))
+       {
+           $prep = "";
+           $bol_has_empty = false;
+           $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'][$tmp[0]]['tp_obj'] = $tmp[2];
+           foreach ($vls as $cada_val)
+           {
+               $cada_val = NM_charset_decode($cada_val);
+               $descr = $cada_val;
+               if (is_string($cada_val)) {
+                   $tmp_pos = strpos($cada_val, "##@@");
+                   if ($tmp_pos !== false) {
+                       $descr    = substr($cada_val, $tmp_pos + 4);
+                       $cada_val = substr($cada_val, 0, $tmp_pos);
+                   }
+               }
+               $cada_val = substr($this->Db->qstr($cada_val), 1, -1);
+               $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'][$tmp[0]]['lab'][$tmp[1]][] = $descr;
+               $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'][$tmp[0]]['val_sel'][] = $cada_val;
+               if ($cada_val == "")
+               {
+                   $bol_has_empty = true;
+               }
+               if ($tmp[2] == "dh")
+               {
+                   $cada_val = substr($cada_val, 0, 19);
+               }
+               $prep .= ($prep != "") ? "," : "";
+               if (in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_access) && $cada_val == "")
+               {
+                   $prep .= 'null';
+               }
+               else
+               $prep .= $delim . $cada_val . $delim1;
+               $range_bw[] = $cada_val;
+           }
+               $str_add_null    = '';
+               $str_add_null_or = '';
+               if($bol_has_empty)
+               {
+                   $str_add_null    = ' ' . $cmd_sql . ' is null ';
+                   $str_add_null_or = ' OR ' . $cmd_sql . ' is null ';
+               }
+           if ($prep == "" && $bol_numeric)
+           {
+               if (in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_postgres))
+               {
+                   $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'][$tmp[0]]['val'] = $cmd_sql . " is null";
+               }
+               else
+               {
+                   $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'][$tmp[0]]['val'] = $cmd_sql . " = '' or " . $cmd_sql . " is null";
+               }
+           }
+           elseif ($prep == "" && $delim != "")
+           {
+               $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'][$tmp[0]]['val'] = $cmd_sql . " = '' or " . $cmd_sql . " is null";
+           }
+           elseif ( $tmp[2] == "bw")
+           {
+               $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'][$tmp[0]]['val'] = $cmd_sql . " between " . $delim . $range_bw[0] .  $delim1 . " and " . $delim . $range_bw[1] .  $delim1 . $str_add_null_or;
+           }
+           elseif ( $tmp[2] == "dh")
+           {
+               if (in_array(strtolower($this->Ini->nm_tpbanco), $this->Ini->nm_bases_postgres))
+               {
+                   $cmd_sql = "to_char ($cmd_sql, 'YYYY-MM-DD hh24:mi:ss')";
+               }
+               $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'][$tmp[0]]['val'] = $cmd_sql . " IN (" . $prep . ")" . $str_add_null_or;
+           }
+           else
+           {
+               $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'][$tmp[0]]['val'] = $cmd_sql . " IN (" . $prep . ")" . $str_add_null_or;
+           }
+       }
+      $tmp_cmd = "";
+      if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig'])) 
+      {
+          $tmp_cmd = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_orig']; 
+      }
+      if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'])) 
+      {
+          if (!empty($tmp_cmd)) 
+          {
+              $tmp_cmd .= " and (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'] . ")"; 
+          }
+          else
+          {
+              $tmp_cmd = " where (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_filtro'] . ")"; 
+          }
+      }
+      if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_fast'])) 
+      {
+          if (!empty($tmp_cmd)) 
+          {
+              $tmp_cmd .= " and (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_fast'] . ")";
+          }
+          else 
+          {
+              $tmp_cmd = " where (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_fast'] . ")";
+          }
+      }
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'] = "";
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_sem_interativ']  = $tmp_cmd;
+      if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'])) 
+      {
+          $prim = true;
+          foreach ($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['interativ_search'] as $cmp => $val) 
+          {
+              if (!$prim)
+              {
+                 $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'] .= " AND ";
+              }
+              $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'] .= "(" . $val['val'] . ")";
+              $prim = false;
+          }
+      }
+      if (!empty($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'])) 
+      {
+          if (!empty($tmp_cmd)) 
+          {
+              $tmp_cmd .= " and (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'] . ")"; 
+          }
+          else
+          {
+              $tmp_cmd = " where (" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq_interativ'] . ")"; 
+          }
+      }
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['where_pesq'] = $tmp_cmd;
+      $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['refresh_interativ'] = (isset($tmp[5])) ? $tmp[5] : "S";
+      if(isset($tmp[4]) && $tmp[4] == 'N')
+      {
+          $this->Arr_result['interativ_search'] = array();
+          $oJson = new Services_JSON();
+          echo $oJson->encode( $this->Arr_result );
+          exit;
+      }
+   }
+  function html_doc_word($nm_arquivo_doc_word, $nmgp_password)
+  {
+      global $nm_url_saida;
+      $Word_password = "";
+      if ($this->Ini->Export_zip || $Word_password != "")
+      { 
+          $Parm_pass  = ($Word_password != "") ? " -p" : "";
+          $Arq_zip = $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_file'];
+          $Pos = strrpos($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_file'], ".");
+          if ($Pos !== false) {
+              $Arq_zip = substr($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_file'], 0, $Pos);
+          }
+          $Arq_zip .= ".zip";
+          $Arq_doc = $nm_arquivo_doc_word;
+          $Pos = strrpos($nm_arquivo_doc_word, ".");
+          if ($Pos !== false) {
+              $Arq_doc = substr($nm_arquivo_doc_word, 0, $Pos);
+          }
+          $Arq_doc  .= ".zip";
+          $Zip_f     = (FALSE !== strpos($Arq_zip, ' ')) ? " \"" . $Arq_zip . "\"" :  $Arq_zip;
+          $Arq_input = (FALSE !== strpos($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_file'], ' ')) ? " \"" . $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_file'] . "\"" :  $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_file'];
+           if (is_file($Arq_zip)) {
+               unlink($Arq_zip);
+           }
+           $str_zip = "";
+           if (FALSE !== strpos(strtolower(php_uname()), 'windows')) 
+           {
+               chdir($this->Ini->path_third . "/zip/windows");
+               $str_zip = "zip.exe " . strtoupper($Parm_pass) . " -j " . $Word_password . " " . $Zip_f . " " . $Arq_input;
+           }
+           elseif (FALSE !== strpos(strtolower(php_uname()), 'linux')) 
+           {
+                if (FALSE !== strpos(strtolower(php_uname()), 'i686')) 
+                {
+                    chdir($this->Ini->path_third . "/zip/linux-i386/bin");
+                }
+                else
+                {
+                    chdir($this->Ini->path_third . "/zip/linux-amd64/bin");
+                }
+               $str_zip = "./7za " . $Parm_pass . $Word_password . " a " . $Zip_f . " " . $Arq_input;
+           }
+           elseif (FALSE !== strpos(strtolower(php_uname()), 'darwin'))
+           {
+               chdir($this->Ini->path_third . "/zip/mac/bin");
+               $str_zip = "./7za " . $Parm_pass . $Word_password . " a " . $Zip_f . " " . $Arq_input;
+           }
+           if (!empty($str_zip)) {
+               exec($str_zip);
+           }
+           // ----- ZIP log
+           $fp = @fopen(trim(str_replace(array(".zip",'"'), array(".log",""), $Zip_f)), 'w');
+           if ($fp)
+           {
+               @fwrite($fp, $str_zip . "\r\n\r\n");
+               @fclose($fp);
+           }
+           foreach ($this->Ini->Img_export_zip as $cada_img_zip)
+           {
+              $str_zip      = "";
+              $cada_img_zip = '"' . $cada_img_zip . '"';
+              if (FALSE !== strpos(strtolower(php_uname()), 'windows')) 
+              {
+                  $str_zip = "zip.exe " . strtoupper($Parm_pass) . " -j -u " . $Word_password . " " . $Zip_f . " " . $cada_img_zip;
+              }
+              elseif (FALSE !== strpos(strtolower(php_uname()), 'linux')) 
+              {
+                  $str_zip = "./7za " . $Parm_pass . $Word_password . " a " . $Zip_f . " " . $cada_img_zip;
+              }
+              elseif (FALSE !== strpos(strtolower(php_uname()), 'darwin'))
+              {
+                  $str_zip = "./7za " . $Parm_pass . $Word_password . " a " . $Zip_f . " " . $cada_img_zip;
+              }
+              if (!empty($str_zip)) {
+                  exec($str_zip);
+              }
+              // ----- ZIP log
+               $fp = @fopen(trim(str_replace(array(".zip",'"'), array(".log",""), $Zip_f)), 'a');
+              if ($fp)
+              {
+                  @fwrite($fp, $str_zip . "\r\n\r\n");
+                  @fclose($fp);
+              }
+           }
+           if (is_file($Arq_zip)) {
+               unlink($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_file']);
+               $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_file'] = $Arq_zip;
+               $nm_arquivo_doc_word = $Arq_doc;
+          } 
+      } 
+      if ($this->Ini->sc_export_ajax)
+      {
+          $this->Arr_result['file_export']  = NM_charset_to_utf8($_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst']['word_file']);
+          $this->Arr_result['title_export'] = NM_charset_to_utf8($nm_arquivo_doc_word);
+          $Temp = ob_get_clean();
+          $oJson = new Services_JSON();
+          echo $oJson->encode($this->Arr_result);
+          exit;
+      }
+      if (strpos(" " . $this->Ini->SC_module_export, "grid") !== false || strpos(" " . $this->Ini->SC_module_export, "resume") !== false)
+      {
+          $path_doc_md5 = md5($this->Ini->path_imag_temp . $nm_arquivo_doc_word);
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst'][$path_doc_md5][0] = $this->Ini->path_imag_temp . $nm_arquivo_doc_word;
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst'][$path_doc_md5][1] = substr($nm_arquivo_doc_word, 1);
+          require_once($this->Ini->path_lib_php . "/sc_progress_bar.php");
+          $this->pb = new scProgressBar();
+          $this->pb->setRoot($this->Ini->root);
+          $this->pb->setDir($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imag_temp'] . "/");
+          $this->pb->setProgressbarMd5($_GET['pbmd5']);
+          $this->pb->initialize();
+          $Mens_bar = $this->Ini->Nm_lang['lang_othr_file_msge'];
+          if ($_SESSION['scriptcase']['charset'] != "UTF-8") {
+              $Mens_bar = sc_convert_encoding($Mens_bar, "UTF-8", $_SESSION['scriptcase']['charset']);
+          }
+          $this->pb->setProgressbarMessage($Mens_bar);
+          $this->pb->setDownloadLink($this->Ini->path_imag_temp . $nm_arquivo_doc_word);
+          $this->pb->setDownloadMd5($path_doc_md5);
+          $this->pb->setReturnUrl("LancamentoReceita_Boleto_Lst.php");
+          $this->pb->setReturnOption($this->ret_word);
+          $this->pb->completed();
+          return;
+      }
+?>
+<!DOCTYPE html>
+<HTML<?php echo $_SESSION['scriptcase']['reg_conf']['html_dir'] ?>>
+<HEAD>
+ <TITLE><?php echo $this->Ini->Nm_lang['lang_othr_grid_titl'] ?> Geração de Boletos e CNAB :: Doc</TITLE>
+ <META http-equiv="Content-Type" content="text/html; charset=<?php echo $_SESSION['scriptcase']['charset_html'] ?>" />
+ <META http-equiv="Expires" content="Fri, Jan 01 1900 00:00:00 GMT"/>
+ <META http-equiv="Last-Modified" content="<?php echo gmdate("D, d M Y H:i:s"); ?> GMT"/>
+ <META http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate"/>
+ <META http-equiv="Pragma" content="no-cache"/>
+<?php
+if ($_SESSION['scriptcase']['proc_mobile'])
+{
+?>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+   <link rel="stylesheet" type="text/css" href="../_lib/lib/css/nm_export_mobile.css" /> 
+<?php
+}
+$path_doc_md5 = md5($this->Ini->path_imag_temp . $nm_arquivo_doc_word);
+$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst'][$path_doc_md5][0] = $this->Ini->path_imag_temp . $nm_arquivo_doc_word;
+$_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst'][$path_doc_md5][1] = substr($nm_arquivo_doc_word, 1);
+?>
+ <link rel="shortcut icon" href="../_lib/img/scriptcase__NM__ico__NM__favicon.ico">
+  <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->Ini->str_schema_all ?>_export.css" /> 
+  <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $this->Ini->str_schema_all ?>_export<?php echo $_SESSION['scriptcase']['reg_conf']['css_dir'] ?>.css" /> 
+ <link rel="stylesheet" href="<?php echo $this->Ini->path_prod ?>/third/font-awesome/6/css/all.min.css" type="text/css" media="screen,print" />
+ <?php
+ if(isset($this->Ini->str_google_fonts) && !empty($this->Ini->str_google_fonts))
+ {
+ ?>
+    <link rel="stylesheet" type="text/css" href="<?php echo $this->Ini->str_google_fonts ?>" />
+ <?php
+ }
+ ?>
+  <link rel="stylesheet" type="text/css" href="../_lib/buttons/<?php echo $this->Ini->Str_btn_css ?>" /> 
+</HEAD>
+<BODY class="scExportPage">
+<?php echo $this->Ini->Ajax_result_set ?>
+<table style="border-collapse: collapse; border-width: 0; height: 100%; width: 100%"><tr><td style="padding: 0; text-align: center; vertical-align: middle">
+ <table class="scExportTable" align="center">
+  <tr>
+   <td class="scExportTitle" style="height: 25px">WORD</td>
+  </tr>
+  <tr>
+   <td class="scExportLine" style="width: 100%">
+    <table style="border-collapse: collapse; border-width: 0; width: 100%"><tr><td class="scExportLineFont" style="padding: 3px 0 0 0" id="idMessage">
+    <?php echo $this->Ini->Nm_lang['lang_othr_file_msge'] ?>
+    </td><td class="scExportLineFont" style="text-align:right; padding: 3px 0 0 0">
+     <?php echo nmButtonOutput($this->arr_buttons, "bexportview", "document.Fview.submit()", "document.Fview.submit()", "idBtnView", "", "", "", "", "", "", $this->Ini->path_botoes, "", "", "", "", "", "only_text", "text_right", "", "", "", "", "", "", "");
+ ?>
+     <?php echo nmButtonOutput($this->arr_buttons, "bdownload", "document.Fdown.submit()", "document.Fdown.submit()", "idBtnDown", "", "", "", "", "", "", $this->Ini->path_botoes, "", "", "", "", "", "only_text", "text_right", "", "", "", "", "", "", "");
+ ?>
+     <?php echo nmButtonOutput($this->arr_buttons, "bvoltar", "document.F0.submit()", "document.F0.submit()", "idBtnBack", "", "", "", "", "", "", $this->Ini->path_botoes, "", "", "", "", "", "only_text", "text_right", "", "", "", "", "", "", "");
+ ?>
+    </td></tr></table>
+   </td>
+  </tr>
+ </table>
+</td></tr></table>
+<form name="Fview" method="get" action="<?php echo $this->Ini->path_imag_temp . $nm_arquivo_doc_word ?>" target="_blank" style="display: none"> 
+</form>
+<form name="Fdown" method="get" action="LancamentoReceita_Boleto_Lst_download.php" target="_blank" style="display: none"> 
+<input type="hidden" name="script_case_init" value="<?php echo NM_encode_input($this->Ini->sc_page); ?>"> 
+<input type="hidden" name="nm_tit_doc" value="LancamentoReceita_Boleto_Lst"> 
+<input type="hidden" name="nm_name_doc" value="<?php echo $path_doc_md5 ?>"> 
+</form>
+<FORM name="F0" method=post action="LancamentoReceita_Boleto_Lst.php"> 
+<INPUT type="hidden" name="script_case_init" value="<?php echo NM_encode_input($this->Ini->sc_page); ?>"> 
+<INPUT type="hidden" name="nmgp_opcao" value="<?php echo NM_encode_input($this->ret_word) ?>"> 
+<INPUT type="hidden" name="nm_grid_submit" value="1"/> 
+<INPUT type="hidden" name="csrf_token" value="<?php echo $this->Ini->scCsrfGetToken() ?>"/> 
+</FORM> 
+</BODY>
+</HTML>
+<?php
+  }
+  function html_export_print($nm_arquivo_html, $nmgp_password)
+  {
+      global $nm_url_saida;
+      $Html_password = "";
+          $Arq_base  = $this->Ini->root . $this->Ini->path_imag_temp . $nm_arquivo_html;
+          $Parm_pass = ($Html_password != "") ? " -p" : "";
+          $Arq_zip   = $Arq_base;
+          $Pos = strrpos($Arq_base, ".");
+          if ($Pos !== false) {
+              $Arq_zip = substr($Arq_base, 0, $Pos);
+          }
+          $Arq_zip .= ".zip";
+          $Arq_htm  = $nm_arquivo_html;
+          $Pos = strrpos($nm_arquivo_html, ".");
+          if ($Pos !== false) {
+              $Arq_htm = substr($nm_arquivo_html, 0, $Pos);
+          }
+          $Arq_htm  .= ".zip";
+          $Zip_f     = (FALSE !== strpos($Arq_zip, ' ')) ? " \"" . $Arq_zip . "\"" :  $Arq_zip;
+          $Arq_input = (FALSE !== strpos($Arq_base, ' ')) ? " \"" . $Arq_base . "\"" :  $Arq_base;
+           if (is_file($Arq_zip)) {
+               unlink($Arq_zip);
+           }
+           $str_zip = "";
+           if (FALSE !== strpos(strtolower(php_uname()), 'windows')) 
+           {
+               chdir($this->Ini->path_third . "/zip/windows");
+               $str_zip = "zip.exe " . strtoupper($Parm_pass) . " -j " . $Html_password . " " . $Zip_f . " " . $Arq_input;
+           }
+           elseif (FALSE !== strpos(strtolower(php_uname()), 'linux')) 
+           {
+                if (FALSE !== strpos(strtolower(php_uname()), 'i686')) 
+                {
+                    chdir($this->Ini->path_third . "/zip/linux-i386/bin");
+                }
+                else
+                {
+                    chdir($this->Ini->path_third . "/zip/linux-amd64/bin");
+                }
+               $str_zip = "./7za " . $Parm_pass . $Html_password . " a " . $Zip_f . " " . $Arq_input;
+           }
+           elseif (FALSE !== strpos(strtolower(php_uname()), 'darwin'))
+           {
+               chdir($this->Ini->path_third . "/zip/mac/bin");
+               $str_zip = "./7za " . $Parm_pass . $Html_password . " a " . $Zip_f . " " . $Arq_input;
+           }
+           if (!empty($str_zip)) {
+               exec($str_zip);
+           }
+           // ----- ZIP log
+           $fp = @fopen(trim(str_replace(array(".zip",'"'), array(".log",""), $Zip_f)), 'w');
+           if ($fp)
+           {
+               @fwrite($fp, $str_zip . "\r\n\r\n");
+               @fclose($fp);
+           }
+           $this->Ini->Img_export_zip[] = $this->Ini->root . $this->Ini->path_imag_cab . "/" . $this->Ini->Label_sort;
+           $this->Ini->Img_export_zip[] = $this->Ini->root . $this->Ini->path_imag_cab . "/" . $this->Ini->Label_sort_desc;
+           $this->Ini->Img_export_zip[] = $this->Ini->root . $this->Ini->path_imag_cab . "/" . $this->Ini->Label_sort_asc;
+           $this->Ini->Img_export_zip[] = $this->Ini->root . $this->Ini->path_imag_cab . "/" . $this->Ini->Label_summary_sort_desc;
+           $this->Ini->Img_export_zip[] = $this->Ini->root . $this->Ini->path_imag_cab . "/" . $this->Ini->Label_summary_sort_asc;
+           foreach ($this->Ini->Img_export_zip as $cada_img_zip)
+           {
+               $str_zip      = "";
+              $cada_img_zip = '"' . $cada_img_zip . '"';
+               if (FALSE !== strpos(strtolower(php_uname()), 'windows')) 
+               {
+                   $str_zip = "zip.exe " . strtoupper($Parm_pass) . " -j -u " . $Html_password . " " . $Zip_f . " " . $cada_img_zip;
+               }
+               elseif (FALSE !== strpos(strtolower(php_uname()), 'linux')) 
+               {
+                   $str_zip = "./7za " . $Parm_pass . $Html_password . " a " . $Zip_f . " " . $cada_img_zip;
+               }
+               elseif (FALSE !== strpos(strtolower(php_uname()), 'darwin'))
+               {
+                   $str_zip = "./7za " . $Parm_pass . $Html_password . " a " . $Zip_f . " " . $cada_img_zip;
+               }
+               if (!empty($str_zip)) {
+                   exec($str_zip);
+               }
+               // ----- ZIP log
+               $fp = @fopen(trim(str_replace(array(".zip",'"'), array(".log",""), $Zip_f)), 'a');
+               if ($fp)
+               {
+                   @fwrite($fp, $str_zip . "\r\n\r\n");
+                   @fclose($fp);
+               }
+           }
+           if (is_file($Arq_zip)) {
+               unlink($Arq_base);
+               $nm_arquivo_html = $Arq_htm;
+           } 
+          $path_doc_md5 = md5($this->Ini->path_imag_temp . $nm_arquivo_html);
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst'][$path_doc_md5][0] = $this->Ini->path_imag_temp . $nm_arquivo_html;
+          $_SESSION['sc_session'][$this->Ini->sc_page]['LancamentoReceita_Boleto_Lst'][$path_doc_md5][1] = substr($nm_arquivo_html, 1);
+          require_once($this->Ini->path_lib_php . "/sc_progress_bar.php");
+          $this->pb = new scProgressBar();
+          $this->pb->setRoot($this->Ini->root);
+          $this->pb->setDir($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imag_temp'] . "/");
+          $this->pb->setProgressbarMd5($_GET['pbmd5']);
+          $this->pb->initialize();
+          $Mens_bar = $this->Ini->Nm_lang['lang_othr_file_msge'];
+          if ($_SESSION['scriptcase']['charset'] != "UTF-8") {
+              $Mens_bar = sc_convert_encoding($Mens_bar, "UTF-8", $_SESSION['scriptcase']['charset']);
+          }
+          $this->pb->setProgressbarMessage($Mens_bar);
+          $this->pb->setDownloadLink($this->Ini->path_imag_temp . $nm_arquivo_html);
+          $this->pb->setDownloadMd5($path_doc_md5);
+          $this->pb->setReturnUrl("LancamentoReceita_Boleto_Lst.php");
+          $this->pb->setReturnOption($this->ret_print);
+          $this->pb->completed();
+          return;
+  }
+} 
+// 
+//======= =========================
+   if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['sc_process_barr'])) {
+       return;
+   }
+   if (!function_exists("NM_is_utf8"))
+   {
+       include_once("../_lib/lib/php/nm_utf8.php");
+   }
+   if (!function_exists("SC_dir_app_ini"))
+   {
+       include_once("../_lib/lib/php/nm_ctrl_app_name.php");
+   }
+   SC_dir_app_ini('LIGA_InfoTIME');
+   $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['contr_erro'] = 'off';
+   $sc_conv_var = array();
+   $Sc_lig_md5 = false;
+   $Sem_Session = (!isset($_SESSION['sc_session'])) ? true : false;
+   $_SESSION['scriptcase']['sem_session'] = false;
+   if (!empty($_POST))
+   {
+       if (isset($_POST['parm']))
+       {
+           $_POST['parm'] = str_replace("__NM_PLUS__", "+", $_POST['parm']);
+           $_POST['parm'] = str_replace("__NM_AMP__", "&", $_POST['parm']);
+           $_POST['parm'] = str_replace("__NM_PRC__", "%", $_POST['parm']);
+       }
+       foreach ($_POST as $nmgp_var => $nmgp_val)
+       {
+            $nmgp_val = str_replace("__NM_PLUS__", "+", $nmgp_val);
+            $nmgp_val = str_replace("__NM_AMP__", "&", $nmgp_val);
+            $nmgp_val = str_replace("__NM_PRC__", "%", $nmgp_val);
+            if (substr($nmgp_var, 0, 11) == "SC_glo_par_")
+            {
+                $nmgp_var = substr($nmgp_var, 11);
+                $nmgp_val = $_SESSION[$nmgp_val];
+            }
+             if ($nmgp_var == "nmgp_parms" && substr($nmgp_val, 0, 8) == "@SC_par@")
+             {
+                 $SC_Ind_Val = explode("@SC_par@", $nmgp_val);
+                 if (count($SC_Ind_Val) == 4 && isset($_SESSION['sc_session'][$SC_Ind_Val[1]][$SC_Ind_Val[2]]['Lig_Md5'][$SC_Ind_Val[3]]))
+                 {
+                     $nmgp_val = $_SESSION['sc_session'][$SC_Ind_Val[1]][$SC_Ind_Val[2]]['Lig_Md5'][$SC_Ind_Val[3]];
+                     $Sc_lig_md5 = true;
+                 }
+                 else
+                 {
+                     $_SESSION['sc_session']['SC_parm_violation'] = true;
+                 }
+             }
+             if ($nmgp_var == "nmgp_parms_where" && substr($nmgp_val, 0, 8) == "@SC_par@")
+             {
+                 $SC_Ind_Val = explode("@SC_par@", $nmgp_val);
+                 if (count($SC_Ind_Val) == 4 && isset($_SESSION['sc_session'][$SC_Ind_Val[1]][$SC_Ind_Val[2]]['LigR_Md5'][$SC_Ind_Val[3]]))
+                 {
+                     $nmgp_val = $_SESSION['sc_session'][$SC_Ind_Val[1]][$SC_Ind_Val[2]]['LigR_Md5'][$SC_Ind_Val[3]];
+                 }
+                 else
+                 {
+                     $_SESSION['sc_session']['SC_parm_violation'] = true;
+                 }
+             }
+            if (isset($sc_conv_var[$nmgp_var]))
+            {
+                $nmgp_var = $sc_conv_var[$nmgp_var];
+            }
+            elseif (isset($sc_conv_var[strtolower($nmgp_var)]))
+            {
+                $nmgp_var = $sc_conv_var[strtolower($nmgp_var)];
+            }
+            nm_limpa_str_LancamentoReceita_Boleto_Lst($nmgp_val);
+            $nmgp_val = NM_decode_input($nmgp_val);
+            nm_protect_num_LancamentoReceita_Boleto_Lst($nmgp_var, $nmgp_val);
+            $$nmgp_var = $nmgp_val;
+       }
+   }
+   if (!empty($_GET))
+   {
+       if (isset($_GET['parm']))
+       {
+           $_GET['parm'] = str_replace("__NM_PLUS__", "+", $_GET['parm']);
+           $_GET['parm'] = str_replace("__NM_AMP__", "&", $_GET['parm']);
+           $_GET['parm'] = str_replace("__NM_PRC__", "%", $_GET['parm']);
+       }
+       foreach ($_GET as $nmgp_var => $nmgp_val)
+       {
+            $nmgp_val = str_replace("__NM_PLUS__", "+", $nmgp_val);
+            $nmgp_val = str_replace("__NM_AMP__", "&", $nmgp_val);
+            $nmgp_val = str_replace("__NM_PRC__", "%", $nmgp_val);
+            if (substr($nmgp_var, 0, 11) == "SC_glo_par_")
+            {
+                $nmgp_var = substr($nmgp_var, 11);
+                $nmgp_val = $_SESSION[$nmgp_val];
+            }
+             if ($nmgp_var == "nmgp_parms" && substr($nmgp_val, 0, 8) == "@SC_par@")
+             {
+                 $SC_Ind_Val = explode("@SC_par@", $nmgp_val);
+                 if (count($SC_Ind_Val) == 4 && isset($_SESSION['sc_session'][$SC_Ind_Val[1]][$SC_Ind_Val[2]]['Lig_Md5'][$SC_Ind_Val[3]]))
+                 {
+                     $nmgp_val = $_SESSION['sc_session'][$SC_Ind_Val[1]][$SC_Ind_Val[2]]['Lig_Md5'][$SC_Ind_Val[3]];
+                     $Sc_lig_md5 = true;
+                 }
+                 else
+                 {
+                     $_SESSION['sc_session']['SC_parm_violation'] = true;
+                 }
+             }
+             if ($nmgp_var == "nmgp_parms_where" && substr($nmgp_val, 0, 8) == "@SC_par@")
+             {
+                 $SC_Ind_Val = explode("@SC_par@", $nmgp_val);
+                 if (count($SC_Ind_Val) == 4 && isset($_SESSION['sc_session'][$SC_Ind_Val[1]][$SC_Ind_Val[2]]['LigR_Md5'][$SC_Ind_Val[3]]))
+                 {
+                     $nmgp_val = $_SESSION['sc_session'][$SC_Ind_Val[1]][$SC_Ind_Val[2]]['LigR_Md5'][$SC_Ind_Val[3]];
+                 }
+                 else
+                 {
+                     $_SESSION['sc_session']['SC_parm_violation'] = true;
+                 }
+             }
+            if (isset($sc_conv_var[$nmgp_var]))
+            {
+                $nmgp_var = $sc_conv_var[$nmgp_var];
+            }
+            elseif (isset($sc_conv_var[strtolower($nmgp_var)]))
+            {
+                $nmgp_var = $sc_conv_var[strtolower($nmgp_var)];
+            }
+            nm_limpa_str_LancamentoReceita_Boleto_Lst($nmgp_val);
+            $nmgp_val = NM_decode_input($nmgp_val);
+            nm_protect_num_LancamentoReceita_Boleto_Lst($nmgp_var, $nmgp_val);
+            $$nmgp_var = $nmgp_val;
+       }
+   }
+   if (!isset($_SERVER['HTTP_REFERER']) && !isset($nmgp_parms) && !isset($script_case_init) && !isset($nmgp_start))
+   {
+       $Sem_Session = false;
+   }
+   $NM_dir_atual = getcwd();
+   if (empty($NM_dir_atual)) {
+       $str_path_sys  = (isset($_SERVER['SCRIPT_FILENAME'])) ? $_SERVER['SCRIPT_FILENAME'] : $_SERVER['ORIG_PATH_TRANSLATED'];
+       $str_path_sys  = str_replace("\\", '/', $str_path_sys);
+   }
+   else {
+       $sc_nm_arquivo = explode("/", $_SERVER['PHP_SELF']);
+       $str_path_sys  = str_replace("\\", "/", getcwd()) . "/" . $sc_nm_arquivo[count($sc_nm_arquivo)-1];
+   }
+   $str_path_web    = $_SERVER['PHP_SELF'];
+   $str_path_web    = str_replace("\\", '/', $str_path_web);
+   $str_path_web    = str_replace('//', '/', $str_path_web);
+   $path_aplicacao  = substr($str_path_web, 0, strrpos($str_path_web, '/'));
+   $path_aplicacao  = substr($path_aplicacao, 0, strrpos($path_aplicacao, '/'));
+   $root            = substr($str_path_sys, 0, -1 * strlen($str_path_web));
+   if ($Sem_Session && (!isset($nmgp_start) || $nmgp_start != "SC")) {
+       if (isset($_COOKIE['sc_apl_default_LIGA_InfoTIME'])) {
+           $apl_def = explode(",", $_COOKIE['sc_apl_default_LIGA_InfoTIME']);
+       }
+       elseif (is_file($root . $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imag_temp'] . "/sc_apl_default_LIGA_InfoTIME.txt")) {
+           $apl_def = explode(",", file_get_contents($root . $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['glo_nm_path_imag_temp'] . "/sc_apl_default_LIGA_InfoTIME.txt"));
+       }
+       if (isset($apl_def)) {
+           if ($apl_def[0] != "LancamentoReceita_Boleto_Lst") {
+               $_SESSION['scriptcase']['sem_session'] = true;
+               if (strtolower(substr($apl_def[0], 0 , 7)) == "http://" || strtolower(substr($apl_def[0], 0 , 8)) == "https://" || substr($apl_def[0], 0 , 2) == "..") {
+                   $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['redir'] = $apl_def[0];
+               }
+               else {
+                   $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['redir'] = $path_aplicacao . "/" . SC_dir_app_name($apl_def[0]) . "/index.php";
+               }
+               $Redir_tp = (isset($apl_def[1])) ? trim(strtoupper($apl_def[1])) : "";
+               $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['redir_tp'] = $Redir_tp;
+           }
+           if (isset($_COOKIE['sc_actual_lang_LIGA_InfoTIME'])) {
+               $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['lang'] = $_COOKIE['sc_actual_lang_LIGA_InfoTIME'];
+           }
+       }
+   }
+   if (isset($SC_lig_apl_orig) && !$Sc_lig_md5 && (!isset($nmgp_parms) || ($nmgp_parms != "SC_null" && substr($nmgp_parms, 0, 8) != "OrScLink")))
+   {
+       $_SESSION['sc_session']['SC_parm_violation'] = true;
+   }
+   if (isset($nmgp_parms) && $nmgp_parms == "SC_null")
+   {
+       $nmgp_parms = "";
+   }
+   if (isset($varIdTenacidade)) 
+   {
+       $_SESSION['varIdTenacidade'] = $varIdTenacidade;
+   }
+   if (isset($varPrimeiraVez)) 
+   {
+       $_SESSION['varPrimeiraVez'] = $varPrimeiraVez;
+   }
+   if (isset($varIdUsuario)) 
+   {
+       $_SESSION['varIdUsuario'] = $varIdUsuario;
+   }
+   if (isset($varPrivAdmin)) 
+   {
+       $_SESSION['varPrivAdmin'] = $varPrivAdmin;
+   }
+   if (isset($total_chked)) 
+   {
+       $_SESSION['total_chked'] = $total_chked;
+   }
+   if (isset($i)) 
+   {
+       $_SESSION['i'] = $i;
+   }
+   if (isset($varRemetente)) 
+   {
+       $_SESSION['varRemetente'] = $varRemetente;
+   }
+   if (isset($nossoNumeroRecebido)) 
+   {
+       $_SESSION['nossoNumeroRecebido'] = $nossoNumeroRecebido;
+   }
+   if (isset($parm1)) 
+   {
+       $_SESSION['parm1'] = $parm1;
+   }
+   if (isset($varDiretorioArquivo)) 
+   {
+       $_SESSION['varDiretorioArquivo'] = $varDiretorioArquivo;
+   }
+   if (isset($varServidorSMTP)) 
+   {
+       $_SESSION['varServidorSMTP'] = $varServidorSMTP;
+   }
+   if (isset($varUsuarioSMTP)) 
+   {
+       $_SESSION['varUsuarioSMTP'] = $varUsuarioSMTP;
+   }
+   if (isset($varSenhaSMTP)) 
+   {
+       $_SESSION['varSenhaSMTP'] = $varSenhaSMTP;
+   }
+   if (!empty($glo_perfil))  
+   { 
+      $_SESSION['scriptcase']['glo_perfil'] = $glo_perfil;
+   }   
+   if (isset($glo_servidor)) 
+   {
+       $_SESSION['scriptcase']['glo_servidor'] = $glo_servidor;
+   }
+   if (isset($glo_banco)) 
+   {
+       $_SESSION['scriptcase']['glo_banco'] = $glo_banco;
+   }
+   if (isset($glo_tpbanco)) 
+   {
+       $_SESSION['scriptcase']['glo_tpbanco'] = $glo_tpbanco;
+   }
+   if (isset($glo_usuario)) 
+   {
+       $_SESSION['scriptcase']['glo_usuario'] = $glo_usuario;
+   }
+   if (isset($glo_senha)) 
+   {
+       $_SESSION['scriptcase']['glo_senha'] = $glo_senha;
+   }
+   if (isset($glo_senha_protect)) 
+   {
+       $_SESSION['scriptcase']['glo_senha_protect'] = $glo_senha_protect;
+   }
+   if (isset($script_case_init) && isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_pai']))
+   {
+       $apl_pai = $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_pai'];
+       if (isset($_SESSION['sc_session'][$script_case_init][$apl_pai]['embutida_filho']))
+       {
+           foreach ($_SESSION['sc_session'][$script_case_init][$apl_pai]['embutida_filho'] as $init_filho)
+           {
+               if (isset($_SESSION['sc_session'][$init_filho]['LancamentoReceita_Boleto_Lst']['master_pai']) && $_SESSION['sc_session'][$init_filho]['LancamentoReceita_Boleto_Lst']['master_pai'] == $script_case_init)
+               {
+                   $script_case_init = $init_filho;
+                   break;
+               }
+           }
+       }
+   }
+   $nm_embutida_form = false;
+   if (isset($script_case_init) && isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form']) && $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form'] && !isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['master_pai']))
+   {
+       $SC_init_ant = $script_case_init;
+       $script_case_init = rand(2, 10000);
+       if (isset($_SESSION['sc_session'][$SC_init_ant]['LancamentoReceita_Boleto_Lst']['embutida_pai']))
+       {
+           $_SESSION['sc_session'][$SC_init_ant][$_SESSION['sc_session'][$SC_init_ant]['LancamentoReceita_Boleto_Lst']['embutida_pai']]['embutida_filho'][] = $script_case_init;
+       }
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['master_pai'] = $SC_init_ant;
+   }
+   if (isset($script_case_init) && isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['master_pai']))
+   {
+       $SC_init_ant = $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['master_pai'];
+       if (!isset($_SESSION['sc_session'][$SC_init_ant]['LancamentoReceita_Boleto_Lst']['embutida_form_parms']))
+       {
+           $_SESSION['sc_session'][$SC_init_ant]['LancamentoReceita_Boleto_Lst']['embutida_form_parms'] = "";
+       }
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_parms'] = $_SESSION['sc_session'][$SC_init_ant]['LancamentoReceita_Boleto_Lst']['embutida_form_parms'];
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form'] = true;
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_full'] = (isset($_SESSION['sc_session'][$SC_init_ant]['LancamentoReceita_Boleto_Lst']['embutida_form_full'])) ? $_SESSION['sc_session'][$SC_init_ant]['LancamentoReceita_Boleto_Lst']['embutida_form_full'] : false;
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['reg_start'] = "";
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'] = "inicio";
+       unset($_SESSION['sc_session'][$SC_init_ant]['LancamentoReceita_Boleto_Lst']['embutida_form']);
+       unset($_SESSION['sc_session'][$SC_init_ant]['LancamentoReceita_Boleto_Lst']['embutida_form_parms']);
+       $nm_apl_dependente = 1;
+       $nm_embutida_form  = true;
+   }
+   if (isset($script_case_init) && isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_parms'])) 
+   {
+       if (!empty($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_parms'])) 
+       {
+           $nmgp_parms = $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_parms'];
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_parms'] = "";
+       }
+   }
+   elseif (isset($script_case_init))
+   {
+       unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form']);
+       unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_full']);
+       unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_parms']);
+   }
+   if (!isset($nmgp_opcao) || !isset($script_case_init) || ((!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida']) || !$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida']) && $nmgp_opcao != "formphp"))
+   { 
+       if (!empty($nmgp_parms)) 
+       { 
+           $nmgp_parms = NM_decode_input($nmgp_parms);
+           $nmgp_parms = str_replace("@aspass@", "'", $nmgp_parms);
+           $nmgp_parms = str_replace("*scout", "?@?", $nmgp_parms);
+           $nmgp_parms = str_replace("*scin", "?#?", $nmgp_parms);
+           $todox = str_replace("?#?@?@?", "?#?@ ?@?", $nmgp_parms);
+           $todo  = explode("?@?", $todox);
+           foreach ($todo as $param)
+           {
+                $cadapar = explode("?#?", $param);
+                if (1 < sizeof($cadapar))
+                {
+                    if (substr($cadapar[0], 0, 11) == "SC_glo_par_")
+                    {
+                        $cadapar[0] = substr($cadapar[0], 11);
+                        $cadapar[1] = $_SESSION[$cadapar[1]];
+                    }
+                    if (isset($sc_conv_var[$cadapar[0]]))
+                    {
+                        $cadapar[0] = $sc_conv_var[$cadapar[0]];
+                    }
+                    elseif (isset($sc_conv_var[strtolower($cadapar[0])]))
+                    {
+                        $cadapar[0] = $sc_conv_var[strtolower($cadapar[0])];
+                    }
+                    nm_limpa_str_LancamentoReceita_Boleto_Lst($cadapar[1]);
+                    nm_protect_num_LancamentoReceita_Boleto_Lst($cadapar[0], $cadapar[1]);
+                    if ($cadapar[1] == "@ ") {$cadapar[1] = trim($cadapar[1]); }
+                    $Tmp_par   = $cadapar[0];
+                    $$Tmp_par = $cadapar[1];
+                }
+           }
+           if (!isset($varIdTenacidade) && isset($varidtenacidade)) 
+           {
+               $_SESSION["varIdTenacidade"] = $varidtenacidade;
+           }
+           if (isset($varIdTenacidade)) 
+           {
+               $_SESSION['varIdTenacidade'] = $varIdTenacidade;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdTenacidade"]);
+           }
+           if (!isset($varPrimeiraVez) && isset($varprimeiravez)) 
+           {
+               $_SESSION["varPrimeiraVez"] = $varprimeiravez;
+           }
+           if (isset($varPrimeiraVez)) 
+           {
+               $_SESSION['varPrimeiraVez'] = $varPrimeiraVez;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrimeiraVez"]);
+           }
+           if (!isset($varIdUsuario) && isset($varidusuario)) 
+           {
+               $_SESSION["varIdUsuario"] = $varidusuario;
+           }
+           if (isset($varIdUsuario)) 
+           {
+               $_SESSION['varIdUsuario'] = $varIdUsuario;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdUsuario"]);
+           }
+           if (!isset($varPrivAdmin) && isset($varprivadmin)) 
+           {
+               $_SESSION["varPrivAdmin"] = $varprivadmin;
+           }
+           if (isset($varPrivAdmin)) 
+           {
+               $_SESSION['varPrivAdmin'] = $varPrivAdmin;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrivAdmin"]);
+           }
+           if (isset($total_chked)) 
+           {
+               $_SESSION['total_chked'] = $total_chked;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["total_chked"]);
+           }
+           if (isset($i)) 
+           {
+               $_SESSION['i'] = $i;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["i"]);
+           }
+           if (!isset($varRemetente) && isset($varremetente)) 
+           {
+               $_SESSION["varRemetente"] = $varremetente;
+           }
+           if (isset($varRemetente)) 
+           {
+               $_SESSION['varRemetente'] = $varRemetente;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varRemetente"]);
+           }
+           if (!isset($nossoNumeroRecebido) && isset($nossonumerorecebido)) 
+           {
+               $_SESSION["nossoNumeroRecebido"] = $nossonumerorecebido;
+           }
+           if (isset($nossoNumeroRecebido)) 
+           {
+               $_SESSION['nossoNumeroRecebido'] = $nossoNumeroRecebido;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["nossoNumeroRecebido"]);
+           }
+           if (isset($parm1)) 
+           {
+               $_SESSION['parm1'] = $parm1;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["parm1"]);
+           }
+           if (!isset($varDiretorioArquivo) && isset($vardiretorioarquivo)) 
+           {
+               $_SESSION["varDiretorioArquivo"] = $vardiretorioarquivo;
+           }
+           if (isset($varDiretorioArquivo)) 
+           {
+               $_SESSION['varDiretorioArquivo'] = $varDiretorioArquivo;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varDiretorioArquivo"]);
+           }
+           if (!isset($varServidorSMTP) && isset($varservidorsmtp)) 
+           {
+               $_SESSION["varServidorSMTP"] = $varservidorsmtp;
+           }
+           if (isset($varServidorSMTP)) 
+           {
+               $_SESSION['varServidorSMTP'] = $varServidorSMTP;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varServidorSMTP"]);
+           }
+           if (!isset($varUsuarioSMTP) && isset($varusuariosmtp)) 
+           {
+               $_SESSION["varUsuarioSMTP"] = $varusuariosmtp;
+           }
+           if (isset($varUsuarioSMTP)) 
+           {
+               $_SESSION['varUsuarioSMTP'] = $varUsuarioSMTP;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varUsuarioSMTP"]);
+           }
+           if (!isset($varSenhaSMTP) && isset($varsenhasmtp)) 
+           {
+               $_SESSION["varSenhaSMTP"] = $varsenhasmtp;
+           }
+           if (isset($varSenhaSMTP)) 
+           {
+               $_SESSION['varSenhaSMTP'] = $varSenhaSMTP;
+               nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varSenhaSMTP"]);
+           }
+           $NMSC_conf_apl = array();
+           if (isset($NMSC_inicial))
+           {
+               $NMSC_conf_apl['inicial'] = $NMSC_inicial;
+           }
+           if (isset($NMSC_rows))
+           {
+               $NMSC_conf_apl['rows'] = $NMSC_rows;
+           }
+           if (isset($NMSC_cols))
+           {
+               $NMSC_conf_apl['cols'] = $NMSC_cols;
+           }
+           if (isset($NMSC_paginacao))
+           {
+               $NMSC_conf_apl['paginacao'] = $NMSC_paginacao;
+           }
+           if (isset($NMSC_cab))
+           {
+               $NMSC_conf_apl['cab'] = $NMSC_cab;
+           }
+           if (isset($NMSC_nav))
+           {
+               $NMSC_conf_apl['nav'] = $NMSC_nav;
+           }
+           if (isset($NMSC_fix_bar_top))
+           {
+               $NMSC_conf_apl['fix_top'] = $NMSC_fix_bar_top;
+           }
+           if (isset($NMSC_fix_bar_bot))
+           {
+               $NMSC_conf_apl['fix_bot'] = $NMSC_fix_bar_bot;
+           }
+           if (isset($NM_run_iframe) && $NM_run_iframe == 1) 
+           { 
+               unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']);
+               $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['b_sair'] = false;
+           }   
+       } 
+   } 
+   if (!isset($nmgp_opcao)) {
+      $nmgp_opcao = "";
+   }
+   $ini_embutida = "";
+   if (isset($script_case_init) && isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida']) && $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'])
+   {
+       $nmgp_outra_jan = "";
+   }
+   if (isset($nmgp_outra_jan) && $nmgp_outra_jan == 'true')
+   {
+       $script_case_init = "";
+   }
+   if (isset($GLOBALS["script_case_init"]) && !empty($GLOBALS["script_case_init"]))
+   {
+       $ini_embutida = $GLOBALS["script_case_init"];
+        if (!isset($_SESSION['sc_session'][$ini_embutida]['LancamentoReceita_Boleto_Lst']['embutida']))
+        { 
+           $_SESSION['sc_session'][$ini_embutida]['LancamentoReceita_Boleto_Lst']['embutida'] = false;
+        }
+        if (!$_SESSION['sc_session'][$ini_embutida]['LancamentoReceita_Boleto_Lst']['embutida'])
+        { 
+           $script_case_init = $ini_embutida;
+        }
+   }
+   if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['protect_modal']) && !empty($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['protect_modal']))
+   {
+       $script_case_init = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['protect_modal'];
+   }
+   if (!isset($script_case_init) || empty($script_case_init))
+   {
+       $script_case_init = rand(2, 10000);
+   }
+   $salva_emb    = false;
+   $salva_iframe = false;
+   if (isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['iframe_menu']))
+   {
+       $salva_iframe = $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['iframe_menu'];
+       unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['iframe_menu']);
+   }
+   if (isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida']))
+   {
+       $salva_emb = $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'];
+       unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida']);
+   }
+   if (isset($nm_run_menu) && $nm_run_menu == 1 && !$salva_emb)
+   {
+        if (isset($_SESSION['scriptcase']['sc_aba_iframe']) && isset($_SESSION['scriptcase']['sc_apl_menu_atual']))
+        {
+            foreach ($_SESSION['scriptcase']['sc_aba_iframe'] as $aba => $apls_aba)
+            {
+                if ($aba == $_SESSION['scriptcase']['sc_apl_menu_atual'])
+                {
+                    unset($_SESSION['scriptcase']['sc_aba_iframe'][$aba]);
+                    break;
+                }
+            }
+        }
+        $_SESSION['scriptcase']['sc_apl_menu_atual'] = "LancamentoReceita_Boleto_Lst";
+        $achou = false;
+        if (isset($_SESSION['sc_session'][$script_case_init]))
+        {
+            foreach ($_SESSION['sc_session'][$script_case_init] as $nome_apl => $resto)
+            {
+                if ($nome_apl == 'LancamentoReceita_Boleto_Lst' || $achou)
+                {
+                    unset($_SESSION['sc_session'][$script_case_init][$nome_apl]);
+                }
+            }
+            if (!$achou && isset($nm_apl_menu))
+            {
+                foreach ($_SESSION['sc_session'][$script_case_init] as $nome_apl => $resto)
+                {
+                    if ($nome_apl == $nm_apl_menu || $achou)
+                    {
+                        $achou = true;
+                        if ($nome_apl != $nm_apl_menu)
+                        {
+                            unset($_SESSION['sc_session'][$script_case_init][$nome_apl]);
+                        }
+                    }
+                }
+            }
+        }
+        $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['iframe_menu'] = true;
+   }
+   else
+   {
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['iframe_menu'] = $salva_iframe;
+   }
+   $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['doc_word'] = false;
+   $_SESSION['scriptcase']['saida_word'] = false;
+   if (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['skip_charts']))
+   {
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['skip_charts'] = false;
+   }
+   if (isset($_REQUEST['sc_create_charts']))
+   {
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['skip_charts'] = 'N' == $_REQUEST['sc_create_charts'];
+   }
+   $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'] = $salva_emb;
+
+   if (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['initialize']))
+   {
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['initialize'] = true;
+   }
+   elseif (!isset($_SERVER['HTTP_REFERER']))
+   {
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['initialize'] = false;
+   }
+   elseif (false === strpos($_SERVER['HTTP_REFERER'], '.php'))
+   {
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['initialize'] = true;
+   }
+   else
+   {
+       $sReferer = substr($_SERVER['HTTP_REFERER'], 0, strpos($_SERVER['HTTP_REFERER'], '.php'));
+       $sReferer = substr($sReferer, strrpos($sReferer, '/') + 1);
+       if ('LancamentoReceita_Boleto_Lst' == $sReferer || 'LancamentoReceita_Boleto_Lst_' == substr($sReferer, 0, 29))
+       {
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['initialize'] = false;
+       }
+       else
+       {
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['initialize'] = true;
+       }
+   }
+   if ($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['initialize'])
+   {
+       unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['tot_geral']);
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['contr_total_geral'] = "NAO";
+   }
+
+   $_POST['script_case_init'] = $script_case_init;
+   if (!isset($nmgp_opcao) || empty($nmgp_opcao) || $nmgp_opcao == "grid" && (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['b_sair'])))
+   {
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['b_sair'] = true;
+   }
+   $STR_lang    = (isset($_SESSION['scriptcase']['str_lang']) && !empty($_SESSION['scriptcase']['str_lang'])) ? $_SESSION['scriptcase']['str_lang'] : "pt_br";
+   if (isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['lang'])) {
+       $STR_lang = $_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['lang'];
+   }
+   $STR_schema_all = (isset($_SESSION['scriptcase']['str_schema_all']) && !empty($_SESSION['scriptcase']['str_schema_all'])) ? $_SESSION['scriptcase']['str_schema_all'] : "Liga_Soft_sm/Liga_Soft_sm";
+   $NM_arq_lang = "../_lib/lang/" . $STR_lang . ".lang.php";
+   $Nm_lang = array();
+   if (is_file($NM_arq_lang))
+   {
+       $Lixo = file($NM_arq_lang);
+       foreach ($Lixo as $Cada_lin) 
+       {
+           if (strpos($Cada_lin, "array()") === false && (trim($Cada_lin) != "<?php")  && (trim($Cada_lin) != "?" . ">"))
+           {
+               eval (str_replace("\$this->", "\$", $Cada_lin));
+           }
+       }
+   }
+   $_SESSION['scriptcase']['charset'] = "UTF-8";
+   ini_set('default_charset', $_SESSION['scriptcase']['charset']);
+   foreach ($Nm_lang as $ind => $dados)
+   {
+      if ($_SESSION['scriptcase']['charset'] != "UTF-8" && NM_is_utf8($dados))
+      {
+          $Nm_lang[$ind] = sc_convert_encoding($dados, $_SESSION['scriptcase']['charset'], "UTF-8");
+      }
+   }
+   if (isset($_SESSION['scriptcase']['sc_outra_jan']) && $_SESSION['scriptcase']['sc_outra_jan'] == 'LancamentoReceita_Boleto_Lst')
+   {
+       $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan'] = true;
+        unset($_SESSION['scriptcase']['sc_outra_jan']);
+   }
+   $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['menu_desenv'] = false;   
+   if (!defined("SC_ERROR_HANDLER"))
+   {
+       define("SC_ERROR_HANDLER", 1);
+       include_once(dirname(__FILE__) . "/LancamentoReceita_Boleto_Lst_erro.php");
+   }
+   $salva_tp_saida  = (isset($_SESSION['scriptcase']['sc_tp_saida']))  ? $_SESSION['scriptcase']['sc_tp_saida'] : "";
+   $salva_url_saida  = (isset($_SESSION['scriptcase']['sc_url_saida'][$script_case_init])) ? $_SESSION['scriptcase']['sc_url_saida'][$script_case_init] : "";
+   if (isset($_SESSION['sc_session']['scriptcase']['embutida_form_pdf']['LancamentoReceita_Boleto_Lst']))
+   { 
+       return;
+   } 
+   if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'] && $nmgp_opcao != "formphp")
+   { 
+       if ($nmgp_opcao == "change_lang" || $nmgp_opcao == "change_lang_res" || $nmgp_opcao == "change_lang_fil" || $nmgp_opcao == "force_lang")  
+       { 
+           if ($nmgp_opcao == "change_lang_fil")  
+           { 
+               $nmgp_opcao  = "busca";  
+           } 
+           elseif ($nmgp_opcao == "change_lang_res")  
+           { 
+               $nmgp_opcao  = "resumo";  
+           } 
+           else 
+           { 
+               $nmgp_opcao  = "igual";  
+           } 
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_change_lang'] = true;
+           unset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['tot_geral']);
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['contr_total_geral'] = "NAO";
+           $Temp_lang = explode(";" , $nmgp_idioma);  
+           if (isset($Temp_lang[0]) && !empty($Temp_lang[0]))  
+           { 
+               $_SESSION['scriptcase']['str_lang'] = $Temp_lang[0];
+           } 
+           if (isset($Temp_lang[1]) && !empty($Temp_lang[1])) 
+           { 
+               $_SESSION['scriptcase']['str_conf_reg'] = $Temp_lang[1];
+           } 
+       } 
+       if ($nmgp_opcao == "change_schema" || $nmgp_opcao == "change_schema_fil" || $nmgp_opcao == "change_schema_res")  
+       { 
+           if ($nmgp_opcao == "change_schema_fil")  
+           { 
+               $nmgp_opcao  = "busca";  
+           } 
+           elseif ($nmgp_opcao == "change_schema_res")  
+           { 
+               $nmgp_opcao  = "resumo";  
+           } 
+           else 
+           { 
+               $nmgp_opcao  = "igual";  
+           } 
+           $nmgp_schema = $nmgp_schema . "/" . $nmgp_schema;  
+           $_SESSION['scriptcase']['str_schema_all'] = $nmgp_schema;
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['num_css'] = rand(0, 1000);
+       } 
+       if ($nmgp_opcao == "volta_grid")  
+       { 
+           $nmgp_opcao = "igual";  
+       }   
+       if (!empty($nmgp_opcao))  
+       { 
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'] = $nmgp_opcao ;  
+       }   
+       if (isset($_POST["varIdTenacidade"])) 
+       {
+           $_SESSION["varIdTenacidade"] = $_POST["varIdTenacidade"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdTenacidade"]);
+       }
+       if (!isset($_POST["varIdTenacidade"]) && isset($_POST["varidtenacidade"])) 
+       {
+           $_SESSION["varIdTenacidade"] = $_POST["varidtenacidade"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdTenacidade"]);
+       }
+       if (isset($_GET["varIdTenacidade"])) 
+       {
+           $_SESSION["varIdTenacidade"] = $_GET["varIdTenacidade"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdTenacidade"]);
+       }
+       if (!isset($_GET["varIdTenacidade"]) && isset($_GET["varidtenacidade"])) 
+       {
+           $_SESSION["varIdTenacidade"] = $_GET["varidtenacidade"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdTenacidade"]);
+       }
+       if (!isset($_SESSION["varIdTenacidade"])) 
+       {
+           $_SESSION["varIdTenacidade"] = "";
+       }
+       if (isset($_POST["varPrimeiraVez"])) 
+       {
+           $_SESSION["varPrimeiraVez"] = $_POST["varPrimeiraVez"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrimeiraVez"]);
+       }
+       if (!isset($_POST["varPrimeiraVez"]) && isset($_POST["varprimeiravez"])) 
+       {
+           $_SESSION["varPrimeiraVez"] = $_POST["varprimeiravez"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrimeiraVez"]);
+       }
+       if (isset($_GET["varPrimeiraVez"])) 
+       {
+           $_SESSION["varPrimeiraVez"] = $_GET["varPrimeiraVez"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrimeiraVez"]);
+       }
+       if (!isset($_GET["varPrimeiraVez"]) && isset($_GET["varprimeiravez"])) 
+       {
+           $_SESSION["varPrimeiraVez"] = $_GET["varprimeiravez"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrimeiraVez"]);
+       }
+       if (!isset($_SESSION["varPrimeiraVez"])) 
+       {
+           $_SESSION["varPrimeiraVez"] = "";
+       }
+       if (isset($_POST["varIdUsuario"])) 
+       {
+           $_SESSION["varIdUsuario"] = $_POST["varIdUsuario"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdUsuario"]);
+       }
+       if (!isset($_POST["varIdUsuario"]) && isset($_POST["varidusuario"])) 
+       {
+           $_SESSION["varIdUsuario"] = $_POST["varidusuario"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdUsuario"]);
+       }
+       if (isset($_GET["varIdUsuario"])) 
+       {
+           $_SESSION["varIdUsuario"] = $_GET["varIdUsuario"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdUsuario"]);
+       }
+       if (!isset($_GET["varIdUsuario"]) && isset($_GET["varidusuario"])) 
+       {
+           $_SESSION["varIdUsuario"] = $_GET["varidusuario"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varIdUsuario"]);
+       }
+       if (!isset($_SESSION["varIdUsuario"])) 
+       {
+           $_SESSION["varIdUsuario"] = "";
+       }
+       if (isset($_POST["varPrivAdmin"])) 
+       {
+           $_SESSION["varPrivAdmin"] = $_POST["varPrivAdmin"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrivAdmin"]);
+       }
+       if (!isset($_POST["varPrivAdmin"]) && isset($_POST["varprivadmin"])) 
+       {
+           $_SESSION["varPrivAdmin"] = $_POST["varprivadmin"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrivAdmin"]);
+       }
+       if (isset($_GET["varPrivAdmin"])) 
+       {
+           $_SESSION["varPrivAdmin"] = $_GET["varPrivAdmin"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrivAdmin"]);
+       }
+       if (!isset($_GET["varPrivAdmin"]) && isset($_GET["varprivadmin"])) 
+       {
+           $_SESSION["varPrivAdmin"] = $_GET["varprivadmin"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varPrivAdmin"]);
+       }
+       if (!isset($_SESSION["varPrivAdmin"])) 
+       {
+           $_SESSION["varPrivAdmin"] = "";
+       }
+       if (isset($_POST["total_chked"])) 
+       {
+           $_SESSION["total_chked"] = $_POST["total_chked"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["total_chked"]);
+       }
+       if (isset($_GET["total_chked"])) 
+       {
+           $_SESSION["total_chked"] = $_GET["total_chked"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["total_chked"]);
+       }
+       if (!isset($_SESSION["total_chked"])) 
+       {
+           $_SESSION["total_chked"] = "";
+       }
+       if (isset($_POST["i"])) 
+       {
+           $_SESSION["i"] = $_POST["i"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["i"]);
+       }
+       if (isset($_GET["i"])) 
+       {
+           $_SESSION["i"] = $_GET["i"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["i"]);
+       }
+       if (!isset($_SESSION["i"])) 
+       {
+           $_SESSION["i"] = "";
+       }
+       if (isset($_POST["varRemetente"])) 
+       {
+           $_SESSION["varRemetente"] = $_POST["varRemetente"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varRemetente"]);
+       }
+       if (!isset($_POST["varRemetente"]) && isset($_POST["varremetente"])) 
+       {
+           $_SESSION["varRemetente"] = $_POST["varremetente"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varRemetente"]);
+       }
+       if (isset($_GET["varRemetente"])) 
+       {
+           $_SESSION["varRemetente"] = $_GET["varRemetente"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varRemetente"]);
+       }
+       if (!isset($_GET["varRemetente"]) && isset($_GET["varremetente"])) 
+       {
+           $_SESSION["varRemetente"] = $_GET["varremetente"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varRemetente"]);
+       }
+       if (!isset($_SESSION["varRemetente"])) 
+       {
+           $_SESSION["varRemetente"] = "";
+       }
+       if (isset($_POST["nossoNumeroRecebido"])) 
+       {
+           $_SESSION["nossoNumeroRecebido"] = $_POST["nossoNumeroRecebido"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["nossoNumeroRecebido"]);
+       }
+       if (!isset($_POST["nossoNumeroRecebido"]) && isset($_POST["nossonumerorecebido"])) 
+       {
+           $_SESSION["nossoNumeroRecebido"] = $_POST["nossonumerorecebido"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["nossoNumeroRecebido"]);
+       }
+       if (isset($_GET["nossoNumeroRecebido"])) 
+       {
+           $_SESSION["nossoNumeroRecebido"] = $_GET["nossoNumeroRecebido"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["nossoNumeroRecebido"]);
+       }
+       if (!isset($_GET["nossoNumeroRecebido"]) && isset($_GET["nossonumerorecebido"])) 
+       {
+           $_SESSION["nossoNumeroRecebido"] = $_GET["nossonumerorecebido"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["nossoNumeroRecebido"]);
+       }
+       if (!isset($_SESSION["nossoNumeroRecebido"])) 
+       {
+           $_SESSION["nossoNumeroRecebido"] = "";
+       }
+       if (isset($_POST["parm1"])) 
+       {
+           $_SESSION["parm1"] = $_POST["parm1"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["parm1"]);
+       }
+       if (isset($_GET["parm1"])) 
+       {
+           $_SESSION["parm1"] = $_GET["parm1"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["parm1"]);
+       }
+       if (!isset($_SESSION["parm1"])) 
+       {
+           $_SESSION["parm1"] = "";
+       }
+       if (isset($_POST["varDiretorioArquivo"])) 
+       {
+           $_SESSION["varDiretorioArquivo"] = $_POST["varDiretorioArquivo"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varDiretorioArquivo"]);
+       }
+       if (!isset($_POST["varDiretorioArquivo"]) && isset($_POST["vardiretorioarquivo"])) 
+       {
+           $_SESSION["varDiretorioArquivo"] = $_POST["vardiretorioarquivo"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varDiretorioArquivo"]);
+       }
+       if (isset($_GET["varDiretorioArquivo"])) 
+       {
+           $_SESSION["varDiretorioArquivo"] = $_GET["varDiretorioArquivo"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varDiretorioArquivo"]);
+       }
+       if (!isset($_GET["varDiretorioArquivo"]) && isset($_GET["vardiretorioarquivo"])) 
+       {
+           $_SESSION["varDiretorioArquivo"] = $_GET["vardiretorioarquivo"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varDiretorioArquivo"]);
+       }
+       if (!isset($_SESSION["varDiretorioArquivo"])) 
+       {
+           $_SESSION["varDiretorioArquivo"] = "";
+       }
+       if (isset($_POST["varServidorSMTP"])) 
+       {
+           $_SESSION["varServidorSMTP"] = $_POST["varServidorSMTP"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varServidorSMTP"]);
+       }
+       if (!isset($_POST["varServidorSMTP"]) && isset($_POST["varservidorsmtp"])) 
+       {
+           $_SESSION["varServidorSMTP"] = $_POST["varservidorsmtp"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varServidorSMTP"]);
+       }
+       if (isset($_GET["varServidorSMTP"])) 
+       {
+           $_SESSION["varServidorSMTP"] = $_GET["varServidorSMTP"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varServidorSMTP"]);
+       }
+       if (!isset($_GET["varServidorSMTP"]) && isset($_GET["varservidorsmtp"])) 
+       {
+           $_SESSION["varServidorSMTP"] = $_GET["varservidorsmtp"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varServidorSMTP"]);
+       }
+       if (!isset($_SESSION["varServidorSMTP"])) 
+       {
+           $_SESSION["varServidorSMTP"] = "";
+       }
+       if (isset($_POST["varUsuarioSMTP"])) 
+       {
+           $_SESSION["varUsuarioSMTP"] = $_POST["varUsuarioSMTP"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varUsuarioSMTP"]);
+       }
+       if (!isset($_POST["varUsuarioSMTP"]) && isset($_POST["varusuariosmtp"])) 
+       {
+           $_SESSION["varUsuarioSMTP"] = $_POST["varusuariosmtp"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varUsuarioSMTP"]);
+       }
+       if (isset($_GET["varUsuarioSMTP"])) 
+       {
+           $_SESSION["varUsuarioSMTP"] = $_GET["varUsuarioSMTP"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varUsuarioSMTP"]);
+       }
+       if (!isset($_GET["varUsuarioSMTP"]) && isset($_GET["varusuariosmtp"])) 
+       {
+           $_SESSION["varUsuarioSMTP"] = $_GET["varusuariosmtp"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varUsuarioSMTP"]);
+       }
+       if (!isset($_SESSION["varUsuarioSMTP"])) 
+       {
+           $_SESSION["varUsuarioSMTP"] = "";
+       }
+       if (isset($_POST["varSenhaSMTP"])) 
+       {
+           $_SESSION["varSenhaSMTP"] = $_POST["varSenhaSMTP"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varSenhaSMTP"]);
+       }
+       if (!isset($_POST["varSenhaSMTP"]) && isset($_POST["varsenhasmtp"])) 
+       {
+           $_SESSION["varSenhaSMTP"] = $_POST["varsenhasmtp"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varSenhaSMTP"]);
+       }
+       if (isset($_GET["varSenhaSMTP"])) 
+       {
+           $_SESSION["varSenhaSMTP"] = $_GET["varSenhaSMTP"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varSenhaSMTP"]);
+       }
+       if (!isset($_GET["varSenhaSMTP"]) && isset($_GET["varsenhasmtp"])) 
+       {
+           $_SESSION["varSenhaSMTP"] = $_GET["varsenhasmtp"];
+           nm_limpa_str_LancamentoReceita_Boleto_Lst($_SESSION["varSenhaSMTP"]);
+       }
+       if (!isset($_SESSION["varSenhaSMTP"])) 
+       {
+           $_SESSION["varSenhaSMTP"] = "";
+       }
+       if (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['mostra_edit'])) 
+       {
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['mostra_edit'] = "S";
+       }
+       if (isset($nmgp_lig_edit_lapis)) 
+       {
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['mostra_edit'] = $nmgp_lig_edit_lapis;
+           unset($GLOBALS["nmgp_lig_edit_lapis"]) ;  
+           if (isset($_SESSION['nmgp_lig_edit_lapis'])) 
+           {
+               unset($_SESSION['nmgp_lig_edit_lapis']);
+           }
+       }
+       if (isset($nmgp_outra_jan) && $nmgp_outra_jan == 'true')
+       {
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan'] = true;
+       }
+       $nm_saida = "";
+       if (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_modal']))
+       {
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_modal'] = false;
+       }
+       if (isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['volta_redirect_apl']) && !empty($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['volta_redirect_apl']))
+       {
+           $_SESSION['scriptcase']['sc_url_saida'][$script_case_init] = $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['volta_redirect_apl']; 
+           $nm_apl_dependente = $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['volta_redirect_tp']; 
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['volta_redirect_apl'] = "";
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['volta_redirect_tp'] = "";
+           $nm_url_saida = "LancamentoReceita_Boleto_Lst_fim.php"; 
+       
+       }
+       elseif (substr($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'], 0, 7) != "grafico" && $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'] != "pdf" ) 
+       {
+           if (isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan']) && $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan'])
+           {
+               if ($nmgp_url_saida == "modal")
+               {
+                   $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_modal'] = true;
+               }
+               $nm_url_saida = "LancamentoReceita_Boleto_Lst_fim.php"; 
+           }
+           elseif (!$nm_embutida_form)
+           {
+               $nm_url_saida = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ""; 
+               $nm_url_saida = str_replace("_fim.php", ".php", $nm_url_saida);
+               if (!empty($nmgp_url_saida)) 
+               { 
+                   $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['retorno_cons'] = $nmgp_url_saida ; 
+               } 
+               if (!empty($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['retorno_cons'])) 
+               { 
+                   $nm_url_saida = $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['retorno_cons']  . "?script_case_init=" . NM_encode_input($script_case_init);  
+                   $nm_apl_dependente = 1 ; 
+               } 
+               if (!empty($nm_url_saida)) 
+               { 
+                   $_SESSION['scriptcase']['sc_url_saida'][$script_case_init] = $nm_url_saida ; 
+               } 
+               $_SESSION['scriptcase']['sc_url_saida'][$script_case_init] = $nm_url_saida; 
+               $nm_url_saida = "LancamentoReceita_Boleto_Lst_fim.php"; 
+               $_SESSION['scriptcase']['sc_tp_saida'] = "P"; 
+               if ($nm_apl_dependente == 1) 
+               { 
+                   $_SESSION['scriptcase']['sc_tp_saida'] = "D"; 
+               } 
+           } 
+       }
+// 
+       if (isset($_SESSION['scriptcase']['nm_sc_retorno']) && !empty($_SESSION['scriptcase']['nm_sc_retorno']) && $nm_apl_dependente != 1 && substr($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'], 0, 7) != "grafico" && $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'] != "pdf" ) 
+       { 
+            $_SESSION['scriptcase']['sc_url_saida'][$script_case_init] = $_SESSION['scriptcase']['nm_sc_retorno']; 
+            $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['menu_desenv'] = true;   
+       } 
+       if (isset($nmgp_parms_ret)) 
+       {
+           $todo = explode(",", $nmgp_parms_ret);
+           if (isset($sc_conv_var[$todo[2]]))
+           {
+               $todo[2] = $sc_conv_var[$todo[2]];
+           }
+           elseif (isset($sc_conv_var[strtolower($todo[2])]))
+           {
+               $todo[2] = $sc_conv_var[strtolower($todo[2])];
+           }
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['form_psq_ret']  = $todo[0];
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['campo_psq_ret'] = $todo[1];
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['dado_psq_ret']  = $todo[2];
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['js_apos_busca'] = $nm_evt_ret_busca;
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opc_psq'] = true;   
+           if (isset($nmgp_iframe_ret)) {
+               $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['iframe_ret_cap'] = $nmgp_iframe_ret;
+           }
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['psq_edit'] = 'N';   
+           if (isset($nmgp_perm_edit)) {
+               $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['psq_edit'] = $nmgp_perm_edit;
+           }
+       } 
+       elseif (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opc_psq']))
+       {
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opc_psq']  = false;   
+           $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['psq_edit'] = 'N';   
+       } 
+       if (isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form']) && $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form'])
+       {
+           if (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_full']) || !$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form_full'])
+           {
+               $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['mostra_edit'] = "N";   
+           } 
+           $_SESSION['scriptcase']['sc_tp_saida']  = $salva_tp_saida;
+           $_SESSION['scriptcase']['sc_url_saida'][$script_case_init] = $salva_url_saida;
+       } 
+       $GLOBALS["NM_ERRO_IBASE"] = 0;  
+       if (isset($_SESSION['nm_session']['user']['sec']['flag']) && $_SESSION['nm_session']['user']['sec']['flag'] == "N") 
+       { 
+           $_SESSION['scriptcase']['sc_apl_seg']['LancamentoReceita_Boleto_Lst'] = "on";
+       } 
+       if (isset($_GET['SC_Link_View']) && !empty($_GET['SC_Link_View']) && is_numeric($_GET['SC_Link_View']))
+       { 
+           $_SESSION['scriptcase']['sc_apl_seg']['LancamentoReceita_Boleto_Lst'] = "on";
+       } 
+       if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opc_psq'] && !isset($_SESSION['scriptcase']['LancamentoReceita_Boleto_Lst']['session_timeout']['redir'])) 
+       { 
+          if (!isset($_SESSION['scriptcase']['sc_apl_seg']['LancamentoReceita_Boleto_Lst']) || $_SESSION['scriptcase']['sc_apl_seg']['LancamentoReceita_Boleto_Lst'] != "on")
+          { 
+              $NM_Mens_Erro = $Nm_lang['lang_errm_unth_user'];
+              $nm_botao_ok = ($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['iframe_menu']) ? false : true;
+              if (isset($_SESSION['scriptcase']['sc_aba_iframe']))
+              {
+                  foreach ($_SESSION['scriptcase']['sc_aba_iframe'] as $aba => $apls_aba)
+                  {
+                      if (in_array("LancamentoReceita_Boleto_Lst", $apls_aba))
+                      {
+                          $nm_botao_ok = false;
+                           break;
+                      }
+                  }
+              }
+              if ((isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida']) && $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida']) || (isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form']) && $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida_form']))
+              {
+                   $nm_botao_ok = false;
+              }
+       header("X-XSS-Protection: 1; mode=block");
+       header("X-Frame-Options: SAMEORIGIN");
+?>
+             <!DOCTYPE html>
+              <HTML>
+               <HEAD>
+                <TITLE>=)</TITLE>
+               <META http-equiv="Content-Type" content="text/html; charset=<?php echo $_SESSION['scriptcase']['charset_html'] ?>" />
+<?php
+if ($_SESSION['scriptcase']['proc_mobile'])
+{
+?>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<?php
+}
+?>
+ <META http-equiv="Expires" content="Fri, Jan 01 1900 00:00:00 GMT" />
+ <META http-equiv="Last-Modified" content="<?php echo gmdate('D, d M Y H:i:s') ?> GMT" />
+ <META http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+ <META http-equiv="Pragma" content="no-cache" />
+                <META http-equiv="Expires" content="Fri, Jan 01 1900 00:00:00 GMT"/>                <META http-equiv="Pragma" content="no-cache"/>
+                <link rel="shortcut icon" href="../_lib/img/scriptcase__NM__ico__NM__favicon.ico">
+                <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $STR_schema_all ?>_grid.css" /> 
+                <link rel="stylesheet" type="text/css" href="../_lib/css/<?php echo $STR_schema_all ?>_grid<?php echo $_SESSION['scriptcase']['reg_conf']['css_dir'] ?>.css" /> 
+               </HEAD>
+               <body class="scGridPage">
+                <table align="center"><tr><td style="padding: 0"><div class="scGridBorder">
+                <table class="scGridTabela" width='100%' cellspacing=0 cellpadding=0><tr class="scGridFieldOdd"><td class="scGridFieldOddFont" style="padding: 15px 30px; text-align: center">
+                 <?php echo $NM_Mens_Erro; ?>
+<?php
+              if ($nm_botao_ok)
+              {
+?>
+                <br />
+                <form name="Fseg" method="post" 
+                                    action="<?php echo $nm_url_saida; ?>" 
+                                    target="_self"> 
+                 <input type="hidden" name="script_case_init" value="<?php echo NM_encode_input($script_case_init) ?>"/> 
+                 <input type="submit" name="sc_sai_seg" value="OK"> 
+                </form> 
+<?php
+              }
+?>
+                </td></tr></table>
+                </div></td></tr></table>
+<?php
+              if (isset($_SESSION['scriptcase']['nm_sc_retorno']) && !empty($_SESSION['scriptcase']['nm_sc_retorno']))
+              {
+?>
+<br /><br /><br />
+<table align="center" style="width: 450px"><tr><td style="padding: 0"><div class="scGridBorder">
+ <table style="width: 100%" class="scGridTabela">
+  <tr class="scGridFieldOdd">
+   <td class="scGridFieldOddFont" style="padding: 15px 30px">
+    <?php echo $Nm_lang['lang_errm_unth_hwto']; ?>
+   </td>
+  </tr>
+ </table>
+</div></td></tr></table>
+<?php
+              }
+?>
+               </body>
+              </HTML>
+<?php
+              exit;
+          } 
+       } 
+       if (isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan']) && $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['sc_outra_jan'])
+       {
+           $nm_apl_dependente = 0;
+       }
+       $contr_LancamentoReceita_Boleto_Lst = new LancamentoReceita_Boleto_Lst_apl();
+
+      if ('ajax_autocomp' == $nmgp_opcao)
+      {
+          $nmgp_opcao = 'busca';
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'] = "busca";
+          $contr_LancamentoReceita_Boleto_Lst->NM_ajax_flag = true;
+          $contr_LancamentoReceita_Boleto_Lst->NM_ajax_opcao = $NM_ajax_opcao;
+      }
+      if ('ajax_filter_save' == $nmgp_opcao)
+      {
+          $nmgp_opcao = 'busca';
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'] = "busca";
+          $contr_LancamentoReceita_Boleto_Lst->NM_ajax_flag = true;
+          $contr_LancamentoReceita_Boleto_Lst->NM_ajax_opcao = "ajax_filter_save";
+      }
+      if ('ajax_filter_delete' == $nmgp_opcao)
+      {
+          $nmgp_opcao = 'busca';
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'] = "busca";
+          $contr_LancamentoReceita_Boleto_Lst->NM_ajax_flag = true;
+          $contr_LancamentoReceita_Boleto_Lst->NM_ajax_opcao = "ajax_filter_delete";
+      }
+      if ('ajax_filter_select' == $nmgp_opcao)
+      {
+          $nmgp_opcao = 'busca';
+          $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'] = "busca";
+          $contr_LancamentoReceita_Boleto_Lst->NM_ajax_flag = true;
+          $contr_LancamentoReceita_Boleto_Lst->NM_ajax_opcao = "ajax_filter_select";
+      }
+      if ('ajax_fixed_columns_grid_save' == $nmgp_opcao) {
+          _acb6a44974258356c8c731fa7a9c20c1_saveFixedColumnsGrid($_POST['fixed_index'], $_POST['fixed_action'], $_POST['script_case_init']);
+      }
+      if ('ajax_fixed_columns_grid_load' == $nmgp_opcao) {
+          _acb6a44974258356c8c731fa7a9c20c1_loadFixedColumnsGrid($_POST['script_case_init']);
+      }
+       $contr_LancamentoReceita_Boleto_Lst->controle();
+   } 
+   if (!$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['embutida'] && $nmgp_opcao == "formphp")
+   { 
+       $GLOBALS["NM_ERRO_IBASE"] = 0;  
+       $contr_LancamentoReceita_Boleto_Lst = new LancamentoReceita_Boleto_Lst_apl();
+       $contr_LancamentoReceita_Boleto_Lst->controle();
+   } 
+//
+   function nm_limpa_str_LancamentoReceita_Boleto_Lst(&$str)
+   {
+   }
+   function nm_protect_num_LancamentoReceita_Boleto_Lst($name, &$val)
+   {
+       if (empty($val))
+       {
+          return;
+       }
+       $Nm_numeric = array();
+       $Nm_numeric[] = "idlancamentoreceita";
+       $Nm_numeric[] = "idcliente";
+       $Nm_numeric[] = "idcontacaixa";
+       $Nm_numeric[] = "idsituacaodocumento";
+       $Nm_numeric[] = "idplanoconta";
+       $Nm_numeric[] = "idlancamentoreceitapai";
+       $Nm_numeric[] = "parcela";
+       $Nm_numeric[] = "valorprevisao";
+       $Nm_numeric[] = "valorrealizacao";
+       $Nm_numeric[] = "idtipoespecie";
+       $Nm_numeric[] = "idnotafiscal";
+       $Nm_numeric[] = "nossonumero";
+       $simb_grp = (isset($_SESSION['scriptcase']['reg_conf']['grup_num'])) ? $_SESSION['scriptcase']['reg_conf']['grup_num'] : ".";
+       $simb_dec = (isset($_SESSION['scriptcase']['reg_conf']['dec_num']))  ? $_SESSION['scriptcase']['reg_conf']['dec_num']  : ",";
+       $simb_neg = (isset($_SESSION['scriptcase']['reg_conf']['simb_neg'])) ? $_SESSION['scriptcase']['reg_conf']['simb_neg'] : "-";
+       if (in_array($name, $Nm_numeric))
+       {
+           if (is_array($val))
+           {
+               foreach ($val as $cada_val)
+               {
+                  $tmp_pos = (is_string($cada_val)) ? strpos($cada_val, "##@@") : false;
+                  if ($tmp_pos !== false)
+                   {
+                      $cada_val = substr($cada_val, 0, $tmp_pos);
+                  }
+                  for ($x = 0; $x < strlen($cada_val); $x++)
+                  {
+                      if (($cada_val[$x] < 0 || $cada_val[$x] > 9) && $cada_val[$x] != $simb_grp && $cada_val[$x] != $simb_dec && $cada_val[$x] != $simb_neg)
+                      {
+                          $val = array();
+                          return;
+                      }
+                   }
+               }
+               return;
+           }
+           $cada_val = $val;
+           $tmp_pos = (is_string($cada_val)) ? strpos($cada_val, "##@@") : false;
+           if ($tmp_pos !== false)
+            {
+               $cada_val = substr($cada_val, 0, $tmp_pos);
+           }
+           for ($x = 0; $x < strlen($cada_val); $x++)
+           {
+               if (($cada_val[$x] < 0 || $cada_val[$x] > 9) && $cada_val[$x] != $simb_grp && $cada_val[$x] != $simb_dec && $cada_val[$x] != $simb_neg)
+               {
+                   $val = 0;
+                   return;
+               }
+           }
+       }
+   }
+   function LancamentoReceita_Boleto_Lst_pack_protect_string($sString)
+   {
+      $sString = (string) $sString;
+      if (!empty($sString))
+      {
+         if (function_exists('NM_is_utf8') && NM_is_utf8($sString))
+         {
+             return $sString;
+         }
+         else
+         {
+             return sc_htmlentities($sString);
+         }
+      }
+      elseif ('0' === $sString || 0 === $sString)
+      {
+         return '0';
+      }
+      else
+      {
+         return '';
+      }
+   }
+
+    function LancamentoReceita_Boleto_Lst_pdf_progress_call($message, $Nm_lang, $flushBuffer = false) {
+        $message = trim($message);
+        if ('off' == $message)
+        {
+            $bol_end = TRUE;
+        }
+        elseif (false !== strpos($message, 'HDOC_#NM#_'))
+        {
+            $bol_end    = FALSE;
+            $arr_partes = explode('_#NM#_', $message);
+            if (4 == sizeof($arr_partes))
+            {
+                $int_size = $arr_partes[0];
+                $str_msg  = ('F' == $arr_partes[2]) ? $Nm_lang['lang_pdff_frmt_page']  : $Nm_lang['lang_pdff_wrtg'];
+                $str_msg .= $arr_partes[2];
+                $int_step = ('F' == $arr_partes[2]) ? floor($int_size * 0.9) : floor($int_size * 0.95);
+            }
+            else
+            {
+                $bol_load = FALSE;
+            }
+        }
+        else
+        {
+            $bol_end    = FALSE;
+            $arr_partes = explode('_#NM#_', $message);
+            if (3 == sizeof($arr_partes))
+            {
+                $int_size = $arr_partes[0];
+                $int_step = $arr_partes[1];
+                $str_msg  = $arr_partes[2];
+            }
+            else
+            {
+                $bol_load = FALSE;
+            }
+        }
+        $return_message = $int_size . '!#!' . $int_step . '!#!' . ($bol_end ? '1' : '0') . '!#!' . ($bol_end ? $Nm_lang['lang_pdff_fnsh'] : $str_msg);
+?>
+<script type="text/javascript">
+if (window.parent && typeof window.parent.updateProgressBar === "function") {
+    window.parent.updateProgressBar("<?php echo trim($return_message); ?>");
+}
+</script>
+<?php
+        global $script_case_init;
+        if ($flushBuffer && $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['opcao'] != 'print') {
+            $bufferSize = @ini_get('output_buffering');
+            if ('' != $bufferSize) {
+                echo str_repeat('&nbsp;', $bufferSize * 5);
+            }
+        }
+        flush();
+    }
+
+    function _acb6a44974258356c8c731fa7a9c20c1_initializeFixedColumnsGrid($script_case_init)
+    {
+        if (!isset($_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['fixed_columns_grid'])) {
+            $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['fixed_columns_grid'] = '';
+        }
+    }
+
+    function _acb6a44974258356c8c731fa7a9c20c1_saveFixedColumnsGrid($index, $action, $script_case_init)
+    {
+        _acb6a44974258356c8c731fa7a9c20c1_initializeFixedColumnsGrid($script_case_init);
+
+        if ('on' == $action) {
+            $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['fixed_columns_grid'] = $index;
+        } elseif (0 < $index) {
+            $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['fixed_columns_grid'] = $index - 1;
+        } else {
+            $_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['fixed_columns_grid'] = '';
+        }
+
+        echo json_encode(
+            array(
+                'status' => 'ok'
+            )
+        );
+        exit;
+    }
+
+    function _acb6a44974258356c8c731fa7a9c20c1_loadFixedColumnsGrid($script_case_init)
+    {
+        _acb6a44974258356c8c731fa7a9c20c1_initializeFixedColumnsGrid($script_case_init);
+
+        echo json_encode(
+            array(
+                'status' => 'ok',
+                'last_index' =>$_SESSION['sc_session'][$script_case_init]['LancamentoReceita_Boleto_Lst']['fixed_columns_grid']
+            )
+        );
+        exit;
+    }
+
+?>

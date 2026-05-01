@@ -1,0 +1,21 @@
+-- Tabela: taxa_cartao
+-- Entidade: banco
+-- Origem: MySQL → PostgreSQL (schema liga_infotime)
+
+-- liga_infotime.taxa_cartao  (origem MySQL: taxacartao)
+CREATE TABLE taxa_cartao (
+  id_taxa_cartao bigint NOT NULL,
+  id_tenacidade bigint DEFAULT NULL,
+  id_conta_caixa bigint DEFAULT NULL,
+  id_bandeira_cartao bigint DEFAULT NULL,
+  id_usuario_auditoria bigint DEFAULT NULL,
+  taxa varchar(255) DEFAULT NULL,
+  taxa_adiantamento varchar(255) DEFAULT NULL,
+  parcela_minima bigint DEFAULT NULL,
+  parcela_maxima bigint DEFAULT NULL,
+  tipo_cartao char(2) DEFAULT NULL,
+  unidade_origem char(2) DEFAULT NULL,
+  endereco_ip_auditoria varchar(50) DEFAULT NULL,
+  nome_aplicacao_auditoria varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id_taxa_cartao)
+);
