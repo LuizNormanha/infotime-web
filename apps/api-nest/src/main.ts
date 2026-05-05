@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import compress from '@fastify/compress';
 import helmet from '@fastify/helmet';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
@@ -33,9 +34,11 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   app.enableShutdownHooks();
 
-  const port = Number(process.env.API_PORT ?? 3333);
-  await app.listen(port, '0.0.0.0');
-  console.log(`[API] NestJS + Fastify rodando em http://localhost:${port}/api/v1`);
+  const config = app.get(ConfigService);
+  const port = config.get<number>('API_PORT', 3333);
+  const host = config.get<string>('API_HOST', '0.0.0.0');
+  await app.listen(port, host);
+  console.log(`[API] NestJS + Fastify em http://localhost:${port}/api/v1 (listen ${host}:${port})`);
 }
 bootstrap().catch((err) => {
   console.error(err);

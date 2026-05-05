@@ -10,8 +10,8 @@ describe('AuthService', () => {
   let service: AuthService;
 
   const prisma = {
+    $queryRaw: vi.fn(),
     usuario: {
-      findFirst: vi.fn(),
       update: vi.fn(),
     },
   };
@@ -42,37 +42,41 @@ describe('AuthService', () => {
   });
 
   it('login rejeita quando usuário não existe', async () => {
-    prisma.usuario.findFirst.mockResolvedValue(null);
+    prisma.$queryRaw.mockResolvedValue([]);
     await expect(service.login({ login: 'nada', senha: 'x', tenantId: 1 })).rejects.toBeInstanceOf(
       UnauthorizedException,
     );
   });
 
   it('login rejeita senha MD5 incorreta', async () => {
-    prisma.usuario.findFirst.mockResolvedValue({
-      idUsuario: 1n,
-      nome: 'A',
-      email: 'a@a.com',
-      senha: createHash('md5').update('certa').digest('hex'),
-      administrador: 'nao',
-      idTenacidade: 1n,
-      ativo: 'sim',
-    });
+    prisma.$queryRaw.mockResolvedValue([
+      {
+        id_usuario: 1n,
+        nome: 'A',
+        email: 'a@a.com',
+        senha: createHash('md5').update('certa').digest('hex'),
+        administrador: 'nao',
+        id_tenacidade: 1n,
+        ativo: 'sim',
+      },
+    ]);
     await expect(service.login({ login: 'u', senha: 'errada', tenantId: 1 })).rejects.toBeInstanceOf(
       UnauthorizedException,
     );
   });
 
   it('login aceita senha MD5 legada e devolve tokens', async () => {
-    prisma.usuario.findFirst.mockResolvedValue({
-      idUsuario: 10n,
-      nome: 'Admin',
-      email: 'a@a.com',
-      senha: createHash('md5').update('segredo').digest('hex'),
-      administrador: 'sim',
-      idTenacidade: 2n,
-      ativo: 'sim',
-    });
+    prisma.$queryRaw.mockResolvedValue([
+      {
+        id_usuario: 10n,
+        nome: 'Admin',
+        email: 'a@a.com',
+        senha: createHash('md5').update('segredo').digest('hex'),
+        administrador: 'sim',
+        id_tenacidade: 2n,
+        ativo: 'sim',
+      },
+    ]);
     prisma.usuario.update.mockResolvedValue({});
 
     const res = await service.login({ login: 'adm', senha: 'segredo', tenantId: 2 });
@@ -81,6 +85,27 @@ describe('AuthService', () => {
     expect(res.refreshToken).toBe('signed-token');
     expect(jwt.signAsync).toHaveBeenCalled();
     expect(prisma.usuario.update).toHaveBeenCalled();
+  });
+
+  it('login conclui com tokens se o update do hash falhar com P2000 (coluna curta)', async () => {
+    prisma.$queryRaw.mockResolvedValue([
+      {
+        id_usuario: 10n,
+        nome: 'Admin',
+        email: 'a@a.com',
+        senha: createHash('md5').update('segredo').digest('hex'),
+        administrador: 'sim',
+        id_tenacidade: 2n,
+        ativo: 'sim',
+      },
+    ]);
+    prisma.usuario.update.mockRejectedValue(Object.assign(new Error('too long'), { code: 'P2000' }));
+
+    const res = await service.login({ login: 'adm', senha: 'segredo', tenantId: 2 });
+
+    expect(res.accessToken).toBe('signed-token');
+    expect(res.refreshToken).toBe('signed-token');
+    expect(jwt.signAsync).toHaveBeenCalled();
   });
 
 });

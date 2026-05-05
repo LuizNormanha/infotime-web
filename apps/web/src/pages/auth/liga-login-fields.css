@@ -1,0 +1,226 @@
+/* Campos outlined — referência: infolab-web liga-campo-texto.css + liga-campo-senha.css */
+
+.liga-campo-texto,
+.liga-campo-senha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.liga-rotulo-campo {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--liga-texto-secundario);
+}
+
+.liga-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.liga-password-wrapper {
+  width: 100%;
+  display: block;
+}
+
+.liga-password-wrapper .p-password-input,
+.liga-password-wrapper .p-inputtext {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.liga-password-wrapper .p-password-input {
+  padding-right: 2.75rem;
+}
+
+.liga-login-campo-outlined {
+  position: relative;
+  gap: 0;
+  margin-top: 0;
+}
+
+.liga-login-campo-outlined + .liga-login-campo-outlined {
+  margin-top: 1rem;
+}
+
+.liga-login-campo-outlined .liga-rotulo-campo {
+  position: absolute;
+  left: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--liga-texto-secundario);
+  pointer-events: none;
+  z-index: 2;
+  padding: 0 0.2rem;
+  line-height: 1;
+  transition:
+    top 0.15s ease,
+    transform 0.15s ease,
+    font-size 0.15s ease,
+    color 0.15s ease,
+    font-weight 0.15s ease;
+  background: transparent;
+  max-width: calc(100% - 2.5rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.liga-login-campo-outlined .liga-rotulo-campo::after {
+  content: "";
+  position: absolute;
+  left: -0.12rem;
+  right: -0.12rem;
+  top: 50%;
+  height: 0.62rem;
+  transform: translateY(-50%);
+  background: transparent;
+  border-radius: 2px;
+  z-index: -1;
+}
+
+.liga-login-campo-outlined--ativo .liga-rotulo-campo {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--liga-verde-escuro);
+}
+
+.liga-login-campo-outlined--ativo .liga-rotulo-campo::after {
+  background: var(--liga-moldura-interna);
+}
+
+.liga-login-campo-outlined:has(.liga-input.p-inputtext:not(:placeholder-shown)) .liga-rotulo-campo,
+.liga-login-campo-outlined:has(.liga-input.p-inputtext:-webkit-autofill) .liga-rotulo-campo {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--liga-verde-escuro);
+}
+
+.liga-login-campo-outlined:has(.liga-input.p-inputtext:not(:placeholder-shown)) .liga-rotulo-campo::after,
+.liga-login-campo-outlined:has(.liga-input.p-inputtext:-webkit-autofill) .liga-rotulo-campo::after {
+  background: var(--liga-moldura-interna);
+}
+
+.liga-tela-login[data-theme="dark"] .liga-login-campo-outlined--ativo .liga-rotulo-campo {
+  color: var(--liga-verde-link-claro);
+}
+
+.liga-tela-login[data-theme="dark"]
+  .liga-login-campo-outlined:has(.liga-input.p-inputtext:not(:placeholder-shown))
+  .liga-rotulo-campo,
+.liga-tela-login[data-theme="dark"]
+  .liga-login-campo-outlined:has(.liga-input.p-inputtext:-webkit-autofill)
+  .liga-rotulo-campo {
+  color: var(--liga-verde-link-claro);
+}
+
+.liga-login-campo-outlined .liga-input.p-inputtext {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 6px;
+  padding: 0.85rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--liga-borda-suave);
+  background: transparent;
+  color: var(--liga-texto-principal);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.liga-form-login > .liga-login-campo-outlined:first-of-type .liga-input.p-inputtext {
+  border-color: var(--liga-verde);
+}
+
+.liga-form-login > .liga-login-campo-outlined:first-of-type .liga-input.p-inputtext:focus {
+  border-color: var(--liga-verde);
+  box-shadow: 0 0 0 1px var(--liga-verde);
+  outline: none;
+}
+
+.liga-login-campo-outlined .liga-input.p-inputtext:hover {
+  border-color: color-mix(in srgb, var(--liga-texto-principal) 40%, var(--liga-borda-suave));
+}
+
+.liga-login-campo-outlined .liga-input.p-inputtext:focus {
+  border-color: var(--liga-verde);
+  box-shadow: 0 0 0 1px var(--liga-verde);
+  outline: none;
+}
+
+.liga-login-campo-outlined--ativo .liga-input.p-inputtext,
+.liga-login-campo-outlined:has(.liga-input.p-inputtext:not(:placeholder-shown)) .liga-input.p-inputtext,
+.liga-login-campo-outlined:has(.liga-input.p-inputtext:-webkit-autofill) .liga-input.p-inputtext {
+  padding-top: 1.15rem;
+  padding-bottom: 0.55rem;
+}
+
+/* Senha */
+.liga-login-campo-outlined:has(.liga-password-wrapper .p-inputtext:not(:placeholder-shown)) .liga-rotulo-campo,
+.liga-login-campo-outlined:has(.liga-password-wrapper .p-inputtext:-webkit-autofill) .liga-rotulo-campo {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--liga-verde-escuro);
+}
+
+.liga-login-campo-outlined:has(.liga-password-wrapper .p-inputtext:not(:placeholder-shown)) .liga-rotulo-campo::after,
+.liga-login-campo-outlined:has(.liga-password-wrapper .p-inputtext:-webkit-autofill) .liga-rotulo-campo::after {
+  background: var(--liga-moldura-interna);
+}
+
+.liga-tela-login[data-theme="dark"]
+  .liga-login-campo-outlined:has(.liga-password-wrapper .p-inputtext:not(:placeholder-shown))
+  .liga-rotulo-campo,
+.liga-tela-login[data-theme="dark"]
+  .liga-login-campo-outlined:has(.liga-password-wrapper .p-inputtext:-webkit-autofill)
+  .liga-rotulo-campo {
+  color: var(--liga-verde-link-claro);
+}
+
+.liga-login-campo-outlined .liga-password-wrapper .p-inputtext {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 6px;
+  padding: 0.85rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--liga-borda-suave);
+  background: transparent;
+  color: var(--liga-texto-principal);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.liga-login-campo-outlined .liga-password-wrapper .p-inputtext:hover {
+  border-color: color-mix(in srgb, var(--liga-texto-principal) 40%, var(--liga-borda-suave));
+}
+
+.liga-login-campo-outlined .liga-password-wrapper .p-inputtext:focus {
+  border-color: var(--liga-verde);
+  box-shadow: 0 0 0 1px var(--liga-verde);
+  outline: none;
+}
+
+.liga-login-campo-outlined .liga-password-wrapper .p-password-panel {
+  z-index: 10;
+}
+
+.liga-login-campo-outlined .liga-password-wrapper .p-password-toggle {
+  z-index: 3;
+}
+
+.liga-login-campo-outlined--ativo .liga-password-wrapper .p-inputtext,
+.liga-login-campo-outlined:has(.liga-password-wrapper .p-inputtext:not(:placeholder-shown)) .liga-password-wrapper .p-inputtext,
+.liga-login-campo-outlined:has(.liga-password-wrapper .p-inputtext:-webkit-autofill) .liga-password-wrapper .p-inputtext {
+  padding-top: 1.15rem;
+  padding-bottom: 0.55rem;
+}

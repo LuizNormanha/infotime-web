@@ -8,12 +8,12 @@
     "lint": "pnpm -r run lint",
     "test": "pnpm --filter @infotime/api test",
     "verify": "pnpm db:generate && pnpm --filter @infotime/database run build && pnpm --filter @infotime/api run build && pnpm --filter @infotime/web run build && pnpm --filter @infotime/api test",
-    "db:generate": "pnpm --filter @infotime/database exec prisma generate",
-    "db:migrate": "pnpm --filter @infotime/database exec prisma migrate dev",
-    "db:push": "pnpm --filter @infotime/database exec prisma db push",
-    "db:seed": "pnpm --filter @infotime/database exec prisma db seed",
+    "db:generate": "pnpm --filter @infotime/database exec dotenv -e ../../.env -- prisma generate",
+    "db:migrate": "pnpm --filter @infotime/database exec dotenv -e ../../.env -- prisma migrate dev",
+    "db:push": "pnpm --filter @infotime/database exec dotenv -e ../../.env -- prisma db push",
+    "db:seed": "pnpm --filter @infotime/database exec dotenv -e ../../.env -- tsx prisma/seed.ts",
     "db:setup-dev": "pnpm db:push && pnpm db:seed",
-    "db:studio": "pnpm --filter @infotime/database exec prisma studio"
+    "db:studio": "pnpm --filter @infotime/database exec dotenv -e ../../.env -- prisma studio"
   },
   "devDependencies": {
     "typescript": "^5.7.2"

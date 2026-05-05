@@ -1,0 +1,27 @@
+.liga-login-mockup-esq .liga-logo-liga-imagem {
+  width: auto;
+  max-width: 16rem;
+  margin: 0;
+  transform: translateY(-1.82rem);
+}
+
+.liga-login-mockup-esq .liga-logo-liga-imagem__img {
+  display: block;
+  width: 100%;
+  max-width: 16rem;
+  height: auto;
+  object-fit: contain;
+  object-position: left top;
+  filter: drop-shadow(0 2px 12px rgba(15, 23, 42, 0.06));
+}
+
+.liga-tela-login[data-theme="dark"] .liga-login-mockup-esq .liga-logo-liga-imagem__img {
+  filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.35));
+}
+
+@media (max-width: 720px) {
+  .liga-login-mockup-esq .liga-logo-liga-imagem,
+  .liga-login-mockup-esq .liga-logo-liga-imagem__img {
+    max-width: min(100%, 15rem);
+  }
+}

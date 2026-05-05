@@ -4,14 +4,38 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import * as bcrypt from 'bcryptjs';
+import { Prisma } from '@infotime/database';
 import { PrismaService } from '../../shared/prisma/prisma.service';
 import { AuthResponseDto, LoginDto, RefreshTokenDto } from './dto/auth.dto';
+
+/** Linha de `usuario` para login — lookup SQL alinha trim/caso com dados migrados. */
+type UsuarioLoginRow = {
+  id_usuario: bigint;
+  nome: string | null;
+  email: string | null;
+  senha: string | null;
+  administrador: string | null;
+  id_tenacidade: bigint | null;
+  ativo: string | null;
+};
 
 async function verifyPassword(plain: string, stored: string): Promise<boolean> {
   if (stored.startsWith('$argon')) return argon2.verify(stored, plain);
   if (stored.startsWith('$2')) return bcrypt.compare(plain, stored);
   const md5 = createHash('md5').update(plain).digest('hex');
   return md5.toLowerCase() === stored.toLowerCase();
+}
+
+/** Legado: `sim` / `S`; inativo explícito: `N`, `nao`, etc. */
+function isUsuarioAtivo(ativo: string | null | undefined): boolean {
+  if (ativo == null || ativo === '') return true;
+  const a = ativo.toLowerCase().trim();
+  if (a === 'n' || a === 'nao' || a === 'não' || a === 'no' || a === '0' || a === 'inativo') return false;
+  return true;
+}
+
+function isPrismaP2000(e: unknown): boolean {
+  return typeof e === 'object' && e !== null && 'code' in e && (e as { code: string }).code === 'P2000';
 }
 
 @Injectable()
@@ -25,36 +49,73 @@ export class AuthService {
   ) {}
 
   async login(dto: LoginDto): Promise<AuthResponseDto> {
-    const usuario = await this.prisma.usuario.findFirst({
-      where: {
-        login: dto.login,
-        idTenacidade: BigInt(dto.tenantId),
-      },
-      select: {
-        idUsuario: true,
-        nome: true,
-        email: true,
-        senha: true,
-        administrador: true,
-        idTenacidade: true,
-        ativo: true,
-      },
-    });
+    let usuario: {
+      idUsuario: bigint;
+      nome: string | null;
+      email: string | null;
+      senha: string | null;
+      administrador: string | null;
+      idTenacidade: bigint | null;
+      ativo: string | null;
+    } | null = null;
 
-    if (!usuario?.senha) throw new UnauthorizedException('Login ou senha incorretos');
-    if (usuario.ativo && usuario.ativo.toLowerCase() !== 'sim') {
+    const rows = await this.prisma.$queryRaw<UsuarioLoginRow[]>(Prisma.sql`
+      SELECT
+        id_usuario,
+        nome,
+        email,
+        senha,
+        administrador,
+        id_tenacidade,
+        ativo
+      FROM usuario
+      WHERE id_tenacidade = ${BigInt(dto.tenantId)}
+        AND LOWER(TRIM(COALESCE(login, ''))) = LOWER(TRIM(${dto.login}))
+      LIMIT 1
+    `);
+    const row = rows[0];
+    if (row) {
+      usuario = {
+        idUsuario: row.id_usuario,
+        nome: row.nome,
+        email: row.email,
+        senha: row.senha,
+        administrador: row.administrador,
+        idTenacidade: row.id_tenacidade,
+        ativo: row.ativo,
+      };
+    }
+
+    if (!usuario?.senha) {
+      throw new UnauthorizedException('Login ou senha incorretos');
+    }
+    if (!isUsuarioAtivo(usuario.ativo)) {
       throw new UnauthorizedException('Usuário inativo');
     }
 
     const valid = await verifyPassword(dto.senha, usuario.senha);
-    if (!valid) throw new UnauthorizedException('Login ou senha incorretos');
+    if (!valid) {
+      throw new UnauthorizedException('Login ou senha incorretos');
+    }
 
     if (!usuario.senha.startsWith('$argon')) {
-      const upgraded = await argon2.hash(dto.senha);
-      await this.prisma.usuario.update({
-        where: { idUsuario: usuario.idUsuario },
-        data: { senha: upgraded },
-      });
+      try {
+        const upgraded = await argon2.hash(dto.senha);
+        await this.prisma.usuario.update({
+          where: { idUsuario: usuario.idUsuario },
+          data: { senha: upgraded },
+        });
+      } catch (e) {
+        if (isPrismaP2000(e)) {
+          this.logger.warn(
+            `Senha não atualizada (valor demasiado longo para a coluna atual — típico legado VARCHAR(32)). ` +
+              `Alargue a coluna: ALTER TABLE usuario ALTER COLUMN senha TYPE VARCHAR(255); ou na raiz \`pnpm db:push\`. ` +
+              `idUsuario=${usuario.idUsuario.toString()}`,
+          );
+        } else {
+          throw e;
+        }
+      }
     }
 
     const role = usuario.administrador?.toLowerCase() === 'sim' ? 'admin' : 'colaborador';
@@ -125,7 +186,7 @@ export class AuthService {
         ativo: true,
       },
     });
-    if (!u || (u.ativo && u.ativo.toLowerCase() !== 'sim')) {
+    if (!u || !isUsuarioAtivo(u.ativo)) {
       throw new UnauthorizedException('Usuário não encontrado');
     }
 

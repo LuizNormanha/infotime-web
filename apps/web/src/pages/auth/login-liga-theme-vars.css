@@ -1,0 +1,36 @@
+/* Variáveis da marca Liga — escopo na tela de login (referência: infolab-web liga-tema.css) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+.liga-tela-login {
+  --liga-verde: #74c043;
+  --liga-verde-hover: #5fa336;
+  --liga-verde-escuro: #2d6a5e;
+  --liga-verde-link-claro: #8bc85a;
+  --liga-fundo-pagina: #f0f2f5;
+  --liga-texto-principal: #111111;
+  --liga-texto-secundario: #4a5568;
+  --liga-moldura-externa: #ffffff;
+  --liga-moldura-interna: #ffffff;
+  --liga-borda-suave: #e2e8f0;
+  --liga-sombra-moldura: 0 4px 24px rgba(15, 23, 42, 0.08);
+  --liga-sombra-bloco: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --liga-font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: var(--liga-font-family);
+}
+
+.liga-tela-login[data-theme="dark"] {
+  --liga-fundo-pagina: #0f1419;
+  --liga-texto-principal: #f3f4f6;
+  --liga-texto-secundario: #cbd5e1;
+  --liga-moldura-externa: #1a222c;
+  --liga-moldura-interna: #222c38;
+  --liga-borda-suave: rgba(255, 255, 255, 0.12);
+  --liga-sombra-moldura: 0 4px 24px rgba(0, 0, 0, 0.45);
+  --liga-sombra-bloco: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --liga-verde-link-claro: #9fd86a;
+  color-scheme: dark;
+}
+
+.liga-tela-login[data-theme="light"] {
+  color-scheme: light;
+}

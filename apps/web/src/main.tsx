@@ -7,6 +7,7 @@ import { AuthProvider } from "./shared/auth/AuthProvider.js";
 import { queryClient } from "./app/queryClient.js";
 import { router } from "./app/router.js";
 import "./app/primeReact.js";
+import "./shared/styles/liga-app-theme.css";
 
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("root");

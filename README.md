@@ -55,7 +55,7 @@ pnpm install
 
 ## Variáveis de ambiente
 
-Copie [`.env.example`](.env.example) para `.env` na raiz e por app se necessário.
+Copie [`.env.example`](.env.example) para **um** `.env` na raiz do monorepo (API, web e Prisma CLI via `pnpm db:*` / build de `@infotime/database` usam esse ficheiro).
 
 | Variável | Descrição |
 |----------|-----------|

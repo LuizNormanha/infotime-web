@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const LoginSchema = z
   .object({
-    login: z.string().min(1),
+    login: z.string().trim().min(1),
     senha: z.string().min(1),
     tenantId: z.coerce.number().int().positive().optional(),
     idTenacidade: z.union([z.string().regex(/^\d+$/), z.coerce.number().int().positive()]).optional(),

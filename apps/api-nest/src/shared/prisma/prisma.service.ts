@@ -27,7 +27,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
         this.logger.error(
           'PostgreSQL recusou DATABASE_URL (P1000). Confirme utilizador e password no servidor. ' +
             'Na URL, codifique caracteres especiais na password (@ → %40, : → %3A). ' +
-            'Mantenha o mesmo DATABASE_URL na raiz do monorepo e em packages/database/.env (comandos Prisma CLI).',
+            'Defina `DATABASE_URL` no `.env` na raiz do monorepo (os scripts `pnpm db:*` e o build de `@infotime/database` carregam esse ficheiro).',
         );
       }
       throw e;

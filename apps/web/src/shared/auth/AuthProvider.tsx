@@ -3,7 +3,8 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 type AuthState = {
   accessToken: string | null;
   idTenacidade: string | null;
-  login: (token: string, tenantId: string) => void;
+  userLogin: string | null;
+  login: (token: string, tenantId: string, userLogin: string) => void;
   logout: () => void;
 };
 
@@ -16,24 +17,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [idTenacidade, setIdTenacidade] = useState<string | null>(() =>
     localStorage.getItem("idTenacidade"),
   );
+  const [userLogin, setUserLogin] = useState<string | null>(() => localStorage.getItem("userLogin"));
 
-  const login = useCallback((token: string, tenant: string) => {
+  const login = useCallback((token: string, tenant: string, loginUsuario: string) => {
     localStorage.setItem("accessToken", token);
     localStorage.setItem("idTenacidade", tenant);
+    localStorage.setItem("userLogin", loginUsuario);
     setAccessToken(token);
     setIdTenacidade(tenant);
+    setUserLogin(loginUsuario);
   }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("idTenacidade");
+    localStorage.removeItem("userLogin");
     setAccessToken(null);
     setIdTenacidade(null);
+    setUserLogin(null);
   }, []);
 
   const value = useMemo(
-    () => ({ accessToken, idTenacidade, login, logout }),
-    [accessToken, idTenacidade, login, logout],
+    () => ({ accessToken, idTenacidade, userLogin, login, logout }),
+    [accessToken, idTenacidade, userLogin, login, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

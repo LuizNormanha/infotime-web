@@ -13,18 +13,16 @@
     }
   },
   "scripts": {
-    "build": "prisma generate && tsc -p tsconfig.json && node scripts/copy-prisma-generated.mjs",
+    "build": "dotenv -e ../../.env -- prisma generate && tsc -p tsconfig.json && node scripts/copy-prisma-generated.mjs",
     "lint": "node -e \"process.exit(0)\""
   },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
   "dependencies": {
-    "@prisma/client": "^6.3.0"
+    "@prisma/client": "6.19.3"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "prisma": "^6.3.0",
+    "dotenv-cli": "^8.0.0",
+    "prisma": "6.19.3",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
