@@ -21,3 +21,6 @@ packages/database/src/generated/
 
 # Opcional: corpus extraído (descomente se não versionar)
 # migration-source/
+
+# Screenshots do legado Scriptcase/PHP (referência local; não versionar binários)
+docs/screenshots/
