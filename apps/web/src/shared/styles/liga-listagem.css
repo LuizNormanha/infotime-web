@@ -1,0 +1,1646 @@
+.liga-listagem-base {
+  display: flex;
+  flex-direction: column;
+  gap: 1.21rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.liga-listagem-pagina-cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-inline: 0.65rem;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+.liga-listagem-titulo-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem 1rem;
+  flex-wrap: nowrap;
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-listagem-titulo-esquerda {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.liga-listagem-titulo-acoes {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: auto;
+  padding-inline-start: 0.5rem;
+  /* Respiro para foco/ativo do botão não colidir com overflow:hidden do painel pai */
+  padding-inline-end: 0.25rem;
+  padding-block: 0.15rem;
+}
+
+.liga-listagem-barra-verde {
+  width: 4px;
+  align-self: stretch;
+  min-height: 2rem;
+  border-radius: 2px;
+  background: var(--liga-borda-acento-barra);
+  flex-shrink: 0;
+}
+
+.liga-listagem-titulo-principal {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--liga-texto-principal);
+  line-height: 1.2;
+}
+
+.liga-listagem-titulo-icone {
+  flex-shrink: 0;
+  font-size: 1.35rem;
+  color: var(--liga-verde);
+  line-height: 1;
+}
+
+.liga-listagem-subtitulo {
+  margin: 0;
+  padding-left: calc(4px + 0.65rem);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--liga-texto-secundario);
+  max-width: 44rem;
+}
+
+.liga-listagem-barra-ferramentas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.25rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-interna);
+  box-shadow: var(--liga-sombra-bloco);
+}
+
+.liga-listagem-barra-paginador {
+  display: flex;
+  justify-content: flex-end;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+/* Uma única linha: pesquisa | chips. Rolagem só se a linha inteira não couber (após ⋯ nos filtros). */
+.liga-listagem-barra-metade-tela {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  align-content: center;
+  gap: 0.75rem 1rem;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  container-type: inline-size;
+  container-name: toolbar-listagem;
+}
+
+.liga-listagem-barra-ferramentas--busca-e-novo {
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .liga-listagem-titulo-linha {
+    flex-wrap: wrap;
+  }
+
+  .liga-listagem-toolbar-grupo-pesquisa {
+    max-width: 100%;
+  }
+
+  .liga-listagem-barra-paginador {
+    flex: 1 1 100%;
+    justify-content: flex-end;
+  }
+}
+
+.liga-listagem-busca-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+}
+
+.liga-listagem-titulo-acoes .liga-listagem-botao-novo.p-button {
+  flex-shrink: 0;
+  width: auto;
+}
+
+.liga-listagem-moldura-tabela {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0 0 0.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-interna);
+  box-shadow: var(--liga-sombra-bloco);
+  /* Rolagem horizontal só no miolo (.p-datatable-wrapper); se auto aqui, a barra inteira
+     (tabela + paginador) ganha a largura da tabela e o paginador some para a direita. */
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
+.liga-listagem-moldura-tabela:has(.p-datatable-loading-overlay) {
+  min-height: 18rem;
+}
+
+.liga-listagem-moldura-tabela:has(.p-datatable-loading-overlay) .liga-listagem-grid.p-datatable {
+  min-height: 17.5rem;
+}
+
+.liga-listagem-moldura-tabela .liga-listagem-grid.p-datatable .p-datatable-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1rem;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--liga-moldura-interna) 86%, var(--liga-fundo-pagina));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid color-mix(in srgb, var(--liga-borda-suave) 55%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 6%, transparent);
+}
+
+html[data-theme="dark"] .liga-listagem-moldura-tabela .liga-listagem-grid.p-datatable .p-datatable-loading-overlay {
+  background: color-mix(in srgb, var(--liga-moldura-interna) 78%, #020617);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 4%, transparent);
+}
+
+.liga-listagem-moldura-tabela .p-datatable-loading-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 1 auto;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: visible;
+}
+
+.liga-listagem-carregando-splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  max-width: 22rem;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.liga-listagem-carregando-visual {
+  position: relative;
+  width: 3.1rem;
+  height: 3.1rem;
+  flex-shrink: 0;
+}
+
+.liga-listagem-carregando-anel {
+  position: absolute;
+  inset: 0;
+  border: 2.5px solid color-mix(in srgb, var(--liga-verde) 22%, transparent);
+  border-top-color: var(--liga-verde);
+  border-radius: 50%;
+  animation: liga-listagem-carregando-giro 0.9s linear infinite;
+}
+
+.liga-listagem-carregando-nucleo {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--liga-verde);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--liga-verde) 45%, transparent);
+  animation: liga-listagem-carregando-pulso 1.35s ease-in-out infinite;
+}
+
+@keyframes liga-listagem-carregando-giro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes liga-listagem-carregando-pulso {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+.liga-listagem-carregando-texto-principal {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--liga-texto-principal);
+  line-height: 1.25;
+}
+
+.liga-listagem-carregando-texto-dica {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--liga-texto-secundario);
+  max-width: 19rem;
+}
+
+.liga-listagem-carregando-pontos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+}
+
+.liga-listagem-carregando-pontos span {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--liga-verde);
+  opacity: 0.38;
+  animation: liga-listagem-carregando-dot 1.35s ease-in-out infinite;
+}
+
+.liga-listagem-carregando-pontos span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.liga-listagem-carregando-pontos span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes liga-listagem-carregando-dot {
+  0%,
+  70%,
+  100% {
+    opacity: 0.32;
+    transform: translateY(0) scale(1);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.12);
+  }
+}
+
+.liga-listagem-busca {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 310px;
+  min-width: 0;
+  position: relative;
+  min-height: 2.25rem;
+  border-radius: 10px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-externa);
+  overflow: hidden;
+}
+
+.liga-listagem-busca-com-icones {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  min-height: 2.25rem;
+}
+
+.liga-listagem-busca-com-icones .liga-listagem-busca-input.p-inputtext {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0.45rem 0.5rem 0.45rem 0.75rem;
+  color: var(--liga-texto-principal);
+  caret-color: var(--liga-texto-principal);
+  cursor: text;
+  box-shadow: none !important;
+}
+
+.liga-listagem-busca-com-icones .liga-listagem-busca-input.p-inputtext:focus {
+  box-shadow: none !important;
+}
+
+.liga-listagem-busca-acoes-direita {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 0.15rem;
+  padding: 0 0.45rem 0 0.25rem;
+}
+
+.liga-listagem-busca-botao-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+  cursor: pointer;
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.liga-listagem-busca-botao-icone:hover {
+  color: var(--liga-texto-principal);
+  background: color-mix(in srgb, var(--liga-borda-suave) 45%, transparent);
+}
+
+button.liga-listagem-busca-icone-lupa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--liga-texto-secundario);
+  padding: 0 0.15rem;
+}
+
+.liga-listagem-busca-icone-lupa .pi {
+  font-size: 0.95rem;
+}
+
+.liga-listagem-busca-input.p-inputtext {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: var(--liga-texto-principal);
+  caret-color: var(--liga-texto-principal);
+  cursor: text;
+}
+
+.liga-listagem-busca-input.p-inputtext:focus {
+  box-shadow: none !important;
+}
+
+.liga-listagem-busca-destaque {
+  margin: 0;
+  padding: 0 0.05em;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--liga-verde) 28%, #facc15);
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+}
+
+html[data-theme="dark"] .liga-listagem-busca-destaque {
+  background: color-mix(in srgb, var(--liga-verde) 35%, rgba(250, 204, 21, 0.35));
+}
+
+.liga-listagem-botao-novo.p-button {
+  background: var(--liga-verde);
+  border-color: var(--liga-verde);
+  color: #ffffff;
+}
+
+.liga-listagem-botao-novo.p-button:enabled:hover {
+  background: var(--liga-verde-hover);
+  border-color: var(--liga-verde-hover);
+}
+
+/*
+ * Painéis da home usam overflow:hidden — foco/sombra padrão do Prime sai da caixa e corta.
+ * Anel de foco dentro do botão + sem box-shadow externo no foco.
+ */
+.liga-listagem-botao-novo.p-button:focus,
+.liga-listagem-botao-novo.p-button:focus-visible {
+  box-shadow: none;
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: -2px;
+}
+
+.liga-listagem-botao-novo.p-button:enabled:active:not(:disabled) {
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.18);
+  outline: none;
+}
+
+/*
+ * Exportar: mesmo padrão do botão Limpar (p-button-sm + outlined na barra de filtros).
+ * Deve vir depois de .liga-listagem-botao-novo para não herdar o verde.
+ */
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined {
+  align-items: center;
+  padding-inline: 0.75rem 0.85rem;
+  background: var(--liga-moldura-interna);
+  border-color: var(--liga-borda-suave);
+  color: var(--liga-texto-secundario);
+}
+
+/* Mesmo que Limpar (.p-button-icon { color: inherit }): ícones pi no conteúdo customizado. */
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined .liga-listagem-export-botao-conteudo,
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined .liga-listagem-export-botao-conteudo span,
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined .liga-listagem-export-botao-conteudo .pi {
+  color: inherit;
+}
+
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined .liga-listagem-export-seta {
+  opacity: 1;
+}
+
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined:enabled:hover {
+  background: color-mix(in srgb, var(--liga-borda-suave) 42%, transparent);
+  border-color: var(--liga-borda-suave);
+  color: var(--liga-texto-principal);
+}
+
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined:focus,
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined:focus-visible {
+  box-shadow: none;
+  outline: 2px solid var(--liga-verde);
+  outline-offset: 2px;
+}
+
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined:enabled:active:not(:disabled) {
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
+  outline: none;
+}
+
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined.p-disabled,
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined:disabled {
+  opacity: 0.55;
+}
+
+/* Exportar: conteúdo do botão (ícone + texto + seta) — exportação só pelo Menu popup */
+.liga-listagem-botao-export-dropdown .liga-listagem-export-botao-conteudo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.liga-listagem-botao-export-dropdown .liga-listagem-export-seta {
+  font-size: 0.82rem;
+  opacity: 0.95;
+}
+
+.liga-listagem-menu-export.p-menu {
+  /* Mesmo padrão de cantos do painel de botões Prime (alinhado ao raio do Novo/Export) */
+  border-radius: var(--p-border-radius-md, 6px);
+  overflow: hidden;
+}
+
+.liga-listagem-grid.p-datatable {
+  border: 0;
+  border-radius: 0 0 8px 8px;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  /* hidden recartava o paginador em alguns layouts flex; o wrapper já limita a área da grade */
+  overflow: visible;
+  background: transparent;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.liga-listagem-grid.p-datatable > .p-datatable-wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.liga-listagem-grid .p-datatable-table {
+  width: max-content;
+  min-width: 100%;
+  table-layout: auto;
+}
+
+.liga-listagem-grid .p-datatable-thead > tr > th {
+  background: color-mix(in srgb, var(--liga-moldura-interna) 82%, var(--liga-borda-suave));
+  color: var(--liga-texto-secundario);
+  font-weight: 600;
+  font-size: 0.787rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  padding: 0.424rem 0.605rem;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  border-color: var(--liga-borda-suave);
+}
+
+/*
+ * Cabeçalhos: evitar quebra prematura (PrimeReact usa flex em .p-column-header-content).
+ * Quebra só onde o módulo pedir explicitamente: th.liga-listagem-celula--quebra (§11.3 padroes/ui).
+ */
+.liga-listagem-grid .p-datatable-thead > tr > th:not(.liga-listagem-celula--quebra) {
+  white-space: nowrap;
+}
+
+.liga-listagem-grid
+  .p-datatable-thead
+  > tr
+  > th:not(.liga-listagem-celula--quebra)
+  .p-column-header-content {
+  flex-wrap: nowrap;
+}
+
+.liga-listagem-grid
+  .p-datatable-thead
+  > tr
+  > th:not(.liga-listagem-celula--quebra)
+  .p-column-title {
+  white-space: nowrap;
+}
+
+.liga-listagem-grid .p-sortable-column .p-sortable-column-icon {
+  font-size: 0.726rem;
+}
+
+.liga-listagem-grid .p-datatable-thead > tr > th.p-highlight {
+  background: color-mix(in srgb, var(--liga-verde) 16%, var(--liga-moldura-interna)) !important;
+}
+
+.liga-listagem-grid .p-sortable-column.p-highlight {
+  background: color-mix(in srgb, var(--liga-verde) 16%, var(--liga-moldura-interna)) !important;
+}
+
+.liga-listagem-grid .p-datatable-tbody > tr.p-row-odd {
+  background: color-mix(in srgb, var(--liga-moldura-externa) 65%, var(--liga-moldura-interna)) !important;
+}
+
+.liga-listagem-grid .p-datatable-tbody > tr.p-row-even {
+  background: var(--liga-moldura-interna) !important;
+}
+
+html[data-theme="light"] .liga-listagem-grid .p-datatable-tbody > tr.p-row-odd {
+  background: #eef1f5 !important;
+}
+
+html[data-theme="light"] .liga-listagem-grid .p-datatable-tbody > tr.p-row-even {
+  background: #ffffff !important;
+}
+
+html[data-theme="light"] .liga-listagem-grid.p-datatable-striped .p-datatable-tbody > tr:hover:not(.p-datatable-emptymessage),
+html[data-theme="light"] .liga-listagem-grid.p-datatable-striped .p-datatable-tbody > tr:hover:not(.p-datatable-emptymessage) > td,
+html[data-theme="light"] .liga-listagem-grid .p-datatable-tbody > tr:hover:not(.p-datatable-emptymessage),
+html[data-theme="light"] .liga-listagem-grid .p-datatable-tbody > tr:hover:not(.p-datatable-emptymessage) > td {
+  background: var(--liga-listagem-zebra-hover) !important;
+  background-color: var(--liga-listagem-zebra-hover) !important;
+}
+
+.liga-listagem-grid .p-datatable-tbody > tr > td {
+  color: var(--liga-texto-principal);
+  font-size: 0.983rem;
+  line-height: 1.45;
+  padding: 0.341rem 0.605rem;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  border-color: var(--liga-borda-suave);
+}
+
+.liga-listagem-grid .p-datatable-tbody > tr > td.liga-listagem-celula--nowrap,
+.liga-listagem-grid .p-datatable-thead > tr > th.liga-listagem-celula--nowrap {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.liga-listagem-grid .p-datatable-tbody > tr > td.liga-listagem-celula--quebra,
+.liga-listagem-grid .p-datatable-thead > tr > th.liga-listagem-celula--quebra {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.liga-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.liga-listagem-acoes-linha {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+}
+
+.liga-listagem-cabecalho-acoes-visivel {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.liga-listagem-acao-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.997rem;
+  height: 1.997rem;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+  cursor: pointer;
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.liga-listagem-acao-icone:hover {
+  color: var(--liga-verde);
+  background: color-mix(in srgb, var(--liga-verde) 12%, transparent);
+}
+
+.liga-listagem-acao-icone .pi {
+  font-size: 0.99rem;
+  pointer-events: none;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-wrapper,
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody {
+  background: transparent !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid.p-datatable .p-datatable-tbody > tr {
+  color: var(--liga-texto-principal) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr > td {
+  color: var(--liga-texto-principal) !important;
+  border-color: var(--liga-borda-suave) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr.p-row-odd,
+html[data-theme="dark"] .liga-listagem-grid.p-datatable-striped .p-datatable-tbody > tr.p-row-odd,
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr.p-row-odd > td,
+html[data-theme="dark"] .liga-listagem-grid.p-datatable-striped .p-datatable-tbody > tr.p-row-odd > td {
+  background: var(--liga-listagem-zebra-impar) !important;
+  background-color: var(--liga-listagem-zebra-impar) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr.p-row-even,
+html[data-theme="dark"] .liga-listagem-grid.p-datatable-striped .p-datatable-tbody > tr.p-row-even,
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr.p-row-even > td,
+html[data-theme="dark"] .liga-listagem-grid.p-datatable-striped .p-datatable-tbody > tr.p-row-even > td {
+  background: var(--liga-listagem-zebra-par) !important;
+  background-color: var(--liga-listagem-zebra-par) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr:not(.p-row-odd):not(.p-row-even):not(.p-datatable-emptymessage) {
+  background: var(--liga-listagem-zebra-par) !important;
+  background-color: var(--liga-listagem-zebra-par) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr.p-datatable-emptymessage > td {
+  background: var(--liga-listagem-zebra-par) !important;
+  background-color: var(--liga-listagem-zebra-par) !important;
+  color: var(--liga-texto-secundario) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-thead > tr > th {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--liga-verde) 28%, transparent) 0%,
+      transparent 45%
+    ),
+    var(--liga-listagem-cabecalho-fundo) !important;
+  color: var(--liga-listagem-cabecalho-texto) !important;
+  font-weight: 700;
+  padding-top: 0.52rem;
+  padding-bottom: 0.52rem;
+  border-inline-color: rgba(255, 255, 255, 0.07) !important;
+  border-bottom: 2px solid var(--liga-listagem-cabecalho-borda) !important;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--liga-verde) 22%, transparent),
+    0 8px 20px rgba(0, 0, 0, 0.48) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-thead > tr > th .p-sortable-column-icon {
+  color: color-mix(in srgb, var(--liga-verde-link-claro) 85%, var(--liga-texto-principal) 15%) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-thead > tr > th.p-highlight,
+html[data-theme="dark"] .liga-listagem-grid .p-sortable-column.p-highlight {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--liga-verde) 32%, transparent) 0%,
+      transparent 42%
+    ),
+    var(--liga-listagem-cabecalho-fundo-ordenado) !important;
+  color: var(--liga-listagem-cabecalho-texto) !important;
+  border-bottom-color: var(--liga-listagem-cabecalho-borda) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-thead > tr.p-highlight > th .p-sortable-column-icon,
+html[data-theme="dark"] .liga-listagem-grid .p-sortable-column.p-highlight .p-sortable-column-icon {
+  color: var(--liga-listagem-cabecalho-texto) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid.p-datatable-striped .p-datatable-tbody > tr:hover:not(.p-datatable-emptymessage),
+html[data-theme="dark"] .liga-listagem-grid.p-datatable-striped .p-datatable-tbody > tr:hover:not(.p-datatable-emptymessage) > td,
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr:hover:not(.p-datatable-emptymessage),
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr:hover:not(.p-datatable-emptymessage) > td {
+  background: var(--liga-listagem-zebra-hover) !important;
+  background-color: var(--liga-listagem-zebra-hover) !important;
+  color: var(--liga-texto-principal) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr.p-highlight,
+html[data-theme="dark"] .liga-listagem-grid .p-datatable-tbody > tr.p-highlight > td {
+  background: color-mix(
+    in srgb,
+    var(--liga-listagem-zebra-par) 55%,
+    var(--liga-verde) 32%
+  ) !important;
+  background-color: color-mix(
+    in srgb,
+    var(--liga-listagem-zebra-par) 55%,
+    var(--liga-verde) 32%
+  ) !important;
+  color: var(--liga-texto-principal) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-busca-input.p-inputtext {
+  color: var(--liga-texto-principal);
+  background: transparent;
+}
+
+html[data-theme="dark"] .liga-listagem-busca .p-inputicon {
+  color: var(--liga-texto-secundario);
+}
+
+.liga-listagem-grid .p-paginator,
+.liga-listagem-barra-paginador .p-paginator {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  gap: 0.182rem 0.363rem;
+  padding: 0.55rem 0.726rem 0.605rem;
+  border-top: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-interna);
+}
+
+.liga-listagem-barra-paginador .p-paginator {
+  border-top: none;
+  padding: 0;
+  background: transparent;
+}
+
+.liga-listagem-grid .p-paginator .p-paginator-element,
+.liga-listagem-barra-paginador .p-paginator .p-paginator-element {
+  min-width: 2.118rem;
+  min-height: 2.118rem;
+  border-radius: 980px;
+  color: var(--liga-texto-secundario);
+}
+
+.liga-listagem-grid .p-paginator .p-paginator-element:not(.p-disabled):hover,
+.liga-listagem-barra-paginador .p-paginator .p-paginator-element:not(.p-disabled):hover {
+  background: color-mix(in srgb, var(--liga-borda-suave) 55%, transparent);
+  color: var(--liga-texto-principal);
+}
+
+.liga-listagem-grid .p-paginator .p-paginator-current,
+.liga-listagem-barra-paginador .p-paginator .p-paginator-current {
+  cursor: default;
+  padding: 0 0.4rem;
+  font-size: 0.983rem;
+  color: var(--liga-texto-secundario);
+  white-space: nowrap;
+}
+
+.liga-listagem-grid .p-paginator .p-dropdown,
+.liga-listagem-barra-paginador .p-paginator .p-dropdown {
+  border-radius: 980px;
+  margin-left: 0.25rem;
+  min-height: 2.118rem;
+  align-items: center;
+}
+
+.liga-listagem-grid .p-paginator .p-dropdown .p-dropdown-label,
+.liga-listagem-barra-paginador .p-paginator .p-dropdown .p-dropdown-label {
+  padding-block: 0.242rem;
+  line-height: 1.45;
+}
+
+.liga-listagem-grid .p-paginator .p-paginator-icon,
+.liga-listagem-barra-paginador .p-paginator .p-paginator-icon {
+  font-size: 1.029rem;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-paginator,
+html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator {
+  background: var(--liga-moldura-interna) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator {
+  background: transparent !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-paginator .p-dropdown,
+html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown {
+  background: transparent !important;
+  color: var(--liga-texto-principal) !important;
+  border: 1px solid var(--liga-borda-suave) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-paginator .p-dropdown .p-dropdown-label,
+html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown .p-dropdown-label {
+  background: transparent !important;
+  color: var(--liga-texto-principal) !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-paginator .p-dropdown-trigger,
+html[data-theme="dark"] .liga-listagem-grid .p-paginator .p-dropdown .p-dropdown-trigger,
+html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown-trigger,
+html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown .p-dropdown-trigger {
+  background: transparent !important;
+  color: var(--liga-texto-secundario) !important;
+  border: 0 !important;
+}
+
+html[data-theme="dark"] .liga-listagem-grid .p-paginator .p-dropdown-panel,
+html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown-panel {
+  background: var(--liga-moldura-externa) !important;
+  border-color: var(--liga-borda-suave) !important;
+}
+
+/*
+ * Grupo de pesquisa: sem barra de rolagem enquanto o conteúdo couber (dropdown encolhe antes).
+ * Rolagem horizontal só no miolo da barra (.liga-listagem-barra-metade-tela) quando a linha inteira não couber.
+ */
+.liga-listagem-toolbar-grupo-pesquisa {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  align-self: center;
+  min-width: 0;
+  width: auto;
+  max-width: min(50%, 42rem);
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  flex-shrink: 1;
+}
+
+/* Filtros: ocupam o restante da linha; fundo alinha à barra para não “ver” vazamento do grupo da pesquisa. */
+.liga-listagem-barra-grupo-filtros-ativos {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: var(--liga-moldura-interna);
+  box-shadow: none;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.liga-listagem-barra-filtros-inline {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+.liga-listagem-filtros-medicao {
+  position: absolute;
+  left: -99999px;
+  top: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.45rem;
+  /* opacity em vez de visibility:hidden — alguns layouts devolviam offsetWidth 0 nos chips (logs H-A). */
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.liga-listagem-filtro-medicao-slot {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.liga-listagem-filtro-medicao-limpar {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.liga-listagem-filtros-ellipsis-medicao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 2.375rem;
+  height: 2.375rem;
+  margin-inline: 0.28rem;
+  padding: 0;
+  border: none;
+  border-radius: 980px;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+}
+
+.liga-listagem-filtros-ellipsis-medicao .pi {
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.liga-listagem-barra-filtros-visiveis {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+/* Só os chips ficam contidos; ícone de overflow e Limpar ficam fora — sem cortar o filter-slash. */
+.liga-listagem-barra-filtros-chips-run {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-barra-filtros-chips-run .p-chip {
+  flex-shrink: 0;
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn {
+  flex-shrink: 0;
+}
+
+/* Contém o anel interno de foco sem alterar o border-radius do tema (Prime). */
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button.p-component {
+  overflow: hidden;
+}
+
+/* Overflow de filtros: pi-ellipsis-h (mais itens); Limpar continua com pi-filter-slash. */
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button.p-button-icon-only {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 2.375rem !important;
+  min-width: 2.375rem !important;
+  height: 2.375rem !important;
+  margin-inline: 0.28rem;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible;
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button.p-button-icon-only .p-button-icon {
+  overflow: visible !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Prime aplica overflow no botão; ícone não pode ser mascarado. */
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button.p-component {
+  overflow: visible !important;
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button.p-button-icon-only:enabled:hover {
+  background: color-mix(in srgb, var(--liga-borda-suave) 42%, transparent) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button.p-button-icon-only:enabled:focus {
+  box-shadow: none !important;
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button.p-button-icon-only:focus-visible {
+  outline: 2px solid var(--liga-verde);
+  outline-offset: 2px;
+}
+
+/* Mesmo tamanho de ícone que o botão Limpar (p-button-sm). */
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button-sm .p-button-icon .pi,
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button-sm .p-button-icon .pi {
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button-sm .p-button-icon .pi {
+  color: var(--liga-texto-secundario);
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button.p-button-icon-only:enabled:hover .pi {
+  color: var(--liga-texto-principal);
+}
+
+.liga-listagem-filtros-overflow-panel.p-overlaypanel .p-overlaypanel-content {
+  padding: 0;
+}
+
+.liga-listagem-filtros-overflow-conteudo {
+  padding: 0.65rem 0.85rem;
+  min-width: 12rem;
+  max-width: min(22rem, 92vw);
+}
+
+.liga-listagem-filtros-overflow-titulo {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--liga-texto-principal);
+  letter-spacing: -0.02em;
+}
+
+.liga-listagem-filtros-overflow-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.liga-listagem-filtros-overflow-lista li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--liga-borda-suave);
+  font-size: 0.92rem;
+  color: var(--liga-texto-principal);
+}
+
+.liga-listagem-filtros-overflow-lista li:last-child {
+  border-bottom: none;
+}
+
+.liga-listagem-filtros-overflow-rotulo {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.liga-listagem-filtros-overflow-remover {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+  cursor: pointer;
+}
+
+.liga-listagem-filtros-overflow-remover:hover {
+  color: var(--liga-verde);
+  background: color-mix(in srgb, var(--liga-verde) 12%, transparent);
+}
+
+.liga-listagem-filtros-overflow-limpar {
+  margin-top: 0.5rem;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Botão secundário “Limpar”: contorno + moldura (padroes-ui / barra de listagem). */
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined {
+  background: var(--liga-moldura-interna);
+  border-color: var(--liga-borda-suave);
+  color: var(--liga-texto-secundario);
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined .p-button-icon {
+  color: inherit;
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined:enabled:hover {
+  background: color-mix(in srgb, var(--liga-borda-suave) 42%, transparent);
+  border-color: var(--liga-borda-suave);
+  color: var(--liga-texto-principal);
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined:focus,
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined:focus-visible {
+  outline: none !important;
+  /* Anel interno — não ultrapassa margens/bordas (alinha ao radius). */
+  box-shadow: inset 0 0 0 2px var(--liga-verde) !important;
+}
+
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined:enabled:active:not(:disabled) {
+  outline: none !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+}
+
+.liga-listagem-filtros-overflow-panel .liga-listagem-filtros-limpar-btn.p-button.p-component {
+  overflow: hidden;
+}
+
+.liga-listagem-filtros-overflow-panel .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined {
+  background: var(--liga-moldura-interna);
+  border-color: var(--liga-borda-suave);
+  color: var(--liga-texto-secundario);
+}
+
+.liga-listagem-filtros-overflow-panel .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined .p-button-icon {
+  color: inherit;
+}
+
+.liga-listagem-filtros-overflow-panel .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined:enabled:hover {
+  background: color-mix(in srgb, var(--liga-borda-suave) 42%, transparent);
+  border-color: var(--liga-borda-suave);
+  color: var(--liga-texto-principal);
+}
+
+.liga-listagem-filtros-overflow-panel .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined:focus,
+.liga-listagem-filtros-overflow-panel .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined:focus-visible {
+  outline: none !important;
+  box-shadow: inset 0 0 0 2px var(--liga-verde) !important;
+}
+
+.liga-listagem-filtros-overflow-panel .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined:enabled:active:not(:disabled) {
+  outline: none !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Toolbar estendida: filtro refinado, pesquisar por, seletor de colunas */
+.liga-listagem-toolbar-busca-linha {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.liga-listagem-refinado-toggle {
+  flex-shrink: 0;
+  width: 2.118rem;
+  height: 2.118rem;
+  border-radius: 980px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-interna);
+  color: var(--liga-texto-secundario);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.liga-listagem-refinado-toggle:hover {
+  background: color-mix(in srgb, var(--liga-borda-suave) 55%, transparent);
+  color: var(--liga-texto-principal);
+}
+
+.liga-listagem-pesquisar-por {
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 14rem;
+}
+
+/* Mesmo arredondamento e altura da moldura de busca (.liga-listagem-busca: min-height 2.25rem). */
+.liga-listagem-toolbar-busca-linha .liga-listagem-pesquisar-por.p-dropdown {
+  display: inline-flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 2.25rem;
+  height: 2.25rem;
+  max-height: 2.25rem;
+  border-radius: 10px;
+  /* overflow:visible — overflow:hidden cortava anel de foco do tema e, em alguns layouts com barra rolável,
+     interferia no overlay do painel quando ancorado ao próprio trigger */
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+}
+
+/* Sem “auréola” verde do primary ao focar: só borda neutra (padronizado com busca ao lado) */
+.liga-listagem-toolbar-busca-linha .liga-listagem-pesquisar-por.p-dropdown.p-inputwrapper-focus,
+.liga-listagem-toolbar-busca-linha .liga-listagem-pesquisar-por.p-dropdown.p-focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.liga-listagem-toolbar-busca-linha
+  .liga-listagem-pesquisar-por.p-dropdown:not(.p-disabled).p-inputwrapper-focus {
+  border-color: var(--liga-borda-suave) !important;
+}
+
+html[data-theme="dark"]
+  .liga-listagem-toolbar-busca-linha
+  .liga-listagem-pesquisar-por.p-dropdown:not(.p-disabled).p-inputwrapper-focus {
+  border-color: var(--liga-borda-suave) !important;
+}
+
+/* Painel no body: acima da barra rolável, cabeçalho de abas e molduras com stacking context */
+.p-dropdown-panel.liga-listagem-pesquisar-por-panel {
+  z-index: 13000 !important;
+}
+
+.liga-listagem-toolbar-busca-linha .liga-listagem-pesquisar-por.p-dropdown .p-dropdown-label,
+.liga-listagem-toolbar-busca-linha .liga-listagem-pesquisar-por.p-dropdown .p-dropdown-trigger {
+  border-radius: 0;
+}
+
+.liga-listagem-toolbar-busca-linha .liga-listagem-pesquisar-por.p-dropdown .p-dropdown-label {
+  display: flex;
+  align-items: center;
+  padding: 0.35rem 0.35rem 0.35rem 0.65rem;
+  line-height: 1.25;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.liga-listagem-toolbar-busca-linha .liga-listagem-pesquisar-por.p-dropdown .p-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  min-width: 2rem;
+  padding: 0;
+}
+
+.liga-listagem-seletor-colunas {
+  flex-shrink: 0;
+  min-width: 10rem;
+  max-width: 16rem;
+}
+
+/*
+ * Prioridade ao redimensionar: 1) chips → ⋯ (JS em LigaListagemBarraFiltrosAtivos);
+ * 2) campo em 310px (não encolhe com o flex); 3) só em barra muito estreita o input pode reduzir (container query).
+ */
+.liga-listagem-toolbar-busca-linha .liga-listagem-busca-wrap {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 310px;
+  min-width: 310px;
+  max-width: 310px;
+}
+
+.liga-listagem-toolbar-busca-linha .liga-listagem-busca.liga-listagem-busca-com-icones {
+  width: 100%;
+  max-width: 310px;
+  min-width: 0;
+}
+
+/* Só quando a linha inteira fica crítica: permite encolher o input depois dos ⋯ já terem absorvido o espaço */
+@container toolbar-listagem (max-width: 520px) {
+  .liga-listagem-toolbar-busca-linha .liga-listagem-busca-wrap {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: min(310px, 100%);
+    max-width: 310px;
+  }
+}
+
+
+@media (max-width: 640px) {
+  .liga-listagem-titulo-linha {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .liga-listagem-titulo-acoes {
+    align-self: flex-end;
+    margin-left: 0;
+  }
+
+  /* Mantém pesquisa + chips na mesma linha; rolagem horizontal na barra em telas estreitas. */
+  .liga-listagem-barra-metade-tela {
+    flex-wrap: nowrap;
+  }
+
+  .liga-listagem-barra-ferramentas--busca-e-novo {
+    flex-wrap: nowrap;
+  }
+
+  .liga-listagem-toolbar-grupo-pesquisa .liga-listagem-toolbar-busca-linha {
+    flex-wrap: nowrap;
+  }
+
+  .liga-listagem-barra-grupo-filtros-ativos {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .liga-listagem-barra-filtros-visiveis {
+    justify-content: flex-start;
+  }
+
+  .liga-listagem-barra-filtros-chips-run {
+    justify-content: flex-start;
+  }
+}
+
+/**
+ * Área da grade + painel de filtro refinado: o slide e o backdrop ficam contidos
+ * aqui (relative), não em `position: fixed` na viewport — alinha ao “miolo” do formulário.
+ */
+.liga-listagem-refinado-shell {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.liga-listagem-refinado-shell > .liga-listagem-moldura-tabela {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.liga-listagem-refinado-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.liga-listagem-refinado-drawer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 6;
+  width: min(22rem, 92%);
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+  background: var(--liga-moldura-externa);
+  border-right: 1px solid var(--liga-borda-suave);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  animation: liga-listagem-drawer-in 0.22s ease-out;
+}
+
+@keyframes liga-listagem-drawer-in {
+  from {
+    transform: translateX(-100%);
+    opacity: 0.85;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.liga-listagem-refinado-drawer-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--liga-borda-suave);
+}
+
+.liga-listagem-refinado-titulo {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.liga-listagem-refinado-fechar {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: var(--liga-texto-secundario);
+  padding: 0.25rem;
+  border-radius: 980px;
+}
+
+.liga-listagem-refinado-fechar:hover {
+  background: color-mix(in srgb, var(--liga-borda-suave) 55%, transparent);
+  color: var(--liga-texto-principal);
+}
+
+.liga-listagem-refinado-corpo {
+  flex: 1;
+  overflow: auto;
+  padding: 0.5rem 0.75rem 1rem;
+}
+
+.liga-listagem-refinado-accordion .p-accordion-header-link {
+  padding: 0.55rem 0.65rem;
+}
+
+/* Empilha o filtro e “Limpar este filtro” — evita o link ao lado do MultiSelect/outros. */
+.liga-listagem-refinado-tab-conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.liga-listagem-refinado-tab-conteudo > :first-child {
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-listagem-refinado-datas-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.liga-listagem-refinado-entre-datas-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Checkbox compacto, alinhado à baseline visual do rótulo. */
+.liga-listagem-refinado-entre-datas-toggle .p-checkbox {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.liga-listagem-refinado-entre-datas-toggle .p-checkbox .p-checkbox-box {
+  width: 1rem !important;
+  height: 1rem !important;
+  border-radius: 4px;
+}
+
+.liga-listagem-refinado-entre-datas-toggle .p-checkbox .p-checkbox-icon {
+  font-size: 0.62rem;
+}
+
+.liga-listagem-refinado-entre-datas-label {
+  margin: 0;
+  padding-top: 0.02rem;
+  font-size: 0.82rem;
+  line-height: 1.25;
+  color: var(--liga-texto-principal);
+  cursor: pointer;
+  user-select: none;
+}
+
+.liga-listagem-refinado-datas {
+  display: grid;
+  gap: 0.5rem 0.65rem;
+  align-items: start;
+}
+
+.liga-listagem-refinado-datas--intervalo {
+  grid-template-columns: 1fr 1fr;
+}
+
+.liga-listagem-refinado-datas--unica {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 380px) {
+  .liga-listagem-refinado-datas--intervalo {
+    grid-template-columns: 1fr;
+  }
+}
+
+.liga-listagem-refinado-data-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  min-width: 0;
+}
+
+.liga-listagem-refinado-data-label {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--liga-texto-secundario);
+}
+
+/* Calendar filtro refinado: mesmo padrão visual do formulário (ícone dentro do input). */
+.liga-listagem-refinado-datas .liga-campo-com-botao-interno.p-calendar {
+  position: relative;
+}
+
+.liga-listagem-refinado-datas .liga-campo-com-botao-interno.p-calendar .p-inputtext {
+  padding-right: 2.2rem;
+}
+
+.liga-listagem-refinado-datas .liga-campo-com-botao-interno.p-calendar .p-datepicker-trigger {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  transform: translateY(-50%);
+  width: 1.75rem;
+  height: 1.75rem;
+  min-width: 1.75rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+  box-shadow: none;
+}
+
+.liga-listagem-refinado-datas .liga-campo-com-botao-interno.p-calendar .p-datepicker-trigger:hover {
+  background: color-mix(in srgb, var(--liga-borda-suave) 35%, transparent);
+  color: var(--liga-texto-principal);
+}
+
+.liga-listagem-refinado-limpar-campo {
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--liga-verde-link-claro, #16a34a);
+  text-decoration: underline;
+  align-self: flex-start;
+}

@@ -16,6 +16,8 @@
   --liga-fundo-barra-abas: color-mix(in srgb, var(--liga-fundo-pagina) 82%, var(--liga-borda-suave));
   --liga-sombra-bloco: 0 1px 3px rgba(15, 23, 42, 0.06);
   --liga-borda-acento-barra: var(--liga-verde-escuro);
+  /* Listagem (alinhado a infolab-web liga-tema.css) */
+  --liga-listagem-zebra-hover: color-mix(in srgb, #eef1f5 72%, var(--liga-verde) 28%);
   --liga-font-family: "Inter", system-ui, -apple-system, sans-serif;
 
   --primary-color: var(--liga-verde);
@@ -32,6 +34,18 @@ html[data-theme="dark"] {
   --liga-texto-secundario: #cbd5e1;
   --liga-moldura-externa: #1a222c;
   --liga-moldura-interna: #222c38;
+  /* Zebrado e cabeçalho tabela (listagem) */
+  --liga-listagem-zebra-par: color-mix(in srgb, #1a2622 58%, var(--liga-verde-escuro) 42%);
+  --liga-listagem-zebra-impar: color-mix(in srgb, #0c1210 68%, var(--liga-verde-escuro) 32%);
+  --liga-listagem-zebra-hover: color-mix(
+    in srgb,
+    var(--liga-listagem-zebra-par) 55%,
+    var(--liga-verde) 35%
+  );
+  --liga-listagem-cabecalho-fundo: color-mix(in srgb, #070d0a 30%, var(--liga-verde) 70%);
+  --liga-listagem-cabecalho-fundo-ordenado: color-mix(in srgb, #050a08 22%, var(--liga-verde) 78%);
+  --liga-listagem-cabecalho-borda: color-mix(in srgb, var(--liga-verde) 88%, rgba(0, 0, 0, 0.42) 12%);
+  --liga-listagem-cabecalho-texto: #e8f5ec;
   --liga-borda-suave: rgba(255, 255, 255, 0.12);
   --liga-sombra-moldura: 0 4px 24px rgba(0, 0, 0, 0.45);
   --liga-fundo-barra-abas: color-mix(in srgb, var(--liga-fundo-pagina) 92%, var(--liga-borda-suave));

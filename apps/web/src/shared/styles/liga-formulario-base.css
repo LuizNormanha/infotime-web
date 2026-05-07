@@ -1,0 +1,488 @@
+/* Layout base do formulario com sidebar + cartao */
+
+.liga-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.liga-formulario-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.liga-formulario-titulo {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--liga-texto-principal);
+}
+
+/** Título (h2) da seção + bloco opcional (ex.: legenda) na mesma faixa. */
+.liga-formulario-secao-titulo-linha {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.85rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.liga-formulario-secao-titulo-linha .liga-formulario-secao-titulo {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.liga-formulario-secao-ao-lado-titulo {
+  flex: 1 1 10rem;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.liga-formulario-titulo-icone {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  color: var(--liga-verde);
+  line-height: 1;
+}
+
+.liga-formulario-titulo .p-tag.liga-orcamento-status-tag {
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  padding: 0.2rem 0.55rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.liga-formulario-subtitulo {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--liga-texto-secundario);
+  max-width: 40rem;
+}
+
+/** Mesmo alinhamento da listagem (`liga-listagem-barra-verde`). */
+.liga-formulario-topo-textos--barra-listagem {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.liga-formulario-topo-textos--barra-listagem .liga-formulario-barra-verde {
+  margin-top: 0.2rem;
+}
+
+.liga-formulario-topo-textos-inner {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/**
+ * Sem barra: o wrapper não participa do layout (compatível com estilos que esperam
+ * h1/subtítulo como filhos diretos do bloco de textos).
+ */
+.liga-formulario-topo-textos-inner--solto {
+  display: contents;
+}
+
+.liga-formulario-alerta-erro {
+  margin: 0;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.liga-formulario-alerta-erro.p-message {
+  justify-content: flex-start;
+}
+
+.liga-formulario-acoes-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.liga-formulario-abaixo-topo {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.liga-formulario-abaixo-topo .liga-home-abas-faixa {
+  margin-bottom: 0.15rem;
+}
+
+/** Topo só com barra de ações (sem título): mesmo canto das outras telas (direita, como junto ao título). */
+.liga-formulario-topo--so-acoes {
+  justify-content: flex-end;
+}
+
+.liga-formulario-topo--so-acoes .liga-formulario-acoes-topo {
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.liga-formulario-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1.25rem;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Modo etapas horizontais: sem sidebar, conteúdo ocupa 100% da largura. */
+.liga-formulario-layout--etapas {
+  flex-direction: column;
+  gap: 0;
+}
+
+.liga-formulario-etapas-faixa {
+  margin-bottom: 0;
+}
+
+.liga-formulario-etapa-wrap {
+  display: inline-flex;
+}
+
+.liga-formulario-etapa-wrap--bloqueada .liga-aba {
+  opacity: 0.55;
+}
+
+.liga-formulario-etapa-wrap--bloqueada .liga-aba-ativador {
+  cursor: not-allowed;
+}
+
+.liga-formulario-etapa-wrap--concluida .liga-aba:not(.ativa) .liga-aba-icone {
+  color: var(--liga-verde);
+}
+
+.liga-formulario-etapas-rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--liga-borda-suave);
+  flex-shrink: 0;
+}
+
+.liga-formulario-sidebar {
+  flex: 0 0 14rem;
+  border-radius: 12px;
+  border: 1px solid var(--liga-borda-suave);
+  background: color-mix(in srgb, var(--liga-moldura-interna) 88%, var(--liga-borda-suave));
+  padding: 0.5rem;
+  align-self: stretch;
+}
+
+.liga-formulario-sidebar-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.liga-formulario-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 980px;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.liga-formulario-nav-item:hover {
+  background: color-mix(in srgb, var(--liga-moldura-externa) 70%, transparent);
+  color: var(--liga-texto-principal);
+}
+
+.liga-formulario-nav-item-ativo {
+  background: color-mix(in srgb, var(--liga-verde) 14%, var(--liga-moldura-externa));
+  border-color: color-mix(in srgb, var(--liga-verde) 28%, var(--liga-borda-suave));
+  color: var(--liga-verde-escuro);
+  font-weight: 600;
+}
+
+html[data-theme="dark"] .liga-formulario-nav-item-ativo {
+  color: var(--liga-verde-link-claro);
+}
+
+.liga-formulario-nav-icone {
+  font-size: 1rem;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.liga-formulario-nav-texto {
+  flex: 1;
+  min-width: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  cursor: inherit;
+}
+
+.liga-formulario-main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  /**
+   * Rolagem no `main` em vez de recortar lookups (`LigaLookupCombobox`) no conteúdo da seção:
+   * `overflow: hidden` no cartão + `overflow: auto` na área de conteúdo cortavam o painel absoluto
+   * de sugestões (atendimento em etapas e demais formulários).
+   */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.liga-formulario-cartao {
+  border-radius: 12px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-externa);
+  box-shadow: var(--liga-sombra-bloco);
+  padding: 1.15rem 1.25rem 1.35rem;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.liga-formulario-cartao .p-hidden-accessible input[type="text"],
+.liga-formulario-cartao .p-hidden-accessible textarea {
+  caret-color: transparent !important;
+}
+
+.liga-formulario-barra-verde {
+  width: 4px;
+  align-self: stretch;
+  min-height: 2rem;
+  border-radius: 2px;
+  background: var(--liga-borda-acento-barra);
+  flex-shrink: 0;
+}
+
+.liga-formulario-secao-cabecalho {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-bottom: 1.15rem;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.liga-formulario-secao-cabecalho * {
+  cursor: inherit;
+}
+
+.liga-formulario-secao-cabecalho .liga-formulario-barra-verde {
+  margin-top: 0.2rem;
+}
+
+.liga-formulario-secao-cabecalho-textos {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/** Mesma linha do título da seção (à direita), alinhado ao padrão do topo do formulário. */
+.liga-formulario-secao-cabecalho-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 0.05rem;
+}
+
+.liga-formulario-secao-cabecalho-acoes .p-button {
+  cursor: pointer;
+}
+
+.liga-formulario-secao-titulo {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--liga-verde-escuro);
+}
+
+html[data-theme="dark"] .liga-formulario-secao-titulo {
+  color: var(--liga-verde-link-claro);
+}
+
+.liga-formulario-secao-descricao {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--liga-texto-secundario);
+}
+
+.liga-formulario-secao-conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+  overflow: visible;
+}
+
+.liga-formulario-legenda-obrigatorio-fora {
+  margin: 0.55rem 0 0;
+  padding: 0 0.05rem;
+  align-self: flex-start;
+  max-width: 100%;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #dc2626;
+  display: flex;
+  align-items: baseline;
+  gap: 0.28rem;
+}
+
+.liga-formulario-legenda-obrigatorio-fora-asterisco {
+  color: #dc2626;
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+@media (max-width: 720px) {
+  .liga-formulario-layout {
+    flex-direction: column;
+  }
+
+  .liga-formulario-sidebar {
+    flex: none;
+    width: 100%;
+  }
+
+  .liga-formulario-sidebar-lista {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .liga-formulario-nav-item {
+    flex: 1 1 auto;
+    min-width: 8rem;
+  }
+
+  .liga-formulario-topo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .liga-formulario-acoes-topo {
+    justify-content: flex-start;
+  }
+}
+
+/*
+ * Dropdown «Ações» no topo do formulário — alinhado ao botão Exportar da listagem
+ * (.liga-listagem-botao-export-dropdown + conteúdo flex).
+ */
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined {
+  align-items: center;
+  padding-inline: 0.75rem 0.85rem;
+  background: var(--liga-moldura-interna);
+  border-color: var(--liga-borda-suave);
+  color: var(--liga-texto-secundario);
+}
+
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined .liga-formulario-acoes-dropdown-conteudo,
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined .liga-formulario-acoes-dropdown-conteudo span,
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined .liga-formulario-acoes-dropdown-conteudo .pi {
+  color: inherit;
+}
+
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined .liga-formulario-acoes-dropdown-seta {
+  opacity: 1;
+}
+
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined:enabled:hover {
+  background: color-mix(in srgb, var(--liga-borda-suave) 42%, transparent);
+  border-color: var(--liga-borda-suave);
+  color: var(--liga-texto-principal);
+}
+
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined:focus,
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined:focus-visible {
+  box-shadow: none;
+  outline: 2px solid var(--liga-verde);
+  outline-offset: 2px;
+}
+
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined:enabled:active:not(:disabled) {
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
+  outline: none;
+}
+
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined.p-disabled,
+.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined:disabled {
+  opacity: 0.55;
+}
+
+.liga-formulario-botao-acoes-dropdown .liga-formulario-acoes-dropdown-conteudo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.liga-formulario-botao-acoes-dropdown .liga-formulario-acoes-dropdown-seta {
+  font-size: 0.82rem;
+  opacity: 0.95;
+}
+
+.liga-formulario-menu-acoes.p-menu {
+  border-radius: var(--p-border-radius-md, 6px);
+  overflow: hidden;
+}
+
+.liga-formulario-menu-acoes .liga-formulario-menu-item-rejeitar .p-menuitem-link {
+  color: var(--p-red-500, #dc3545);
+}
+
+.liga-formulario-menu-acoes .liga-formulario-menu-item-rejeitar .p-menuitem-link:hover {
+  background: color-mix(in srgb, var(--p-red-500, #dc3545) 12%, transparent);
+}

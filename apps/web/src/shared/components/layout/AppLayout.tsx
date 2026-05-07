@@ -13,7 +13,7 @@ import { InfotimeMarcaLogo } from "./InfotimeMarcaLogo.js";
 import { InfotimeAba } from "./InfotimeAba.js";
 import { HomePage } from "../../../pages/HomePage.js";
 import { UsuarioListPage } from "../../../pages/usuario/UsuarioListPage.js";
-import { ClienteListPage } from "../../../pages/cliente/ClienteListPage.js";
+import { ClienteAreaPage } from "../../../pages/cliente/ClienteAreaPage.js";
 import {
   applyAppThemeToDocument,
   persistAppTheme,
@@ -53,7 +53,7 @@ const TAB_DEF: Record<
     icone: "pi-briefcase",
     path: "/clientes",
     fechavel: true,
-    Page: ClienteListPage,
+    Page: ClienteAreaPage,
   },
 };
 

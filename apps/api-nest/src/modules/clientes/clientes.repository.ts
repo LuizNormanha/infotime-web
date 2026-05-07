@@ -11,6 +11,19 @@ export class ClientesRepository {
     const skip = (q.page - 1) * q.pageSize;
     const take = q.pageSize;
     const search = q.search?.trim();
+    const dir = q.sortOrder === 'desc' ? 'desc' : 'asc';
+    const allowed = new Set([
+      'razaoSocial',
+      'nomeFantasia',
+      'cnpj',
+      'email',
+      'cidade',
+      'estado',
+    ]);
+    const sortField =
+      q.sortField && allowed.has(q.sortField) ? q.sortField : 'razaoSocial';
+    const orderBy = { [sortField]: dir } as Prisma.ClienteOrderByWithRelationInput;
+
     const where: Prisma.ClienteWhereInput = {
       idTenacidade: tenantId,
       ...(search
@@ -30,13 +43,15 @@ export class ClientesRepository {
         where,
         skip,
         take,
-        orderBy: { razaoSocial: 'asc' },
+        orderBy,
         select: {
           idCliente: true,
           razaoSocial: true,
           nomeFantasia: true,
           cnpj: true,
           email: true,
+          cidade: true,
+          estado: true,
         },
       }),
     ]);

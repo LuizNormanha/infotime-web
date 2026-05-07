@@ -1,16 +1,26 @@
 import { Button } from "primereact/button";
 import type { ReactNode } from "react";
 
-export function ListToolbar(props: {
-  onRefresh?: () => void;
-  extra?: ReactNode;
-}) {
+/**
+ * Ações do canto superior direito da listagem (infolab-web).
+ * Ordem: **Atualizar** (estilo Exportar / outlined) → conteúdo extra (ex.: **Novo** em verde).
+ */
+export function ListToolbar(props: { onRefresh?: () => void; extra?: ReactNode }) {
   return (
-    <div className="flex gap-2">
-      {props.extra}
+    <>
       {props.onRefresh ? (
-        <Button type="button" icon="pi pi-refresh" rounded text onClick={props.onRefresh} aria-label="Atualizar" />
+        <Button
+          type="button"
+          icon="pi pi-refresh"
+          label="Atualizar"
+          outlined
+          className="liga-listagem-botao-export-dropdown"
+          onClick={props.onRefresh}
+          aria-label="Atualizar listagem"
+          title="Recarregar dados da listagem"
+        />
       ) : null}
-    </div>
+      {props.extra}
+    </>
   );
 }

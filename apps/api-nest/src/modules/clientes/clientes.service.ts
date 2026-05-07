@@ -33,6 +33,8 @@ export class ClientesService {
       nomeFantasia: c.nomeFantasia,
       cnpj: c.cnpj,
       email: c.email,
+      cidade: c.cidade,
+      estado: c.estado,
     }));
     return { data, total, page: q.page, pageSize: q.pageSize };
   }

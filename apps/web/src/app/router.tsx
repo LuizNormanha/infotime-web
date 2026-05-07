@@ -24,6 +24,8 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Fragment /> },
       { path: "usuarios", element: <Fragment /> },
+      { path: "clientes/novo", element: <Fragment /> },
+      { path: "clientes/:id", element: <Fragment /> },
       { path: "clientes", element: <Fragment /> },
     ],
   },
