@@ -347,11 +347,7 @@ export function tryMontarMenuHomeBarraInfotime(
     },
     {
       id: "infotime-cad-suporte",
-      filhos: [
-        "infotime-cad-sup-aplicacoes",
-        "infotime-cad-sup-triggers-auditoria",
-        "infotime-cad-sup-sincronizar-grupos-apps",
-      ],
+      filhos: ["infotime-cad-sup-triggers-auditoria"],
     },
   ];
 

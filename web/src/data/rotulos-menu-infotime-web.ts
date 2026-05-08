@@ -4,9 +4,10 @@
  */
 export const ROTULOS_MENU_INFOTIME_WEB: Record<string, string> = {
   "infotime-template-app": "Cadastros",
-  dashboard: "Indicadores",
+  dashboard: "Cockpit",
   "cad-estoque-fornecedores-fabricantes": "Fornecedores",
-  "cad-acesso-usuário": "Colaboradores",
+  "cad-acesso-usuário": "Usuários",
+  "cadastros-usuarios": "Usuários",
   "cad-acesso-perfil": "Grupos de usuários",
   "mod-faturamento-indicadores-faturamento": "Indicadores - Comercial",
   "cad-financeiro-tabelas-de-preços": "Plano de Contas",

@@ -254,7 +254,7 @@
       }
     },
     "abas": {
-      "dashboard": "Indicadores",
+      "dashboard": "Cockpit",
       "emBreve": "Em breve",
       "clientes": "Clientes",
       "medicos": "Médicos",
@@ -342,7 +342,7 @@
     "conteudo": {
       "areaVazia": "Área de conteúdo da Home Liga.",
       "dashboard": {
-        "titulo": "Indicadores",
+        "titulo": "Cockpit",
         "subtitulo": "Resumo operacional da unidade. Atalhos à esquerda abrem módulos em abas.",
         "vazio": "Layout-base do início preparado para próximos componentes."
       },
@@ -662,7 +662,7 @@
         "vazio": "Setores de exame (setor). Listagem e cadastro nesta aba ou pelo menu lateral."
       },
       "usuarios": {
-        "titulo": "Cadastros > Usuários",
+        "titulo": "Usuários",
         "subtitulo": "",
         "vazio": "Usuários do tenant (usuario). Listagem e cadastro nesta aba ou pelo menu lateral."
       },
@@ -693,7 +693,7 @@
       "infotime-financeiro": "Financeiro",
       "infotime-estoque": "Estoque",
       "infotime-modulos-operacionais": "Módulos",
-      "dashboard": "Indicadores",
+      "dashboard": "Cockpit",
       "cadastros": "Cadastros",
       "cadastros-clientes": "Lista de clientes",
       "cadastros-medicos": "Lista de médicos",
