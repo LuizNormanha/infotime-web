@@ -18,6 +18,17 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
+      - uses: nrwl/nx-set-shas@v4
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-${{ runner.os }}-${{ github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            nx-${{ runner.os }}-${{ github.ref_name }}-
+            nx-${{ runner.os }}-
+
       - name: Instalar dependências
         run: npm ci
 
@@ -28,15 +39,34 @@ jobs:
         working-directory: api
         run: npx prisma generate
 
-      - name: Lint
-        run: npm run lint
+      - name: Typecheck (API)
+        run: npx nx run api:typecheck
 
-      - name: Testes
-        run: npm test
+      - name: Lint (affected em PR)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            npx nx affected -t lint --parallel=3
+          else
+            npm run lint
+          fi
+
+      - name: Testes (affected em PR)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            npx nx affected -t test --parallel=3
+          else
+            npm test
+          fi
 
       - name: E2E (API)
+        if: github.event_name != 'pull_request'
         working-directory: api
         run: npm run test:e2e
 
-      - name: Build
-        run: npm run build
+      - name: Build (affected em PR)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            npx nx affected -t build --parallel=2
+          else
+            npm run build
+          fi

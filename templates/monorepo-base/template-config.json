@@ -37,7 +37,7 @@
       "padrao": "manter"
     },
     "mcpCursor": {
-      "descricao": "tools/infolab-mcp + .cursor/mcp.json para briefing CRUD no Cursor.",
+      "descricao": "mcp/ + .cursor/mcp.json para apoio de briefing CRUD no Cursor.",
       "padrao": "manter"
     },
     "manuaisPublicos": {

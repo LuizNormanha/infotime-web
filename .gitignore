@@ -38,10 +38,6 @@ pnpm-debug.log*
 !.cursor/rules/**
 !.cursor/mcp.json
 
-# MCP Infolab — permitir versionar o JS compilado (Cursor aponta para dist/index.js)
-!tools/infolab-mcp/dist/
-!tools/infolab-mcp/dist/**
-
 # SO e editores
 .DS_Store
 Thumbs.db

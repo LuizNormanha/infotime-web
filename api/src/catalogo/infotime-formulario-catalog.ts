@@ -1,5 +1,5 @@
 /**
- * Catálogo de telas persistido na tabela `infolab_formulario` (nome físico legado no PostgreSQL).
+ * Catálogo de telas persistido no formulário de catálogo (modelo legado mapeado no PostgreSQL).
  *
  * InfoTIME: vazio até que cada tela do DDL tenha registro estável aqui e no seed (`upsert` por `codigo`).
  */

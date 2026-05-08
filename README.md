@@ -4,7 +4,7 @@ Este repositório é o **template Liga** para novos produtos: mesma stack (API N
 
 **O que é:** base reutilizável de UI e arquitetura; você deriva um projeto novo trocando banco, schema Prisma, módulos da API, rotas e menu.
 
-**O que não é:** não é o produto “InfoLab Web”; nomes legados no Prisma (`infolab_*`) refletem o banco **InfoTIME** usado como referência neste clone. Projetos filhos apontam para outro `DATABASE_URL` e outro schema quando fizer sentido.
+**O que não é:** não é um produto fechado; é uma base neutra para derivação. Projetos filhos apontam para seu próprio `DATABASE_URL` e schema quando fizer sentido.
 
 Guia para criar um produto a partir daqui: [docs/TEMPLATE-DERIVACAO.md](docs/TEMPLATE-DERIVACAO.md).
 
@@ -14,7 +14,6 @@ Guia para criar um produto a partir daqui: [docs/TEMPLATE-DERIVACAO.md](docs/TEM
 - `api/`: backend NestJS, autenticação, Prisma, migrations.
 - `web/`: Next.js, rotas BFF em `/api/*`, login, home com menu e abas.
 - `templates/monorepo-base/`: documentação do template (`BASELINE.md`, `docs/`, `manifest.json`).
-- `README.infolab.orig.md`: README original do monorepo de origem (referência).
 
 ## Pré-requisitos
 
@@ -91,10 +90,19 @@ O template pode incluir módulos de negócio do Infotime que **não** pertencem 
 
 Mensagens em `web/src/app/(comum)/i18n/mensagens/pt-BR.json`. Ver [I18N-BASE.md](templates/monorepo-base/docs/I18N-BASE.md).
 
+## Produção e segurança
+
+- Configure `THROTTLE_LOGIN_LIMIT` e `THROTTLE_LOGIN_TTL_MS` na API para proteger `/auth/login` e `/auth/login-confirm` contra brute force.
+- Em ambiente com mais de uma instância da API, configure `THROTTLER_REDIS_URL` para rate limiting distribuído.
+- Use `NODE_ENV=production` para garantir cookie de sessão com `secure=true`.
+- No web, avalie `AUTH_STRICT=true` para comportamento fail-closed quando a API estiver indisponível.
+- Consulte o checklist operacional em [docs/SEGURANCA-OPERACAO.md](docs/SEGURANCA-OPERACAO.md).
+
 ## Documentação técnica do template
 
 | Documento | Conteúdo |
 |-----------|-----------|
+| [docs/SEGURANCA-OPERACAO.md](docs/SEGURANCA-OPERACAO.md) | Checklist de segurança e operação para produção |
 | [docs/TEMPLATE-DERIVACAO.md](docs/TEMPLATE-DERIVACAO.md) | Checklist para derivar um produto (DB, Prisma, API, web, menu, i18n) |
 | [docs/MENU-TEMPLATE-VS-DST.md](docs/MENU-TEMPLATE-VS-DST.md) | Menu enxuto vs catálogo DST |
 | [docs/ESTRUTURA-API.md](docs/ESTRUTURA-API.md) | Shell da API vs domínio InfoTIME |

@@ -29,7 +29,7 @@ function formatBrl(n: number): string {
 }
 
 /**
- * Resumo financeiro alinhado ao painel de atendimento (borda leve, hierarquia simples).
+ * Resumo financeiro alinhado ao painel operacional (borda leve, hierarquia simples).
  */
 export function FinancialSummary({
   totalExames,

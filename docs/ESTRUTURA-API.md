@@ -16,16 +16,14 @@ Costumam permanecer ao portar um novo banco e novas regras:
 
 Qualquer novo módulo de negócio deve **reutilizar** autenticação, tenant e padrões de DTO/validação já usados nestes módulos.
 
-## Domínio de exemplo (InfoTIME / legado)
+## Domínio legado e derivação
 
-Grande parte das pastas em `api/src/` com controllers REST nomeados por entidade de negócio (clientes, convênios, faturas, usuários, etc.) representam o **domínio InfoTIME** atual, espelhado no `schema.prisma` com tabelas prefixadas (`infolab_*` no Prisma).
+Em projetos derivados:
 
-Em um **projeto derivado**:
+- Remova ou substitua módulos que não pertençam ao novo escopo.
+- Mantenha a forma base (module + controller + service + DTOs) para novos CRUDs.
+- Evite expor nomes internos de tabela em mensagens de API.
 
-- Remova ou substitua módulos que não existam no novo schema.
-- Mantenha a **forma** (Nest module + controller + service + DTOs) como referência de CRUD.
-- Mensagens de erro e textos voltados ao usuário final devem usar vocabulário do **novo** produto, não nomes internos de tabela.
+## Evolução
 
-## Evolução gradual
-
-Não é necessário renomear todos os models Prisma de uma vez (isso implica migração de banco). O template pode conviver com `infolab_*` enquanto o BD for InfoTIME; produtos novos podem introduzir models com nomes neutros à medida que o schema for reescrito.
+Renomeações amplas de models Prisma devem ser planejadas com cuidado, pois podem exigir migração de banco e ajustes de integração.

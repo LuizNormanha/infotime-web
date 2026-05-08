@@ -260,7 +260,7 @@ export default function TelaLogin() {
                     id="campo-login-captcha"
                     nomeCampo="captcha_resposta"
                     rotulo={captcha.pergunta}
-                    placeholder="Digite o resultado"
+                    placeholder="Digite a resposta"
                     valor={captchaResposta}
                     aoAlterar={setCaptchaResposta}
                     tipo="text"

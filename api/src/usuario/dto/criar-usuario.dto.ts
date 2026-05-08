@@ -234,7 +234,7 @@ export class CriarUsuarioDto {
   @MaxLength(100)
   senha?: string;
 
-  /** Perfil (infolab_grupo_usuario) do tenant. */
+  /** Perfil de grupo do tenant. */
   @IsOptional()
   @IsString()
   @Transform(({ value }: { value: unknown }): string | undefined => {

@@ -1,5 +1,5 @@
 /**
- * Política de senha para usuários do sistema (bcrypt em `infolab_usuario.senha`).
+ * Política de senha para usuários do sistema (persistida com hash bcrypt).
  * Espelho no frontend: `web/src/lib/senha-usuario-politica.ts` — manter regras alinhadas.
  */
 export const SENHA_USUARIO_COMPRIMENTO_MINIMO = 8;

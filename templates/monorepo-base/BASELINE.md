@@ -73,7 +73,7 @@ Não incluir no pacote: `node_modules/`, `dist/`, `.next/`, `.nx/`, `coverage/`,
 | Addon | Caminhos | Quando remover |
 |-------|----------|----------------|
 | IA domínio | `ai/README.md`, `ai/domains/**` | Produto sem fluxo IA em `ai/domains` |
-| MCP Cursor | `tools/infolab-mcp/`, `.cursor/mcp.json` | Sem Cursor / sem briefing MCP |
+| MCP Cursor | `mcp/`, `.cursor/mcp.json` | Sem Cursor / sem briefing MCP |
 | Regras Cursor | `.cursor/rules/**` | Time não usa Cursor; pode manter como documentação |
 | Legado MCP pasta | `mcp/` | Preferir `ai/domains`; remover se redundante |
 | Manuais públicos | `web/public/manuais/`, `web/public/ajuda-ligia/` | Novo produto sem essa ajuda |

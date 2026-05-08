@@ -5,13 +5,13 @@
     "subtituloPagina": "Portal do cliente",
     "titulo": "Faça login",
     "subtitulo": "Entre com suas credenciais",
-    "emailLoginPadrao": "usuario@laboratorio.com.br",
+    "emailLoginPadrao": "usuario@tenant.com.br",
     "entrar": "Login",
     "entrando": "Entrando...",
     "entrarAcessibilidade": "Entrar no sistema",
     "recuperarSenha": "Recuperar Senha",
     "emailLabel": "Usuário",
-    "emailPlaceholder": "usuario@laboratorio.br",
+    "emailPlaceholder": "usuario@tenant.br",
     "senhaLabel": "Senha",
     "senhaPlaceholder": "Digite sua senha",
     "erroCredenciais": "Credenciais inválidas.",
@@ -36,14 +36,14 @@
     "infotimeMarca": {
       "titulo": "InfoTIME",
       "tituloMenu": "InfoTIME",
-      "tagline": "Gestão integrada para o seu laboratório"
+      "tagline": "Gestão integrada para o seu tenant"
     }
   },
   "logoLiga": {
     "titulo": "Liga",
     "software": "SOFTWARE",
-    "paraLaboratorios": "PARA LABORATÓRIOS",
-    "taglineImagemAlt": "Tecnologia que impulsiona resultados"
+    "paraLaboratorios": "PARA tenantS",
+    "taglineImagemAlt": "Tecnologia que impulsiona saidas"
   },
   "home": {
     "avisoLicenca": {
@@ -116,21 +116,21 @@
     },
     "registroColetorForm": {
       "titulo": "Registro de coletor",
-      "subtitulo": "Informe o código e pressione ENTER para registrar a coleta. Ao sair do campo, apenas consulta (sem registrar).",
-      "secUnica": "Registro de coleta",
-      "secUnicaDesc": "Código, tipo de leitura, observações, coletor e resultado da operação.",
+      "subtitulo": "Informe o código e pressione ENTER para registrar a processamento. Ao sair do campo, apenas consulta (sem registrar).",
+      "secUnica": "Registro de processamento",
+      "secUnicaDesc": "Código, tipo de leitura, observações, coletor e saida da operação.",
       "codigo": "Código",
       "observacao": "Observações | Incorrências",
       "modoLeitura": "Tipo de leitura",
       "modoLeituraAmostra": "Amostra",
-      "modoLeituraAtendimento": "Atendimento",
+      "modoLeituraAtendimento": "registro",
       "coletor": "Coletor (opcional)",
       "coletorPlaceholder": "Selecione o coletor",
       "coletorUsuarioAtual": "Usuário logado (você)",
       "estadoAmostra": "Estado da amostra",
       "statusOperacao": "Status da operação",
-      "itensNaoColhidos": "Amostras não coletadas",
-      "itensColhidos": "Amostras coletadas",
+      "itensNaoColhidos": "Amostras não processamentodas",
+      "itensColhidos": "Amostras processamentodas",
       "gridMaterial": "Material",
       "gridExames": "Exames",
       "gridSemLinhas": "Nenhuma amostra nesta lista.",
@@ -147,21 +147,21 @@
       "consultandoItens": "Consultando amostras…",
       "cabecalhoCliente": "Cliente",
       "cabecalhoData": "Data",
-      "cabecalhoIdAtendimento": "Atendimento",
+      "cabecalhoIdAtendimento": "registro",
       "amostraEncontrada": "Amostra encontrada",
       "amostraNaoEncontrada": "Amostra não encontrada",
-      "amostraJaColetada": "Amostra já coletada",
-      "atendimentoEncontrado": "Atendimento encontrado",
-      "atendimentoNaoEncontrado": "Atendimento não encontrado",
-      "atendimentoItensJaColhidos": "Itens elegíveis já coletados",
+      "amostraJaColetada": "Amostra já processamentoda",
+      "atendimentoEncontrado": "registro encontrado",
+      "atendimentoNaoEncontrado": "registro não encontrado",
+      "atendimentoItensJaColhidos": "Itens elegíveis já processamentodos",
       "statusConcluida": "Registro concluído",
-      "registroConcluidoComSucessoAmostra": "Amostra '{codigo}' coletada com sucesso.",
-      "registroConcluidoComSucessoAtendimento": "Leitura do atendimento '{codigo}' registrada com sucesso.",
+      "registroConcluidoComSucessoAmostra": "Amostra '{codigo}' processamentoda com sucesso.",
+      "registroConcluidoComSucessoAtendimento": "Leitura do registro '{codigo}' registrada com sucesso.",
       "statusNaoConcluida": "Registro não concluído",
       "nenhumItemAtualizado": "Nenhum item atualizado.",
       "temperaturaMaleta": "Temperatura da maleta de amostras",
       "temperaturaMaletaPlaceholder": "Selecione a opção",
-      "temperaturaMaletaHint": "- Gasometria: 0 a 4 \u00BAC;\n- Líquidos Corporais: 10 a 22 \u00BAC;\n- Amostras provenientes de outras unidades: 2 a 8 \u00BAC.",
+      "temperaturaMaletaHint": "- Gasometria: 0 a 4 ºC;\n- Líquidos Corporais: 10 a 22 ºC;\n- Amostras provenientes de outras unidades: 2 a 8 ºC.",
       "temperaturaMaletaDicaAria": "Temperaturas de referência para transporte da maleta de amostras",
       "loginColetorTituloCartao": "Registro de coletor",
       "loginColetorCracha": "Crachá",
@@ -257,7 +257,7 @@
       "dashboard": "Cockpit",
       "emBreve": "Em breve",
       "clientes": "Clientes",
-      "medicos": "Médicos",
+      "medicos": "profissionals",
       "cbo": "CBO",
       "cid": "CID",
       "conselhoRegional": "Conselho regional",
@@ -269,12 +269,12 @@
       "motivoExameRetificacao": "Motivo retificação exame",
       "motivoOrcamentoRejeicao": "Motivo rejeição orçamento",
       "motivoQuarentena": "Motivo quarentena",
-      "motivoRecoleta": "Motivo recoleta",
+      "motivoRecoleta": "Motivo reprocessamento",
       "motivoRetificacao": "Motivo retificação",
       "raca": "Raça",
-      "situacaoColeta": "Situação coleta",
+      "situacaoColeta": "Situação processamento",
       "tipoAplicacao": "Tipo aplicação",
-      "tipoDestinoResultado": "Tipo destino resultado",
+      "tipoDestinoResultado": "Tipo destino saida",
       "tipoEstadoCivil": "Tipo estado civil",
       "tipoEvento": "Tipo evento",
       "tipoIndicacao": "Tipo indicação",
@@ -285,36 +285,36 @@
       "precoFator": "Fator",
       "tipoRelatorio": "Tipo relatório",
       "unidadeFederacao": "UF / federação",
-      "pendenciaResultado": "Pendência resultado",
+      "pendenciaResultado": "Pendência saida",
       "portaSerial": "Porta serial",
       "mapaDefinicao": "Definição de mapas",
-      "mapaProducao": "Mapas de produção",
+      "mapaProducao": "Mapas de operacao",
       "monitorMapas": "Monitor de mapas",
       "vetEspecie": "Espécie (animal)",
       "vetRaca": "Raça (animal)",
-      "unidadeAtendimento": "Unidade de atendimento",
+      "unidadeAtendimento": "Unidade de registro",
       "analisadores": "Analisadores",
       "aplicacoes": "Aplicações",
       "computadores": "Computadores",
-      "convenios": "Convênios",
+      "convenios": "categorias",
       "faturas": "Faturas",
       "orcamentos": "Orçamentos",
       "exames": "Exames",
       "exameMaterial": "Exame / material",
-      "examesMaterialLabApoio": "Exames laboratório de apoio (DE/PARA)",
+      "examesMaterialLabApoio": "Exames tenant de apoio (DE/PARA)",
       "grupos": "Grupos",
       "grupoPerfil": "Grupo (perfil)",
       "usuarioPermissoes": "Permissões",
       "indicacoes": "Indicações",
       "integracoes": "Integrações",
-      "labsApoio": "Laboratórios",
-      "labsApoioWs": "Laboratórios de apoio WS",
+      "labsApoio": "tenants",
+      "labsApoioWs": "tenants de apoio WS",
       "locaisArmazenamento": "Locais armazenamento",
       "sorotecaGrades": "Grades",
       "cadastrosSoroteca": "Soroteca (tabelas)",
       "materiais": "Materiais",
       "medicamentos": "Medicamentos",
-      "modelosResultado": "Modelos resultado",
+      "modelosResultado": "Modelos saida",
       "procedencias": "Procedências",
       "questionarios": "Questionários",
       "recipientes": "Recipientes",
@@ -322,9 +322,9 @@
       "usuarios": "Usuários",
       "preferenciasFormularios": "Formulários",
       "preferenciasLayoutFormulario": "Layout formulário",
-      "tenacidadeConfiguracao": "Config. laboratório",
+      "tenacidadeConfiguracao": "Config. tenant",
       "saudeHumana": "Saúde Humana",
-      "atendimentos": "Atendimentos saúde humana",
+      "atendimentos": "registros saúde humana",
       "registroColetor": "Registro de coletor",
       "ajudaDocumentacao": "Documentação",
       "ajudaSuporte": "Suporte",
@@ -357,9 +357,9 @@
         "vazio": "Layout-base de clientes preparado para próximos componentes."
       },
       "medicos": {
-        "titulo": "Médicos",
+        "titulo": "profissionals",
         "subtitulo": "",
-        "vazio": "Layout-base de médicos preparado para próximos componentes."
+        "vazio": "Layout-base de profissionals preparado para próximos componentes."
       },
       "saudeHumana": {
         "titulo": "Módulos > Saúde Humana",
@@ -367,13 +367,13 @@
         "vazio": "Layout-base de Saúde Humana preparado para próximos componentes."
       },
       "atendimentos": {
-        "titulo": "Saúde Humana > Atendimento",
-        "subtitulo": "Mestre e detalhes gravados em uma transação (atendimento e filhos).",
+        "titulo": "Saúde Humana > registro",
+        "subtitulo": "Mestre e detalhes gravados em uma transação (registro e filhos).",
         "vazio": ""
       },
       "registroColetor": {
-        "titulo": "Coleta > Registro de coletor",
-        "subtitulo": "Registro de coleta por amostra ou atendimento.",
+        "titulo": "processamento > Registro de coletor",
+        "subtitulo": "Registro de processamento por amostra ou registro.",
         "vazio": ""
       },
       "cbo": {
@@ -432,14 +432,14 @@
         "vazio": "Motivos de quarentena (motivo_quarentena)."
       },
       "motivoRecoleta": {
-        "titulo": "Cadastros > Motivo recoleta",
+        "titulo": "Cadastros > Motivo reprocessamento",
         "subtitulo": "",
-        "vazio": "Motivos de recoleta (motivo_recoleta)."
+        "vazio": "Motivos de reprocessamento (motivo_reprocessamento)."
       },
       "motivoRetificacao": {
         "titulo": "Cadastros > Motivo retificação",
         "subtitulo": "",
-        "vazio": "Motivos de retificação de resultado (motivo_retificacao)."
+        "vazio": "Motivos de retificação de saida (motivo_retificacao)."
       },
       "raca": {
         "titulo": "Cadastros > Raça",
@@ -447,9 +447,9 @@
         "vazio": "Raças (raca)."
       },
       "situacaoColeta": {
-        "titulo": "Cadastros > Situação de coleta",
+        "titulo": "Cadastros > Situação de processamento",
         "subtitulo": "",
-        "vazio": "Situações de coleta (situacao_coleta)."
+        "vazio": "Situações de processamento (situacao_processamento)."
       },
       "tipoAplicacao": {
         "titulo": "Cadastros > Tipo de aplicação",
@@ -457,9 +457,9 @@
         "vazio": "Tipos de aplicação (tipo_aplicacao)."
       },
       "tipoDestinoResultado": {
-        "titulo": "Cadastros > Tipo destino de resultado",
+        "titulo": "Cadastros > Tipo destino de saida",
         "subtitulo": "",
-        "vazio": "Tipos de destino de resultado (tipo_destino_resultado)."
+        "vazio": "Tipos de destino de saida (tipo_destino_saida)."
       },
       "tipoEstadoCivil": {
         "titulo": "Cadastros > Tipo estado civil",
@@ -512,9 +512,9 @@
         "vazio": "UF / unidades da federação (unidade_federacao)."
       },
       "pendenciaResultado": {
-        "titulo": "Cadastros > Pendência de resultado",
+        "titulo": "Cadastros > Pendência de saida",
         "subtitulo": "",
-        "vazio": "Pendências de resultado (pendencia_resultado)."
+        "vazio": "Pendências de saida (pendencia_saida)."
       },
       "portaSerial": {
         "titulo": "Cadastros > Porta serial",
@@ -527,14 +527,14 @@
         "vazio": "Definições de mapa (mapa_definicao). Use a listagem e o botão Novo nesta aba."
       },
       "mapaProducao": {
-        "titulo": "Produção > Mapas de produção",
+        "titulo": "operacao > Mapas de operacao",
         "subtitulo": "",
-        "vazio": "Consulta aos mapas de produção (mapa). Os mapas são formados pelo fluxo de atendimento."
+        "vazio": "Consulta aos mapas de operacao (mapa). Os mapas são formados pelo fluxo de registro."
       },
       "monitorMapas": {
         "titulo": "Planejamento > Monitor de mapas",
         "subtitulo": "",
-        "vazio": "Acompanhamento e impressão de grupos de mapas. Para ver detalhes de um mapa, use Mapas de produção."
+        "vazio": "Acompanhamento e impressão de grupos de mapas. Para ver detalhes de um mapa, use Mapas de operacao."
       },
       "vetEspecie": {
         "titulo": "Cadastros > Espécie (animal)",
@@ -547,9 +547,9 @@
         "vazio": "Raças veterinárias (vet_raca)."
       },
       "unidadeAtendimento": {
-        "titulo": "Cadastros > Unidade de atendimento",
+        "titulo": "Cadastros > Unidade de registro",
         "subtitulo": "",
-        "vazio": "Unidades de atendimento (unidade)."
+        "vazio": "Unidades de registro (unidade)."
       },
       "analisadores": {
         "titulo": "Cadastros > Analisadores",
@@ -567,14 +567,14 @@
         "vazio": "Computadores (computador). Listagem e cadastro nesta aba ou pelo menu lateral."
       },
       "convenios": {
-        "titulo": "Cadastros > Convênios",
+        "titulo": "Cadastros > categorias",
         "subtitulo": "",
-        "vazio": "Convênios (convenio). Listagem e cadastro nesta aba ou pelo menu lateral."
+        "vazio": "categorias (categoria). Listagem e cadastro nesta aba ou pelo menu lateral."
       },
       "faturas": {
         "titulo": "Faturamento > Faturas",
         "subtitulo": "",
-        "vazio": "Faturas de convênio (fatura). Listagem nesta aba; criação via API ou formulário em evolução."
+        "vazio": "Faturas de categoria (fatura). Listagem nesta aba; criação via API ou formulário em evolução."
       },
       "orcamentos": {
         "titulo": "Recepção > Orçamento",
@@ -612,14 +612,14 @@
         "vazio": "Integrações (integracao). Listagem e cadastro nesta aba ou pelo menu lateral."
       },
       "labsApoio": {
-        "titulo": "Cadastros > Integrações > Laboratórios",
+        "titulo": "Cadastros > Integrações > tenants",
         "subtitulo": "",
-        "vazio": "Laboratórios de apoio (lab_apoio). Listagem e cadastro nesta aba ou pelo menu lateral."
+        "vazio": "tenants de apoio (lab_apoio). Listagem e cadastro nesta aba ou pelo menu lateral."
       },
       "labsApoioWs": {
-        "titulo": "Cadastros > Integrações > Laboratórios de apoio WS",
+        "titulo": "Cadastros > Integrações > tenants de apoio WS",
         "subtitulo": "",
-        "vazio": "Configuração B2B por unidade (lab_apoio_unidade): listagem só de laboratórios que já têm ao menos uma unidade configurada no tenant; use Novo para incluir a primeira ou outras unidades."
+        "vazio": "Configuração B2B por unidade (lab_apoio_unidade): listagem só de tenants que já têm ao menos uma unidade configurada no tenant; use Novo para incluir a primeira ou outras unidades."
       },
       "locaisArmazenamento": {
         "titulo": "Cadastros > Locais armazenamento",
@@ -637,9 +637,9 @@
         "vazio": "Medicamentos (medicamento). Listagem e cadastro nesta aba ou pelo menu lateral."
       },
       "modelosResultado": {
-        "titulo": "Cadastros > Modelos de resultado",
+        "titulo": "Cadastros > Modelos de saida",
         "subtitulo": "",
-        "vazio": "Modelos de resultado (modelo_resultado). Listagem e cadastro nesta aba ou pelo menu lateral."
+        "vazio": "Modelos de saida (modelo_saida). Listagem e cadastro nesta aba ou pelo menu lateral."
       },
       "procedencias": {
         "titulo": "Cadastros > Procedências",
@@ -673,11 +673,11 @@
       },
       "implantacaoTenacidade": {
         "titulo": "Tenacidades",
-        "subtitulo": "Cadastro global de laboratórios (implantação).",
+        "subtitulo": "Cadastro global de tenants (implantação).",
         "vazio": ""
       },
       "tenacidadeConfiguracao": {
-        "titulo": "Preferências > Configuração do laboratório",
+        "titulo": "Preferências > Configuração do tenant",
         "subtitulo": "Parâmetros do tenant atual (tenacidade_configuracao).",
         "vazio": ""
       },
@@ -696,14 +696,14 @@
       "dashboard": "Cockpit",
       "cadastros": "Cadastros",
       "cadastros-clientes": "Lista de clientes",
-      "cadastros-medicos": "Lista de médicos",
+      "cadastros-medicos": "Lista de profissionals",
       "cadastros-grupo-clientes": "Clientes",
-      "cadastros-grupo-medicos": "Médicos",
+      "cadastros-grupo-medicos": "profissionals",
       "cadastros-grupo-pagamentos": "Pagamentos",
-      "cadastros-grupo-laboratorio": "Laboratório",
+      "cadastros-grupo-laboratorio": "tenant",
       "cadastros-grupo-agenda": "Agenda",
       "cadastros-grupo-sistema": "Sistema",
-      "cadastros-grupo-convenios-exames": "Convênios e exames",
+      "cadastros-grupo-convenios-exames": "categorias e exames",
       "cadastros-grupo-estoque": "Estoque e grupos",
       "cadastros-grupo-relatorios": "Relatórios",
       "cadastros-cbo": "CBO",
@@ -717,12 +717,12 @@
       "cadastros-motivo-exame-retificacao": "Motivo retif. exame",
       "cadastros-motivo-orcamento-rejeicao": "Motivo rej. orçamento",
       "cadastros-motivo-quarentena": "Motivo quarentena",
-      "cadastros-motivo-recoleta": "Motivo recoleta",
+      "cadastros-motivo-recoleta": "Motivo reprocessamento",
       "cadastros-motivo-retificacao": "Motivo retificação",
       "cadastros-raca": "Raça",
-      "cadastros-situacao-coleta": "Situação coleta",
+      "cadastros-situacao-coleta": "Situação processamento",
       "cadastros-tipo-aplicacao": "Tipo aplicação",
-      "cadastros-tipo-destino-resultado": "Tipo destino resultado",
+      "cadastros-tipo-destino-resultado": "Tipo destino saida",
       "cadastros-tipo-estado-civil": "Tipo estado civil",
       "cadastros-tipo-evento": "Tipo evento",
       "cadastros-tipo-indicacao": "Tipo indicação",
@@ -733,14 +733,14 @@
       "cadastros-preco-fator": "Fatores",
       "cadastros-tipo-relatorio": "Tipo relatório",
       "cadastros-unidade-federacao": "UF / federação",
-      "cadastros-pendencia-resultado": "Pendência resultado",
+      "cadastros-pendencia-resultado": "Pendência saida",
       "cadastros-porta-serial": "Porta serial",
       "cadastros-vet-especie": "Espécie (animal)",
       "cadastros-vet-raca": "Raça (animal)",
       "cadastros-analisadores": "Analisadores",
       "cadastros-aplicacoes": "Aplicações",
       "cadastros-computadores": "Computadores",
-      "cadastros-convenios": "Convênios",
+      "cadastros-convenios": "categorias",
       "cadastros-exames": "Exame",
       "cadastros-grupos": "Grupos",
       "cadastros-indicacoes": "Indicações",
@@ -751,7 +751,7 @@
       "cadastros-locais-armazenamento": "Locais armazenamento",
       "cadastros-materiais": "Materiais",
       "cadastros-medicamentos": "Medicamentos",
-      "cadastros-modelos-resultado": "Modelos resultado",
+      "cadastros-modelos-resultado": "Modelos saida",
       "cadastros-procedencias": "Procedências",
       "cadastros-questionarios": "Questionários",
       "cadastros-recipientes": "Recipientes",
@@ -797,11 +797,11 @@
         "nomeClienteEtapas": "Informe o nome do cliente (mínimo 2 caracteres) para avançar.",
         "menuAcoes": "Ações",
         "menuAcoesAria": "Abrir menu de ações do orçamento",
-        "acaoConverter": "Converter (atendimento)",
+        "acaoConverter": "Converter (registro)",
         "acaoMarcarVencido": "Marcar vencido",
         "acaoRejeitar": "Rejeitar",
         "dialogConverterTitulo": "Converter orçamento",
-        "dialogConverterIdAtendimento": "ID do atendimento",
+        "dialogConverterIdAtendimento": "ID do registro",
         "dialogConverterConfirmar": "Converter",
         "dialogVencerTitulo": "Marcar orçamento como vencido",
         "dialogVencerMensagem": "O orçamento passará ao status vencido e não poderá mais ser alterado.",
@@ -853,7 +853,7 @@
       "subtituloEditar": "Atualize a descrição, as permissões por formulário e o menu; tudo é persistido ao salvar.",
       "secaoDadosTitulo": "Dados",
       "secaoDadosDescricao": "Identificação do grupo de usuário (perfil).",
-      "secaoLaboratorioTitulo": "Laboratório",
+      "secaoLaboratorioTitulo": "tenant",
       "secaoLaboratorioDescricao": "Escopo do tenant (`id_tenacidade` da sessão ou do registro). Somente leitura.",
       "secaoPermissoesTitulo": "Permissões por formulário",
       "secaoPermissoesDescricao": "Detalhe `usuario_permissoes`: uma linha por formulário, com flags de acesso. Nada é gravado no servidor até salvar o cadastro.",
@@ -861,8 +861,8 @@
       "secaoAuditoriaDescricao": "Rastreio preenchido pelo sistema.",
       "campoCodigo": "Código",
       "campoDescricao": "Descrição",
-      "campoIdLaboratorio": "Código do laboratório",
-      "campoNomeLaboratorio": "Laboratório",
+      "campoIdLaboratorio": "Código do tenant",
+      "campoNomeLaboratorio": "tenant",
       "campoIdUsuarioAuditoria": "ID usuário auditoria",
       "campoIpAuditoria": "IP auditoria",
       "campoAplicacaoAuditoria": "Aplicação auditoria"
@@ -870,7 +870,7 @@
     "grupoPerfilForm": {
       "sim": "Sim",
       "nao": "Não",
-      "tabelaVazia": "Nenhum formulário com permissão explícita. Pesquise acima para incluir (como na seção Convênio do atendimento). Salve o cadastro para gravar.",
+      "tabelaVazia": "Nenhum formulário com permissão explícita. Pesquise acima para incluir (como na seção categoria do registro). Salve o cadastro para gravar.",
       "colunaSiglaFormulario": "Sigla",
       "colunaCodigoFormulario": "Código",
       "editarLinha": "Editar permissão",
@@ -1052,7 +1052,7 @@
             "contatoMeiosTitulo": "Telefones e e-mail",
             "contatoSenhaTitulo": "Senha de internet",
             "contatoSenhaDescricao": "Acesso opcional informado ao paciente; não reutilize a senha de login da unidade.",
-            "observacaoTitulo": "Observações para resultado"
+            "observacaoTitulo": "Observações para saida"
           },
           "secoes": {
             "identificacao": {
@@ -1081,7 +1081,7 @@
             },
             "complementar": {
               "titulo": "Dados complementares",
-              "descricao": "Raça, CBO, etnia, senha de internet e observações para resultado."
+              "descricao": "Raça, CBO, etnia, senha de internet e observações para saida."
             },
             "auditoria": {
               "titulo": "Auditoria",
@@ -1129,7 +1129,7 @@
             "telefone": "Telefone",
             "celular": "Celular",
             "senhaInternet": "Senha internet",
-            "observacaoResultado": "Obs. para resultado",
+            "observacaoResultado": "Obs. para saida",
             "dataInclusao": "Data de inclusão",
             "idUsuarioAuditoria": "Usuário (auditoria)",
             "enderecoIpAuditoria": "IP (auditoria)",
@@ -1182,22 +1182,23 @@
         }
       },
       "medicos": {
-        "tituloPagina": "Médicos",
+        "tituloPagina": "profissionals",
         "placeholderBusca": "Buscar por ID, nome, CPF, e-mail, telefone ou status…",
-        "selecionarRegistro": "Selecionar médico",
-        "editarCadastro": "Abrir formulário de cadastro do médico",
+        "selecionarRegistro": "Selecionar profissional",
+        "editarCadastro": "Abrir formulário de cadastro do profissional",
         "colunas": {
+          "id": "ID",
           "nome": "Nome",
-          "cpf": "CPF",
+          "documento": "CPF",
           "email": "E-mail",
           "telefone": "Telefone",
-          "ativo": "Situação"
+          "status": "Status"
         },
         "formulario": {
-          "novoTitulo": "Novo médico",
-          "editarTitulo": "Editar médico",
-          "subtituloNovo": "Preencha os dados do profissional (medico).",
-          "subtituloEditar": "Atualize as informações do médico.",
+          "novoTitulo": "Novo profissional",
+          "editarTitulo": "Editar profissional",
+          "subtituloNovo": "Preencha os dados do profissional (profissional).",
+          "subtituloEditar": "Atualize as informações do profissional.",
           "secoes": {
             "identificacao": {
               "titulo": "Identificação",
@@ -1213,7 +1214,7 @@
             },
             "complementar": {
               "titulo": "Complementares",
-              "descricao": "Convênios suspensos e situação ativo/inativo."
+              "descricao": "categorias suspensos e situação ativo/inativo."
             },
             "extensaoMetadados": {
               "titulo": "Campos adicionais (metadados)",
@@ -1238,13 +1239,13 @@
             "numeroConselho": "Número no conselho (CRM)",
             "numeroCns": "CNS",
             "registroUnimed": "Registro Unimed",
-            "idCredencialConvenio": "ID credencial convênio",
+            "idCredencialConvenio": "ID credencial categoria",
             "email": "E-mail",
             "telefone": "Telefone",
             "celular": "Celular",
             "senhaInternet": "Senha internet",
-            "listaConvenioSuspenso": "Lista convênio suspenso",
-            "ativo": "Médico ativo",
+            "listaConvenioSuspenso": "Lista categoria suspenso",
+            "ativo": "profissional ativo",
             "idTenacidade": "ID tenacidade",
             "idUsuarioAuditoria": "Usuário (auditoria)",
             "enderecoIpAuditoria": "IP (auditoria)",
@@ -1265,30 +1266,22 @@
             "salvando": "Salvando…",
             "excluir": "Excluir",
             "excluindo": "Excluindo…",
-            "confirmarExclusao": "Excluir permanentemente o médico \"{nome}\"? Esta ação não pode ser desfeita.",
+            "confirmarExclusao": "Excluir permanentemente o profissional \"{nome}\"? Esta ação não pode ser desfeita.",
             "erroNome": "Informe o nome.",
             "erroCpf": "CPF inválido. Informe 11 dígitos corretos ou deixe em branco.",
             "erroEmail": "E-mail inválido. Corrija o endereço ou deixe em branco (máx. 50 caracteres).",
             "erroSalvar": "Não foi possível salvar. Tente novamente.",
-            "erroCarregar": "Não foi possível carregar o médico.",
+            "erroCarregar": "Não foi possível carregar o profissional.",
             "erroExcluir": "Não foi possível excluir. Verifique vínculos no banco ou tente novamente.",
             "erroCampoObrigatorio": "Preenchimento obrigatório.",
             "erroValidacao": "Corrija os campos destacados.",
             "erroValidacaoCampo": "Valor inválido para o campo.",
-            "erroMetadadosIndisponivel": "Configuração do formulário (metadados) não encontrada. Execute o script motor_metadados_upgrade_cliente_medico_form.sql no banco.",
+            "erroMetadadosIndisponivel": "Configuração do formulário (metadados) não encontrada. Execute o script motor_metadados_upgrade_cliente_profissional_form.sql no banco.",
             "carregandoMetadados": "Carregando configuração do formulário…",
             "carregandoMetadadosSplash": "Carregando…",
             "carregandoMetadadosDetalhe": "Carregando configuração do formulário. Aguarde."
           },
           "placeholder": ""
-        },
-        "colunas": {
-          "id": "ID",
-          "nome": "Nome",
-          "documento": "CPF",
-          "email": "E-mail",
-          "telefone": "Telefone",
-          "status": "Status"
         }
       },
       "cbo": {
@@ -1513,7 +1506,7 @@
         }
       },
       "convenios": {
-        "tituloPagina": "Convênios",
+        "tituloPagina": "categorias",
         "placeholderBusca": "Buscar por nome fantasia, sigla, CNPJ ou cidade…",
         "colunas": {
           "nomeFantasia": "Nome fantasia",
@@ -1521,18 +1514,18 @@
           "cnpj": "CNPJ",
           "cidade": "Cidade"
         },
-        "selecionarRegistro": "Selecionar convênio",
-        "editarCadastro": "Abrir formulário de cadastro do convênio"
+        "selecionarRegistro": "Selecionar categoria",
+        "editarCadastro": "Abrir formulário de cadastro do categoria"
       },
       "faturas": {
         "tituloPagina": "Faturas",
         "selecionarRegistro": "Selecionar fatura",
-        "placeholderBusca": "Buscar por ID da fatura, lote, nome ou sigla do convênio…",
+        "placeholderBusca": "Buscar por ID da fatura, lote, nome ou sigla do categoria…",
         "colunas": {
           "codigo": "Código",
           "lote": "Lote",
-          "convenio": "Convênio",
-          "nomeConvenio": "Nome convênio",
+          "convenio": "categoria",
+          "nomeConvenio": "Nome categoria",
           "inicio": "Início",
           "fim": "Fim",
           "status": "Status",
@@ -1542,10 +1535,10 @@
         },
         "editarCadastro": "Abrir detalhe da fatura",
         "formulario": {
-          "validarConvenio": "Selecione o convênio.",
+          "validarConvenio": "Selecione o categoria.",
           "validarDataInicio": "Informe a data de início do período.",
           "validarDataFim": "Informe a data de fim do período.",
-          "selecioneConvenio": "Selecione o convênio…",
+          "selecioneConvenio": "Selecione o categoria…",
           "opcaoNao": "Não",
           "opcaoSim": "Sim",
           "totalizarReal": "Real (R$)",
@@ -1554,17 +1547,17 @@
           "lookupCarregando": "Carregando opções…",
           "lookupVazio": "Nenhum registro no catálogo.",
           "lookupFiltroVazio": "Digite para filtrar.",
-          "filtroListaConvenio": "Convênios adicionais (além do principal)",
-          "filtroListaUnidade": "Unidades de atendimento (vazio = todas permitidas)",
+          "filtroListaConvenio": "categorias adicionais (além do principal)",
+          "filtroListaUnidade": "Unidades de registro (vazio = todas permitidas)",
           "filtroListaProcedencia": "Procedências do paciente",
           "filtroListaSetor": "Setores",
-          "filtroListaMedicoLabel": "Médicos (ids separados por vírgula)",
-          "filtroListaPendenciaLabel": "Pendências de resultado (ids separados por vírgula)",
-          "filtroListaSituacaoLabel": "Situações de coleta (ids separados por vírgula)",
+          "filtroListaMedicoLabel": "profissionals (ids separados por vírgula)",
+          "filtroListaPendenciaLabel": "Pendências de saida (ids separados por vírgula)",
+          "filtroListaSituacaoLabel": "Situações de processamento (ids separados por vírgula)",
           "filtroListaIdsPlaceholder": "ex.: 1, 2, 3",
-          "tabelaVaziaAtendimentos": "Nenhum atendimento listado a partir dos itens.",
+          "tabelaVaziaAtendimentos": "Nenhum registro listado a partir dos itens.",
           "tabelaVaziaItens": "Nenhum item gerado. Ajuste filtros e salve, ou clique em Regenerar.",
-          "colAtendimento": "Atendimento",
+          "colAtendimento": "registro",
           "colPaciente": "Paciente",
           "colExame": "Exame / material",
           "colCodFat": "Cód. faturamento",
@@ -1626,7 +1619,7 @@
           "subtituloNovo": "Cadastro da combinação exame + material.",
           "subtituloEditar": "Ações no topo valem para a revisão aberta; troque de revisão pelas abas abaixo do título.",
           "placeholderSelecione": "Selecione…",
-          "placeholderPendenciaOpcional": "Opcional — pendência de resultado",
+          "placeholderPendenciaOpcional": "Opcional — pendência de saida",
           "botaoClonarVersao": "Nova versão (clonar)",
           "tituloConfirmarClonar": "Nova revisão (clonar)?",
           "botaoConfirmarClonar": "Continuar",
@@ -1656,16 +1649,16 @@
               "descricao": "Nomes, critérios de realização e opções de publicação no catálogo."
             },
             "pendencias": {
-              "titulo": "Pendências (resultado)",
-              "descricao": "Transição entre pendências de resultado (opcional)."
+              "titulo": "Pendências (saida)",
+              "descricao": "Transição entre pendências de saida (opcional)."
             },
             "integracaoApoio": {
-              "titulo": "Integração — laboratório de apoio",
-              "descricao": "Default da unidade de apoio (codigo_b2b) usada no atendimento e regras de equivalência."
+              "titulo": "Integração — tenant de apoio",
+              "descricao": "Default da unidade de apoio (codigo_b2b) usada no registro e regras de equivalência."
             },
             "producao": {
-              "titulo": "Produção e calendário",
-              "descricao": "Prazos de entrega e dias de produção do exame."
+              "titulo": "operacao e calendário",
+              "descricao": "Prazos de entrega e dias de operacao do exame."
             },
             "etiquetasVolume": {
               "titulo": "Etiquetas e volume",
@@ -1695,7 +1688,7 @@
             "publicarTitulo": "Publicação",
             "publicarTituloCheckbox": "Publicar",
             "prazosTitulo": "Prazos de entrega",
-            "diasProducaoTitulo": "Dias de produção",
+            "diasProducaoTitulo": "Dias de operacao",
             "diasProducaoTituloCheckbox": "Produzir nos dias",
             "faixaEtariaTituloFlag": "Controle ativo",
             "faixaEtariaTituloCheckbox": "Faixa etária",
@@ -1737,8 +1730,8 @@
             "produzirDomingo": "Domingo",
             "produzirFeriado": "Feriado",
             "qtdEtiqueta": "Qtd. etiquetas",
-            "qtdExameMaterialAtendimento": "Qtd. por atendimento",
-            "qtdMaximaExameMaterialAtendimento": "Qtd. máxima por atendimento",
+            "qtdExameMaterialAtendimento": "Qtd. por registro",
+            "qtdMaximaExameMaterialAtendimento": "Qtd. máxima por registro",
             "volumeExameMaterial": "Volume (ml)",
             "qtdDiasSoroteca": "Dias em soroteca",
             "qtdDiasSolicitar": "Dias para solicitar",
@@ -1752,7 +1745,7 @@
             "exibirCondicoesInicias": "Exibir condições iniciais",
             "imprimirPaginaSeparada": "Imprimir em página separada",
             "exibirAlertaObservacaoMaterial": "Exibir alerta de observação do material",
-            "pendenciaInformarResultado": "Pendência de informar resultado",
+            "pendenciaInformarResultado": "Pendência de informar saida",
             "condicoesInicias": "Condições iniciais",
             "observacoesGerais": "Observações gerais",
             "idTenacidade": "Tenacidade (ID)",
@@ -1785,13 +1778,13 @@
       },
       "implantacaoTenacidade": {
         "tituloPagina": "Tenacidade (implantação)",
-        "nomeTabelaListagem": "Laboratórios",
+        "nomeTabelaListagem": "tenants",
         "subtituloListagem": "Tenacidade (`tenacidade`) com domínio e vigência na configuração (`tenacidade_configuracao`).",
-        "erroCarregarListagem": "Não foi possível carregar a lista de laboratórios. Verifique a sessão e tente novamente.",
+        "erroCarregarListagem": "Não foi possível carregar a lista de tenants. Verifique a sessão e tente novamente.",
         "placeholderBusca": "Buscar por razão social, nome fantasia ou domínio…",
-        "editarCadastro": "Abrir formulário de cadastro do laboratório",
-        "ariaAcaoLinha": "Editar laboratório (tenacidade)",
-        "avisoMutacaoImplantacaoForaLigaBr": "Criação e alteração de laboratórios na implantação só são permitidas com a sessão aberta no tenant cujo domínio é liga.br. Entre nesse ambiente e tente novamente.",
+        "editarCadastro": "Abrir formulário de cadastro do tenant",
+        "ariaAcaoLinha": "Editar tenant (tenacidade)",
+        "avisoMutacaoImplantacaoForaLigaBr": "Criação e alteração de tenants na implantação só são permitidas com a sessão aberta no tenant cujo domínio é liga.br. Entre nesse ambiente e tente novamente.",
         "colunas": {
           "id": "ID",
           "razao_social": "Razão social",
@@ -1801,41 +1794,41 @@
           "data_expiracao": "Expiração"
         },
         "formulario": {
-          "tituloNovo": "Novo laboratório",
-          "tituloEditar": "Editar laboratório",
+          "tituloNovo": "Novo tenant",
+          "tituloEditar": "Editar tenant",
           "subtituloNovo": "Cadastro global na implantação (`tenacidade`).",
-          "subtituloEditar": "Altere os dados do laboratório.",
+          "subtituloEditar": "Altere os dados do tenant.",
           "subtituloNovoUnificado": "Mestre `tenacidade` e detalhe `tenacidade_configuracao`; um único salvamento.",
-          "subtituloEditarUnificado": "Altere o registro do laboratório e a configuração; um único salvamento.",
-          "erroDominioObrigatorio": "Informe o domínio do laboratório.",
+          "subtituloEditarUnificado": "Altere o registro do tenant e a configuração; um único salvamento.",
+          "erroDominioObrigatorio": "Informe o domínio do tenant.",
           "erroDataExpiracaoObrigatoria": "Informe a data de expiração inicial.",
           "erroQuantidadeLicencaObrigatoria": "Informe a quantidade de licenças (mínimo 1).",
           "erroUltimoAnoAnoAtualObrigatorio": "O último ano deve ser o ano calendário atual (campo definido pelo sistema, somente leitura).",
-          "erroUltimoAtendimentoInicialObrigatorio": "O último atendimento inicial deve ser 1 (campo definido pelo sistema, somente leitura).",
+          "erroUltimoAtendimentoInicialObrigatorio": "O último registro inicial deve ser 1 (campo definido pelo sistema, somente leitura).",
           "tituloComplemento": "Cód. {id} · {nome}",
           "secIdentificacaoTitulo": "Identificação",
           "secIdentificacaoDescricao": "Razão social, nome fantasia e domínio do tenant.",
-          "secIdentificacaoDescricaoUnificado": "Dados cadastrais do laboratório e códigos de vínculo entre tenacidade e configuração.",
-          "secIdentificacaoDescricaoMestre": "Registro do laboratório em `tenacidade` (status e vínculos de sistema).",
+          "secIdentificacaoDescricaoUnificado": "Dados cadastrais do tenant e códigos de vínculo entre tenacidade e configuração.",
+          "secIdentificacaoDescricaoMestre": "Registro do tenant em `tenacidade` (status e vínculos de sistema).",
           "secCaracteristicasTitulo": "Características",
           "secCaracteristicasDescricao": "Identidade comercial e domínio em `tenacidade_configuracao` (obrigatórios na implantação).",
-          "grupoTenacidadeMestreTitulo": "Laboratório (tenacidade)",
+          "grupoTenacidadeMestreTitulo": "tenant (tenacidade)",
           "grupoIdentidadeConfigTitulo": "Identidade e acesso externo",
           "secSessaoLicencaTitulo": "Sessão e licenças",
           "secSessaoLicencaDescricao": "Timeout de sessão e limite de usuários simultâneos (`tenacidade_configuracao`).",
-          "grupoDadosLaboratorioTitulo": "Dados do laboratório",
+          "grupoDadosLaboratorioTitulo": "Dados do tenant",
           "grupoRegistrosSistemaTitulo": "Registros no sistema",
           "secAcessoTitulo": "Acesso e segurança",
-          "secAcessoDescricao": "Chave de acesso e segredo JWT por laboratório.",
+          "secAcessoDescricao": "Chave de acesso e segredo JWT por tenant.",
           "secIndicadoresTitulo": "Indicadores e vigência",
           "secIndicadoresDescricao": "Expiração, contadores operacionais e situação ativa.",
           "secIndicadoresDescricaoDetalhe": "Vigência da licença e contadores em `tenacidade_configuracao`.",
           "tituloGrupoSn": "Situação",
           "secAuditoriaTitulo": "Auditoria",
           "secAuditoriaDescricao": "Rastreio preenchido pelo sistema (visível para suporte e implantação).",
-          "secAuditoriaDescricaoUnificado": "Rastreio preenchido pelo sistema para o cadastro do laboratório e para a configuração (visível para suporte e implantação).",
-          "grupoAuditoriaTenacidadeTitulo": "Cadastro do laboratório (tenacidade)",
-          "grupoAuditoriaConfiguracaoTitulo": "Configuração do laboratório",
+          "secAuditoriaDescricaoUnificado": "Rastreio preenchido pelo sistema para o cadastro do tenant e para a configuração (visível para suporte e implantação).",
+          "grupoAuditoriaTenacidadeTitulo": "Cadastro do tenant (tenacidade)",
+          "grupoAuditoriaConfiguracaoTitulo": "Configuração do tenant",
           "campoId": "ID",
           "campoRazaoSocial": "Razão social",
           "campoNomeFantasia": "Nome fantasia",
@@ -1845,7 +1838,7 @@
           "campoDataExpiracao": "Data de expiração",
           "placeholderDataIso": "AAAA-MM-DD",
           "campoUltimoAno": "Último ano",
-          "campoUltimoAtendimento": "Último atendimento",
+          "campoUltimoAtendimento": "Último registro",
           "campoAtivo": "Ativo",
           "campoIdUsuarioAuditoria": "Usuário (ID)",
           "campoUsuarioAuditoria": "Usuário",
@@ -1891,7 +1884,7 @@
         }
       },
       "pendenciasResultado": {
-        "tituloPagina": "Pendências de resultado",
+        "tituloPagina": "Pendências de saida",
         "placeholderBusca": "Buscar por nome, sigla ou código…",
         "editarCadastro": "Abrir formulário de cadastro",
         "colunas": {
@@ -1965,7 +1958,7 @@
         }
       },
       "unidadeAtendimento": {
-        "tituloPagina": "Unidades de atendimento",
+        "tituloPagina": "Unidades de registro",
         "placeholderBusca": "Buscar por nome, cidade, CNPJ ou ID…",
         "editarCadastro": "Editar cadastro",
         "colunas": {
@@ -1977,9 +1970,9 @@
           "ativo": "Ativo"
         },
         "formulario": {
-          "novoTitulo": "Nova unidade de atendimento",
-          "editarTitulo": "Editar unidade de atendimento",
-          "subtituloNovo": "Cadastro de unidade (laboratório / ponto de atendimento).",
+          "novoTitulo": "Nova unidade de registro",
+          "editarTitulo": "Editar unidade de registro",
+          "subtituloNovo": "Cadastro de unidade (tenant / ponto de registro).",
           "subtituloEditar": "Atualize os dados da unidade.",
           "botaoCancelar": "Cancelar",
           "botaoSalvar": "Salvar",
@@ -2069,7 +2062,7 @@
             "amostraExternaFim": "Amostra externa fim",
             "amostraExternaAtual": "Amostra externa atual",
             "listaProcedenciaPermitida": "Lista procedência permitida",
-            "listaConvenioPermitido": "Lista convênio permitido",
+            "listaConvenioPermitido": "Lista categoria permitido",
             "nomeArquivoLogotipo": "Nome arquivo logotipo",
             "nomeReferenciaLogotipo": "Nome referência logotipo",
             "idUsuarioAuditoria": "Usuário (auditoria)",
@@ -2079,9 +2072,9 @@
           "regrasAgrupamento": {
             "opcao1": "Material + Recipiente",
             "opcao2": "Setor + Material + Recipiente",
-            "opcao3": "Laboratório + Material + Recipiente",
-            "opcao4": "Laboratório + Setor + Material + Recipiente",
-            "opcao5": "Laboratório + Material + Recipiente + Volume"
+            "opcao3": "tenant + Material + Recipiente",
+            "opcao4": "tenant + Setor + Material + Recipiente",
+            "opcao5": "tenant + Material + Recipiente + Volume"
           },
           "tipoUnidade": {
             "matriz": "Matriz",
@@ -2095,7 +2088,7 @@
           "listas": {
             "nenhumSelecionado": "Nenhum item selecionado.",
             "modalProcedenciaTitulo": "Selecionar procedências permitidas",
-            "modalConvenioTitulo": "Selecionar convênios permitidos",
+            "modalConvenioTitulo": "Selecionar categorias permitidos",
             "naoSelecionados": "Não selecionados",
             "selecionados": "Selecionados",
             "filtroPlaceholder": "Filtrar itens..."
@@ -2167,46 +2160,46 @@
         }
       },
       "tenacidadeConfiguracao": {
-        "tituloPagina": "Configuração do laboratório",
+        "tituloPagina": "Configuração do tenant",
         "placeholderBusca": "Buscar pelo diretório de exportação…",
-        "editarCadastro": "Abrir formulário de configuração do laboratório",
+        "editarCadastro": "Abrir formulário de configuração do tenant",
         "colunas": {
           "codigo": "Código",
-          "idTenacidade": "Laboratório",
+          "idTenacidade": "tenant",
           "timeout": "Timeout (min)",
           "licencas": "Licenças",
           "dirExportacao": "Dir. exportação"
         },
         "formulario": {
-          "tituloNovo": "Nova configuração do laboratório",
-          "tituloEditar": "Editar configuração do laboratório",
+          "tituloNovo": "Nova configuração do tenant",
+          "tituloEditar": "Editar configuração do tenant",
           "subtituloNovo": "Parâmetros da infraestrutura por tenant (tenacidade_configuracao).",
           "subtituloEditar": "Altere os parâmetros da configuração.",
-          "tituloComplemento": "Cód. {id} · {laboratorio}",
+          "tituloComplemento": "Cód. {id} · {tenant}",
           "secVinculoTitulo": "Identificação",
-          "secVinculoDescricao": "Laboratório vinculado (definido pela sessão).",
+          "secVinculoDescricao": "tenant vinculado (definido pela sessão).",
           "secCfgVinculoImplantacaoDescricao": "Códigos da configuração vinculados à tenacidade em edição.",
           "campoId": "Código",
-          "campoIdTenacidade": "Laboratório (ID)",
-          "campoTenacidadeLaboratorio": "Laboratório",
+          "campoIdTenacidade": "tenant (ID)",
+          "campoTenacidadeLaboratorio": "tenant",
           "tenacidadeCarregandoRotulo": "Carregando…",
-          "tenacidadeSomenteLeituraDica": "Somente leitura: o laboratório vem da sessão e não pode ser alterado nesta tela.",
+          "tenacidadeSomenteLeituraDica": "Somente leitura: o tenant vem da sessão e não pode ser alterado nesta tela.",
           "secInterfaceamentoTitulo": "Interfaceamento e liberação",
-          "secInterfaceamentoDescricao": "Comportamento de interface, numeração e liberação de resultados.",
+          "secInterfaceamentoDescricao": "Comportamento de interface, numeração e liberação de saidas.",
           "tituloGrupoCheckboxInterfaceamento": "Opções de interface e liberação",
           "campoSomenteInterfaceamento": "Somente interfaceamento",
           "campoUtilizarNumeracaoOrigemLiberacao": "Utilizar numeração de origem na liberação",
           "campoUtilizarDeltacheckLiberacao": "Utilizar deltacheck na liberação",
-          "campoLiberarResultadoInterfaceadoBaixado": "Liberar resultado interfaceado baixado",
-          "campoLiberarResultadoInformado": "Liberar resultado informado",
-          "secOperacaoTitulo": "Operação do laboratório",
+          "campoLiberarResultadoInterfaceadoBaixado": "Liberar saida interfaceado baixado",
+          "campoLiberarResultadoInformado": "Liberar saida informado",
+          "secOperacaoTitulo": "Operação do tenant",
           "secOperacaoDescricao": "Indicadores de domínio veterinário e captura de versão.",
           "tituloGrupoCheckboxOperacao": "Parâmetros operacionais",
           "campoInfotimeVet": "Infotime veterinário",
           "campoCapturarVersaoExameApoio": "Capturar versão do exame (apoio)",
           "secCaminhosTitulo": "Diretórios e mensagens",
           "secCaminhosDescricao": "Caminhos de exportação, triagem e textos exibidos ao usuário.",
-          "campoDiretorioExportacaoResultado": "Diretório de exportação de resultado",
+          "campoDiretorioExportacaoResultado": "Diretório de exportação de saida",
           "campoDiretorioTriagemAmostra": "Diretório de triagem de amostra",
           "campoMensagemExameRepetido": "Mensagem de exame repetido",
           "campoListaSetorLiberaInformado": "Lista de setores que liberam informado",
@@ -2225,10 +2218,10 @@
         }
       },
       "labsApoio": {
-        "tituloPagina": "Laboratórios de apoio",
+        "tituloPagina": "tenants de apoio",
         "placeholderBusca": "Buscar por código, nome ou sigla…",
-        "editarCadastro": "Abrir formulário de cadastro do laboratório de apoio",
-        "visualizarCadastro": "Abrir detalhe do laboratório de apoio (somente leitura)",
+        "editarCadastro": "Abrir formulário de cadastro do tenant de apoio",
+        "visualizarCadastro": "Abrir detalhe do tenant de apoio (somente leitura)",
         "colunas": {
           "id": "Código",
           "nome": "Nome",
@@ -2236,14 +2229,14 @@
           "ativo": "Ativo"
         },
         "formulario": {
-          "tituloNovo": "Novo laboratório de apoio",
-          "tituloEditar": "Laboratório de apoio",
-          "subtituloNovo": "Cadastro global do laboratório parceiro (lab_apoio).",
+          "tituloNovo": "Novo tenant de apoio",
+          "tituloEditar": "tenant de apoio",
+          "subtituloNovo": "Cadastro global do tenant parceiro (lab_apoio).",
           "subtituloEditar": "Atualize nome, sigla e situação do registro.",
           "secoes": {
             "identificacao": {
               "titulo": "Identificação",
-              "descricao": "Nome, sigla e situação ativa do laboratório de apoio."
+              "descricao": "Nome, sigla e situação ativa do tenant de apoio."
             },
             "auditoria": {
               "titulo": "Auditoria",
@@ -2266,8 +2259,8 @@
         }
       },
       "labsApoioWs": {
-        "tituloPagina": "Laboratórios de apoio WS",
-        "placeholderBusca": "Buscar por nome, sigla ou código do laboratório…",
+        "tituloPagina": "tenants de apoio WS",
+        "placeholderBusca": "Buscar por nome, sigla ou código do tenant…",
         "configurarUnidades": "Abrir configuração por unidade (webservice)",
         "colunas": {
           "idLabApoio": "Código",
@@ -2277,12 +2270,12 @@
         }
       },
       "labApoioUnidade": {
-        "tituloPagina": "Laboratório de apoio por unidade",
-        "placeholderBusca": "Buscar por unidade, laboratório ou código B2B…",
+        "tituloPagina": "tenant de apoio por unidade",
+        "placeholderBusca": "Buscar por unidade, tenant ou código B2B…",
         "editarCadastro": "Abrir configuração de integração por unidade",
         "erros": {
-          "labObrigatorio": "Selecione o laboratório de apoio.",
-          "unidadeObrigatoria": "Selecione a unidade de atendimento.",
+          "labObrigatorio": "Selecione o tenant de apoio.",
+          "unidadeObrigatoria": "Selecione a unidade de registro.",
           "codigoB2bObrigatorio": "Informe o código B2B.",
           "tipoConferenciaInvalido": "Tipo de conferência da amostra inválido.",
           "saoMarcosLaudoPedido": "Para apoio São Marcos não é permitido laudo por pedido (valor 0).",
@@ -2290,9 +2283,9 @@
           "proxyEnderecoObrigatorio": "Com proxy ativo, informe o endereço do proxy."
         },
         "integracao": {
-          "voltarLabsApoio": "« Voltar para laboratórios de apoio",
+          "voltarLabsApoio": "« Voltar para tenants de apoio",
           "titulo": "Integração por unidade (B2B)",
-          "subtitulo": "Laboratório de apoio n.º {id}.",
+          "subtitulo": "tenant de apoio n.º {id}.",
           "abaNova": "Nova unidade"
         },
         "formulario": {
@@ -2301,10 +2294,10 @@
           "subtituloNovo": "Integração B2B (lab_apoio_unidade).",
           "subtituloEditar": "Ajuste parâmetros de webservice e envio.",
           "secIdentTitulo": "Identificação",
-          "secIdentDescricao": "Laboratório, unidade e parâmetros principais.",
+          "secIdentDescricao": "tenant, unidade e parâmetros principais.",
           "fId": "Código",
-          "fIdLabApoio": "Laboratório de apoio",
-          "fIdUnidade": "Unidade de atendimento",
+          "fIdLabApoio": "tenant de apoio",
+          "fIdUnidade": "Unidade de registro",
           "fCodigoB2b": "Código B2B",
           "fTipoConferenciaAmostra": "Conferência da amostra",
           "optConferenciaIndividual": "Individual",
@@ -2343,8 +2336,8 @@
           "fSenhaProxy": "Senha proxy",
           "secEnvioTitulo": "Opções de envio",
           "secEnvioDescricao": "Flags adicionais de integração.",
-          "fEnviarExameSituacaoColeta": "Enviar situação de coleta do exame",
-          "fEnviarMedico": "Enviar médico",
+          "fEnviarExameSituacaoColeta": "Enviar situação de processamento do exame",
+          "fEnviarMedico": "Enviar profissional",
           "secAuditoriaTitulo": "Auditoria",
           "secAuditoriaDescricao": "Rastreio preenchido pelo sistema.",
           "fIdTenacidade": "Tenacidade",
@@ -2374,7 +2367,7 @@
         "editarGradeCabecalho": "Editar grade",
         "editarGradeSubtitulo": "Editar grade",
         "selecioneGrade": "Escolha uma grade para ver o mapa de poços.",
-        "nenhumaGrade": "Nenhuma grade de soroteca encontrada para este laboratório.",
+        "nenhumaGrade": "Nenhuma grade de soroteca encontrada para este tenant.",
         "verMapa": "Abrir mapa",
         "voltarLista": "Voltar à lista de grades",
         "carregando": "Carregando…",
@@ -2396,7 +2389,7 @@
         "estadoRejeitada": "Rejeitada",
         "estadoConflito": "Conflito (várias amostras no mesmo poço)",
         "codigoAmostra": "Cód. amostra",
-        "idAtendimento": "Atendimento",
+        "idAtendimento": "registro",
         "armazenarNestePocoAria": "Armazenar amostra neste poço",
         "focoPoçoAria": "Definir foco para ver o resumo deste poço",
         "cliquePoçoOperacoes": "Passe o cursor sobre o poço para ver detalhes; clique para armazenar, retirar ou ver opções.",
@@ -2404,7 +2397,7 @@
         "dialogPocoFechar": "Fechar",
         "pocoInativoAviso": "Este poço está inativo. Não é possível armazenar aqui.",
         "detalheAmostrasTitulo": "Amostras neste poço",
-        "idAmostraLabel": "ID da amostra (atendimento)",
+        "idAmostraLabel": "ID da amostra (registro)",
         "idAmostraPlaceholder": "Informe o identificador numérico…",
         "validacaoIdAmostra": "Informe o ID da amostra.",
         "botaoArmazenar": "Armazenar",
@@ -2412,7 +2405,7 @@
         "confirmarRemover": "Retirar esta amostra da posição nesta caixa?",
         "operacaoEmDesenvolvimento": "Previsto no manual; ainda sem integração nesta tela.",
         "botaoDescartar": "Descartar",
-        "botaoRepetir": "Repetir (recoleta)",
+        "botaoRepetir": "Repetir (reprocessamento)",
         "erroOperacao": "Não foi possível concluir a operação."
       },
       "sorotecaCadastro": {
@@ -2581,14 +2574,14 @@
         "formulario": {
           "tituloNovo": "Nova grade",
           "tituloEditar": "Editar grade",
-          "subtituloNovo": "Informe os dados da grade e, após salvar, use o mapa de poços conforme o fluxo do laboratório.",
+          "subtituloNovo": "Informe os dados da grade e, após salvar, use o mapa de poços conforme o fluxo do tenant.",
           "subtituloEditar": "Editar grade",
           "secIdentificacaoDescricao": "Dados cadastrais, dimensões da grade e parâmetros operacionais.",
           "secGradeMapaTitulo": "Grade",
           "secGradeMapaDescricao": "Mapa da caixa e resumo do poço em foco.",
           "dialogArmazenarTitulo": "Armazenar amostra no poço",
           "dialogArmazenarPoco": "Poço",
-          "dialogArmazenarIdAmostra": "ID da amostra (atendimento)",
+          "dialogArmazenarIdAmostra": "ID da amostra (registro)",
           "dialogArmazenarConfirmar": "Armazenar",
           "dialogArmazenarCancelar": "Cancelar",
           "dialogArmazenarPlaceholderId": "Informe o ID…",
@@ -2655,7 +2648,7 @@
           "armazenarNestePoco": "Armazenar neste poço",
           "armazenagemExpressa": "Armazenagem expressa",
           "dialogExpressoTitulo": "Armazenagem expressa",
-          "dialogExpressoAmostra": "Amostra (ID atendimento)",
+          "dialogExpressoAmostra": "Amostra (ID registro)",
           "dialogExpressoPlaceholder": "Bipe ou informe o ID e pressione Enter…",
           "dialogExpressoStatus": "Status da operação",
           "expressoGradeCheia": "Não há poços livres nesta grade.",
@@ -2761,9 +2754,9 @@
         }
       },
       "motivosRecoleta": {
-        "tituloPagina": "Motivos de recoleta",
+        "tituloPagina": "Motivos de reprocessamento",
         "placeholderBusca": "Buscar por descrição, migração, código externo ou ID…",
-        "editarCadastro": "Abrir formulário de cadastro do motivo de recoleta",
+        "editarCadastro": "Abrir formulário de cadastro do motivo de reprocessamento",
         "colunas": {
           "codigoMigracao": "Código migração",
           "descricao": "Descrição",
@@ -2819,9 +2812,9 @@
         }
       },
       "tiposDestinoResultado": {
-        "tituloPagina": "Tipos de destino de resultado",
+        "tituloPagina": "Tipos de destino de saida",
         "placeholderBusca": "Buscar por descrição ou código…",
-        "editarCadastro": "Abrir formulário de cadastro do tipo de destino de resultado",
+        "editarCadastro": "Abrir formulário de cadastro do tipo de destino de saida",
         "colunas": {
           "descricao": "Descrição"
         }
@@ -2835,9 +2828,9 @@
         }
       },
       "situacoesColeta": {
-        "tituloPagina": "Situações de coleta",
+        "tituloPagina": "Situações de processamento",
         "placeholderBusca": "Buscar por sigla ou nome…",
-        "editarCadastro": "Abrir formulário de cadastro da situação de coleta",
+        "editarCadastro": "Abrir formulário de cadastro da situação de processamento",
         "colunas": {
           "sigla": "Sigla",
           "nome": "Nome"
@@ -2857,7 +2850,7 @@
         "formulario": {
           "tituloNovo": "Nova definição de mapa",
           "tituloEditar": "Definição de mapa",
-          "subtituloNovo": "Defina nome, filtros e parâmetros da worklist de produção.",
+          "subtituloNovo": "Defina nome, filtros e parâmetros da worklist de operacao.",
           "subtituloEditar": "Ajuste parâmetros e listas de critério.",
           "secIdent": "Identificação",
           "secIdentDesc": "Nome, situação e ordem do registro.",
@@ -2884,9 +2877,9 @@
           "tipoExport3": "Sérgio Franco",
           "tipoExport4": "Diagnósticos Brasil",
           "tipoExport6": "CSV",
-          "ordemC": "N.º do atendimento",
+          "ordemC": "N.º do registro",
           "ordemN": "Nome do cliente",
-          "ordemR": "Data/hora do resultado",
+          "ordemR": "Data/hora do saida",
           "ordemE": "Exame/material",
           "ordemA": "Amostras",
           "ordemU": "Número origem",
@@ -2898,14 +2891,14 @@
           "secCritUnidades": "Unidades",
           "secCritUnidadesDesc": "Lista vazia = sem filtro. Com itens, restringe à unidade.",
           "fListaIdUnidade": "Unidades",
-          "secCritConvenios": "Convênios",
-          "secCritConveniosDesc": "Lista vazia = sem filtro. Com itens, restringe ao convênio.",
-          "fListaIdConvenio": "Convênios",
-          "secCritLabs": "Laboratórios",
-          "secCritLabsDesc": "Lista vazia = sem filtro. Com itens, restringe ao laboratório de apoio.",
-          "fListaIdLabApoio": "Laboratórios de Apoio",
+          "secCritConvenios": "categorias",
+          "secCritConveniosDesc": "Lista vazia = sem filtro. Com itens, restringe ao categoria.",
+          "fListaIdConvenio": "categorias",
+          "secCritLabs": "tenants",
+          "secCritLabsDesc": "Lista vazia = sem filtro. Com itens, restringe ao tenant de apoio.",
+          "fListaIdLabApoio": "tenants de Apoio",
           "secCritUsuarios": "Usuários",
-          "secCritUsuariosDesc": "Lista vazia = sem filtro. Com itens, restringe ao usuário emissor do atendimento.",
+          "secCritUsuariosDesc": "Lista vazia = sem filtro. Com itens, restringe ao usuário emissor do registro.",
           "fListaIdUsuario": "Usuários",
           "secCritProcedencias": "Procedências",
           "secCritProcedenciasDesc": "Lista vazia = sem filtro. Com itens, restringe à procedência.",
@@ -2915,15 +2908,15 @@
           "lookupAriaSetor": "Seleção de setores para o critério do mapa",
           "critLookupCarregando": "Carregando opções…",
           "critLookupVazio": "Nenhum item disponível.",
-          "critLookupFiltroVazio": "Nenhum resultado para o filtro.",
+          "critLookupFiltroVazio": "Nenhum saida para o filtro.",
           "lookupPlaceholderCritExames": "Buscar exame/material por código, nome ou id…",
           "lookupAriaCritExames": "Seleção de exames e materiais para o critério do mapa",
           "lookupPlaceholderCritUnidades": "Buscar unidade por sigla, nome ou id…",
           "lookupAriaCritUnidades": "Seleção de unidades para o critério do mapa",
-          "lookupPlaceholderCritConvenios": "Buscar convênio por nome ou id…",
-          "lookupAriaCritConvenios": "Seleção de convênios para o critério do mapa",
-          "lookupPlaceholderCritLabs": "Buscar laboratório de apoio por nome ou id…",
-          "lookupAriaCritLabs": "Seleção de laboratórios de apoio para o critério do mapa",
+          "lookupPlaceholderCritConvenios": "Buscar categoria por nome ou id…",
+          "lookupAriaCritConvenios": "Seleção de categorias para o critério do mapa",
+          "lookupPlaceholderCritLabs": "Buscar tenant de apoio por nome ou id…",
+          "lookupAriaCritLabs": "Seleção de tenants de apoio para o critério do mapa",
           "lookupPlaceholderCritUsuarios": "Buscar usuário por nome, login, e-mail ou id…",
           "lookupAriaCritUsuarios": "Seleção de usuários para o critério do mapa",
           "lookupPlaceholderCritProcedencias": "Buscar procedência por descrição, sigla ou id…",
@@ -2937,10 +2930,10 @@
         }
       },
       "mapaProducao": {
-        "tituloPagina": "Mapas de produção",
+        "tituloPagina": "Mapas de operacao",
         "placeholderBusca": "Buscar por N.º, histórico, definição ou usuário emissor…",
-        "editarCadastro": "Abrir mapa de produção",
-        "visualizarMapa": "Visualizar mapa de produção",
+        "editarCadastro": "Abrir mapa de operacao",
+        "visualizarMapa": "Visualizar mapa de operacao",
         "colunas": {
           "id": "N.º",
           "descricao": "Descrição / histórico",
@@ -2950,9 +2943,9 @@
           "inclusao": "Inclusão"
         },
         "formulario": {
-          "tituloNovo": "Novo mapa de produção",
-          "tituloEditar": "Mapa de produção",
-          "subtituloNovo": "Somente consulta: mapas são gerados pelo atendimento (mapa).",
+          "tituloNovo": "Novo mapa de operacao",
+          "tituloEditar": "Mapa de operacao",
+          "subtituloNovo": "Somente consulta: mapas são gerados pelo registro (mapa).",
           "subtituloEditar": "Somente leitura — dados do mapa e dos exames vinculados.",
           "secIdent": "Identificação",
           "secIdentDesc": "N.º do mapa, definição e situação de impressão.",
@@ -2969,20 +2962,20 @@
           "fUsuarioEmissao": "Usuário (emissão)",
           "fContadorExames": "Qtd. exames (itens no mapa)",
           "fQtdImpressao": "Qtd. impressão",
-          "secExames": "Exames (atendimento)",
+          "secExames": "Exames (registro)",
           "secExamesDesc": "Itens de exame/material vinculados a este mapa.",
-          "fIdsExameMaterial": "IDs exame material do atendimento",
+          "fIdsExameMaterial": "IDs exame material do registro",
           "secHistorico": "Informações / histórico",
           "secHistoricoDesc": "Histórico ou descrição associada ao mapa.",
           "fHistorico": "Histórico / descrição"
         }
       },
       "monitorMapas": {
-        "tituloPagina": "Monitor de mapas de produção",
+        "tituloPagina": "Monitor de mapas de operacao",
         "placeholderBusca": "Buscar…",
-        "editarMapa": "Abrir cadastro do mapa de produção",
+        "editarMapa": "Abrir cadastro do mapa de operacao",
         "abasFiltroAria": "Filtrar mapas abertos ou já impressos (fechados)",
-        "visualizarMapa": "Abrir cadastro do mapa de produção",
+        "visualizarMapa": "Abrir cadastro do mapa de operacao",
         "abaNaoImpressos": "Em aberto",
         "abaImpressos": "Impressos",
         "timer": "Atualização automática em",
@@ -3005,38 +2998,38 @@
         }
       },
       "modelosResultado": {
-        "tituloPagina": "Modelos de resultado",
+        "tituloPagina": "Modelos de saida",
         "placeholderBusca": "Buscar por nome…",
         "editarCadastro": "Abrir formulário de cadastro do modelo"
       },
       "exameMaterialLabApoio": {
-        "tituloPagina": "Exames laboratório de apoio (DE/PARA)",
-        "placeholderBusca": "Buscar por exame/material, laboratório ou código no apoio…",
+        "tituloPagina": "Exames tenant de apoio (DE/PARA)",
+        "placeholderBusca": "Buscar por exame/material, tenant ou código no apoio…",
         "editarCadastro": "Abrir cadastro DE/PARA",
         "colunas": {
           "id": "ID",
           "rotuloExameMaterial": "Exame/material",
-          "rotuloLabApoio": "Laboratório de apoio",
+          "rotuloLabApoio": "tenant de apoio",
           "codigoExameLabApoio": "Código exame (apoio)",
           "codigoMaterialLabApoio": "Código material (apoio)",
           "codigoMaterialReal": "Código material real"
         },
         "erros": {
           "exameMaterialObrigatorio": "Selecione o exame/material.",
-          "labObrigatorio": "Selecione o laboratório de apoio."
+          "labObrigatorio": "Selecione o tenant de apoio."
         },
         "formulario": {
           "tituloNovo": "Novo DE/PARA",
           "tituloEditar": "DE/PARA exame × apoio",
-          "subtituloNovo": "Vincule um exame/material do catálogo ao laboratório de apoio e informe os códigos e flags usados na integração (exame_material_lab_apoio).",
-          "subtituloEditar": "Altere códigos ou flags; a unicidade é por exame/material e laboratório de apoio no tenant.",
+          "subtituloNovo": "Vincule um exame/material do catálogo ao tenant de apoio e informe os códigos e flags usados na integração (exame_material_lab_apoio).",
+          "subtituloEditar": "Altere códigos ou flags; a unicidade é por exame/material e tenant de apoio no tenant.",
           "optSnVazio": "(não definido)",
           "optSnSim": "Sim (S)",
           "optSnNao": "Não (N)",
           "secIdentTitulo": "Identificação",
-          "secIdentDescricao": "Exame/material interno e laboratório de apoio (catálogo).",
+          "secIdentDescricao": "Exame/material interno e tenant de apoio (catálogo).",
           "secDeparaTitulo": "Códigos no apoio",
-          "secDeparaDescricao": "DE/PARA de exame e material conforme exige o webservice do laboratório.",
+          "secDeparaDescricao": "DE/PARA de exame e material conforme exige o webservice do tenant.",
           "secFlagsTitulo": "Envio de dados adicionais",
           "secFlagsDescricao": "Flags S/N para campos opcionais no envio ao apoio.",
           "secComplementoTitulo": "Complemento e referência",
@@ -3045,7 +3038,7 @@
           "secAuditoriaDescricao": "Preenchido pelo sistema.",
           "fId": "ID",
           "fIdExameMaterial": "Exame/material",
-          "fIdLabApoio": "Laboratório de apoio",
+          "fIdLabApoio": "tenant de apoio",
           "fCodigoExameLabApoio": "Código exame no apoio",
           "fCodigoMaterialLabApoio": "Código material no apoio",
           "fCodigoMaterialReal": "Código material real",
@@ -3150,7 +3143,7 @@
             },
             "caracteristicas": {
               "titulo": "Características",
-              "descricao": "Códigos de referência e caminhos de mídia (foto e assinatura) conforme cadastro no laboratório."
+              "descricao": "Códigos de referência e caminhos de mídia (foto e assinatura) conforme cadastro no tenant."
             },
             "documentos": {
               "titulo": "Documentos e perfil",
@@ -3191,7 +3184,7 @@
             "codigosExternosTitulo": "Códigos",
             "referenciasMidiaTitulo": "Arquivos de foto e assinatura",
             "listasPermitidasTitulo": "Listas permitidas",
-            "laudoResultadoTitulo": "Laudo e resultado",
+            "laudoResultadoTitulo": "Laudo e saida",
             "laudoResultadoCheckboxTitulo": "Comportamento no laudo"
           },
           "campos": {
@@ -3219,10 +3212,10 @@
             "celular": "Celular",
             "login": "Login",
             "senhaInclusao": "Senha (só inclusão)",
-            "liberarResultado": "Liberar resultado",
+            "liberarResultado": "Liberar saida",
             "motivoBloqueioImpressao": "Motivo bloqueio impressão",
             "retirarQuarentena": "Retirar quarentena",
-            "listaConvenio": "Lista convênio",
+            "listaConvenio": "Lista categoria",
             "codigoAtivacao": "Código ativação",
             "codigoExterno": "Código externo",
             "codigoMigracao": "Código migração",
@@ -3234,7 +3227,7 @@
             "timeoutSessaoMinutos": "Timeout sessão (minutos)",
             "alertarLaudoParcial": "Alertar laudo parcial",
             "bloquearImpressaoLaudoParcial": "Bloquear impressão laudo parcial",
-            "alterarResultadoLiberado": "Alterar resultado liberado",
+            "alterarResultadoLiberado": "Alterar saida liberado",
             "visualizarLaudoAntesLiberacao": "Visualizar laudo antes da liberação",
             "idUsuarioAuditoria": "Usuário (auditoria)",
             "ipAuditoria": "IP (auditoria)",
@@ -3277,10 +3270,10 @@
           "labelBairro": "Bairro",
           "labelCidade": "Cidade",
           "labelUf": "UF",
-          "labelLiberarResultado": "Liberar resultado",
+          "labelLiberarResultado": "Liberar saida",
           "labelMotivoBloqueioImpressao": "Motivo bloqueio impressão",
           "labelRetirarQuarentena": "Retirar quarentena",
-          "labelListaConvenio": "Lista convênio",
+          "labelListaConvenio": "Lista categoria",
           "labelCodigoAtivacao": "Código ativação",
           "labelSenhaInclusao": "Senha (só inclusão)",
           "politicaSenhaUsuarioDica": "Obrigatória na inclusão: 8 a 100 caracteres, com ao menos uma minúscula, uma maiúscula e um dígito.",
@@ -3325,7 +3318,7 @@
         }
       },
       "atendimentos": {
-        "tituloPagina": "Atendimentos",
+        "tituloPagina": "registros",
         "placeholderBusca": "Buscar por número, nome ou código…",
         "colunas": {
           "numero": "Número",
@@ -3333,17 +3326,17 @@
           "codigoExterno": "Código externo",
           "inclusao": "Inclusão"
         },
-        "editarCadastro": "Abrir formulário do atendimento",
+        "editarCadastro": "Abrir formulário do registro",
         "formulario": {
           "secoesWizard": {
             "identificacaoCliente": {
               "titulo": "Identificação e paciente",
-              "descricao": "Unidade, procedência e dados do paciente neste atendimento."
+              "descricao": "Unidade, procedência e dados do paciente neste registro."
             }
           },
           "wizard": {
-            "variosMedicos": "Selecionar mais de um médico",
-            "variosConvenios": "Selecionar mais de um convênio",
+            "variosMedicos": "Selecionar mais de um profissional",
+            "variosConvenios": "Selecionar mais de um categoria",
             "variosExames": "Selecionar mais de um exame/material",
             "variosPagamentos": "Selecionar mais de um pagamento"
           },
@@ -3354,28 +3347,28 @@
             "identificacaoExterna": "Identificação externa",
             "orcamentoId": "Orçamento (id)",
             "incluidoEm": "Incluído em",
-            "numeroAtendimento": "Número atendimento",
+            "numeroAtendimento": "Número registro",
             "unidade": "Unidade",
             "procedencia": "Procedência",
             "paciente": "Paciente",
             "nomeProtocolo": "Nome",
             "nomeSocialProtocolo": "Nome social",
-            "medicosLookup": "Médico(s)",
-            "conveniosLookup": "Convênio(s)",
+            "medicosLookup": "profissional(s)",
+            "conveniosLookup": "categoria(s)",
             "exameMaterialLookup": "Exame/Material",
-            "pagamentoConvenioLookup": "Convênio para novo pagamento",
+            "pagamentoConvenioLookup": "categoria para novo pagamento",
             "cid": "CID",
-            "atendimentoSigiloso": "Atendimento sigiloso",
-            "atendimentoPreferencial": "Atendimento preferencial",
+            "atendimentoSigiloso": "registro sigiloso",
+            "atendimentoPreferencial": "registro preferencial",
             "tenacidadeId": "Tenacidade (id)",
             "usuarioAuditoriaId": "Usuário auditoria (id)",
             "usuarioInclusaoId": "Usuário inclusão (id)",
             "ipAplicacaoAuditoria": "IP / aplicação (auditoria)"
           },
           "hints": {
-            "auditoriaNovo": "Em novo atendimento, estes campos serão preenchidos após a primeira gravação.",
-            "pagamentoConvenioInclusao": "Somente convênio já vinculado a este atendimento. Inclusão manual aplica a cobrança imediata. Convênio faturado aparece com valores calculados automaticamente a partir dos exames.",
-            "pagamentoConvenioInclusaoAria": "Mais informações: convênio para novo pagamento"
+            "auditoriaNovo": "Em novo registro, estes campos serão preenchidos após a primeira gravação.",
+            "pagamentoConvenioInclusao": "Somente categoria já vinculado a este registro. Inclusão manual aplica a cobrança imediata. categoria faturado aparece com valores calculados automaticamente a partir dos exames.",
+            "pagamentoConvenioInclusaoAria": "Mais informações: categoria para novo pagamento"
           },
           "placeholders": {
             "unidade": "Digite para buscar unidade",
@@ -3384,9 +3377,9 @@
             "medico": "Digite nome, CPF, e-mail ou telefone",
             "convenio": "Digite sigla, nome, CNPJ ou cidade",
             "exameMaterial": "Digite código, nome impressão ou nome técnico",
-            "pagamentoConvenio": "Busque entre os convênios já vinculados a este atendimento",
+            "pagamentoConvenio": "Busque entre os categorias já vinculados a este registro",
             "cid": "Digite para buscar CID",
-            "nomeProtocolo": "Como gravado neste atendimento"
+            "nomeProtocolo": "Como gravado neste registro"
           },
           "resumoCliente": {
             "cpf": "CPF",
@@ -3406,26 +3399,26 @@
           },
           "tabelaPagamento": {
             "acrescimo": "Acréscimo",
-            "restanteConvenio": "Pendente (convênio)",
-            "restanteConvenioTitulo": "Diferença entre o total de exames deste convênio e a soma do valor pago em todas as linhas deste convênio (campo calculado, não persiste no banco)."
+            "restanteConvenio": "Pendente (categoria)",
+            "restanteConvenioTitulo": "Diferença entre o total de exames deste categoria e a soma do valor pago em todas as linhas deste categoria (campo calculado, não persiste no banco)."
           },
           "exameInclusaoRapida": {
-            "modalTitulo": "Convênio e médico do exame",
-            "convenio": "Convênio",
-            "convenioPlaceholder": "Selecione o convênio",
-            "convenioObrigatorio": "Selecione o convênio do exame para confirmar.",
-            "medico": "Médico solicitante",
+            "modalTitulo": "categoria e profissional do exame",
+            "convenio": "categoria",
+            "convenioPlaceholder": "Selecione o categoria",
+            "convenioObrigatorio": "Selecione o categoria do exame para confirmar.",
+            "medico": "profissional solicitante",
             "medicoOpcional": "(Nenhum)",
-            "checkboxMemoria": "Aplicar esta escolha aos próximos exames deste atendimento (não perguntar de novo)",
+            "checkboxMemoria": "Aplicar esta escolha aos próximos exames deste registro (não perguntar de novo)",
             "confirmar": "Confirmar",
             "cancelar": "Cancelar",
-            "cancelado": "O exame não foi incluído: confirme o convênio e o médico no diálogo ou cancele de forma explícita.",
-            "trocaVcPpSemUsuario": "Não foi possível registrar a coleta: sessão sem usuário identificado. Faça login novamente.",
+            "cancelado": "O exame não foi incluído: confirme o categoria e o profissional no diálogo ou cancele de forma explícita.",
+            "trocaVcPpSemUsuario": "Não foi possível registrar a processamento: sessão sem usuário identificado. Faça login novamente.",
             "situacaoPlaceholder": "Situação…"
           },
           "listaVazia": {
-            "medicos": "Nenhum médico incluído.",
-            "convenios": "Nenhum convênio incluído.",
+            "medicos": "Nenhum profissional incluído.",
+            "convenios": "Nenhum categoria incluído.",
             "exames": "Nenhum exame incluído.",
             "pagamentos": "Nenhum pagamento incluído."
           },

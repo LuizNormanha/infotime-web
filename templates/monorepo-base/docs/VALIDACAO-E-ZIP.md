@@ -10,7 +10,7 @@ npm run template:zip
 
 - **Entrada**: monorepo atual (exclusões de artefatos locais — ver `manifest.json`).
 - **Saída**: `templates/monorepo-base/output/liga-prj-template-<timestamp>.zip` (prefixo em `manifest.json` → `nomePacoteZip`).
-- O README da raiz do pacote é substituído pelo conteúdo de `templates/monorepo-base/README-template.md`; o README original é preservado como `README.infolab.orig.md`.
+- O README da raiz do pacote é substituído pelo conteúdo de `templates/monorepo-base/README-template.md`; o README original é preservado como `README.template.orig.md`.
 
 ## Checklist de aceite (após descompactar em pasta limpa)
 

@@ -1,4 +1,4 @@
-/** Exibição de campos de cadastro de cliente (painel resumo) — alinhado ao atendimento. */
+/** Exibição de campos de cadastro de cliente (painel resumo). */
 
 export function strClienteCadastroExibicao(v: unknown): string {
   if (v == null) return "";

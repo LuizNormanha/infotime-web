@@ -642,7 +642,7 @@ export class UsuarioService {
     });
     if (!g) {
       throw new BadRequestException(
-        `Grupo de usuário ${s} não encontrado neste laboratório.`,
+        `Grupo de usuário ${s} não encontrado neste tenant.`,
       );
     }
     return g.id_grupo_usuario;

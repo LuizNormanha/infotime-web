@@ -104,7 +104,7 @@ export function LigaReautenticacaoDialogo({
                     id="reauth-captcha"
                     nomeCampo="captcha"
                     rotulo={captcha.pergunta}
-                    placeholder="Digite o resultado"
+                    placeholder="Digite a resposta"
                     valor={captchaResposta}
                     aoAlterar={aoAlterarCaptchaResposta ?? (() => undefined)}
                     tipo="text"

@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { fetchComTimeout } from "@/lib/fetch-com-timeout";
 import { resolveBackendApiUrl } from "@/lib/resolve-backend-api-url";
 
-/** Catálogo `infolab_formulario` (telas + menu). */
+/** Catálogo de formulários (telas + menu). */
 export async function GET() {
   const cookieStore = await cookies();
   const token = cookieStore.get("access_token")?.value;

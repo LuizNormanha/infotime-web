@@ -78,7 +78,7 @@ export class LayoutService {
 
   /**
    * Usuário do JWT no contexto do tenant.
-   * Inclui `id_tenacidade: null` (técnico global suporte/implantação) além da linha do laboratório.
+   * Inclui `id_tenacidade: null` (técnico global suporte/implantação) além da linha do tenant.
    */
   private async buscarGrupoDoUsuarioLogado(
     ctx: TenantContexto,

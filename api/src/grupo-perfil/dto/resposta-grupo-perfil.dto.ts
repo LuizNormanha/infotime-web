@@ -3,7 +3,7 @@ import type { RespostaListagemUsuarioPermissaoDto } from '../../usuario-permisso
 export class RespostaGrupoPerfilDto {
   id!: string;
   descricao!: string | null;
-  /** FK tenant — somente leitura na UI (escopo do laboratório). */
+  /** FK tenant — somente leitura na UI (escopo do tenant). */
   idTenacidade!: string;
   /** Nome amigável resolvido em `infolab_tenacidade` (fantasia ou razão social). */
   tenacidadeNomeExibicao!: string | null;

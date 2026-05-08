@@ -1,6 +1,6 @@
 // [APRESENTAÇÃO] Tipos do contrato de layout de formulário.
 // Espelham o DTO retornado pela API — sem lógica de negócio.
-// O backend resolve o catálogo `infolab_formulario` + JSON por usuário e devolve
+// O backend resolve o catálogo de formulários + JSON por usuário e devolve
 // este contrato via GET /layout/:tela/formulario-cadastro (envelope interno `{ v, layout }`).
 // Quando a resposta vem vazia (secoes: []), o componente usa o layout padrão da tela.
 // Quando vem preenchida, usa a personalização do cliente.

@@ -1,7 +1,7 @@
 export class RespostaUsuarioDto {
   id!: string;
   idUnidade!: string | null;
-  /** Perfil (infolab_grupo_usuario). */
+  /** Perfil de grupo do usuário. */
   idGrupoUsuario!: string | null;
   nome!: string | null;
   login!: string | null;

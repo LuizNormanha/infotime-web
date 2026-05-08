@@ -18,6 +18,10 @@ import { Prisma } from '@prisma/client';
 import { gerarChaveJwtTenant } from '../comum/gerar-chave-jwt-tenant';
 import { PrismaService } from '../prisma/prisma.service';
 import { setCurrentTenantLocal } from '../prisma/set-current-tenant-local';
+import {
+  resolverTenantAtivoPorDominio,
+  type TenantLoginAtivo,
+} from './internal/resolver-tenant-login';
 import { GeradorSenhaDoDia } from './gerador-senha-dia.service';
 import { ServicoCaptchaLogin } from './captcha-login.service';
 import { DtoLoginUsuario } from './dto/login-usuario.dto';
@@ -73,7 +77,7 @@ export class ServicoAutenticacao {
       loginReservadoParaUsuarioPorTenant(parteLocal);
 
     const dominio = dto.email.split('@')[1]?.trim().toLowerCase();
-    const tenant = await this.buscarTenantAtivo(dominio);
+    const tenant = await resolverTenantAtivoPorDominio(this.prisma, dominio);
     const avisoLicenca = this.avaliarLicencaTenant(tenant.data_expiracao);
 
     try {
@@ -92,7 +96,7 @@ export class ServicoAutenticacao {
 
   async loginNormal(
     dto: DtoLoginUsuario,
-    tenant: Awaited<ReturnType<ServicoAutenticacao['buscarTenantAtivo']>>,
+    tenant: TenantLoginAtivo,
     req: Request,
     avisoLicenca: string | null = null,
   ): Promise<RespostaLogin> {
@@ -160,7 +164,7 @@ export class ServicoAutenticacao {
       const dominio = dto.email.split('@')[1]?.trim().toLowerCase();
       const loginLocal = dto.email.split('@')[0].trim().toLowerCase();
       const senhaInformada = dto.senha.trim();
-      const tenant = await this.buscarTenantAtivo(dominio);
+      const tenant = await resolverTenantAtivoPorDominio(this.prisma, dominio);
       const avisoLicenca = this.avaliarLicencaTenant(tenant.data_expiracao);
 
       const resultado = await this.prisma.$transaction(async (tx) => {
@@ -203,7 +207,7 @@ export class ServicoAutenticacao {
 
   async loginSuporte(
     dto: DtoLoginUsuario,
-    tenant: Awaited<ReturnType<ServicoAutenticacao['buscarTenantAtivo']>>,
+    tenant: TenantLoginAtivo,
     req: Request,
   ): Promise<RespostaLoginSuporte> {
     // Ordem: tenant já validado em login() → senha do dia → usuário global (id_tenacidade NULL) → sessão no tenant do domínio
@@ -578,151 +582,6 @@ export class ServicoAutenticacao {
   // ─── Helpers privados ────────────────────────────────────────────────────────
 
   /**
-   * Resolve a tenacidade pelo domínio do e-mail **antes** de validar senha.
-   * Sem `app.current_tenant_id` na sessão de login; usa função SQL SECURITY DEFINER
-   * (`public.infotime_tenant_ativo_por_dominio`; migrations `20260421143000`, `20260507130000_ensure_fn_infotime_tenant_ativo_por_dominio`, `20260508120000_fn_tenant_dominio_liga_ou_infotime`, `20260512100000_infotime_rename_fn_tenant_ativo_por_dominio`).
-   * Se a função não existir no banco (42883), tenta resolução direta no layout ERP InfoTIME (`tenacidade` + `usuario`).
-   */
-  private async buscarTenantAtivo(dominio: string | undefined) {
-    if (!dominio?.trim()) {
-      throw new BadRequestException(
-        'Informe um e-mail com domínio válido (ex.: usuario@laboratorio.com.br).',
-      );
-    }
-    const d = dominio.trim().toLowerCase();
-
-    type LinhaTenant = {
-      id_tenacidade: bigint;
-      chave_jwt: string | null;
-      timeout_sessao_minutos: number | null;
-      quantidade_licenca: number | null;
-      data_expiracao: Date | null;
-    };
-
-    let rows: LinhaTenant[];
-    try {
-      rows = await this.prisma.$queryRaw<LinhaTenant[]>(
-        Prisma.sql`SELECT * FROM public.infotime_tenant_ativo_por_dominio(${d})`,
-      );
-    } catch (e) {
-      if (this.eAusenciaFuncaoTenantDominio(e)) {
-        try {
-          rows = await this.buscarTenantAtivoPorDominioInfoTIME(d);
-        } catch (e2) {
-          this.tratarErroPermissaoLoginTenant(e2);
-          throw e2;
-        }
-      } else {
-        this.tratarErroPermissaoLoginTenant(e);
-        throw e;
-      }
-    }
-
-    const row = rows[0];
-    if (!row) {
-      throw new HttpException(
-        {
-          mensagem:
-            'Domínio não cadastrado ou laboratório inativo. Verifique o e-mail ou contate o suporte.',
-        },
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    return {
-      id_tenacidade: row.id_tenacidade,
-      chave_jwt: row.chave_jwt,
-      data_expiracao: row.data_expiracao,
-      infolab_tenacidade_configuracao: [
-        {
-          timeout_sessao_minutos: row.timeout_sessao_minutos,
-          quantidade_licenca: row.quantidade_licenca,
-        },
-      ],
-    };
-  }
-
-  /**
-   * PostgreSQL 42501 em consultas de login: falta de privilégio nas tabelas InfoTIME
-   * ou na função `public.infotime_tenant_ativo_por_dominio`. Evita HTML genérico do driver.
-   */
-  private tratarErroPermissaoLoginTenant(e: unknown): void {
-    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2010') {
-      const meta = e.meta as { code?: string; message?: string } | undefined;
-      if (meta?.code === '42501') {
-        throw new InternalServerErrorException(
-          'Permissão negada no banco ao resolver o laboratório pelo domínio do e-mail (PostgreSQL 42501). ' +
-            'Conceda SELECT em `tenacidade` e `usuario` ao usuário da API (ex.: LigaDev), ' +
-            'EXECUTE em `public.infotime_tenant_ativo_por_dominio(text)`, ou aplique as migrations recentes ' +
-            '(ex.: `20260508120000_fn_tenant_dominio_liga_ou_infotime`, `20260511200000_infotime_grants_login_tenant_usuario`, `20260512100000_infotime_rename_fn_tenant_ativo_por_dominio`).',
-        );
-      }
-    }
-  }
-
-  /** Postgres 42883 — função ausente (banco sem migration ou restore parcial). */
-  private eAusenciaFuncaoTenantDominio(e: unknown): boolean {
-    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2010') {
-      const meta = e.meta as { code?: string; message?: string } | undefined;
-      if (meta?.code === '42883') return true;
-      const msg = meta?.message ?? '';
-      return (
-        msg.includes('42883') &&
-        (msg.includes('infotime_tenant_ativo_por_dominio') ||
-          msg.includes('infolab_tenant_ativo_por_dominio'))
-      );
-    }
-    if (e instanceof Prisma.PrismaClientUnknownRequestError) {
-      return (
-        e.message.includes('42883') &&
-        (e.message.includes('infotime_tenant_ativo_por_dominio') ||
-          e.message.includes('infolab_tenant_ativo_por_dominio'))
-      );
-    }
-    return false;
-  }
-
-  /**
-   * InfoTIME ERP: sem `infolab_*`, domínio casado com `usuario.email` da mesma tenacidade,
-   * ou instalação com única tenacidade ativa.
-   */
-  private async buscarTenantAtivoPorDominioInfoTIME(d: string) {
-    return this.prisma.$queryRaw<
-      {
-        id_tenacidade: bigint;
-        chave_jwt: string | null;
-        timeout_sessao_minutos: number | null;
-        quantidade_licenca: number | null;
-        data_expiracao: Date | null;
-      }[]
-    >(Prisma.sql`
-      SELECT
-        t.id_tenacidade,
-        t.chave_acesso::text AS chave_jwt,
-        480::int AS timeout_sessao_minutos,
-        NULL::int AS quantidade_licenca,
-        t.data_expiracao
-      FROM tenacidade t
-      WHERE t.ativo = 'S'
-        AND (
-          EXISTS (
-            SELECT 1
-            FROM usuario u
-            WHERE u.id_tenacidade = t.id_tenacidade
-              AND COALESCE(u.ativo, 'S') = 'S'
-              AND u.email IS NOT NULL
-              AND length(trim(u.email)) > 0
-              AND lower(trim(split_part(trim(u.email), '@', 2))) = lower(trim(${d}))
-          )
-          OR (
-            (SELECT count(*)::bigint FROM tenacidade t2 WHERE t2.ativo = 'S') = 1
-          )
-        )
-      ORDER BY t.id_tenacidade
-      LIMIT 1`);
-  }
-
-  /**
    * Licença SaaS (`infolab_tenacidade_configuracao.data_expiracao`): bloqueia login se vencida;
    * retorna aviso se faltar ≤10 dias (MCP login).
    */
@@ -740,14 +599,14 @@ export class ServicoAutenticacao {
       throw new HttpException(
         {
           mensagem:
-            'Licença do laboratório expirada. Entre em contato com o financeiro para regularizar o acesso.',
+            'Licença do tenant expirada. Entre em contato com o financeiro para regularizar o acesso.',
         },
         HttpStatus.FORBIDDEN,
       );
     }
     const dias = Math.ceil((tFim - tHoje) / 86400000);
     if (dias <= 10) {
-      return `Atenção: a licença deste laboratório vence em ${dias} dia(s). Procure o financeiro antes do vencimento.`;
+      return `Atenção: a licença deste tenant vence em ${dias} dia(s). Procure o financeiro antes do vencimento.`;
     }
     return null;
   }

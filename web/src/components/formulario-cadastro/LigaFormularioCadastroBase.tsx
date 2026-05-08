@@ -927,7 +927,7 @@ export type LigaFormularioCadastroBaseProps = {
   /** Barra vertical verde à esquerda do título (padrão listagem). Repassado a `LigaFormularioBase`. */
   tituloComBarraVerde?: boolean;
   /**
-   * Slug do formulário no catálogo `infolab_formulario` — passado ao hook de
+   * Slug do formulário no catálogo de layouts — passado ao hook de
    * permissões para que cada formulário consulte suas próprias permissões.
    */
   codigoTela?: string;
@@ -952,7 +952,7 @@ export type LigaFormularioCadastroBaseProps = {
   secaoIdsAvancoAutomaticoEtapas?: readonly string[];
   /**
    * Somente consulta: oculta Salvar e Excluir; mantém o botão de fechar/voltar (`labelCancelar`).
-   * Telas de visualização (ex.: mapa de produção instanciado pelo atendimento).
+   * Telas de visualização instanciadas por fluxo operacional.
    */
   ocultarPersistencia?: boolean;
   /**

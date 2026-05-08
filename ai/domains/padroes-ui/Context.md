@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Este domínio **não** descreve regras de negócio de um produto (ex.: folha, estoque, laboratório). Ele descreve **como telas devem se comportar e se integrar** ao stack padrão do template:
+Este domínio **não** descreve regras de negócio de um produto (ex.: folha ou estoque). Ele descreve **como telas devem se comportar e se integrar** ao stack padrão do template:
 
 - **Web:** Next.js, componentes `Liga*`, PrimeReact, **next-intl**.
 - **API:** NestJS, DTOs, validação, multi-tenant quando aplicável.
@@ -14,7 +14,7 @@ Qualquer aplicação nova (InfoTIME Web, outro ERP, portal, etc.) **reutiliza es
 
 - Implementação de referência dos padrões de **listagem:** `web/src/components/formulario-pesquisa/LigaListagemBase.tsx` e `liga-listagem.types.ts`.
 - **Formulários:** `web/src/components/formulario-cadastro/` e `LigaFormularioCadastroBase`.
-- Regras explícitas e numeradas: **`Rules.md`** (usadas em code review, agentes e MCP `infolab.crud_briefing`).
+- Regras explícitas e numeradas: **`Rules.md`** (usadas em code review, agentes e briefings de CRUD no MCP do projeto).
 
 ## O que não entra aqui
 

@@ -244,7 +244,7 @@ export class UsuarioPermissoesService {
     });
     if (!grupo) {
       throw new NotFoundException(
-        'Grupo de usuário não encontrado neste laboratório.',
+        'Grupo de usuário não encontrado neste tenant.',
       );
     }
 
@@ -324,7 +324,7 @@ export class UsuarioPermissoesService {
       });
       if (!g) {
         throw new NotFoundException(
-          'Grupo de usuário não encontrado neste laboratório.',
+          'Grupo de usuário não encontrado neste tenant.',
         );
       }
     }

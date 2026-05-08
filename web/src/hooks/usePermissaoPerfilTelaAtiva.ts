@@ -76,7 +76,7 @@ type RespostaPermissoesApi = {
 };
 
 function permissoesAPartirDoJson(slug: string, json: RespostaPermissoesApi): PermissoesTela {
-  // Regra de negócio: sem linha em infolab_usuario_permissoes → sem restrição.
+  // Regra de negócio: sem linha na tabela de permissões → sem restrição.
   // `possuiRegra` ausente ou false = permissivo total (sem restringir).
   if (json.possuiRegra !== true) {
     return permissivoTotal(slug);
@@ -93,7 +93,7 @@ function permissoesAPartirDoJson(slug: string, json: RespostaPermissoesApi): Per
 const DEBOUNCE_FOCO_MS = 400;
 
 /**
- * Permissões do perfil para a tela ativa (`codigo` em `infolab_formulario`).
+ * Permissões do perfil para a tela ativa (`codigo` no catálogo de telas).
  * Revalida automaticamente ao recuperar foco na janela e após evento
  * `liga:permissoes-invalidadas` (disparado por `invalidarPermissoesPerfilCliente`).
  *

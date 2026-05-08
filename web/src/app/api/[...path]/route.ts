@@ -28,6 +28,24 @@ function proibido() {
 }
 
 type RouteParams = { params: Promise<{ path: string[] }> };
+type MetodoComCorpo = "POST" | "PUT" | "PATCH";
+
+function validarPath(path: string[], minimoSegmentos: number): string | null {
+  if (path.length < minimoSegmentos) return null;
+  const [recurso] = path;
+  if (!recurso || !RECURSOS_PERMITIDOS.has(recurso)) return null;
+  return recurso;
+}
+
+function montarUpstream(base: string, path: string[], search = ""): string {
+  return `${base}/${path.map((s) => encodeURIComponent(s)).join("/")}${search}`;
+}
+
+function getClientIp(request: Request): string {
+  return (
+    request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? ""
+  );
+}
 
 /**
  * Lê JSON do corpo de POST/PUT de forma segura.
@@ -48,18 +66,16 @@ async function corpoJsonSeguro(request: Request): Promise<Record<string, unknown
 
 export async function GET(request: Request, { params }: RouteParams) {
   const { path } = await params;
-  if (path.length < 1) return proibido();
-  const [recurso, ...rest] = path;
-  if (!recurso || !RECURSOS_PERMITIDOS.has(recurso)) return proibido();
+  const recurso = validarPath(path, 1);
+  if (!recurso) return proibido();
+  const rest = path.slice(1);
 
   const token = await getToken();
   const base = resolveBackendApiUrl();
   const url = new URL(request.url);
 
   const upstream =
-    rest.length === 0
-      ? `${base}/${recurso}${url.search}`
-      : `${base}/${recurso}/${rest.map((s) => encodeURIComponent(s)).join("/")}${url.search}`;
+    rest.length === 0 ? `${base}/${recurso}${url.search}` : montarUpstream(base, path, url.search);
 
   const res = await fetchComTimeout(upstream, {
     headers: { ...authHeaders(token) },
@@ -89,23 +105,22 @@ export async function GET(request: Request, { params }: RouteParams) {
   return NextResponse.json(data, { status: res.status, headers: CABECALHOS_SEM_CACHE });
 }
 
-export async function POST(request: Request, { params }: RouteParams) {
+async function encaminharComCorpo(
+  request: Request,
+  params: RouteParams["params"],
+  method: MetodoComCorpo,
+) {
   const { path } = await params;
-  if (path.length < 1) return proibido();
-  const [recurso] = path;
-  if (!recurso || !RECURSOS_PERMITIDOS.has(recurso)) return proibido();
+  if (!validarPath(path, method === "POST" ? 1 : 2)) return proibido();
 
   const token = await getToken();
   const body = await corpoJsonSeguro(request);
-  const clientIp =
-    request.headers.get("x-forwarded-for") ??
-    request.headers.get("x-real-ip") ??
-    "";
+  const clientIp = getClientIp(request);
   const base = resolveBackendApiUrl();
-  const upstream = `${base}/${path.map((s) => encodeURIComponent(s)).join("/")}`;
+  const upstream = montarUpstream(base, path);
 
   const res = await fetchComTimeout(upstream, {
-    method: "POST",
+    method,
     headers: {
       ...authHeaders(token),
       "Content-Type": "application/json",
@@ -117,77 +132,27 @@ export async function POST(request: Request, { params }: RouteParams) {
 
   const data = await res.json().catch(() => ({}));
   return NextResponse.json(data, { status: res.status, headers: CABECALHOS_SEM_CACHE });
+}
+
+export async function POST(request: Request, { params }: RouteParams) {
+  return encaminharComCorpo(request, params, "POST");
 }
 
 export async function PUT(request: Request, { params }: RouteParams) {
-  const { path } = await params;
-  if (path.length < 2) return proibido();
-  const [recurso] = path;
-  if (!recurso || !RECURSOS_PERMITIDOS.has(recurso)) return proibido();
-
-  const token = await getToken();
-  const body = await corpoJsonSeguro(request);
-  const clientIp =
-    request.headers.get("x-forwarded-for") ??
-    request.headers.get("x-real-ip") ??
-    "";
-  const base = resolveBackendApiUrl();
-  const upstream = `${base}/${path.map((s) => encodeURIComponent(s)).join("/")}`;
-
-  const res = await fetchComTimeout(upstream, {
-    method: "PUT",
-    headers: {
-      ...authHeaders(token),
-      "Content-Type": "application/json",
-      ...(clientIp ? { "X-Forwarded-For": clientIp } : {}),
-    },
-    body: JSON.stringify(body),
-    cache: "no-store",
-  });
-
-  const data = await res.json().catch(() => ({}));
-  return NextResponse.json(data, { status: res.status, headers: CABECALHOS_SEM_CACHE });
+  return encaminharComCorpo(request, params, "PUT");
 }
 
 export async function PATCH(request: Request, { params }: RouteParams) {
-  const { path } = await params;
-  if (path.length < 2) return proibido();
-  const [recurso] = path;
-  if (!recurso || !RECURSOS_PERMITIDOS.has(recurso)) return proibido();
-
-  const token = await getToken();
-  const body = await corpoJsonSeguro(request);
-  const clientIp =
-    request.headers.get("x-forwarded-for") ??
-    request.headers.get("x-real-ip") ??
-    "";
-  const base = resolveBackendApiUrl();
-  const upstream = `${base}/${path.map((s) => encodeURIComponent(s)).join("/")}`;
-
-  const res = await fetchComTimeout(upstream, {
-    method: "PATCH",
-    headers: {
-      ...authHeaders(token),
-      "Content-Type": "application/json",
-      ...(clientIp ? { "X-Forwarded-For": clientIp } : {}),
-    },
-    body: JSON.stringify(body),
-    cache: "no-store",
-  });
-
-  const data = await res.json().catch(() => ({}));
-  return NextResponse.json(data, { status: res.status, headers: CABECALHOS_SEM_CACHE });
+  return encaminharComCorpo(request, params, "PATCH");
 }
 
 export async function DELETE(request: Request, { params }: RouteParams) {
   const { path } = await params;
-  if (path.length < 2) return proibido();
-  const [recurso] = path;
-  if (!recurso || !RECURSOS_PERMITIDOS.has(recurso)) return proibido();
+  if (!validarPath(path, 2)) return proibido();
 
   const token = await getToken();
   const base = resolveBackendApiUrl();
-  const upstream = `${base}/${path.map((s) => encodeURIComponent(s)).join("/")}`;
+  const upstream = montarUpstream(base, path);
 
   const res = await fetchComTimeout(upstream, {
     method: "DELETE",

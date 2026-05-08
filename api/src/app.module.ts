@@ -10,46 +10,10 @@ import { AppController } from './app.controller';
 import { GuardAutenticacaoJwtMultiTenant } from './autenticacao/autenticacao.guard';
 import { PrismaModule } from './prisma/prisma.module';
 import { ModuloAutenticacao } from './autenticacao/autenticacao.module';
-import { CboModule } from './cbo/cbo.module';
-import { CidModule } from './cid/cid.module';
-import { ClienteModule } from './cliente/cliente.module';
-import { ConselhoRegionalModule } from './conselho-regional/conselho-regional.module';
-import { EspecialidadeMedicaModule } from './especialidade-medica/especialidade-medica.module';
-import { EtniaModule } from './etnia/etnia.module';
-import { FeriadoModule } from './feriado/feriado.module';
-import { GrupoModule } from './grupo/grupo.module';
 import { GrupoPerfilModule } from './grupo-perfil/grupo-perfil.module';
-import { IndicacaoModule } from './indicacao/indicacao.module';
 import { LayoutModule } from './layout/layout.module';
-import { MedicoModule } from './medico/medico.module';
-import { MotivoCancelamentoModule } from './motivo-cancelamento/motivo-cancelamento.module';
-import { ProcedenciaModule } from './procedencia/procedencia.module';
-import { MotivoDescontoModule } from './motivo-desconto/motivo-desconto.module';
-import { MotivoRetificacaoModule } from './motivo-retificacao/motivo-retificacao.module';
-import { RacaModule } from './raca/raca.module';
-import { SetorModule } from './setor/setor.module';
-import { TipoAplicacaoModule } from './tipo-aplicacao/tipo-aplicacao.module';
-import { TipoEstadoCivilModule } from './tipo-estado-civil/tipo-estado-civil.module';
-import { TipoEventoModule } from './tipo-evento/tipo-evento.module';
-import { TipoIndicacaoModule } from './tipo-indicacao/tipo-indicacao.module';
-import { TipoIntegracaoModule } from './tipo-integracao/tipo-integracao.module';
-import { TipoInterfaceModule } from './tipo-interface/tipo-interface.module';
-import { TipoPagamentoModule } from './tipo-pagamento/tipo-pagamento.module';
-import { TipoRelatorioModule } from './tipo-relatorio/tipo-relatorio.module';
-import { UnidadeAtendimentoModule } from './unidade-atendimento/unidade-atendimento.module';
-import { UnidadeFederacaoModule } from './unidade-federacao/unidade-federacao.module';
-import { DicionarioModule } from './dicionario/dicionario.module';
-import { AplicacaoModule } from './aplicacao/aplicacao.module';
-import { MedicamentoModule } from './medicamento/medicamento.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { UsuarioPermissoesModule } from './usuario-permissoes/usuario-permissoes.module';
-import { VetEspecieModule } from './vet-especie/vet-especie.module';
-import { VetRacaModule } from './vet-raca/vet-raca.module';
-import { ImplantacaoTenacidadeModule } from './implantacao-tenacidade/implantacao-tenacidade.module';
-import { TenacidadeModule } from './tenacidade/tenacidade.module';
-import { TenacidadeConfiguracaoModule } from './tenacidade-configuracao/tenacidade-configuracao.module';
-import { SerieNotaFiscalServicoModule } from './serie-nota-fiscal-servico/serie-nota-fiscal-servico.module';
-import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -91,46 +55,10 @@ import { AiModule } from './ai/ai.module';
     }),
     PrismaModule,
     ModuloAutenticacao,
-    AplicacaoModule,
-    ClienteModule,
-    CboModule,
-    CidModule,
-    ConselhoRegionalModule,
-    EspecialidadeMedicaModule,
-    EtniaModule,
-    FeriadoModule,
-    GrupoModule,
     GrupoPerfilModule,
-    ImplantacaoTenacidadeModule,
-    IndicacaoModule,
-    MedicamentoModule,
-    MedicoModule,
-    MotivoCancelamentoModule,
-    MotivoDescontoModule,
-    MotivoRetificacaoModule,
-    ProcedenciaModule,
-    RacaModule,
-    SetorModule,
-    SerieNotaFiscalServicoModule,
-    TenacidadeModule,
-    TenacidadeConfiguracaoModule,
-    TipoAplicacaoModule,
-    TipoEstadoCivilModule,
-    TipoEventoModule,
-    TipoIndicacaoModule,
-    TipoIntegracaoModule,
-    TipoInterfaceModule,
-    TipoPagamentoModule,
-    TipoRelatorioModule,
-    UnidadeAtendimentoModule,
-    UnidadeFederacaoModule,
     UsuarioModule,
     UsuarioPermissoesModule,
-    VetEspecieModule,
-    VetRacaModule,
     LayoutModule,
-    DicionarioModule,
-    AiModule,
   ],
   controllers: [AppController],
   providers: [

@@ -19,7 +19,7 @@ function parseIdGrupoUsuarioQuery(q?: string): bigint | undefined {
 export class LayoutController {
   constructor(private readonly service: LayoutService) {}
 
-  /** Catálogo de telas/menu (`infolab_formulario`). */
+  /** Catálogo de telas/menu do sistema. */
   @Get('catalogo/formularios')
   catalogoFormularios() {
     return this.service.listarCatalogoFormularios();

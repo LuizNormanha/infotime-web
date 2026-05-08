@@ -226,7 +226,7 @@ function main() {
   }
 
   const readmeOrig = path.join(stagingRoot, 'README.md');
-  const readmeBackup = path.join(stagingRoot, 'README.infolab.orig.md');
+  const readmeBackup = path.join(stagingRoot, 'README.template.orig.md');
   if (fs.existsSync(readmeOrig)) {
     fs.renameSync(readmeOrig, readmeBackup);
   }

@@ -29,6 +29,14 @@
         "cwd": "{projectRoot}"
       }
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "command": "npm run typecheck",
+        "cwd": "{projectRoot}"
+      }
+    },
     "start:dev": {
       "executor": "nx:run-commands",
       "continuous": true,

@@ -13,7 +13,7 @@ export type SessaoAtual = {
   podeVerSecaoAuditoriaFormulario: boolean;
   /** JWT com `suporte: true` — ignora restrições de permissão no client. */
   ehSuporte: boolean;
-  /** Domínio da tenacidade da sessão (`infolab_tenacidade_configuracao.dominio_tenacidade`), quando a API informou. */
+  /** Domínio da tenacidade da sessão (quando a API informou). */
   dominioTenacidadeSessao: string | null;
   /**
    * Se `false`, usuário implantacao/suporte não deve persistir em `implantacao-tenacidades`

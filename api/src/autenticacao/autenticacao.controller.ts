@@ -28,12 +28,25 @@ const COOKIE_OPTS = {
   path: '/',
 };
 
-/**
- * @review Limite de login muito alto de propósito (evita 429 em dev/testes).
- * Antes de produção: reduzir para algo anti força-bruta (ex.: 10 tentativas / 15 min por IP),
- * ou mover para variável de ambiente.
- */
-const THROTTLE_LOGIN = { global: { limit: 50_000, ttl: 15 * 60_000 } };
+function parseEnvNumber(
+  value: string | undefined,
+  fallback: number,
+  min = 1,
+): number {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < min) return fallback;
+  return Math.floor(parsed);
+}
+
+const THROTTLE_LOGIN = {
+  global: {
+    limit: parseEnvNumber(
+      process.env.THROTTLE_LOGIN_LIMIT,
+      process.env.NODE_ENV === 'production' ? 10 : 100,
+    ),
+    ttl: parseEnvNumber(process.env.THROTTLE_LOGIN_TTL_MS, 15 * 60_000, 1_000),
+  },
+};
 
 @Controller('auth')
 export class ControladorAutenticacao {

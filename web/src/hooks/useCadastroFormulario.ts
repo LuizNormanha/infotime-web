@@ -24,7 +24,7 @@ type OpcoesCadastroFormulario<T extends Record<string, unknown>> = {
   estadoVazio: () => T;
   idEdicao: string | null;
   aoFechar: () => void;
-  /** Se false, não sobrescreve `id_tenacidade` com o tenant do JWT (implantação / outro laboratório). */
+  /** Se false, não sobrescreve `id_tenacidade` com o tenant do JWT (implantação / outro tenant). */
   injetarTenacidadeDaSessao?: boolean;
   /** Habilita fluxo de reautenticação em modal ao receber 401 no save. */
   habilitarReautenticacaoEmModal?: boolean;

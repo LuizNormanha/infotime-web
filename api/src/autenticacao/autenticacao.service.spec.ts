@@ -33,6 +33,7 @@ const mockLoginReservado =
 function makeService() {
   const prisma = {
     $transaction: jest.fn(),
+    $queryRaw: jest.fn(),
     infolab_tenacidade: { findFirst: jest.fn() },
     infolab_usuario: { findFirst: jest.fn(), update: jest.fn() },
     infolab_sessao_usuario: {
@@ -55,7 +56,16 @@ function makeService() {
     get: jest.fn().mockReturnValue('secret_test'),
   } as unknown as ConfigService;
 
-  const captchaLogin = {} as unknown as ServicoCaptchaLogin;
+  const captchaLogin = {
+    deveExigirCaptcha: jest.fn().mockReturnValue(false),
+    validarDesafio: jest.fn().mockReturnValue(true),
+    obterOuCriarDesafio: jest.fn().mockReturnValue({
+      id: 'captcha-id',
+      pergunta: '1 + 1',
+    }),
+    registrarSucesso: jest.fn(),
+    registrarFalha: jest.fn(),
+  } as unknown as ServicoCaptchaLogin;
   const service = new ServicoAutenticacao(prisma, jwt, geradorSenha, config, captchaLogin);
   return { service, prisma, jwt, geradorSenha, config };
 }
@@ -100,12 +110,17 @@ describe('ServicoAutenticacao — comparePassword', () => {
 // ─── login — roteamento suporte vs normal ───────────────────────────────────
 
 describe('ServicoAutenticacao — login (roteamento)', () => {
+  const reqMock = {
+    headers: {},
+    ip: '127.0.0.1',
+  } as never;
+
   it('lança BadRequestException quando domínio está ausente', async () => {
     const { service } = makeService();
     mockLoginReservado.mockReturnValue(false);
 
     await expect(
-      service.login({ email: 'sem-arroba', senha: '123' }, {} as never),
+      service.login({ email: 'sem-arroba', senha: '123' }, reqMock),
     ).rejects.toBeInstanceOf(BadRequestException);
   });
 
@@ -113,21 +128,14 @@ describe('ServicoAutenticacao — login (roteamento)', () => {
     const { service, prisma } = makeService();
     mockLoginReservado.mockReturnValue(false);
 
-    // buscarTenantAtivo usa queryRaw; simular retorno vazio
-    (prisma.$transaction as jest.Mock).mockResolvedValue(null);
-    jest
-      .spyOn(
-        service as unknown as {
-          buscarTenantAtivo: (d: string | undefined) => Promise<unknown>;
-        },
-        'buscarTenantAtivo',
-      )
-      .mockRejectedValue(new UnauthorizedException('Tenant não encontrado'));
+    (prisma.$queryRaw as jest.Mock).mockRejectedValue(
+      new UnauthorizedException('Tenant não encontrado'),
+    );
 
     await expect(
       service.login(
         { email: 'user@dominio-invalido.com', senha: '123' },
-        {} as never,
+        reqMock,
       ),
     ).rejects.toBeInstanceOf(UnauthorizedException);
   });

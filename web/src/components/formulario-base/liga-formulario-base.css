@@ -266,7 +266,7 @@ html[data-theme="dark"] .liga-formulario-nav-item-ativo {
   /**
    * Rolagem no `main` em vez de recortar lookups (`LigaLookupCombobox`) no conteúdo da seção:
    * `overflow: hidden` no cartão + `overflow: auto` na área de conteúdo cortavam o painel absoluto
-   * de sugestões (atendimento em etapas e demais formulários).
+   * de sugestões (wizard em etapas e demais formulários).
    */
   overflow-x: hidden;
   overflow-y: auto;

@@ -10,7 +10,7 @@ Após descompactar, siga também [docs/TEMPLATE-DERIVACAO.md](docs/TEMPLATE-DERI
 - `api/`: backend NestJS, autenticação, Prisma, migrations.
 - `web/`: Next.js, rotas BFF em `/api/*`, login, home com menu e abas.
 - `templates/monorepo-base/`: documentação do template (`BASELINE.md`, `docs/`, `manifest.json`).
-- `README.infolab.orig.md`: README original do monorepo de origem (referência).
+- `README.template.orig.md`: README original do monorepo de origem (referência).
 
 ## Pré-requisitos
 

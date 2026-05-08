@@ -5,72 +5,10 @@ import { RECURSOS_PERMITIDOS } from "./recursos-permitidos-bff";
 describe("RECURSOS_PERMITIDOS — allowlist do catch-all BFF", () => {
   it("contém todos os recursos de cadastro esperados", () => {
     const esperados = [
-      "analisadores",
-      "aplicacoes",
-      "atendimentos",
-      "cbos",
-      "cids",
-      "clientes",
-      "computadores",
-      "conselhos-regionais",
-      "especialidades-medicas",
-      "etnias",
-      "exames",
-      "exames-material",
-      "exames-material-lab-apoio",
-      "feriados",
-      "grupos",
       "grupos-perfil",
-      "indicacoes",
-      "implantacao-tenacidades",
-      "implantacao-tenacidade-configuracoes",
-      "integracoes",
-      "labs-apoio",
-      "labs-apoio-unidade",
-      "locais-armazenamento",
-      "mapa-definicoes",
-      "mapa-producoes",
-      "materiais",
-      "medicamentos",
-      "medicos",
-      "modelos-resultado",
-      "orcamentos",
-      "motivos-cancelamento",
-      "pendencias-resultado",
-      "motivos-desconto",
-      "motivos-exame-retificacao",
-      "motivos-orcamento-rejeicao",
-      "motivos-quarentena",
-      "motivos-recoleta",
-      "motivos-retificacao",
-      "portas-serial",
-      "precos-fator",
-      "precos-tabela",
-      "procedencias",
-      "questionarios",
-      "racas",
-      "recipientes",
-      "setores",
-      "soroteca",
-      "situacoes-coleta",
-      "temperatura-opcao",
-      "tenacidade-configuracoes",
-      "tenacidades",
-      "tipos-aplicacao",
-      "tipos-destino-resultado",
-      "tipos-estado-civil",
-      "tipos-evento",
-      "tipos-indicacao",
-      "tipos-integracao",
-      "tipos-interface",
-      "tipos-pagamento",
-      "tipos-relatorio",
-      "unidades-atendimento",
-      "unidades-federacao",
       "usuario-permissoes",
       "usuarios",
-      "vet-especies",
-      "vet-racas",
+      "auth",
     ];
 
     for (const recurso of esperados) {
@@ -105,7 +43,13 @@ describe("RECURSOS_PERMITIDOS — allowlist do catch-all BFF", () => {
   });
 
   it("tem exatamente o número de recursos da allowlist", () => {
-    expect(RECURSOS_PERMITIDOS.size).toBe(68);
+    const esperados = [
+      "grupos-perfil",
+      "usuario-permissoes",
+      "usuarios",
+      "auth",
+    ];
+    expect(RECURSOS_PERMITIDOS.size).toBe(esperados.length);
   });
 });
 
@@ -134,14 +78,14 @@ describe("Validação de path.length por método HTTP", () => {
     expect(validarPathGet(["usuarios", "42"])).toBe(true);
   });
   it("GET aceita 3+ segmentos (sub-rotas, ex.: catálogo)", () => {
-    expect(validarPathGet(["atendimentos", "catalogo", "unidades"])).toBe(true);
+    expect(validarPathGet(["grupos-perfil", "catalogo", "dummy"])).toBe(true);
   });
 
   it("POST aceita 1 segmento (criação na raiz do recurso)", () => {
     expect(validarPathPost(["usuarios"])).toBe(true);
   });
   it("POST aceita 3+ segmentos (sub-rotas, ex.: linha de detalhe)", () => {
-    expect(validarPathPost(["precos-tabela", "1", "preco-exames"])).toBe(true);
+    expect(validarPathPost(["grupos-perfil", "1", "clonar"])).toBe(true);
   });
   it("POST rejeita 0 segmentos", () => {
     expect(validarPathPost([])).toBe(false);
@@ -154,11 +98,11 @@ describe("Validação de path.length por método HTTP", () => {
     expect(validarPathPutDelete(["usuarios"])).toBe(false);
   });
   it("PUT aceita 4+ segmentos (detalhe aninhado)", () => {
-    expect(validarPathPutDelete(["precos-tabela", "1", "preco-exames", "9"])).toBe(true);
+    expect(validarPathPutDelete(["grupos-perfil", "1", "detalhe", "9"])).toBe(true);
   });
 
   it("DELETE aceita exatamente 2 segmentos", () => {
-    expect(validarPathPutDelete(["medicos", "99"])).toBe(true);
+    expect(validarPathPutDelete(["usuarios", "99"])).toBe(true);
   });
   it("DELETE rejeita recurso fora da allowlist", () => {
     expect(validarPathPutDelete(["../secret", "1"])).toBe(false);

@@ -12,7 +12,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Infotime",
-  description: "Aplicacao web InfloLab",
+  description: "Aplicacao web InfoTIME",
+  icons: {
+    icon: [{ url: "/icon.png?v=20260508" }],
+    shortcut: ["/icon.png?v=20260508"],
+    apple: [{ url: "/icon.png?v=20260508" }],
+  },
 };
 
 export default async function RootLayout({
