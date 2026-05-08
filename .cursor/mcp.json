@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "infotime": {
+      "command": "node",
+      "args": ["${workspaceFolder}/tools/infolab-mcp/dist/index.js"],
+      "env": {
+        "INFOTIME_REPO_ROOT": "${workspaceFolder}",
+        "INFOLAB_REPO_ROOT": "${workspaceFolder}"
+      }
+    }
+  }
+}

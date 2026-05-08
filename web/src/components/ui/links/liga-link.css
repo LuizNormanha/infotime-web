@@ -1,0 +1,12 @@
+.liga-link-recuperar {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--liga-verde-link-claro);
+  text-decoration: none;
+  align-self: center;
+}
+
+.liga-link-recuperar:hover {
+  text-decoration: underline;
+  color: var(--liga-verde);
+}

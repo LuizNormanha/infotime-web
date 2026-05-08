@@ -1,0 +1,55 @@
+{
+  "nomeProjeto": "meu-projeto-monorepo",
+  "descricao": "Monorepo Nx (API NestJS + Web Next.js) — derivado do template liga-prj-template",
+  "portasPadrao": {
+    "api": 3003,
+    "web": 3004
+  },
+  "urlsDev": {
+    "web": "http://localhost:3004",
+    "api": "http://localhost:3003"
+  },
+  "substituirAposDescompactar": [
+    {
+      "arquivo": "package.json",
+      "campo": "name",
+      "valor": "${nomeProjeto}"
+    },
+    {
+      "arquivo": "package.json",
+      "campo": "description",
+      "valor": "${descricao}"
+    },
+    {
+      "arquivo": "web/.env.example",
+      "variavel": "API_URL",
+      "valorPadrao": "http://localhost:3003"
+    },
+    {
+      "arquivo": "api/.env.example",
+      "variavel": "WEB_URL",
+      "valorPadrao": "http://localhost:3004"
+    }
+  ],
+  "addonsOpcionais": {
+    "aiDomainsCompleto": {
+      "descricao": "Manter pasta ai/domains completa ou podar domínios não usados.",
+      "padrao": "manter"
+    },
+    "mcpCursor": {
+      "descricao": "tools/infolab-mcp + .cursor/mcp.json para briefing CRUD no Cursor.",
+      "padrao": "manter"
+    },
+    "manuaisPublicos": {
+      "descricao": "web/public/manuais e ajuda — remover se o novo produto não usar.",
+      "padrao": "avaliar"
+    }
+  },
+  "novoModuloCrud": {
+    "slugTelaExemplo": "exemplo-item",
+    "prefixoRotasApi": "/exemplo-item",
+    "pathsDocumentados": [
+      "templates/monorepo-base/docs/KIT-CRUD.md"
+    ]
+  }
+}

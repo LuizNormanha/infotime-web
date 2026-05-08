@@ -1,0 +1,92 @@
+{
+  "itens": {
+    "comum": [
+      {
+        "id": "geral",
+        "tituloKey": "menuGeral",
+        "arquivo": "/manuais/usuario/Manual_Usuario_Geral_Infotime.md",
+        "palavrasChave": [
+          "infotime",
+          "menu",
+          "abas",
+          "listagem",
+          "formulário",
+          "tenant",
+          "sessão",
+          "manual",
+          "guia",
+          "usuário",
+          "login",
+          "listagem",
+          "filtro"
+        ]
+      },
+      {
+        "id": "soroteca",
+        "tituloKey": "menuSoroteca",
+        "arquivo": "/manuais/usuario/Manual_Usuario_Soroteca.md",
+        "palavrasChave": [
+          "soroteca",
+          "grades",
+          "mapa",
+          "caixa",
+          "armazenar",
+          "freezer",
+          "retenção",
+          "descarte",
+          "manual",
+          "guia"
+        ]
+      }
+    ],
+    "tecnico": [
+      {
+        "id": "geral",
+        "tituloKey": "menuGeral",
+        "arquivo": "tecnico/Manual_Tecnico_Suporte.md",
+        "palavrasChave": [
+          "tenant",
+          "rls",
+          "perfil",
+          "implantação",
+          "cadastro",
+          "suporte",
+          "diagnóstico",
+          "logs",
+          "jwt",
+          "bff",
+          "soroteca",
+          "postgresql",
+          "auditoria",
+          "403",
+          "401",
+          "caixa"
+        ]
+      }
+    ],
+    "desenvolvedor": [
+      {
+        "id": "geral",
+        "tituloKey": "menuGeral",
+        "arquivo": "desenvolvedor/Manual_Desenvolvedor.md",
+        "palavrasChave": [
+          "bff",
+          "next",
+          "nestjs",
+          "prisma",
+          "repositório",
+          "schema",
+          "migration",
+          "rls",
+          "dto",
+          "monorepo",
+          "nx",
+          "soroteca",
+          "testes",
+          "deploy",
+          "caixa"
+        ]
+      }
+    ]
+  }
+}

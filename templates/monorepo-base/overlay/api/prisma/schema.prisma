@@ -1,0 +1,312 @@
+// Núcleo do liga-prj-template: apenas models usados por auth, tenacidade, usuário,
+// permissões, layout/aplicação e sessões. Tabelas físicas via @@map (sem prefixo infolab_ no PostgreSQL).
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma-client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_MIGRATE")
+}
+
+model infolab_tenacidade {
+  id_tenacidade            BigInt    @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  razao_social             String?   @db.VarChar(255)
+  nome_fantasia            String?   @db.VarChar(255)
+  chave_acesso             String?   @db.VarChar(255)
+  data_expiracao           DateTime? @db.Timestamp(6)
+  estoque                  String?   @db.Char(1)
+  ativo                    String?   @db.Char(1)
+  endereco_ip_auditoria    String?   @db.VarChar(50)
+  nome_aplicacao_auditoria String?   @db.VarChar(255)
+
+  infolab_sessao_suporte          infolab_sessao_suporte[]
+  infolab_sessao_usuario          infolab_sessao_usuario[]
+  infolab_grupo_usuario           infolab_grupo_usuario[]
+  infolab_tenacidade_configuracao infolab_tenacidade_configuracao[]
+  infolab_usuario                 infolab_usuario[]
+  infolab_usuario_infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario infolab_usuario? @relation("infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tenacidade_id_usuario_auditoria")
+
+  @@map("tenacidade")
+}
+
+model infolab_usuario {
+  id_usuario               BigInt    @id @default(autoincrement())
+  id_tenacidade            BigInt?
+  id_unidade               BigInt?
+  id_grupo_usuario         BigInt?
+  id_usuario_auditoria     BigInt?
+  nome                     String?   @db.VarChar(100)
+  sexo                     String?   @db.Char(1)
+  data_nascimento          DateTime? @db.Date
+  login                    String?   @db.VarChar(50)
+  senha                    String?   @db.VarChar(100)
+  email                    String?   @db.VarChar(255)
+  telefone                 String?   @db.VarChar(30)
+  celular                  String?   @db.VarChar(30)
+  nome_arquivo_fotografia  String?   @db.VarChar(255)
+  nome_referencia_fotografia String? @db.VarChar(255)
+  nome_arquivo_assinatura  String?   @db.VarChar(255)
+  nome_referencia_assinatura String? @db.VarChar(255)
+  cracha                   String?   @db.VarChar(20)
+  cpf                      String?   @db.Char(11)
+  identidade               String?   @db.VarChar(12)
+  cartao_nacional_saude    String?   @db.VarChar(15)
+  orgao_emissor            String?   @db.VarChar(8)
+  cep                      String?   @db.Char(10)
+  tipo_logradouro          String?   @db.VarChar(50)
+  logradouro               String?   @db.VarChar(100)
+  numero                   String?   @db.VarChar(25)
+  complemento              String?   @default("") @db.VarChar(25)
+  bairro                   String?   @db.VarChar(100)
+  cidade                   String?   @db.VarChar(100)
+  estado                   String?   @db.Char(2)
+  codigo_ativacao          String?   @db.VarChar(50)
+  liberar_resultado        String?   @db.VarChar(2)
+  retirar_quarentena        String?   @db.Char(1)
+  motivo_bloqueio_impressao_resultado String? @db.Char(1)
+  lista_convenio_permitido String?   @default("") @db.VarChar(255)
+  lista_unidade_permitido  String?   @db.VarChar(255)
+  alertar_laudo_parcial    String?   @db.Char(1)
+  bloquear_impressao_laudo_parcial String? @db.Char(1)
+  alterar_resultado_liberado String? @db.Char(1)
+  visualizar_laudo_antes_liberacao String? @db.Char(1)
+  codigo_externo           String?   @db.VarChar(30)
+  codigo_migracao          String?   @db.VarChar(10)
+  ativo                    String?   @db.Char(1)
+  nome_aplicacao_auditoria String?   @db.VarChar(255)
+  endereco_ip_auditoria    String?   @db.VarChar(20)
+
+  infolab_aplicacao            infolab_aplicacao[]
+  infolab_grupo_usuario        infolab_grupo_usuario[]
+  infolab_sessao_suporte       infolab_sessao_suporte[]
+  infolab_sessao_usuario       infolab_sessao_usuario[]
+  infolab_tenacidade_infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario infolab_tenacidade[] @relation("infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario")
+  infolab_grupo_usuario_infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario infolab_grupo_usuario? @relation("infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario", fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_grupo_usuario")
+  infolab_tenacidade infolab_tenacidade? @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_usuario_id_tenacidade")
+  infolab_usuario infolab_usuario? @relation("infolab_usuarioToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_usuario_auditoria")
+  other_infolab_usuario infolab_usuario[] @relation("infolab_usuarioToinfolab_usuario")
+  infolab_usuario_permissoes_infolab_usuario_id_usuario_auditoriaToinfolab_usuario infolab_usuario_permissoes[] @relation("infolab_usuario_permissoes_id_usuario_auditoriaToinfolab_usuario")
+
+  @@map("usuario")
+}
+
+model infolab_grupo_usuario {
+  id_grupo_usuario         BigInt    @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_usuario_auditoria     BigInt?
+  descricao                String?   @db.VarChar(200)
+  desconto_maximo          BigInt?
+  acessa_auditoria         String?   @db.Char(1)
+  codigo_migracao          Int?
+  codigo_externo           BigInt?
+  endereco_ip_auditoria    String?   @db.VarChar(20)
+  nome_aplicacao_auditoria String?   @db.VarChar(255)
+
+  infolab_tenacidade        infolab_tenacidade        @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_grupo_usuario_id_tenacidade")
+  infolab_usuario           infolab_usuario?        @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_grupo_usuario_id_usuario_auditoria")
+  infolab_usuario_infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario infolab_usuario[] @relation("infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario")
+  infolab_layout_formulario infolab_layout_formulario[]
+  infolab_usuario_permissoes infolab_usuario_permissoes[]
+
+  @@map("grupo_usuario")
+}
+
+model infolab_tenacidade_configuracao {
+  id_tenacidade_configuracao             BigInt    @id(map: "infolab_configuracao_tenacidade_pkey") @default(autoincrement())
+  id_tenacidade                          BigInt
+  razao_social                           String?   @db.VarChar(255)
+  nome_fantasia                          String?   @db.VarChar(255)
+  chave_acesso                           String?   @db.VarChar(255)
+  data_expiracao                         DateTime? @db.Timestamp(6)
+  ultimo_ano                             BigInt?
+  ultimo_atendimento                     BigInt?   @default(0)
+  dominio_tenacidade                     String?   @unique @db.VarChar(255)
+  chave_jwt                              String?   @db.VarChar(255)
+  infolab_vet                            String?   @db.Char(1)
+  somente_interfaceamento                String?   @db.Char(1)
+  utilizar_numeracao_origem_liberacao    String?   @db.Char(1)
+  utilizar_deltacheck_liberacao          String?   @db.Char(1)
+  liberar_resultado_interfaceado_baixado String? @db.Char(1)
+  capturar_versao_exame_apoio            String?   @db.Char(1)
+  diretorio_exportacao_resultado         String?   @db.VarChar(150)
+  diretorio_triagem_amostra              String?   @db.VarChar(150)
+  mensagem_exame_repetido                String?   @db.VarChar(200)
+  liberar_resultado_informado            String?   @db.Char(1)
+  lista_setor_libera_informado           String?   @db.VarChar(1000)
+  endpoint_pedido                        String?   @db.VarChar(255)
+  endpoint_chatbot                       String?   @db.VarChar(255)
+  endereco_ip_auditoria                  String?   @db.VarChar(20)
+  nome_aplicacao_auditoria               String?   @db.VarChar(255)
+  timeout_sessao_minutos                 Int?      @default(15)
+  quantidade_licenca                     Int?
+
+  infolab_tenacidade infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_tenacidade_configuracao_infolab_tenacidade")
+
+  @@map("tenacidade_configuracao")
+}
+
+model infolab_aplicacao {
+  id_aplicacao             BigInt                    @id @default(autoincrement())
+  id_tenacidade            BigInt                    @default(0)
+  id_usuario_auditoria     BigInt?
+  codigo_aplicacao         String                    @db.VarChar(120)
+  nome_aplicacao           String                    @db.VarChar(180)
+  descricao_aplicacao      String?
+  nome_tabela_principal    String                    @db.VarChar(120)
+  nome_rota_frontend       String?                   @db.VarChar(200)
+  nome_endpoint_backend    String?                   @db.VarChar(200)
+  usa_listagem             Boolean                   @default(true)
+  usa_formulario           Boolean                   @default(true)
+  ativo                    Boolean                   @default(true)
+  dica_aplicacao           String?
+  observacao               String?
+  nome_aplicacao_auditoria String?                   @db.VarChar(120)
+  endereco_ip_auditoria    String?                   @db.VarChar(45)
+  infolab_usuario          infolab_usuario?          @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_infolab_aplicacao_id_usuario_auditoria")
+  infolab_aplicacao_campo  infolab_aplicacao_campo[]
+
+  @@unique([id_tenacidade, codigo_aplicacao], map: "uq_infolab_aplicacao_01")
+  @@index([id_tenacidade, codigo_aplicacao], map: "idx_infolab_aplicacao_01")
+  @@index([ativo], map: "idx_infolab_aplicacao_02")
+  @@map("aplicacao")
+}
+
+model infolab_aplicacao_campo {
+  id_aplicacao_campo                    BigInt            @id @default(autoincrement())
+  id_tenacidade                         BigInt            @default(0)
+  id_aplicacao                          BigInt
+  id_usuario_auditoria                  BigInt?
+  codigo_campo                          String            @db.VarChar(120)
+  nome_campo                            String            @db.VarChar(180)
+  descricao_campo                       String?
+  origem_campo                          String?           @db.VarChar(180)
+  tipo_componente                       String            @db.VarChar(60)
+  tipo_dado                             String            @db.VarChar(60)
+  secao_formulario                      String?           @db.VarChar(100)
+  aba_formulario                        String?           @db.VarChar(100)
+  placeholder                           String?           @db.VarChar(200)
+  mascara                               String?           @db.VarChar(80)
+  dica_campo                            String?
+  obrigatorio_padrao                    Boolean           @default(false)
+  visivel_formulario_padrao             Boolean           @default(true)
+  editavel_formulario_padrao            Boolean           @default(true)
+  exibir_listagem_padrao                Boolean           @default(false)
+  permite_filtro_padrao                 Boolean           @default(false)
+  permite_ordenacao_padrao              Boolean           @default(false)
+  fixo_listagem_padrao                  Boolean           @default(false)
+  ordem_formulario_padrao               Int               @default(0)
+  ordem_listagem_padrao                 Int               @default(0)
+  participa_subtitulo_formulario_padrao Boolean         @default(false)
+  ordem_subtitulo_formulario_padrao     Int               @default(0)
+  largura_listagem_padrao               Int?
+  alinhamento_listagem_padrao           String            @default("left") @db.VarChar(10)
+  valor_padrao                          String?
+  validacao_json                        Json              @default("{}")
+  opcoes_json                           Json              @default("{}")
+  ativo                                 Boolean           @default(true)
+  nome_aplicacao_auditoria              String?           @db.VarChar(120)
+  endereco_ip_auditoria                 String?           @db.VarChar(45)
+  infolab_aplicacao                     infolab_aplicacao @relation(fields: [id_aplicacao], references: [id_aplicacao], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_aplicacao_campo_01")
+
+  @@unique([id_tenacidade, id_aplicacao, codigo_campo], map: "uq_infolab_aplicacao_campo_01")
+  @@index([id_aplicacao, ativo], map: "idx_infolab_aplicacao_campo_01")
+  @@index([id_aplicacao, ordem_formulario_padrao], map: "idx_infolab_aplicacao_campo_02")
+  @@index([id_aplicacao, exibir_listagem_padrao, ordem_listagem_padrao], map: "idx_infolab_aplicacao_campo_03")
+  @@index([id_tenacidade, id_aplicacao, codigo_campo], map: "idx_infolab_aplicacao_campo_04")
+  @@map("aplicacao_campo")
+}
+
+model infolab_sessao_usuario {
+  id_sessao          BigInt             @id @default(autoincrement())
+  id_tenacidade      BigInt
+  id_usuario         BigInt
+  token_id           String             @db.VarChar(255)
+  data_criacao       DateTime           @default(now()) @db.Timestamp(6)
+  data_expiracao     DateTime           @db.Timestamp(6)
+  ativo              String             @default("S") @db.Char(1)
+  dispositivo        String?            @db.VarChar(255)
+  ip                 String?            @db.VarChar(45)
+  user_agent         String?            @db.VarChar(255)
+  infolab_tenacidade infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction, map: "fk_sessao_tenacidade")
+  infolab_usuario    infolab_usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_sessao_usuario")
+
+  @@unique([id_tenacidade, id_usuario], map: "ux_sessao_usuario_ativa")
+  @@index([token_id], map: "ix_sessao_token_id")
+  @@map("sessao_usuario")
+}
+
+model infolab_sessao_suporte {
+  id_sessao_suporte  BigInt             @id @default(autoincrement())
+  id_usuario         BigInt
+  id_tenacidade      BigInt
+  token_id           String             @unique @db.VarChar(255)
+  numero_chamado     String?            @db.VarChar(100)
+  motivo_acesso      String?
+  data_criacao       DateTime           @default(now()) @db.Timestamp(6)
+  data_expiracao     DateTime           @db.Timestamp(6)
+  ativo              String             @default("S") @db.Char(1)
+  ip                 String?            @db.VarChar(45)
+  dispositivo        String?            @db.VarChar(255)
+  user_agent         String?
+  infolab_tenacidade infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction)
+  infolab_usuario    infolab_usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([id_tenacidade], map: "idx_sessao_suporte_tenacidade")
+  @@index([token_id], map: "idx_sessao_suporte_token_id")
+  @@index([id_usuario], map: "idx_sessao_suporte_usuario")
+  @@map("sessao_suporte")
+}
+
+model infolab_formulario {
+  id_formulario              BigInt                       @id @default(autoincrement())
+  codigo                     String                       @unique @db.VarChar(80)
+  descricao                  String?                      @db.VarChar(255)
+  ordem                      Int                          @default(0)
+  ativo                      Boolean                      @default(true)
+  infolab_layout_formulario  infolab_layout_formulario[]
+  infolab_usuario_permissoes infolab_usuario_permissoes[]
+
+  @@index([ativo, ordem])
+  @@map("formulario")
+}
+
+model infolab_usuario_permissoes {
+  id_usuario_permissao     BigInt                @id @default(autoincrement())
+  id_grupo_usuario         BigInt
+  id_formulario            BigInt
+  id_tenacidade            BigInt?
+  id_usuario_auditoria     BigInt?
+  administrador            String                @default("N") @db.Char(1)
+  incluir                  String                @default("N") @db.Char(1)
+  editar                   String                @default("N") @db.Char(1)
+  excluir                  String                @default("N") @db.Char(1)
+  endereco_ip_auditoria    String?               @db.VarChar(20)
+  nome_aplicacao_auditoria String?               @db.VarChar(255)
+  infolab_formulario       infolab_formulario    @relation(fields: [id_formulario], references: [id_formulario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_permissoes_id_formulario")
+  infolab_grupo_usuario    infolab_grupo_usuario @relation(fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Cascade, onUpdate: Restrict, map: "fk_usuario_permissoes_id_grupo_usuario")
+  infolab_usuario          infolab_usuario?      @relation("infolab_usuario_permissoes_id_usuario_auditoriaToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_permissoes_id_usuario_auditoria")
+
+  @@unique([id_grupo_usuario, id_formulario], map: "uq_usuario_permissoes_grupo_formulario")
+  @@index([id_formulario], map: "idx_usuario_permissoes_formulario")
+  @@index([id_grupo_usuario], map: "idx_usuario_permissoes_grupo")
+  @@index([id_tenacidade], map: "idx_usuario_permissoes_tenacidade")
+  @@map("usuario_permissoes")
+}
+
+model infolab_layout_formulario {
+  id_layout_formulario  BigInt                @id @default(autoincrement())
+  id_formulario         BigInt
+  id_grupo_usuario      BigInt
+  configuracao_json     String
+  infolab_formulario    infolab_formulario    @relation(fields: [id_formulario], references: [id_formulario], onDelete: Restrict, onUpdate: Cascade)
+  infolab_grupo_usuario infolab_grupo_usuario @relation(fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([id_grupo_usuario, id_formulario])
+  @@index([id_formulario])
+  @@map("layout_formulario")
+}

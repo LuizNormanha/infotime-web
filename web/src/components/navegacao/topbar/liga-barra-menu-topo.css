@@ -1,0 +1,75 @@
+/* Linha do menu no topo: sem rolagem; conteúdo em largura natural para medição */
+.liga-barra-menu-topo {
+  display: flex;
+  align-items: stretch;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+  margin: 0 0.75rem;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+
+.liga-barra-menu-topo--medicao {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  visibility: hidden;
+  pointer-events: none;
+  flex: none;
+  width: max-content;
+  margin: 0;
+  overflow: visible;
+}
+
+.liga-barra-menu-topo-raiz {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.liga-barra-menu-topo-gatilho {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 100%;
+  min-height: 2.5rem;
+  padding: 0 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+button.liga-barra-menu-topo-gatilho {
+  cursor: pointer;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.liga-barra-menu-topo-gatilho:hover {
+  color: var(--liga-texto-principal);
+  background: color-mix(in srgb, var(--liga-texto-secundario) 8%, transparent);
+  border-color: var(--liga-borda-suave);
+}
+
+.liga-barra-menu-topo-gatilho.ativa {
+  color: var(--liga-texto-principal);
+  background: color-mix(in srgb, var(--liga-texto-secundario) 11%, transparent);
+  border-color: var(--liga-borda-suave);
+}
+
+.liga-barra-menu-topo-gatilho.aberta {
+  background: color-mix(in srgb, var(--liga-texto-secundario) 12%, transparent);
+  border-color: var(--liga-borda-suave);
+}
+
+.liga-barra-menu-topo-chevron {
+  font-size: 0.7rem;
+  opacity: 0.75;
+}

@@ -1,0 +1,124 @@
+/**
+ * Estilos do `LigaLookupCombobox`: ícone de busca como adorno dentro do campo
+ * (padding no input + botão posicionado em absolute), alinhado ao padrão das telas já validadas.
+ */
+.liga-atendimento-lookup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  z-index: 3;
+}
+
+.liga-atendimento-lookup .p-inputtext {
+  width: 100%;
+  min-width: 0;
+  padding-right: 2.75rem;
+  border-radius: 8px;
+}
+
+.liga-atendimento-lookup__lupa {
+  position: absolute;
+  right: 0.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-color-secondary, #64748b);
+  cursor: pointer;
+}
+
+.liga-atendimento-lookup__lupa:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--primary-color, #3b82f6) 12%, transparent);
+  color: var(--primary-color, #2563eb);
+}
+
+.liga-atendimento-lookup__lupa:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.liga-atendimento-lookup__clear {
+  position: absolute;
+  right: 2.35rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-color-secondary, #94a3b8);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.liga-atendimento-lookup__clear:hover:not(:disabled) {
+  color: var(--red-500, #ef4444);
+  background: color-mix(in srgb, #ef4444 10%, transparent);
+}
+
+.liga-atendimento-lookup__sugestoes {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 0.25rem;
+  list-style: none;
+  border: 1px solid var(--surface-border, #e2e8f0);
+  border-radius: 8px;
+  background: var(--surface-card, #fff);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+  max-height: 16rem;
+  overflow: auto;
+}
+
+.liga-atendimento-lookup__opcao {
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  cursor: pointer;
+}
+
+.liga-atendimento-lookup__opcao--ativa {
+  background: color-mix(in srgb, var(--primary-color, #3b82f6) 14%, white);
+}
+
+.liga-atendimento-lookup__opcao-linha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.liga-atendimento-lookup__opcao-principal {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-color, #1f2937);
+}
+
+.liga-atendimento-lookup__opcao-secundaria {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary, #64748b);
+}
+
+/**
+ * A lista de sugestões é `position: absolute` sob o input. Campos irmãos posteriores
+ * (ex.: paciente abaixo de unidade/procedência) pintam por cima se o wrapper não tiver
+ * um stacking context acima do padrão — `:focus-within` eleva o bloco inteiro do campo.
+ */
+.liga-atendimento-field:has(.liga-atendimento-lookup:focus-within) {
+  position: relative;
+  z-index: 50;
+}

@@ -1,0 +1,223 @@
+.liga-home-topbar {
+  height: 64px;
+  border-bottom: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-externa);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0 1rem;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.liga-home-topbar-esquerda {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.liga-home-topbar-slot-menu {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+.liga-home-topbar-marca {
+  flex-shrink: 0;
+}
+
+.liga-home-topbar-marca .liga-logo-marca {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0;
+  margin: 0;
+}
+
+.liga-home-topbar-marca .liga-logo-marca-tagline {
+  display: none;
+}
+
+.liga-home-topbar-marca .liga-logo-marca-titulo {
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+.liga-home-topbar-busca {
+  display: none;
+  align-items: center;
+  flex: 0 1 220px;
+  max-width: 280px;
+  min-width: 140px;
+  min-height: 0;
+}
+
+@media (min-width: 961px) {
+  .liga-home-topbar-busca {
+    display: flex;
+  }
+}
+
+.liga-home-topbar-busca .liga-menu-pesquisa {
+  flex: 1;
+  min-width: 0;
+}
+
+.liga-home-topbar-acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.liga-topbar-conta-wrap {
+  position: relative;
+}
+
+.liga-topbar-avatar-gatilho {
+  border: 1px solid var(--liga-borda-suave);
+  border-radius: 50%;
+  background: var(--liga-moldura-interna);
+  color: var(--liga-texto-secundario);
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  font-size: 0.95rem;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.liga-topbar-avatar-gatilho:hover,
+.liga-topbar-avatar-gatilho[aria-expanded="true"] {
+  color: var(--liga-texto-principal);
+  border-color: var(--liga-borda-suave);
+  background: color-mix(in srgb, var(--liga-texto-secundario) 9%, var(--liga-moldura-interna));
+}
+
+.liga-topbar-menu-conta {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 200;
+  min-width: 240px;
+  max-width: min(320px, calc(100vw - 1.5rem));
+  padding: 0.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-externa);
+  box-shadow: var(--liga-sombra-moldura);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.liga-topbar-menu-conta-usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem;
+  min-width: 0;
+  border-bottom: 1px solid var(--liga-borda-suave);
+  margin-bottom: 0.1rem;
+  padding-bottom: 0.55rem;
+}
+
+.liga-topbar-menu-conta-avatar {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-interna);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--liga-texto-secundario);
+  font-size: 0.85rem;
+}
+
+.liga-topbar-menu-conta-email {
+  font-size: 0.78rem;
+  color: var(--liga-texto-secundario);
+  word-break: break-all;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.liga-topbar-menu-conta-acao,
+.liga-topbar-menu-conta-sair {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+  font-size: 0.875rem;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  text-align: left;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.liga-topbar-menu-conta-acao:hover,
+.liga-topbar-menu-conta-sair:hover {
+  border-color: var(--liga-borda-suave);
+  background: var(--liga-moldura-interna);
+  color: var(--liga-texto-principal);
+}
+
+.liga-topbar-menu-conta-sair:hover {
+  color: #ef4444;
+}
+
+.liga-home-botao-menu-mobile {
+  border: 1px solid var(--liga-borda-suave);
+  border-radius: 980px;
+  background: var(--liga-moldura-interna);
+  color: var(--liga-texto-secundario);
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.liga-home-botao-menu-mobile:hover {
+  color: var(--liga-texto-principal);
+  border-color: var(--liga-borda-suave);
+  background: color-mix(in srgb, var(--liga-texto-secundario) 9%, var(--liga-moldura-interna));
+}
+
+.liga-home-botao-menu-mobile {
+  display: none;
+}
+
+.liga-home-topbar--drawer .liga-home-botao-menu-mobile {
+  display: inline-flex;
+}
+
+.liga-home-topbar--drawer .liga-home-topbar-esquerda {
+  flex: 1;
+  min-width: 0;
+}

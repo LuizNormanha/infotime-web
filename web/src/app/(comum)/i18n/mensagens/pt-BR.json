@@ -1,0 +1,3437 @@
+{
+  "login": {
+    "mensagemPrincipal": "Faça login com suas credenciais",
+    "tituloPagina": "Fazer login",
+    "subtituloPagina": "Portal do cliente",
+    "titulo": "Faça login",
+    "subtitulo": "Entre com suas credenciais",
+    "emailLoginPadrao": "usuario@laboratorio.com.br",
+    "entrar": "Login",
+    "entrando": "Entrando...",
+    "entrarAcessibilidade": "Entrar no sistema",
+    "recuperarSenha": "Recuperar Senha",
+    "emailLabel": "Usuário",
+    "emailPlaceholder": "usuario@laboratorio.br",
+    "senhaLabel": "Senha",
+    "senhaPlaceholder": "Digite sua senha",
+    "erroCredenciais": "Credenciais inválidas.",
+    "erroInesperado": "Erro inesperado. Tente novamente.",
+    "sessaoAtivaDetectada": "Sessão ativa detectada.",
+    "erroConfirmarSessao": "Não foi possível encerrar a sessão anterior. Tente novamente.",
+    "modal": {
+      "titulo": "Sessão ativa detectada",
+      "cancelar": "Cancelar",
+      "continuar": "Continuar aqui"
+    },
+    "tema": {
+      "alternarParaEscuro": "Ativar tema escuro",
+      "alternarParaClaro": "Ativar tema claro"
+    },
+    "rodape": {
+      "idioma": "Português (Brasil)",
+      "ajuda": "Ajuda",
+      "privacidade": "Privacidade",
+      "termos": "Termos"
+    },
+    "infotimeMarca": {
+      "titulo": "InfoTIME",
+      "tituloMenu": "InfoTIME",
+      "tagline": "Gestão integrada para o seu laboratório"
+    }
+  },
+  "logoLiga": {
+    "titulo": "Liga",
+    "software": "SOFTWARE",
+    "paraLaboratorios": "PARA LABORATÓRIOS",
+    "taglineImagemAlt": "Tecnologia que impulsiona resultados"
+  },
+  "home": {
+    "avisoLicenca": {
+      "fechar": "Fechar"
+    },
+    "menu": {
+      "colapsar": "Colapsar menu",
+      "expandir": "Expandir menu",
+      "buscar": "Buscar menu...",
+      "aria": "Menu principal da home"
+    },
+    "menuPesquisa": {
+      "placeholder": "Buscar...",
+      "aria": "Buscar item do menu e abrir",
+      "limpar": "Limpar busca"
+    },
+    "botaoFlutuante": {
+      "aria": "Abrir LIGIA — ajuda do sistema (painel lateral)"
+    },
+    "ligiaAjuda": {
+      "titulo": "Ajuda",
+      "fechar": "Fechar ajuda",
+      "rotuloPerfisManual": "Perfil do manual",
+      "perfilComum": "Usuário comum",
+      "perfilTecnico": "Técnico",
+      "perfilDesenvolvedor": "Desenvolvedor",
+      "rotuloNavegacaoAjuda": "Tópicos do manual",
+      "rotuloMenuTopicos": "Partes do manual",
+      "menuGeral": "Geral",
+      "menuSoroteca": "Soroteca",
+      "pesquisaMenuLabel": "Pesquisar no menu",
+      "pesquisaMenuPlaceholder": "Filtrar tópicos…",
+      "pesquisaSemResultados": "Nenhum tópico corresponde à pesquisa.",
+      "pesquisaMenuCorpo": "A pesquisar no texto dos manuais…",
+      "contextoSoroteca": "Você está em uma tela da Soroteca. O tópico Soroteca foi selecionado no menu; use Geral para o restante do sistema.",
+      "carregando": "Carregando ajuda…",
+      "erroCarregarManifest": "Não foi possível carregar o índice da ajuda (manifest.json).",
+      "erroCarregarMd": "Não foi possível carregar este tópico. Verifique se os ficheiros existem em public/manuais/ e public/ajuda-ligia/.",
+      "perguntaLigiaTitulo": "Pergunte à LIGIA",
+      "perguntaLigiaDescricao": "As respostas usarão a base de conhecimento do sistema (uso, operação técnica e repositório), quando esta funcionalidade estiver disponível.",
+      "perguntaLigiaPlaceholder": "Escreva a sua dúvida…",
+      "perguntaLigiaEnviar": "Enviar",
+      "perguntaLigiaEmBreve": "A resposta automática com base na base de conhecimento estará disponível numa versão futura.",
+      "voltarLeitura": "Voltar",
+      "voltarLeituraAria": "Voltar ao ponto anterior da leitura; repita até voltar ao início do tópico."
+    },
+    "topbar": {
+      "abrirMenu": "Abrir menu",
+      "fecharMenu": "Fechar menu",
+      "avatar": "Avatar do usuário",
+      "menuConta": "Conta e opções",
+      "modoEscuro": "Modo escuro",
+      "modoClaro": "Modo claro",
+      "alternarParaEscuro": "Ativar tema escuro",
+      "alternarParaClaro": "Ativar tema claro",
+      "sair": "Sair"
+    },
+    "feedback": {
+      "salvoOk": "Registro salvo com sucesso.",
+      "excluidoOk": "Registro excluído com sucesso.",
+      "erroSalvar": "Não foi possível salvar. Tente novamente.",
+      "erroExcluir": "Não foi possível excluir. Verifique vínculos no banco ou tente novamente.",
+      "erroCarregar": "Não foi possível carregar os dados. Tente novamente.",
+      "erroGenerico": "Ocorreu um erro inesperado. Tente novamente.",
+      "erroJsonParse": "JSON inválido. Verifique a sintaxe antes de salvar.",
+      "erroJsonTamanho": "O texto excede o tamanho máximo permitido para edição.",
+      "toastValidacaoCampos": "Corrija os campos destacados antes de salvar.",
+      "toastFalhaOperacao": "Não foi possível concluir a operação.",
+      "toastErroRespostaServidor": "Não foi possível interpretar a resposta do servidor."
+    },
+    "registroColetorForm": {
+      "titulo": "Registro de coletor",
+      "subtitulo": "Informe o código e pressione ENTER para registrar a coleta. Ao sair do campo, apenas consulta (sem registrar).",
+      "secUnica": "Registro de coleta",
+      "secUnicaDesc": "Código, tipo de leitura, observações, coletor e resultado da operação.",
+      "codigo": "Código",
+      "observacao": "Observações | Incorrências",
+      "modoLeitura": "Tipo de leitura",
+      "modoLeituraAmostra": "Amostra",
+      "modoLeituraAtendimento": "Atendimento",
+      "coletor": "Coletor (opcional)",
+      "coletorPlaceholder": "Selecione o coletor",
+      "coletorUsuarioAtual": "Usuário logado (você)",
+      "estadoAmostra": "Estado da amostra",
+      "statusOperacao": "Status da operação",
+      "itensNaoColhidos": "Amostras não coletadas",
+      "itensColhidos": "Amostras coletadas",
+      "gridMaterial": "Material",
+      "gridExames": "Exames",
+      "gridSemLinhas": "Nenhuma amostra nesta lista.",
+      "usarSom": "Utilizar som",
+      "somSilenciado": "Silenciado",
+      "somAposSucesso": "Som após o sucesso",
+      "somAposFracasso": "Som após o fracasso",
+      "somParaAmbos": "Som para ambos",
+      "modoSomPlaceholder": "Selecione o modo de som",
+      "pesquisar": "Pesquisar",
+      "fechar": "Fechar",
+      "emBranco": "—",
+      "registrando": "Registrando…",
+      "consultandoItens": "Consultando amostras…",
+      "cabecalhoCliente": "Cliente",
+      "cabecalhoData": "Data",
+      "cabecalhoIdAtendimento": "Atendimento",
+      "amostraEncontrada": "Amostra encontrada",
+      "amostraNaoEncontrada": "Amostra não encontrada",
+      "amostraJaColetada": "Amostra já coletada",
+      "atendimentoEncontrado": "Atendimento encontrado",
+      "atendimentoNaoEncontrado": "Atendimento não encontrado",
+      "atendimentoItensJaColhidos": "Itens elegíveis já coletados",
+      "statusConcluida": "Registro concluído",
+      "registroConcluidoComSucessoAmostra": "Amostra '{codigo}' coletada com sucesso.",
+      "registroConcluidoComSucessoAtendimento": "Leitura do atendimento '{codigo}' registrada com sucesso.",
+      "statusNaoConcluida": "Registro não concluído",
+      "nenhumItemAtualizado": "Nenhum item atualizado.",
+      "temperaturaMaleta": "Temperatura da maleta de amostras",
+      "temperaturaMaletaPlaceholder": "Selecione a opção",
+      "temperaturaMaletaHint": "- Gasometria: 0 a 4 \u00BAC;\n- Líquidos Corporais: 10 a 22 \u00BAC;\n- Amostras provenientes de outras unidades: 2 a 8 \u00BAC.",
+      "temperaturaMaletaDicaAria": "Temperaturas de referência para transporte da maleta de amostras",
+      "loginColetorTituloCartao": "Registro de coletor",
+      "loginColetorCracha": "Crachá",
+      "loginColetorCrachaPlaceholder": "Leitura do código de barras (preenche o usuário)",
+      "loginColetorUsuario": "Usuário",
+      "loginColetorUsuarioPlaceholder": "Login ou e-mail (ex.: nome@empresa.com.br)",
+      "loginColetorCancelar": "Cancelar",
+      "loginColetorCamposObrigatorios": "Informe usuário e senha.",
+      "loginColetorUsuarioEmailInvalido": "O usuário deve ser um e-mail no formato login@domínio. Se você usa só o código do crachá, esta instalação precisa do domínio de login configurado.",
+      "loginColetorErroGenerico": "Não foi possível entrar. Verifique e-mail e senha.",
+      "loginColetorErroRede": "Falha de rede ao autenticar o coletor.",
+      "loginColetorSessaoInvalida": "Login ok, mas a sessão do coletor não pôde ser lida. Tente novamente."
+    },
+    "validation": {
+      "fallback": "Valor inválido neste campo.",
+      "respostaInvalida": "Não foi possível validar os dados enviados.",
+      "constraints": {
+        "minLength": "Informe pelo menos {min} caracteres.",
+        "maxLength": "Use no máximo {max} caracteres.",
+        "isString": "Este campo deve ser texto.",
+        "isNotEmpty": "Este campo é obrigatório.",
+        "matches": "O formato informado não é válido para este campo.",
+        "isEmail": "Informe um e-mail válido.",
+        "isNumber": "Informe um número válido.",
+        "isInt": "Informe um número inteiro válido.",
+        "min": "O valor não pode ser menor que {min}.",
+        "max": "O valor não pode ser maior que {max}.",
+        "isBoolean": "Marque ou desmarque esta opção.",
+        "isDate": "Informe uma data válida.",
+        "isUUID": "Identificador inválido.",
+        "isDefined": "Este campo é obrigatório.",
+        "isArray": "Lista inválida."
+      }
+    },
+    "preferencias": {
+      "formularios": {
+        "titulo": "Preferências > Formulários",
+        "apenasCatalogoInfo": "Lista somente o catálogo de telas (seed). Para criar ou editar JSON de layout por perfil, use Preferências > Layout formulário.",
+        "carregandoCatalogo": "Carregando catálogo…",
+        "carregandoJson": "Carregando configuração…",
+        "colCodigo": "Código",
+        "colDescricao": "Descrição",
+        "colOrdem": "Ordem",
+        "acaoEditar": "Editar configuração",
+        "acaoEditarAria": "Editar configuração JSON da tela {codigo}",
+        "dialogTitulo": "Configuração: {codigo}",
+        "dialogJsonLabel": "JSON",
+        "dialogCancelar": "Cancelar",
+        "dialogSalvar": "Salvar",
+        "dialogSalvando": "Salvando…",
+        "erroCarregarCatalogoBanner": "Não foi possível carregar o catálogo. Verifique a sessão e tente novamente.",
+        "textoBotaoNovoOculto": ""
+      },
+      "layoutFormulario": {
+        "erroCarregar": "Não foi possível carregar os dados de layout.",
+        "semDescricaoPerfil": "(sem descrição)",
+        "colPerfil": "Perfil",
+        "colCodigo": "Formulário",
+        "colDescricao": "Descrição",
+        "colOrdem": "Ordem",
+        "ariaEditarLayout": "Editar JSON de layout desta combinação perfil e formulário",
+        "dialogNovoTitulo": "Novo layout",
+        "dialogNovoCancelar": "Cancelar",
+        "dialogNovoContinuar": "Abrir editor",
+        "campoPerfil": "Perfil (grupo de usuário)",
+        "campoPerfilPlaceholder": "Selecione o perfil",
+        "campoFormulario": "Formulário / tela",
+        "campoFormularioPlaceholder": "Selecione o código no catálogo",
+        "selecionePerfilEFormulario": "Selecione perfil e formulário.",
+        "dialogEditorTitulo": "Layout: {codigo} · perfil id {perfil}",
+        "dialogJsonLabel": "JSON",
+        "dialogCancelar": "Cancelar",
+        "dialogSalvar": "Salvar",
+        "dialogSalvando": "Salvando…",
+        "carregandoJson": "Carregando configuração…",
+        "formulario": {
+          "tituloNovo": "Novo layout por perfil",
+          "tituloEdicao": "{perfil} — {codigo}",
+          "subtitulo": "Edite o JSON do layout para o perfil e a tela escolhidos.",
+          "abaIdentificacao": "Identificação",
+          "abaJson": "Layout (JSON)",
+          "resumoPerfil": "Perfil",
+          "resumoFormulario": "Formulário / tela",
+          "hintPrimeiraEtapa": "Escolha o perfil e o código da tela; em seguida use a aba JSON.",
+          "aguardandoSelecaoJson": "Defina perfil e formulário na aba Identificação para carregar o JSON.",
+          "botaoRefazerEscolha": "Refazer escolha",
+          "carregandoMeta": "Carregando perfis e catálogo…",
+          "botaoContinuarJson": "Abrir editor JSON"
+        }
+      }
+    },
+    "abas": {
+      "dashboard": "Indicadores",
+      "emBreve": "Em breve",
+      "clientes": "Clientes",
+      "medicos": "Médicos",
+      "cbo": "CBO",
+      "cid": "CID",
+      "conselhoRegional": "Conselho regional",
+      "especialidadeMedica": "Especialidade médica",
+      "etnia": "Etnia",
+      "feriado": "Feriado",
+      "motivoCancelamento": "Motivo cancelamento",
+      "motivoDesconto": "Motivo desconto",
+      "motivoExameRetificacao": "Motivo retificação exame",
+      "motivoOrcamentoRejeicao": "Motivo rejeição orçamento",
+      "motivoQuarentena": "Motivo quarentena",
+      "motivoRecoleta": "Motivo recoleta",
+      "motivoRetificacao": "Motivo retificação",
+      "raca": "Raça",
+      "situacaoColeta": "Situação coleta",
+      "tipoAplicacao": "Tipo aplicação",
+      "tipoDestinoResultado": "Tipo destino resultado",
+      "tipoEstadoCivil": "Tipo estado civil",
+      "tipoEvento": "Tipo evento",
+      "tipoIndicacao": "Tipo indicação",
+      "tipoIntegracao": "Tipo integração",
+      "tipoInterface": "Tipo interface",
+      "tipoPagamento": "Tipo pagamento",
+      "precoTabela": "Tabela de preço",
+      "precoFator": "Fator",
+      "tipoRelatorio": "Tipo relatório",
+      "unidadeFederacao": "UF / federação",
+      "pendenciaResultado": "Pendência resultado",
+      "portaSerial": "Porta serial",
+      "mapaDefinicao": "Definição de mapas",
+      "mapaProducao": "Mapas de produção",
+      "monitorMapas": "Monitor de mapas",
+      "vetEspecie": "Espécie (animal)",
+      "vetRaca": "Raça (animal)",
+      "unidadeAtendimento": "Unidade de atendimento",
+      "analisadores": "Analisadores",
+      "aplicacoes": "Aplicações",
+      "computadores": "Computadores",
+      "convenios": "Convênios",
+      "faturas": "Faturas",
+      "orcamentos": "Orçamentos",
+      "exames": "Exames",
+      "exameMaterial": "Exame / material",
+      "examesMaterialLabApoio": "Exames laboratório de apoio (DE/PARA)",
+      "grupos": "Grupos",
+      "grupoPerfil": "Grupo (perfil)",
+      "usuarioPermissoes": "Permissões",
+      "indicacoes": "Indicações",
+      "integracoes": "Integrações",
+      "labsApoio": "Laboratórios",
+      "labsApoioWs": "Laboratórios de apoio WS",
+      "locaisArmazenamento": "Locais armazenamento",
+      "sorotecaGrades": "Grades",
+      "cadastrosSoroteca": "Soroteca (tabelas)",
+      "materiais": "Materiais",
+      "medicamentos": "Medicamentos",
+      "modelosResultado": "Modelos resultado",
+      "procedencias": "Procedências",
+      "questionarios": "Questionários",
+      "recipientes": "Recipientes",
+      "setor": "Setores",
+      "usuarios": "Usuários",
+      "preferenciasFormularios": "Formulários",
+      "preferenciasLayoutFormulario": "Layout formulário",
+      "tenacidadeConfiguracao": "Config. laboratório",
+      "saudeHumana": "Saúde Humana",
+      "atendimentos": "Atendimentos saúde humana",
+      "registroColetor": "Registro de coletor",
+      "ajudaDocumentacao": "Documentação",
+      "ajudaSuporte": "Suporte",
+      "implantacaoTenacidade": "Tenacidade",
+      "fechar": "Fechar aba",
+      "aria": "Abas da home",
+      "rolarAnterior": "Rolar abas para a esquerda",
+      "rolarProxima": "Rolar abas para a direita",
+      "cancelar": "Cancelar",
+      "fecharTodasMenu": "Fechar todas as abas",
+      "fecharTodasTitulo": "Fechar todas as abas?",
+      "fecharTodasMensagem": "Registros não salvos serão perdidos. Deseja continuar?",
+      "fecharTodasConfirmar": "Fechar todas"
+    },
+    "conteudo": {
+      "areaVazia": "Área de conteúdo da Home Liga.",
+      "dashboard": {
+        "titulo": "Indicadores",
+        "subtitulo": "Resumo operacional da unidade. Atalhos à esquerda abrem módulos em abas.",
+        "vazio": "Layout-base do início preparado para próximos componentes."
+      },
+      "emBreve": {
+        "titulo": "Em breve",
+        "subtitulo": "",
+        "vazio": "Esta funcionalidade ainda não está disponível na versão web."
+      },
+      "clientes": {
+        "titulo": "Clientes",
+        "subtitulo": "",
+        "vazio": "Layout-base de clientes preparado para próximos componentes."
+      },
+      "medicos": {
+        "titulo": "Médicos",
+        "subtitulo": "",
+        "vazio": "Layout-base de médicos preparado para próximos componentes."
+      },
+      "saudeHumana": {
+        "titulo": "Módulos > Saúde Humana",
+        "subtitulo": "",
+        "vazio": "Layout-base de Saúde Humana preparado para próximos componentes."
+      },
+      "atendimentos": {
+        "titulo": "Saúde Humana > Atendimento",
+        "subtitulo": "Mestre e detalhes gravados em uma transação (atendimento e filhos).",
+        "vazio": ""
+      },
+      "registroColetor": {
+        "titulo": "Coleta > Registro de coletor",
+        "subtitulo": "Registro de coleta por amostra ou atendimento.",
+        "vazio": ""
+      },
+      "cbo": {
+        "titulo": "Cadastros > CBO",
+        "subtitulo": "",
+        "vazio": "Layout-base de CBO (Classificação Brasileira de Ocupações)."
+      },
+      "cid": {
+        "titulo": "Cadastros > CID",
+        "subtitulo": "",
+        "vazio": "Classificação Internacional de Doenças (cid)."
+      },
+      "conselhoRegional": {
+        "titulo": "Cadastros > Conselho regional",
+        "subtitulo": "",
+        "vazio": "Conselhos regionais (conselho_regional)."
+      },
+      "especialidadeMedica": {
+        "titulo": "Cadastros > Especialidade médica",
+        "subtitulo": "",
+        "vazio": "Especialidades médicas (especialidade_medica)."
+      },
+      "etnia": {
+        "titulo": "Cadastros > Etnia",
+        "subtitulo": "",
+        "vazio": "Etnias (etnia)."
+      },
+      "feriado": {
+        "titulo": "Cadastros > Feriado",
+        "subtitulo": "",
+        "vazio": "Feriados da unidade (feriado)."
+      },
+      "motivoCancelamento": {
+        "titulo": "Cadastros > Motivo cancelamento",
+        "subtitulo": "",
+        "vazio": "Motivos de cancelamento (motivo_cancelamento)."
+      },
+      "motivoDesconto": {
+        "titulo": "Cadastros > Motivo desconto",
+        "subtitulo": "",
+        "vazio": "Motivos de desconto (motivo_desconto)."
+      },
+      "motivoExameRetificacao": {
+        "titulo": "Cadastros > Motivo retificação exame",
+        "subtitulo": "",
+        "vazio": "Motivos de retificação de exame (motivo_exame_retificacao)."
+      },
+      "motivoOrcamentoRejeicao": {
+        "titulo": "Cadastros > Motivo rejeição orçamento",
+        "subtitulo": "",
+        "vazio": "Motivos de rejeição de orçamento (motivo_orcamento_rejeicao)."
+      },
+      "motivoQuarentena": {
+        "titulo": "Cadastros > Motivo quarentena",
+        "subtitulo": "",
+        "vazio": "Motivos de quarentena (motivo_quarentena)."
+      },
+      "motivoRecoleta": {
+        "titulo": "Cadastros > Motivo recoleta",
+        "subtitulo": "",
+        "vazio": "Motivos de recoleta (motivo_recoleta)."
+      },
+      "motivoRetificacao": {
+        "titulo": "Cadastros > Motivo retificação",
+        "subtitulo": "",
+        "vazio": "Motivos de retificação de resultado (motivo_retificacao)."
+      },
+      "raca": {
+        "titulo": "Cadastros > Raça",
+        "subtitulo": "",
+        "vazio": "Raças (raca)."
+      },
+      "situacaoColeta": {
+        "titulo": "Cadastros > Situação de coleta",
+        "subtitulo": "",
+        "vazio": "Situações de coleta (situacao_coleta)."
+      },
+      "tipoAplicacao": {
+        "titulo": "Cadastros > Tipo de aplicação",
+        "subtitulo": "",
+        "vazio": "Tipos de aplicação (tipo_aplicacao)."
+      },
+      "tipoDestinoResultado": {
+        "titulo": "Cadastros > Tipo destino de resultado",
+        "subtitulo": "",
+        "vazio": "Tipos de destino de resultado (tipo_destino_resultado)."
+      },
+      "tipoEstadoCivil": {
+        "titulo": "Cadastros > Tipo estado civil",
+        "subtitulo": "",
+        "vazio": "Tipos de estado civil (tipo_estado_civil)."
+      },
+      "tipoEvento": {
+        "titulo": "Cadastros > Tipo de evento",
+        "subtitulo": "",
+        "vazio": "Tipos de evento (tipo_evento)."
+      },
+      "tipoIndicacao": {
+        "titulo": "Cadastros > Tipo de indicação",
+        "subtitulo": "",
+        "vazio": "Tipos de indicação (tipo_indicacao)."
+      },
+      "tipoIntegracao": {
+        "titulo": "Cadastros > Tipo de integração",
+        "subtitulo": "",
+        "vazio": "Tipos de integração (tipo_integracao)."
+      },
+      "tipoInterface": {
+        "titulo": "Cadastros > Tipo de interface",
+        "subtitulo": "",
+        "vazio": "Tipos de interface (tipo_interface)."
+      },
+      "tipoPagamento": {
+        "titulo": "Cadastros > Tipo de pagamento",
+        "subtitulo": "",
+        "vazio": "Tipos de pagamento (tipo_pagamento)."
+      },
+      "precoTabela": {
+        "titulo": "Cadastros > Tabela de preço",
+        "subtitulo": "",
+        "vazio": "Tabelas de preço (preco_tabela) e itens (preco_exame)."
+      },
+      "precoFator": {
+        "titulo": "Cadastros > Fatores",
+        "subtitulo": "",
+        "vazio": "Fatores de preço (preco_fator)."
+      },
+      "tipoRelatorio": {
+        "titulo": "Cadastros > Tipo de relatório",
+        "subtitulo": "",
+        "vazio": "Tipos de relatório (tipo_relatorio)."
+      },
+      "unidadeFederacao": {
+        "titulo": "Cadastros > Unidade da federação",
+        "subtitulo": "",
+        "vazio": "UF / unidades da federação (unidade_federacao)."
+      },
+      "pendenciaResultado": {
+        "titulo": "Cadastros > Pendência de resultado",
+        "subtitulo": "",
+        "vazio": "Pendências de resultado (pendencia_resultado)."
+      },
+      "portaSerial": {
+        "titulo": "Cadastros > Porta serial",
+        "subtitulo": "",
+        "vazio": "Portas seriais (porta_serial)."
+      },
+      "mapaDefinicao": {
+        "titulo": "Planejamento > Definição de mapas",
+        "subtitulo": "",
+        "vazio": "Definições de mapa (mapa_definicao). Use a listagem e o botão Novo nesta aba."
+      },
+      "mapaProducao": {
+        "titulo": "Produção > Mapas de produção",
+        "subtitulo": "",
+        "vazio": "Consulta aos mapas de produção (mapa). Os mapas são formados pelo fluxo de atendimento."
+      },
+      "monitorMapas": {
+        "titulo": "Planejamento > Monitor de mapas",
+        "subtitulo": "",
+        "vazio": "Acompanhamento e impressão de grupos de mapas. Para ver detalhes de um mapa, use Mapas de produção."
+      },
+      "vetEspecie": {
+        "titulo": "Cadastros > Espécie (animal)",
+        "subtitulo": "",
+        "vazio": "Espécies veterinárias (vet_especie)."
+      },
+      "vetRaca": {
+        "titulo": "Cadastros > Raça (animal)",
+        "subtitulo": "",
+        "vazio": "Raças veterinárias (vet_raca)."
+      },
+      "unidadeAtendimento": {
+        "titulo": "Cadastros > Unidade de atendimento",
+        "subtitulo": "",
+        "vazio": "Unidades de atendimento (unidade)."
+      },
+      "analisadores": {
+        "titulo": "Cadastros > Analisadores",
+        "subtitulo": "",
+        "vazio": "Analisadores (analisador). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "aplicacoes": {
+        "titulo": "Cadastros > Aplicações",
+        "subtitulo": "",
+        "vazio": "Aplicações de metadados (aplicacao). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "computadores": {
+        "titulo": "Cadastros > Computadores",
+        "subtitulo": "",
+        "vazio": "Computadores (computador). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "convenios": {
+        "titulo": "Cadastros > Convênios",
+        "subtitulo": "",
+        "vazio": "Convênios (convenio). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "faturas": {
+        "titulo": "Faturamento > Faturas",
+        "subtitulo": "",
+        "vazio": "Faturas de convênio (fatura). Listagem nesta aba; criação via API ou formulário em evolução."
+      },
+      "orcamentos": {
+        "titulo": "Recepção > Orçamento",
+        "subtitulo": "",
+        "vazio": "Orçamentos (orcamento). Listagem e cadastro nesta aba ou pelo menu Módulos > Recepção."
+      },
+      "exames": {
+        "titulo": "Cadastros > Exames",
+        "subtitulo": "",
+        "vazio": "Exames (exame). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "grupos": {
+        "titulo": "Cadastros > Grupos",
+        "subtitulo": "",
+        "vazio": "Grupos (grupo). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "grupoPerfil": {
+        "titulo": "Acesso > Grupo (perfil)",
+        "subtitulo": "",
+        "vazio": "Grupos de usuário (grupo_usuario) e permissões por tela, salvos em uma única operação."
+      },
+      "usuarioPermissoes": {
+        "titulo": "Cadastros > Permissões",
+        "subtitulo": "",
+        "vazio": "Permissões por grupo de usuário e formulário (usuario_permissoes)."
+      },
+      "indicacoes": {
+        "titulo": "Cadastros > Indicações",
+        "subtitulo": "",
+        "vazio": "Indicações (indicacao). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "integracoes": {
+        "titulo": "Cadastros > Integrações",
+        "subtitulo": "",
+        "vazio": "Integrações (integracao). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "labsApoio": {
+        "titulo": "Cadastros > Integrações > Laboratórios",
+        "subtitulo": "",
+        "vazio": "Laboratórios de apoio (lab_apoio). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "labsApoioWs": {
+        "titulo": "Cadastros > Integrações > Laboratórios de apoio WS",
+        "subtitulo": "",
+        "vazio": "Configuração B2B por unidade (lab_apoio_unidade): listagem só de laboratórios que já têm ao menos uma unidade configurada no tenant; use Novo para incluir a primeira ou outras unidades."
+      },
+      "locaisArmazenamento": {
+        "titulo": "Cadastros > Locais armazenamento",
+        "subtitulo": "",
+        "vazio": "Locais de armazenamento (local_armazenamento). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "materiais": {
+        "titulo": "Cadastros > Materiais",
+        "subtitulo": "",
+        "vazio": "Materiais (material). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "medicamentos": {
+        "titulo": "Cadastros > Medicamentos",
+        "subtitulo": "",
+        "vazio": "Medicamentos (medicamento). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "modelosResultado": {
+        "titulo": "Cadastros > Modelos de resultado",
+        "subtitulo": "",
+        "vazio": "Modelos de resultado (modelo_resultado). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "procedencias": {
+        "titulo": "Cadastros > Procedências",
+        "subtitulo": "",
+        "vazio": "Procedências (procedencia). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "questionarios": {
+        "titulo": "Cadastros > Questionários",
+        "subtitulo": "",
+        "vazio": "Questionários (questionario). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "recipientes": {
+        "titulo": "Cadastros > Recipientes",
+        "subtitulo": "",
+        "vazio": "Recipientes (recipiente). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "setor": {
+        "titulo": "Cadastros > Exames > Setores",
+        "subtitulo": "",
+        "vazio": "Setores de exame (setor). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "usuarios": {
+        "titulo": "Cadastros > Usuários",
+        "subtitulo": "",
+        "vazio": "Usuários do tenant (usuario). Listagem e cadastro nesta aba ou pelo menu lateral."
+      },
+      "ajudaDocumentacao": {
+        "titulo": "Ajuda > Documentação",
+        "subtitulo": "Manuais e referência do sistema.",
+        "vazio": "A documentação detalhada será publicada aqui. Utilize o menu Cadastros e Relatórios para operação diária."
+      },
+      "implantacaoTenacidade": {
+        "titulo": "Tenacidades",
+        "subtitulo": "Cadastro global de laboratórios (implantação).",
+        "vazio": ""
+      },
+      "tenacidadeConfiguracao": {
+        "titulo": "Preferências > Configuração do laboratório",
+        "subtitulo": "Parâmetros do tenant atual (tenacidade_configuracao).",
+        "vazio": ""
+      },
+      "ajudaSuporte": {
+        "titulo": "Ajuda > Suporte",
+        "subtitulo": "Canais de suporte ao utilizador.",
+        "vazio": "Para suporte técnico, contate a equipe responsável pelo InfoTIME na sua organização."
+      }
+    },
+    "menuItens": {
+      "infotime-rh": "R.H.",
+      "infotime-comercial": "Comercial",
+      "infotime-financeiro": "Financeiro",
+      "infotime-estoque": "Estoque",
+      "infotime-modulos-operacionais": "Módulos",
+      "dashboard": "Indicadores",
+      "cadastros": "Cadastros",
+      "cadastros-clientes": "Lista de clientes",
+      "cadastros-medicos": "Lista de médicos",
+      "cadastros-grupo-clientes": "Clientes",
+      "cadastros-grupo-medicos": "Médicos",
+      "cadastros-grupo-pagamentos": "Pagamentos",
+      "cadastros-grupo-laboratorio": "Laboratório",
+      "cadastros-grupo-agenda": "Agenda",
+      "cadastros-grupo-sistema": "Sistema",
+      "cadastros-grupo-convenios-exames": "Convênios e exames",
+      "cadastros-grupo-estoque": "Estoque e grupos",
+      "cadastros-grupo-relatorios": "Relatórios",
+      "cadastros-cbo": "CBO",
+      "cadastros-cid": "CID",
+      "cadastros-conselho-regional": "Conselho regional",
+      "cadastros-especialidade-medica": "Especialidade médica",
+      "cadastros-etnia": "Etnia",
+      "cadastros-feriado": "Feriado",
+      "cadastros-motivo-cancelamento": "Motivo cancelamento",
+      "cadastros-motivo-desconto": "Motivo desconto",
+      "cadastros-motivo-exame-retificacao": "Motivo retif. exame",
+      "cadastros-motivo-orcamento-rejeicao": "Motivo rej. orçamento",
+      "cadastros-motivo-quarentena": "Motivo quarentena",
+      "cadastros-motivo-recoleta": "Motivo recoleta",
+      "cadastros-motivo-retificacao": "Motivo retificação",
+      "cadastros-raca": "Raça",
+      "cadastros-situacao-coleta": "Situação coleta",
+      "cadastros-tipo-aplicacao": "Tipo aplicação",
+      "cadastros-tipo-destino-resultado": "Tipo destino resultado",
+      "cadastros-tipo-estado-civil": "Tipo estado civil",
+      "cadastros-tipo-evento": "Tipo evento",
+      "cadastros-tipo-indicacao": "Tipo indicação",
+      "cadastros-tipo-integracao": "Tipo integração",
+      "cadastros-tipo-interface": "Tipo interface",
+      "cadastros-tipo-pagamento": "Tipo pagamento",
+      "cadastros-preco-tabela": "Tabela de preço",
+      "cadastros-preco-fator": "Fatores",
+      "cadastros-tipo-relatorio": "Tipo relatório",
+      "cadastros-unidade-federacao": "UF / federação",
+      "cadastros-pendencia-resultado": "Pendência resultado",
+      "cadastros-porta-serial": "Porta serial",
+      "cadastros-vet-especie": "Espécie (animal)",
+      "cadastros-vet-raca": "Raça (animal)",
+      "cadastros-analisadores": "Analisadores",
+      "cadastros-aplicacoes": "Aplicações",
+      "cadastros-computadores": "Computadores",
+      "cadastros-convenios": "Convênios",
+      "cadastros-exames": "Exame",
+      "cadastros-grupos": "Grupos",
+      "cadastros-indicacoes": "Indicações",
+      "cadastros-integracoes": "Integrações",
+      "cadastros-labs-apoio": "Labs apoio",
+      "cadastros-labs-apoio-unidade": "Lab apoio por unidade",
+      "cadastros-labs-apoio-ws": "Labs apoio WS",
+      "cadastros-locais-armazenamento": "Locais armazenamento",
+      "cadastros-materiais": "Materiais",
+      "cadastros-medicamentos": "Medicamentos",
+      "cadastros-modelos-resultado": "Modelos resultado",
+      "cadastros-procedencias": "Procedências",
+      "cadastros-questionarios": "Questionários",
+      "cadastros-recipientes": "Recipientes",
+      "cadastros-setores": "Setores",
+      "cadastros-usuarios": "Usuários",
+      "clientes": "Clientes",
+      "preferencias": "Preferências",
+      "preferencias-formularios": "Formulários",
+      "preferencias-layout-formulario": "Layout formulário",
+      "solucoes": "Módulos",
+      "solucoes-saude-humana": "Saúde Humana",
+      "relatorios": "Relatórios",
+      "relatorios-tipos": "Tipos de relatório",
+      "ajuda": "Ajuda",
+      "ajuda-documentacao": "Documentação",
+      "ajuda-suporte": "Suporte"
+    },
+    "formulario": {
+      "nav": {
+        "aria": "Seções do formulário"
+      },
+      "campoObrigatorioTooltip": "Campo obrigatório",
+      "legendaAsteriscoCampoObrigatorio": "Campo obrigatório",
+      "carregandoPermissoes": "Carregando permissões…",
+      "tituloConfirmarExclusaoCadastro": "Excluir registro?",
+      "confirmarExclusaoCadastro": "Deseja realmente excluir este registro? Esta ação não pode ser desfeita.",
+      "botaoConfirmarExclusaoCadastro": "Excluir",
+      "senhaCadastroMostrar": "Mostrar senha",
+      "senhaCadastroOcultar": "Ocultar senha",
+      "abasTopo": {
+        "abasAria": "Seções do painel"
+      },
+      "etapas": {
+        "abasAria": "Etapas do formulário",
+        "avancar": "Avançar",
+        "concluir": "Concluir",
+        "voltar": "Voltar",
+        "concluaEtapa": "Conclua a etapa atual para avançar.",
+        "concluaEtapasAnteriores": "Conclua as etapas anteriores antes de salvar.",
+        "etapaBloqueada": "Etapa bloqueada. Conclua a etapa atual para avançar."
+      },
+      "orcamento": {
+        "nomeClienteEtapas": "Informe o nome do cliente (mínimo 2 caracteres) para avançar.",
+        "menuAcoes": "Ações",
+        "menuAcoesAria": "Abrir menu de ações do orçamento",
+        "acaoConverter": "Converter (atendimento)",
+        "acaoMarcarVencido": "Marcar vencido",
+        "acaoRejeitar": "Rejeitar",
+        "dialogConverterTitulo": "Converter orçamento",
+        "dialogConverterIdAtendimento": "ID do atendimento",
+        "dialogConverterConfirmar": "Converter",
+        "dialogVencerTitulo": "Marcar orçamento como vencido",
+        "dialogVencerMensagem": "O orçamento passará ao status vencido e não poderá mais ser alterado.",
+        "dialogVencerConfirmar": "Confirmar",
+        "dialogRejeitarTitulo": "Rejeitar orçamento",
+        "dialogRejeitarMotivo": "Motivo de rejeição",
+        "dialogRejeitarConfirmar": "Rejeitar",
+        "validadeResumo": "Validade: {dias} dias · fim previsto em {data}",
+        "validadeRascunho": "Prazo de validade padrão: {dias} dias após a inclusão (parâmetro da tenacidade quando configurado).",
+        "editarCliente": "Editar cliente",
+        "novoCliente": "Novo cliente",
+        "dataHoraInclusaoInicio": "Data/hora inclusão início",
+        "dataHoraInclusaoFim": "Data/hora inclusão fim",
+        "usuarioInclusao": "Usuário inclusão",
+        "dataNascimento": "Data nascimento",
+        "idadeDma": "Idade",
+        "idCliente": "ID cliente",
+        "gridExame": {
+          "exameMaterial": "Exame/Material"
+        }
+      }
+    },
+    "adminMetadados": {
+      "aplicacoesPaginaTitulo": "Metadados — aplicações",
+      "listagemTitulo": "Aplicações (metadados)",
+      "listagemSub": "Cadastro de codigo_aplicacao e flags de uso.",
+      "atualizar": "Atualizar",
+      "vazio": "Nenhuma aplicação cadastrada.",
+      "placeholderBusca": "Buscar por código ou nome…",
+      "col": {
+        "codigo": "Código",
+        "nome": "Nome",
+        "listagem": "Listagem",
+        "formulario": "Formulário"
+      },
+      "salvoOk": "Ok",
+      "novaTitulo": "Nova aplicação",
+      "campoCodigo": "codigo_aplicacao",
+      "campoNome": "nome_aplicacao",
+      "campoTabela": "nome_tabela_principal",
+      "campoRota": "nome_rota_frontend (opcional)",
+      "campoEndpoint": "nome_endpoint_backend (opcional)",
+      "criar": "Criar"
+    },
+    "grupoPerfilFormLayout": {
+      "tituloNovo": "Novo grupo de usuário",
+      "tituloEditar": "Editar grupo de usuário",
+      "subtituloNovo": "Cadastre o perfil (`grupo_usuario`). As linhas de permissão (`usuario_permissoes`) e o menu visível são gravados ao salvar.",
+      "subtituloEditar": "Atualize a descrição, as permissões por formulário e o menu; tudo é persistido ao salvar.",
+      "secaoDadosTitulo": "Dados",
+      "secaoDadosDescricao": "Identificação do grupo de usuário (perfil).",
+      "secaoLaboratorioTitulo": "Laboratório",
+      "secaoLaboratorioDescricao": "Escopo do tenant (`id_tenacidade` da sessão ou do registro). Somente leitura.",
+      "secaoPermissoesTitulo": "Permissões por formulário",
+      "secaoPermissoesDescricao": "Detalhe `usuario_permissoes`: uma linha por formulário, com flags de acesso. Nada é gravado no servidor até salvar o cadastro.",
+      "secaoAuditoriaTitulo": "Auditoria",
+      "secaoAuditoriaDescricao": "Rastreio preenchido pelo sistema.",
+      "campoCodigo": "Código",
+      "campoDescricao": "Descrição",
+      "campoIdLaboratorio": "Código do laboratório",
+      "campoNomeLaboratorio": "Laboratório",
+      "campoIdUsuarioAuditoria": "ID usuário auditoria",
+      "campoIpAuditoria": "IP auditoria",
+      "campoAplicacaoAuditoria": "Aplicação auditoria"
+    },
+    "grupoPerfilForm": {
+      "sim": "Sim",
+      "nao": "Não",
+      "tabelaVazia": "Nenhum formulário com permissão explícita. Pesquise acima para incluir (como na seção Convênio do atendimento). Salve o cadastro para gravar.",
+      "colunaSiglaFormulario": "Sigla",
+      "colunaCodigoFormulario": "Código",
+      "editarLinha": "Editar permissão",
+      "removerLinha": "Remover permissão",
+      "flagsGrupo": "Permissões na tela",
+      "flagAdministrador": "Administrador",
+      "flagIncluir": "Incluir",
+      "flagEditar": "Editar",
+      "flagExcluir": "Excluir",
+      "menuTitulo": "Itens de menu visíveis no login",
+      "menuFiltroDica": "Limite por área do menu e refine com o texto; a árvore e as marcações continuam as mesmas.",
+      "menuFiltroArea": "Área do menu",
+      "menuFiltroOpcaoTodos": "Tudo (menu completo)",
+      "menuFiltroOpcaoInicio": "Início",
+      "menuFiltroBusca": "Filtrar itens",
+      "menuFiltroPlaceholder": "Nome da tela, id ou parte do caminho…",
+      "menuFiltroSemResultados": "Nenhum item corresponde ao filtro. Troque a área ou limpe o texto.",
+      "menuExibirAgrupador": "Exibir \"{nome}\" no menu",
+      "ariaMenuItens": "Itens de menu visíveis no login",
+      "cancelar": "Cancelar",
+      "aplicar": "Aplicar",
+      "duplicidadeFormulario": "Já existe uma permissão para este formulário neste grupo.",
+      "confirmarRemocaoTitulo": "Remover permissão?",
+      "botaoConfirmarRemocaoLinha": "Remover",
+      "confirmarRemocaoMensagem": "Remover a linha «{titulo}»? A alteração só será gravada ao salvar o cadastro.",
+      "lookupFormularioLabel": "Formulário (tela)",
+      "lookupFormularioPlaceholder": "Digite código, descrição ou id do formulário",
+      "lookupFormularioAria": "Incluir permissão por formulário",
+      "lookupFormularioId": "Id {id}",
+      "modalCatalogoTitulo": "Selecionar formulário",
+      "modalCatalogoFiltro": "Filtrar lista",
+      "modalCatalogoPlaceholder": "Código, descrição ou id…",
+      "modalCatalogoVazio": "Nenhum formulário encontrado com este filtro.",
+      "painelAriaLabel": "Edição da permissão por formulário",
+      "painelTituloPrefixo": "Permissão",
+      "painelSecaoFormulario": "Formulário",
+      "painelSecaoFormularioDesc": "Registro escolhido na busca (somente leitura).",
+      "painelCampoTela": "Tela",
+      "painelCampoIdFormulario": "Código (id_formulario)",
+      "painelSecaoFlags": "Permissões na tela",
+      "painelSecaoFlagsDesc": "Flags de acesso (administrador, incluir, editar, excluir) para este formulário.",
+      "painelBotaoTrocar": "Trocar",
+      "painelBotaoVoltar": "Voltar",
+      "painelBotaoConfirmar": "Confirmar",
+      "painelBotaoExcluir": "Excluir"
+    },
+    "listagem": {
+      "comum": {
+        "novo": "Novo",
+        "voltar": "Voltar",
+        "salvar": "Salvar",
+        "pesquisar": "Pesquisar...",
+        "carregando": "Carregando registros…",
+        "carregandoDica": "Estamos consultando os dados. Em instantes a lista será exibida.",
+        "nenhumRegistro": "Nenhum registro encontrado.",
+        "atualizar": "Atualizar",
+        "ordenacaoServidor": "ordenação no servidor",
+        "paginacaoIntervalo": "'{first}' a '{last}' de '{totalRecords}'",
+        "abrir": "Abrir",
+        "colunaAcoes": "Ações",
+        "limparBusca": "Limpar pesquisa e recarregar a listagem",
+        "buscaAplicarComEnter": "Pressione Enter para buscar na lista.",
+        "buscaAplicar": "Aplicar busca na listagem",
+        "exportar": "Exportar",
+        "exportarCsv": "CSV",
+        "exportarPdf": "PDF",
+        "exportarPdfEmBreve": "Em breve — o DataTable do PrimeReact não exporta PDF nativamente.",
+        "buscaValidacaoCpfInvalido": "CPF inválido. Verifique os dígitos.",
+        "buscaValidacaoCnpjInvalido": "CNPJ inválido. Verifique os dígitos.",
+        "buscaValidacaoDataIncompleta": "Informe a data completa (dd/mm/aaaa).",
+        "buscaValidacaoDataInvalida": "Data inválida.",
+        "buscaValidacaoCepInvalido": "CEP inválido (use até 8 dígitos).",
+        "buscaValidacaoTelefoneInvalido": "Telefone inválido (use até 11 dígitos).",
+        "pesquisarPor": "Pesquisar por",
+        "buscaPlaceholderPorCampo": "Pesquisar por {campo}",
+        "colunasPlaceholder": "Colunas",
+        "colunasSelecionadasRotulo": "colunas",
+        "colunasVisiveis": "Colunas visíveis na grade",
+        "filtroRefinadoAlternar": "Abrir ou fechar filtro refinado",
+        "filtroRefinadoTitulo": "Filtro refinado",
+        "fechar": "Fechar",
+        "fecharFiltroRefinado": "Fechar filtro refinado",
+        "limparFiltros": "Limpar",
+        "filtrosAtivosAria": "Filtros refinados ativos",
+        "filtrosAtivosOverflowAbrir": "Ver outros filtros aplicados",
+        "filtrosAtivosOverflowTitulo": "Outros",
+        "filtrosAtivosOverflowRemover": "Remover este filtro",
+        "filtroRefinadoDataUnica": "Data",
+        "filtroRefinadoEntreDatas": "Entre datas",
+        "filtroRefinadoDataInicio": "Data inicial",
+        "filtroRefinadoDataFim": "Data final",
+        "filtroRefinadoDataPlaceholder": "dd/mm/aaaa",
+        "filtroRefinadoLimparCampo": "Limpar este filtro",
+        "cabecalhoId": "Id",
+        "valorCelulaAtivo": "Ativo",
+        "valorCelulaInativo": "Inativo",
+        "valorCelulaSimComLetra": "Sim (S)",
+        "valorCelulaNaoComLetra": "Não (N)"
+      },
+      "formularios": {
+        "tituloPagina": "Formulários",
+        "placeholderBusca": "Buscar por código, descrição ou ordem…",
+        "editarCadastro": "Abrir editor de configuração JSON desta tela"
+      },
+      "layoutFormulario": {
+        "tituloPagina": "Layout por perfil",
+        "placeholderBusca": "Buscar por perfil, código ou descrição do formulário…",
+        "nenhumRegistro": "Nenhum layout gravado. Use Novo para criar."
+      },
+      "orcamentos": {
+        "tituloPagina": "Orçamentos",
+        "placeholderBusca": "Buscar por nome, celular, exames ou número do orçamento…",
+        "editarCadastro": "Abrir cadastro do orçamento",
+        "colunas": {
+          "nome": "Nome",
+          "nascimento": "Nascimento",
+          "celular": "Celular",
+          "status": "Status",
+          "id": "ID"
+        }
+      },
+      "orcamento": {
+        "colIdOrcamento": "ID",
+        "colNascimento": "Nascimento",
+        "statusPendente": "Pendente",
+        "statusConvertido": "Convertido",
+        "statusRejeitado": "Rejeitado",
+        "statusVencido": "Vencido",
+        "statusCancelado": "Cancelado"
+      },
+      "clientes": {
+        "nomeTabela": "",
+        "tituloPagina": "Clientes",
+        "subtitulo": "",
+        "secaoCadastros": "Cadastros",
+        "colunas": {
+          "id": "ID",
+          "nome": "Nome",
+          "dataNascimento": "Data de nascimento",
+          "sexo": "Sexo",
+          "cpf": "CPF",
+          "documento": "Documento",
+          "email": "E-mail",
+          "telefone": "Telefone",
+          "bairro": "Bairro",
+          "cidade": "Cidade",
+          "status": "Situação",
+          "clienteDesde": "Cliente desde"
+        },
+        "sexo": {
+          "masculino": "Masculino",
+          "feminino": "Feminino",
+          "outro": "Outro",
+          "naoInformado": "Não informado"
+        },
+        "status": {
+          "ativo": "Ativo",
+          "inativo": "Inativo"
+        },
+        "placeholderBusca": "Buscar por nome, CPF, documento ou e-mail…",
+        "selecionarRegistro": "Selecionar cliente",
+        "editarCadastro": "Abrir formulário de cadastro do cliente",
+        "resumoListagem": "{count, plural, one {# registro} other {# registros}} · {ordenacao}",
+        "formulario": {
+          "novoTitulo": "Novo cliente",
+          "editarTitulo": "Editar cliente",
+          "subtituloNovo": "Preencha os dados do cadastro conforme o prontuário da unidade.",
+          "subtituloEditar": "Atualize as informações do cliente.",
+          "tituloGrupoCheckboxesPessoais": "Indicadores e preferências",
+          "grupos": {
+            "nomesTitulo": "Nome civil e social",
+            "nomesDescricao": "Identificação principal do paciente no cadastro.",
+            "documentosTitulo": "Documentos",
+            "codigosReferenciaTitulo": "Códigos e prontuário",
+            "perfilNascimentoTitulo": "Perfil e nascimento",
+            "medidasTitulo": "Medidas",
+            "enderecoCepLogradouroTitulo": "CEP, logradouro e número",
+            "enderecoBairroCidadeTitulo": "Bairro, cidade, UF e referência",
+            "contatoMeiosTitulo": "Telefones e e-mail",
+            "contatoSenhaTitulo": "Senha de internet",
+            "contatoSenhaDescricao": "Acesso opcional informado ao paciente; não reutilize a senha de login da unidade.",
+            "observacaoTitulo": "Observações para resultado"
+          },
+          "secoes": {
+            "identificacao": {
+              "titulo": "Identificação",
+              "descricao": "Nome, documentos e códigos do cadastro (cliente)."
+            },
+            "vinculos": {
+              "titulo": "Vínculos / referências",
+              "descricao": "Vínculos familiares e necessidade especial."
+            },
+            "pessoais": {
+              "titulo": "Dados pessoais",
+              "descricao": "Sexo, nascimento, medidas e indicadores clínicos."
+            },
+            "endereco": {
+              "titulo": "Endereço",
+              "descricao": "Localização e referência de correspondência."
+            },
+            "contato": {
+              "titulo": "Contato",
+              "descricao": "Telefones e e-mail."
+            },
+            "extensaoMetadados": {
+              "titulo": "Campos adicionais (metadados)",
+              "descricao": "Definidos em aplicacao_campo com seção `extensao_metadados`."
+            },
+            "complementar": {
+              "titulo": "Dados complementares",
+              "descricao": "Raça, CBO, etnia, senha de internet e observações para resultado."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "ID tenacidade, data de inclusão e rastreio preenchidos pelo sistema (somente leitura)."
+            }
+          },
+          "campos": {
+            "id": "Código",
+            "idGeradoPeloSistema": "Gerado automaticamente pelo banco; não editável.",
+            "auditoriaSomenteLeitura": "Preenchido pelo sistema; não editável.",
+            "nome": "Nome",
+            "nomeSocial": "Nome social",
+            "documento": "Documento",
+            "cpf": "CPF",
+            "codigoPassaporte": "Passaporte",
+            "prontuario": "Prontuário",
+            "codigoExterno": "Código externo",
+            "tenacidade": "Tenacidade",
+            "idTenacidade": "ID tenacidade",
+            "raca": "Raça",
+            "cbo": "CBO",
+            "etnia": "Etnia",
+            "clienteMae": "Cliente (mãe)",
+            "clientePai": "Cliente (pai)",
+            "clienteAcompanhante": "Cliente (acompanhante)",
+            "necessidadeEspecial": "Necessidade especial",
+            "sexo": "Sexo",
+            "estadoCivil": "Estado civil",
+            "dataNascimento": "Nascimento",
+            "peso": "Peso (inteiro)",
+            "altura": "Altura (inteiro)",
+            "diabetico": "Diabético",
+            "falecido": "Falecido",
+            "receberMensagem": "Receber mensagem",
+            "bloqueado": "Cliente bloqueado",
+            "cep": "CEP",
+            "logradouro": "Logradouro",
+            "numero": "Número",
+            "complemento": "Complemento",
+            "bairro": "Bairro",
+            "cidade": "Cidade",
+            "estado": "UF",
+            "enderecoReferencia": "Referência",
+            "email": "E-mail",
+            "telefone": "Telefone",
+            "celular": "Celular",
+            "senhaInternet": "Senha internet",
+            "observacaoResultado": "Obs. para resultado",
+            "dataInclusao": "Data de inclusão",
+            "idUsuarioAuditoria": "Usuário (auditoria)",
+            "enderecoIpAuditoria": "IP (auditoria)",
+            "nomeAplicacaoAuditoria": "Aplicação (auditoria)"
+          },
+          "sexoOpcoes": {
+            "ni": "Não informado",
+            "m": "Masculino",
+            "f": "Feminino",
+            "o": "Outro"
+          },
+          "estadoCivilOpcoes": {
+            "ni": "Não informado",
+            "s": "Solteiro(a)",
+            "c": "Casado(a)",
+            "d": "Divorciado(a)",
+            "v": "Viúvo(a)",
+            "u": "União estável"
+          },
+          "lookup": {
+            "filtrarLista": "Filtrar lista…",
+            "buscarCliente": "Digite nome, documento ou CPF (2+ caracteres)…"
+          },
+          "senhaInternetPlaceholderNovo": "Gerada automaticamente (8 caracteres: letras e números). Você pode alterar antes de salvar.",
+          "senhaInternetPlaceholderEdicao": "Deixe em branco para manter; ou informe 8 caracteres (letras e números, com ambos)",
+          "acoes": {
+            "cancelar": "Cancelar",
+            "salvar": "Salvar",
+            "salvando": "Salvando…",
+            "excluir": "Excluir",
+            "excluindo": "Excluindo…",
+            "confirmarExclusao": "Excluir permanentemente o cliente \"{nome}\"? Esta ação não pode ser desfeita.",
+            "erroNome": "Informe o nome.",
+            "erroCpf": "CPF inválido. Informe 11 dígitos corretos ou deixe em branco.",
+            "erroEmail": "E-mail inválido. Corrija o endereço ou deixe em branco.",
+            "erroSenhaInternetNovo": "A senha de internet deve ter 8 caracteres (apenas letras e números, com pelo menos uma letra e um dígito).",
+            "erroSenhaInternetFormato": "Senha inválida: exatamente 8 caracteres, apenas letras e números, com pelo menos uma letra e um dígito.",
+            "erroSalvar": "Não foi possível salvar. Tente novamente.",
+            "erroCarregar": "Não foi possível carregar o cliente.",
+            "erroExcluir": "Não foi possível excluir. Verifique vínculos no banco ou tente novamente.",
+            "erroCampoObrigatorio": "Preenchimento obrigatório.",
+            "erroValidacao": "Corrija os campos destacados.",
+            "erroValidacaoCampo": "Valor inválido para o campo.",
+            "erroMetadadosIndisponivel": "Configuração do formulário (metadados) não encontrada. Execute o seed SQL do motor de metadados para a aplicação cliente.",
+            "carregandoMetadados": "Carregando configuração do formulário…",
+            "carregandoMetadadosSplash": "Carregando…",
+            "carregandoMetadadosDetalhe": "Carregando configuração do formulário. Aguarde."
+          },
+          "placeholder": ""
+        }
+      },
+      "medicos": {
+        "tituloPagina": "Médicos",
+        "placeholderBusca": "Buscar por ID, nome, CPF, e-mail, telefone ou status…",
+        "selecionarRegistro": "Selecionar médico",
+        "editarCadastro": "Abrir formulário de cadastro do médico",
+        "colunas": {
+          "nome": "Nome",
+          "cpf": "CPF",
+          "email": "E-mail",
+          "telefone": "Telefone",
+          "ativo": "Situação"
+        },
+        "formulario": {
+          "novoTitulo": "Novo médico",
+          "editarTitulo": "Editar médico",
+          "subtituloNovo": "Preencha os dados do profissional (medico).",
+          "subtituloEditar": "Atualize as informações do médico.",
+          "secoes": {
+            "identificacao": {
+              "titulo": "Identificação",
+              "descricao": "Nome, CPF, sexo e código externo."
+            },
+            "profissional": {
+              "titulo": "Dados profissionais",
+              "descricao": "Especialidade, conselho regional, CRM, CNS e credenciais."
+            },
+            "contato": {
+              "titulo": "Contato",
+              "descricao": "E-mail, telefones e senha de internet."
+            },
+            "complementar": {
+              "titulo": "Complementares",
+              "descricao": "Convênios suspensos e situação ativo/inativo."
+            },
+            "extensaoMetadados": {
+              "titulo": "Campos adicionais (metadados)",
+              "descricao": "Definidos em aplicacao_campo com secao_formulario = extensao_metadados."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "ID tenacidade e rastreio preenchidos pelo sistema (somente leitura)."
+            }
+          },
+          "campos": {
+            "id": "Código",
+            "idGeradoPeloSistema": "Gerado automaticamente pelo banco; não editável.",
+            "auditoriaSomenteLeitura": "Preenchido pelo sistema; não editável.",
+            "nome": "Nome",
+            "cpf": "CPF",
+            "sexo": "Sexo",
+            "codigoExterno": "Código externo",
+            "especialidadeMedica": "Especialidade médica",
+            "conselhoRegional": "Conselho regional",
+            "estadoConselho": "UF conselho",
+            "numeroConselho": "Número no conselho (CRM)",
+            "numeroCns": "CNS",
+            "registroUnimed": "Registro Unimed",
+            "idCredencialConvenio": "ID credencial convênio",
+            "email": "E-mail",
+            "telefone": "Telefone",
+            "celular": "Celular",
+            "senhaInternet": "Senha internet",
+            "listaConvenioSuspenso": "Lista convênio suspenso",
+            "ativo": "Médico ativo",
+            "idTenacidade": "ID tenacidade",
+            "idUsuarioAuditoria": "Usuário (auditoria)",
+            "enderecoIpAuditoria": "IP (auditoria)",
+            "nomeAplicacaoAuditoria": "Aplicação (auditoria)"
+          },
+          "sexoOpcoes": {
+            "ni": "Não informado",
+            "m": "Masculino",
+            "f": "Feminino",
+            "o": "Outro"
+          },
+          "lookup": {
+            "filtrarLista": "Filtrar lista…"
+          },
+          "acoes": {
+            "cancelar": "Cancelar",
+            "salvar": "Salvar",
+            "salvando": "Salvando…",
+            "excluir": "Excluir",
+            "excluindo": "Excluindo…",
+            "confirmarExclusao": "Excluir permanentemente o médico \"{nome}\"? Esta ação não pode ser desfeita.",
+            "erroNome": "Informe o nome.",
+            "erroCpf": "CPF inválido. Informe 11 dígitos corretos ou deixe em branco.",
+            "erroEmail": "E-mail inválido. Corrija o endereço ou deixe em branco (máx. 50 caracteres).",
+            "erroSalvar": "Não foi possível salvar. Tente novamente.",
+            "erroCarregar": "Não foi possível carregar o médico.",
+            "erroExcluir": "Não foi possível excluir. Verifique vínculos no banco ou tente novamente.",
+            "erroCampoObrigatorio": "Preenchimento obrigatório.",
+            "erroValidacao": "Corrija os campos destacados.",
+            "erroValidacaoCampo": "Valor inválido para o campo.",
+            "erroMetadadosIndisponivel": "Configuração do formulário (metadados) não encontrada. Execute o script motor_metadados_upgrade_cliente_medico_form.sql no banco.",
+            "carregandoMetadados": "Carregando configuração do formulário…",
+            "carregandoMetadadosSplash": "Carregando…",
+            "carregandoMetadadosDetalhe": "Carregando configuração do formulário. Aguarde."
+          },
+          "placeholder": ""
+        },
+        "colunas": {
+          "id": "ID",
+          "nome": "Nome",
+          "documento": "CPF",
+          "email": "E-mail",
+          "telefone": "Telefone",
+          "status": "Status"
+        }
+      },
+      "cbo": {
+        "tituloPagina": "CBO (ocupações)",
+        "placeholderBusca": "Buscar por código numérico, descrição ou código externo…",
+        "editarCadastro": "Abrir formulário de cadastro do CBO",
+        "formulario": {
+          "novoTitulo": "Novo CBO",
+          "editarTitulo": "Editar CBO",
+          "subtituloNovo": "Cadastre uma ocupação da tabela cbo.",
+          "subtituloEditar": "Atualize descrição e códigos do CBO.",
+          "secoes": {
+            "dados": {
+              "titulo": "Dados do CBO",
+              "descricao": "Descrição da ocupação e códigos de referência (cbo)."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "Rastreio preenchido pelo sistema (somente leitura)."
+            }
+          },
+          "campos": {
+            "id": "Código",
+            "descricao": "Descrição",
+            "codigoExterno": "Código externo",
+            "codigoCbo": "Código numérico CBO",
+            "idUsuarioAuditoria": "Usuário (auditoria)",
+            "enderecoIpAuditoria": "IP (auditoria)",
+            "nomeAplicacaoAuditoria": "Aplicação (auditoria)"
+          },
+          "acoes": {
+            "cancelar": "Cancelar",
+            "salvar": "Salvar",
+            "salvando": "Salvando…",
+            "excluir": "Excluir",
+            "excluindo": "Excluindo…",
+            "confirmarExclusao": "Excluir permanentemente este CBO? Esta ação não pode ser desfeita se houver vínculos.",
+            "erroSalvar": "Não foi possível salvar. Tente novamente.",
+            "erroCarregar": "Não foi possível carregar o CBO.",
+            "erroExcluir": "Não foi possível excluir. Verifique vínculos no banco ou tente novamente.",
+            "erroCampoObrigatorio": "Preenchimento obrigatório.",
+            "erroValidacao": "Corrija os campos destacados.",
+            "erroValidacaoCampo": "Valor inválido para o campo.",
+            "erroMetadadosIndisponivel": "Configuração do formulário não encontrada.",
+            "carregandoMetadados": "Carregando configuração do formulário…",
+            "carregandoMetadadosSplash": "Carregando…",
+            "carregandoMetadadosDetalhe": "Carregando configuração do formulário. Aguarde."
+          },
+          "placeholder": ""
+        },
+        "colunas": {
+          "id": "Código",
+          "codigo_cbo": "Código CBO",
+          "descricao": "Descrição",
+          "codigo_externo": "Código externo"
+        }
+      },
+      "cid": {
+        "tituloPagina": "CID (doenças)",
+        "placeholderBusca": "Buscar por ID, código CID ou descrição…",
+        "editarCadastro": "Abrir formulário de cadastro do CID",
+        "selecionarRegistro": "Selecionar CID",
+        "formulario": {
+          "novoTitulo": "Novo CID",
+          "editarTitulo": "Editar CID",
+          "subtituloNovo": "Cadastre um código da Classificação Internacional de Doenças (cid).",
+          "subtituloEditar": "Atualize código e descrições do CID.",
+          "secoes": {
+            "dados": {
+              "titulo": "Dados",
+              "descricao": "Código CID e descrições (cid)."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "Rastreio preenchido pelo sistema (somente leitura)."
+            }
+          },
+          "campos": {
+            "id": "Código",
+            "codigoCid": "Código CID",
+            "descricao": "Descrição",
+            "descricaoCap": "Descrição CAP",
+            "descricaoCategoria": "Descrição categoria",
+            "observacao": "Observação",
+            "idUsuarioAuditoria": "Usuário (auditoria)",
+            "enderecoIpAuditoria": "IP (auditoria)",
+            "nomeAplicacaoAuditoria": "Aplicação (auditoria)"
+          },
+          "acoes": {
+            "cancelar": "Cancelar",
+            "salvar": "Salvar",
+            "salvando": "Salvando…",
+            "excluir": "Excluir",
+            "excluindo": "Excluindo…",
+            "confirmarExclusao": "Excluir permanentemente este CID? Verifique vínculos antes.",
+            "erroSalvar": "Não foi possível salvar. Tente novamente.",
+            "erroCarregar": "Não foi possível carregar o CID.",
+            "erroExcluir": "Não foi possível excluir. Verifique vínculos no banco ou tente novamente.",
+            "erroCampoObrigatorio": "Preenchimento obrigatório.",
+            "erroValidacao": "Corrija os campos destacados.",
+            "erroValidacaoCampo": "Valor inválido para o campo.",
+            "erroMetadadosIndisponivel": "Configuração do formulário não encontrada.",
+            "carregandoMetadados": "Carregando configuração do formulário…",
+            "carregandoMetadadosSplash": "Carregando…",
+            "carregandoMetadadosDetalhe": "Carregando configuração do formulário. Aguarde."
+          },
+          "placeholder": ""
+        },
+        "colunas": {
+          "id": "ID",
+          "codigo_cid": "Código CID",
+          "descricao": "Descrição"
+        }
+      },
+      "conselhoRegional": {
+        "tituloPagina": "Conselhos regionais",
+        "placeholderBusca": "Buscar por sigla ou descrição…",
+        "editarCadastro": "Abrir formulário de cadastro do conselho regional",
+        "formulario": {
+          "novoTitulo": "Novo conselho regional",
+          "editarTitulo": "Editar conselho regional",
+          "subtituloNovo": "Informe sigla e descrição do conselho regional.",
+          "subtituloEditar": "Atualize os dados do conselho regional.",
+          "secoes": {
+            "dados": {
+              "titulo": "Dados",
+              "descricao": "Identificação do conselho regional."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "Rastreamento de alterações no sistema."
+            }
+          },
+          "campos": {
+            "id": "ID",
+            "sigla": "Sigla",
+            "descricao": "Descrição",
+            "idUsuarioAuditoria": "Usuário (auditoria)",
+            "enderecoIpAuditoria": "Endereço IP (auditoria)",
+            "nomeAplicacaoAuditoria": "Aplicação (auditoria)"
+          },
+          "acoes": {
+            "cancelar": "Cancelar",
+            "salvar": "Salvar",
+            "salvando": "Salvando…",
+            "excluir": "Excluir",
+            "excluindo": "Excluindo…",
+            "confirmarExclusao": "Excluir permanentemente este conselho regional? Verifique vínculos.",
+            "erroSalvar": "Não foi possível salvar. Tente novamente.",
+            "erroCarregar": "Não foi possível carregar o registro.",
+            "erroExcluir": "Não foi possível excluir. Verifique vínculos no banco ou tente novamente.",
+            "erroCampoObrigatorio": "Preenchimento obrigatório.",
+            "erroValidacao": "Corrija os campos destacados.",
+            "erroValidacaoCampo": "Valor inválido para o campo.",
+            "erroMetadadosIndisponivel": "Configuração do formulário não encontrada.",
+            "carregandoMetadados": "Carregando configuração do formulário…",
+            "carregandoMetadadosSplash": "Carregando…",
+            "carregandoMetadadosDetalhe": "Carregando configuração do formulário. Aguarde."
+          },
+          "placeholder": ""
+        },
+        "colunas": {
+          "sigla": "Sigla",
+          "descricao": "Descrição"
+        }
+      },
+      "especialidadeMedica": {
+        "tituloPagina": "Especialidades médicas",
+        "placeholderBusca": "Buscar por descrição, código externo ou ID CBO…",
+        "editarCadastro": "Abrir formulário de cadastro da especialidade médica",
+        "formulario": {
+          "novoTitulo": "Nova especialidade médica",
+          "editarTitulo": "Editar especialidade médica",
+          "subtituloNovo": "Preencha os dados da especialidade (especialidade_medica).",
+          "subtituloEditar": "Altere os dados da especialidade.",
+          "secoes": {
+            "dados": {
+              "titulo": "Dados",
+              "descricao": "Identificação e códigos da especialidade."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "Rastreabilidade de alterações."
+            }
+          },
+          "campos": {
+            "id": "ID",
+            "descricao": "Descrição",
+            "idCbo": "ID CBO",
+            "idCboPlaceholder": "ID CBO (opcional)",
+            "codigoIpsemg": "Código IPSEMG",
+            "codigoExterno": "Código externo",
+            "codigoMigracao": "Código migração",
+            "idUsuarioAuditoria": "Usuário auditoria",
+            "enderecoIpAuditoria": "IP auditoria",
+            "nomeAplicacaoAuditoria": "Aplicação auditoria"
+          },
+          "acoes": {
+            "cancelar": "Cancelar",
+            "salvar": "Salvar",
+            "salvando": "Salvando…",
+            "excluir": "Excluir",
+            "excluindo": "Excluindo…",
+            "confirmarExclusao": "Excluir permanentemente esta especialidade? Verifique vínculos.",
+            "erroSalvar": "Não foi possível salvar. Tente novamente.",
+            "erroCarregar": "Não foi possível carregar o registro.",
+            "erroExcluir": "Não foi possível excluir. Verifique vínculos no banco ou tente novamente.",
+            "erroCampoObrigatorio": "Preenchimento obrigatório.",
+            "erroValidacao": "Corrija os campos destacados.",
+            "erroValidacaoCampo": "Valor inválido para o campo.",
+            "erroMetadadosIndisponivel": "Configuração do formulário não encontrada.",
+            "carregandoMetadados": "Carregando configuração do formulário…",
+            "carregandoMetadadosSplash": "Carregando…",
+            "carregandoMetadadosDetalhe": "Carregando configuração do formulário. Aguarde."
+          },
+          "placeholder": ""
+        },
+        "colunas": {
+          "id_cbo": "ID CBO",
+          "descricao": "Descrição",
+          "codigo_externo": "Código externo"
+        }
+      },
+      "convenios": {
+        "tituloPagina": "Convênios",
+        "placeholderBusca": "Buscar por nome fantasia, sigla, CNPJ ou cidade…",
+        "colunas": {
+          "nomeFantasia": "Nome fantasia",
+          "sigla": "Sigla",
+          "cnpj": "CNPJ",
+          "cidade": "Cidade"
+        },
+        "selecionarRegistro": "Selecionar convênio",
+        "editarCadastro": "Abrir formulário de cadastro do convênio"
+      },
+      "faturas": {
+        "tituloPagina": "Faturas",
+        "selecionarRegistro": "Selecionar fatura",
+        "placeholderBusca": "Buscar por ID da fatura, lote, nome ou sigla do convênio…",
+        "colunas": {
+          "codigo": "Código",
+          "lote": "Lote",
+          "convenio": "Convênio",
+          "nomeConvenio": "Nome convênio",
+          "inicio": "Início",
+          "fim": "Fim",
+          "status": "Status",
+          "envio": "Envio",
+          "baixa": "Baixa",
+          "total": "Total R$"
+        },
+        "editarCadastro": "Abrir detalhe da fatura",
+        "formulario": {
+          "validarConvenio": "Selecione o convênio.",
+          "validarDataInicio": "Informe a data de início do período.",
+          "validarDataFim": "Informe a data de fim do período.",
+          "selecioneConvenio": "Selecione o convênio…",
+          "opcaoNao": "Não",
+          "opcaoSim": "Sim",
+          "totalizarReal": "Real (R$)",
+          "totalizarCh": "Coeficiente (CH)",
+          "erroAcao": "Não foi possível concluir a operação.",
+          "lookupCarregando": "Carregando opções…",
+          "lookupVazio": "Nenhum registro no catálogo.",
+          "lookupFiltroVazio": "Digite para filtrar.",
+          "filtroListaConvenio": "Convênios adicionais (além do principal)",
+          "filtroListaUnidade": "Unidades de atendimento (vazio = todas permitidas)",
+          "filtroListaProcedencia": "Procedências do paciente",
+          "filtroListaSetor": "Setores",
+          "filtroListaMedicoLabel": "Médicos (ids separados por vírgula)",
+          "filtroListaPendenciaLabel": "Pendências de resultado (ids separados por vírgula)",
+          "filtroListaSituacaoLabel": "Situações de coleta (ids separados por vírgula)",
+          "filtroListaIdsPlaceholder": "ex.: 1, 2, 3",
+          "tabelaVaziaAtendimentos": "Nenhum atendimento listado a partir dos itens.",
+          "tabelaVaziaItens": "Nenhum item gerado. Ajuste filtros e salve, ou clique em Regenerar.",
+          "colAtendimento": "Atendimento",
+          "colPaciente": "Paciente",
+          "colExame": "Exame / material",
+          "colCodFat": "Cód. faturamento",
+          "colValor": "Valor R$",
+          "colQtd": "Qtd.",
+          "acoesFatura": "Ações da fatura",
+          "regenerar": "Regenerar itens",
+          "enviar": "Enviar fatura",
+          "baixar": "Baixar fatura",
+          "tituloRegenerar": "Regenerar itens da fatura?",
+          "mensagemRegenerar": "Os itens atuais serão descartados e recalculados com base no cabeçalho (período e filtros). Deseja continuar?",
+          "tituloEnviar": "Enviar fatura?",
+          "mensagemEnviar": "Após o envio, o cabeçalho não poderá mais ser editado. Confirma o envio?",
+          "confirmar": "Confirmar",
+          "tituloBaixar": "Baixar fatura",
+          "ajudaBaixa": "Informe o valor pago (obrigatório) e, se houver, desconto. A data de baixa, se omitida, será a de hoje.",
+          "campoValorPago": "Valor pago (R$)",
+          "campoValorDesconto": "Desconto (R$)",
+          "campoDataBaixa": "Data da baixa",
+          "confirmarBaixa": "Confirmar baixa",
+          "somenteLeituraAposEnvio": "Fatura enviada ou baixada: o cabeçalho e filtros estão em leitura. Use Baixar ou ações administrativas conforme o perfil.",
+          "statusAberta": "Aberta",
+          "statusEnviada": "Enviada",
+          "statusBaixada": "Baixada"
+        }
+      },
+      "exames": {
+        "tituloPagina": "Exames",
+        "placeholderBusca": "Buscar por código, nome ou sinônimos…",
+        "editarCadastro": "Abrir formulário de cadastro do exame",
+        "colunas": {
+          "nome": "Nome",
+          "sinonimos": "Sinônimos"
+        }
+      },
+      "exameMaterial": {
+        "tituloPagina": "Exame / material",
+        "placeholderBusca": "Buscar por código, nome técnico ou nome impressão…",
+        "editarCadastro": "Abrir formulário de cadastro do exame/material",
+        "colunas": {
+          "id": "Código interno",
+          "codigo": "Código",
+          "nome": "Nome",
+          "versao": "Versão"
+        },
+        "validacao": {
+          "idExame": "Selecione o exame.",
+          "idMaterial": "Selecione o material.",
+          "idRecipiente": "Selecione o recipiente.",
+          "idSetor": "Selecione o setor.",
+          "codigo": "Informe o código do exame/material.",
+          "nomeTecnico": "Informe o nome técnico.",
+          "nomeImpressao": "Informe o nome para impressão.",
+          "versaoExameMaterial": "Número de versão ausente ou inválido nos dados carregados. Atualize a página ou contate o suporte."
+        },
+        "formulario": {
+          "tituloNovo": "Novo exame/material",
+          "tituloEditar": "Exame/material",
+          "subtituloNovo": "Cadastro da combinação exame + material.",
+          "subtituloEditar": "Ações no topo valem para a revisão aberta; troque de revisão pelas abas abaixo do título.",
+          "placeholderSelecione": "Selecione…",
+          "placeholderPendenciaOpcional": "Opcional — pendência de resultado",
+          "botaoClonarVersao": "Nova versão (clonar)",
+          "tituloConfirmarClonar": "Nova revisão (clonar)?",
+          "botaoConfirmarClonar": "Continuar",
+          "confirmarClonar": "Será aberta uma nova aba de revisão (rascunho) com os dados desta versão. Nada é gravado no servidor até você clicar em Salvar.\n\nAo salvar, a nova revisão é criada no banco e pode tornar-se a ativa no catálogo, conforme o interruptor \"Ativa no catálogo\".\n\nDeseja continuar?",
+          "erroClonar": "Não foi possível criar a nova versão. Tente novamente ou contate o suporte.",
+          "erroSalvarAposClonar": "A nova revisão foi criada, mas não foi possível salvar as alterações. Abra a nova revisão na listagem ou nas abas e tente salvar de novo.",
+          "tituloPerderRascunhoClonar": "Descartar revisão em rascunho?",
+          "mensagemPerderRascunhoClonar": "Há uma nova revisão em rascunho que ainda não foi salva.\n\nSe mudar de aba agora, essas alterações serão perdidas.\n\nDeseja descartar o rascunho e mudar de revisão?",
+          "botaoConfirmarPerderRascunho": "Descartar e mudar",
+          "abaVersaoRascunhoSufixo": " (rascunho)",
+          "versaoZeroInclusaoLegenda": "Rascunho: o número definitivo da revisão é atribuído ao salvar (≥ 1).",
+          "tituloConfirmarNovaVersaoComAtiva": "Já existe revisão ativa neste par",
+          "mensagemConfirmarNovaVersaoComAtiva": "Para este exame e material já existe uma revisão marcada como ativa no catálogo.\n\nSe continuar, a nova revisão será gravada como ativa e a(s) revisão(ões) ativa(s) anterior(es) deixarão de ser a(s) usada(s) no catálogo para este par.\n\nDeseja continuar?",
+          "botaoConfirmarNovaVersaoComAtiva": "Sim, incluir e atualizar o catálogo",
+          "versaoAtivaSwitchLabel": "Ativa no catálogo",
+          "abasVersaoAria": "Revisões do exame/material",
+          "erroAtivarVersao": "Não foi possível concluir a alteração de versão ativa. Verifique os dados e tente novamente.",
+          "abaVersaoTitulo": "Versão {numero}",
+          "abaVersaoAtivaSufixo": " (ativa)",
+          "secoes": {
+            "identificacao": {
+              "titulo": "Identificação",
+              "descricao": "Dados principais do par exame + material."
+            },
+            "caracteristicas": {
+              "titulo": "Características",
+              "descricao": "Nomes, critérios de realização e opções de publicação no catálogo."
+            },
+            "pendencias": {
+              "titulo": "Pendências (resultado)",
+              "descricao": "Transição entre pendências de resultado (opcional)."
+            },
+            "integracaoApoio": {
+              "titulo": "Integração — laboratório de apoio",
+              "descricao": "Default da unidade de apoio (codigo_b2b) usada no atendimento e regras de equivalência."
+            },
+            "producao": {
+              "titulo": "Produção e calendário",
+              "descricao": "Prazos de entrega e dias de produção do exame."
+            },
+            "etiquetasVolume": {
+              "titulo": "Etiquetas e volume",
+              "descricao": "Quantidades padrão, volume da amostra e política de soroteca."
+            },
+            "faixaEtaria": {
+              "titulo": "Controle de faixa etária",
+              "descricao": "Idade mínima e máxima aceitas para o exame."
+            },
+            "clinico": {
+              "titulo": "Comportamento clínico / laudo",
+              "descricao": "Condições iniciais, alertas e impressão do laudo."
+            },
+            "complemento": {
+              "titulo": "Observações",
+              "descricao": "Observações gerais (texto livre)."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "Rastreio do sistema (suporte e implantação)."
+            }
+          },
+          "grupos": {
+            "vinculosTitulo": "Vínculos",
+            "dadosTitulo": "Informações gerais",
+            "sexoTitulo": "Critérios",
+            "publicarTitulo": "Publicação",
+            "publicarTituloCheckbox": "Publicar",
+            "prazosTitulo": "Prazos de entrega",
+            "diasProducaoTitulo": "Dias de produção",
+            "diasProducaoTituloCheckbox": "Produzir nos dias",
+            "faixaEtariaTituloFlag": "Controle ativo",
+            "faixaEtariaTituloCheckbox": "Faixa etária",
+            "faixaEtariaMinimoTitulo": "Idade mínima",
+            "faixaEtariaMaximoTitulo": "Idade máxima",
+            "clinicoFlagsTitulo": "Indicadores",
+            "clinicoFlagsTituloCheckbox": "Comportamento",
+            "condicoesIniciasTitulo": "Condições iniciais (texto livre)"
+          },
+          "campos": {
+            "id": "Código interno",
+            "idExame": "Exame",
+            "idMaterial": "Material",
+            "idRecipiente": "Recipiente",
+            "idSetor": "Setor",
+            "codigo": "Código",
+            "nomeTecnico": "Nome técnico",
+            "nomeImpressao": "Nome impressão",
+            "metodo": "Método",
+            "sexoRealiza": "Sexo que realiza",
+            "publicar": "Publicar",
+            "idPendenciaExameDe": "Pendência origem (DE)",
+            "idPendenciaExamePara": "Pendência destino (PARA)",
+            "idLabApoioUnidade": "Unidade de apoio default (codigo_b2b)",
+            "verificarEquivalenciaApoio": "Verificar equivalência exame x apoio",
+            "incrementoPrazoEntrega": "Incremento prazo entrega (dias)",
+            "rotinaDiasNormal": "Rotina — dias (normal)",
+            "rotinaHoraNormal": "Rotina — hora (normal)",
+            "rotinaHoraAtipico": "Rotina — hora (atípico)",
+            "urgenteDiasNormal": "Urgente — dias (normal)",
+            "urgenteHoraNormal": "Urgente — hora (normal)",
+            "urgenteHoraAtipico": "Urgente — hora (atípico)",
+            "produzirSegunda": "Segunda",
+            "produzirTerca": "Terça",
+            "produzirQuarta": "Quarta",
+            "produzirQuinta": "Quinta",
+            "produzirSexta": "Sexta",
+            "produzirSabado": "Sábado",
+            "produzirDomingo": "Domingo",
+            "produzirFeriado": "Feriado",
+            "qtdEtiqueta": "Qtd. etiquetas",
+            "qtdExameMaterialAtendimento": "Qtd. por atendimento",
+            "qtdMaximaExameMaterialAtendimento": "Qtd. máxima por atendimento",
+            "volumeExameMaterial": "Volume (ml)",
+            "qtdDiasSoroteca": "Dias em soroteca",
+            "qtdDiasSolicitar": "Dias para solicitar",
+            "controleFaixaEtaria": "Controlar faixa etária",
+            "controleDiaMinimo": "Dias",
+            "controleMesMinimo": "Meses",
+            "controleAnoMinimo": "Anos",
+            "controleDiaMaximo": "Dias",
+            "controleMesMaximo": "Meses",
+            "controleAnoMaximo": "Anos",
+            "exibirCondicoesInicias": "Exibir condições iniciais",
+            "imprimirPaginaSeparada": "Imprimir em página separada",
+            "exibirAlertaObservacaoMaterial": "Exibir alerta de observação do material",
+            "pendenciaInformarResultado": "Pendência de informar resultado",
+            "condicoesInicias": "Condições iniciais",
+            "observacoesGerais": "Observações gerais",
+            "idTenacidade": "Tenacidade (ID)",
+            "idUsuarioAuditoria": "Usuário (ID)",
+            "enderecoIpAuditoria": "Endereço IP",
+            "nomeAplicacaoAuditoria": "Aplicação"
+          },
+          "sexoOpcoes": {
+            "A": "Ambos",
+            "M": "Masculino",
+            "F": "Feminino"
+          }
+        }
+      },
+      "grupos": {
+        "tituloPagina": "Grupos",
+        "placeholderBusca": "Buscar por código ou descrição…",
+        "editarCadastro": "Abrir formulário de cadastro do grupo",
+        "colunas": {
+          "descricao": "Descrição"
+        }
+      },
+      "grupoPerfil": {
+        "tituloPagina": "Grupos de usuário",
+        "placeholderBusca": "Buscar por código ou descrição…",
+        "editarCadastro": "Abrir formulário do grupo de usuário",
+        "colunas": {
+          "descricao": "Descrição"
+        }
+      },
+      "implantacaoTenacidade": {
+        "tituloPagina": "Tenacidade (implantação)",
+        "nomeTabelaListagem": "Laboratórios",
+        "subtituloListagem": "Tenacidade (`tenacidade`) com domínio e vigência na configuração (`tenacidade_configuracao`).",
+        "erroCarregarListagem": "Não foi possível carregar a lista de laboratórios. Verifique a sessão e tente novamente.",
+        "placeholderBusca": "Buscar por razão social, nome fantasia ou domínio…",
+        "editarCadastro": "Abrir formulário de cadastro do laboratório",
+        "ariaAcaoLinha": "Editar laboratório (tenacidade)",
+        "avisoMutacaoImplantacaoForaLigaBr": "Criação e alteração de laboratórios na implantação só são permitidas com a sessão aberta no tenant cujo domínio é liga.br. Entre nesse ambiente e tente novamente.",
+        "colunas": {
+          "id": "ID",
+          "razao_social": "Razão social",
+          "nome_fantasia": "Nome fantasia",
+          "dominio_tenacidade": "Domínio",
+          "ativo": "Ativo",
+          "data_expiracao": "Expiração"
+        },
+        "formulario": {
+          "tituloNovo": "Novo laboratório",
+          "tituloEditar": "Editar laboratório",
+          "subtituloNovo": "Cadastro global na implantação (`tenacidade`).",
+          "subtituloEditar": "Altere os dados do laboratório.",
+          "subtituloNovoUnificado": "Mestre `tenacidade` e detalhe `tenacidade_configuracao`; um único salvamento.",
+          "subtituloEditarUnificado": "Altere o registro do laboratório e a configuração; um único salvamento.",
+          "erroDominioObrigatorio": "Informe o domínio do laboratório.",
+          "erroDataExpiracaoObrigatoria": "Informe a data de expiração inicial.",
+          "erroQuantidadeLicencaObrigatoria": "Informe a quantidade de licenças (mínimo 1).",
+          "erroUltimoAnoAnoAtualObrigatorio": "O último ano deve ser o ano calendário atual (campo definido pelo sistema, somente leitura).",
+          "erroUltimoAtendimentoInicialObrigatorio": "O último atendimento inicial deve ser 1 (campo definido pelo sistema, somente leitura).",
+          "tituloComplemento": "Cód. {id} · {nome}",
+          "secIdentificacaoTitulo": "Identificação",
+          "secIdentificacaoDescricao": "Razão social, nome fantasia e domínio do tenant.",
+          "secIdentificacaoDescricaoUnificado": "Dados cadastrais do laboratório e códigos de vínculo entre tenacidade e configuração.",
+          "secIdentificacaoDescricaoMestre": "Registro do laboratório em `tenacidade` (status e vínculos de sistema).",
+          "secCaracteristicasTitulo": "Características",
+          "secCaracteristicasDescricao": "Identidade comercial e domínio em `tenacidade_configuracao` (obrigatórios na implantação).",
+          "grupoTenacidadeMestreTitulo": "Laboratório (tenacidade)",
+          "grupoIdentidadeConfigTitulo": "Identidade e acesso externo",
+          "secSessaoLicencaTitulo": "Sessão e licenças",
+          "secSessaoLicencaDescricao": "Timeout de sessão e limite de usuários simultâneos (`tenacidade_configuracao`).",
+          "grupoDadosLaboratorioTitulo": "Dados do laboratório",
+          "grupoRegistrosSistemaTitulo": "Registros no sistema",
+          "secAcessoTitulo": "Acesso e segurança",
+          "secAcessoDescricao": "Chave de acesso e segredo JWT por laboratório.",
+          "secIndicadoresTitulo": "Indicadores e vigência",
+          "secIndicadoresDescricao": "Expiração, contadores operacionais e situação ativa.",
+          "secIndicadoresDescricaoDetalhe": "Vigência da licença e contadores em `tenacidade_configuracao`.",
+          "tituloGrupoSn": "Situação",
+          "secAuditoriaTitulo": "Auditoria",
+          "secAuditoriaDescricao": "Rastreio preenchido pelo sistema (visível para suporte e implantação).",
+          "secAuditoriaDescricaoUnificado": "Rastreio preenchido pelo sistema para o cadastro do laboratório e para a configuração (visível para suporte e implantação).",
+          "grupoAuditoriaTenacidadeTitulo": "Cadastro do laboratório (tenacidade)",
+          "grupoAuditoriaConfiguracaoTitulo": "Configuração do laboratório",
+          "campoId": "ID",
+          "campoRazaoSocial": "Razão social",
+          "campoNomeFantasia": "Nome fantasia",
+          "campoDominioTenacidade": "Domínio",
+          "campoChaveAcesso": "Chave de acesso",
+          "campoChaveJwt": "Chave JWT",
+          "campoDataExpiracao": "Data de expiração",
+          "placeholderDataIso": "AAAA-MM-DD",
+          "campoUltimoAno": "Último ano",
+          "campoUltimoAtendimento": "Último atendimento",
+          "campoAtivo": "Ativo",
+          "campoIdUsuarioAuditoria": "Usuário (ID)",
+          "campoUsuarioAuditoria": "Usuário",
+          "campoEnderecoIpAuditoria": "Endereço IP",
+          "campoNomeAplicacaoAuditoria": "Aplicação"
+        }
+      },
+      "usuarioPermissoes": {
+        "tituloPagina": "Permissões",
+        "placeholderBusca": "Buscar por código, grupo ou formulário…",
+        "editarCadastro": "Abrir formulário de cadastro da permissão",
+        "flagsResumo": {
+          "administrador": "Adm",
+          "incluir": "Inc",
+          "editar": "Edt",
+          "excluir": "Exc",
+          "separador": " · ",
+          "vazio": "—"
+        },
+        "colunas": {
+          "id": "Código",
+          "grupoUsuarioDescricao": "Grupo usuário",
+          "formularioCodigo": "Formulário",
+          "formularioDescricao": "Descrição",
+          "flags": "Permissões"
+        }
+      },
+      "indicacoes": {
+        "tituloPagina": "Indicações",
+        "placeholderBusca": "Buscar por código ou nome…",
+        "editarCadastro": "Abrir formulário de cadastro da indicação",
+        "colunas": {
+          "nome": "Nome",
+          "ativo": "Ativo"
+        }
+      },
+      "racas": {
+        "tituloPagina": "Raças",
+        "placeholderBusca": "Buscar por código ou nome…",
+        "editarCadastro": "Abrir formulário de cadastro da raça",
+        "colunas": {
+          "nome": "Nome"
+        }
+      },
+      "pendenciasResultado": {
+        "tituloPagina": "Pendências de resultado",
+        "placeholderBusca": "Buscar por nome, sigla ou código…",
+        "editarCadastro": "Abrir formulário de cadastro",
+        "colunas": {
+          "nome": "Nome",
+          "sigla": "Sigla"
+        }
+      },
+      "precosFator": {
+        "tituloPagina": "Fatores de preço",
+        "placeholderBusca": "Buscar por descrição, código externo ou ID…",
+        "editarCadastro": "Abrir formulário de cadastro do fator de preço",
+        "colunas": {
+          "descricao": "Descrição",
+          "valor": "Valor",
+          "codigoExterno": "Cód. externo"
+        }
+      },
+      "serieNotaFiscalServico": {
+        "tituloPagina": "Séries NF serviço",
+        "placeholderBusca": "Buscar por sigla, numeração, unidade ou código…",
+        "editarCadastro": "Abrir formulário de cadastro da série",
+        "colunas": {
+          "sigla": "Sigla",
+          "numeracao": "Numeração",
+          "unidade_rotulo": "Unidade"
+        }
+      },
+      "etnias": {
+        "tituloPagina": "Etnias",
+        "placeholderBusca": "Buscar por nome, raça ou código…",
+        "editarCadastro": "Abrir formulário de cadastro da etnia",
+        "colunas": {
+          "nome": "Nome",
+          "id_raca": "Raça (ID)"
+        }
+      },
+      "integracoes": {
+        "tituloPagina": "Integrações",
+        "placeholderBusca": "Buscar por nome ou situação (S/N, ativo/inativo)…",
+        "editarCadastro": "Abrir formulário de cadastro da integração"
+      },
+      "materiais": {
+        "tituloPagina": "Materiais",
+        "placeholderBusca": "Buscar por código material ou nome…",
+        "editarCadastro": "Abrir formulário de cadastro do material",
+        "colunas": {
+          "codigoMat": "Código mat.",
+          "nome": "Nome"
+        }
+      },
+      "precoTabela": {
+        "tituloPagina": "Tabelas de preço",
+        "placeholderBusca": "Buscar por código, descrição ou código externo…",
+        "editarCadastro": "Abrir formulário de cadastro da tabela de preço",
+        "selecionarRegistro": "Selecionar tabela de preço",
+        "colunas": {
+          "id": "Código",
+          "descricao": "Descrição",
+          "codigoExterno": "Cód. externo"
+        }
+      },
+      "procedencias": {
+        "tituloPagina": "Procedências",
+        "placeholderBusca": "Buscar por código, descrição ou sigla…",
+        "selecionarRegistro": "Selecionar procedência",
+        "editarCadastro": "Abrir formulário de cadastro da procedência",
+        "colunas": {
+          "descricao": "Descrição",
+          "sigla": "Sigla",
+          "ativo": "Ativo"
+        }
+      },
+      "unidadeAtendimento": {
+        "tituloPagina": "Unidades de atendimento",
+        "placeholderBusca": "Buscar por nome, cidade, CNPJ ou ID…",
+        "editarCadastro": "Editar cadastro",
+        "colunas": {
+          "id": "ID",
+          "nomeFantasia": "Nome fantasia",
+          "sigla": "Sigla",
+          "cidade": "Cidade",
+          "cnpj": "CNPJ",
+          "ativo": "Ativo"
+        },
+        "formulario": {
+          "novoTitulo": "Nova unidade de atendimento",
+          "editarTitulo": "Editar unidade de atendimento",
+          "subtituloNovo": "Cadastro de unidade (laboratório / ponto de atendimento).",
+          "subtituloEditar": "Atualize os dados da unidade.",
+          "botaoCancelar": "Cancelar",
+          "botaoSalvar": "Salvar",
+          "placeholderSelecione": "Selecione...",
+          "erroRegraAgrupamentoObrigatoria": "Selecione uma opção válida para Regra agrupamento amostra.",
+          "secoes": {
+            "identificacao": {
+              "titulo": "Identificação",
+              "descricao": "Dados principais da unidade."
+            },
+            "fiscal": {
+              "titulo": "Fiscal e referências",
+              "descricao": "Nota fiscal e vínculos opcionais."
+            },
+            "endereco": {
+              "titulo": "Endereço",
+              "descricao": "Localização e geolocalização."
+            },
+            "contato": {
+              "titulo": "Contato",
+              "descricao": "Telefones e acesso."
+            },
+            "operacao": {
+              "titulo": "Operação",
+              "descricao": "Comportamentos operacionais da unidade.",
+              "tituloGrupoSn": "Configurações S/N"
+            },
+            "amostra": {
+              "titulo": "Amostra",
+              "descricao": "Parâmetros e janelas de envio/agrupamento de amostras.",
+              "tituloGrupoAmostraExterna": "Amostra externa",
+              "tituloGrupoSn": "Configurações S/N"
+            },
+            "listas": {
+              "titulo": "Listas permitidas",
+              "descricao": "Texto interno do sistema (até 600 caracteres cada)."
+            },
+            "marca": {
+              "titulo": "Marca / logotipo",
+              "descricao": "Referências de arquivo (se aplicável)."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "Preenchido pelo sistema."
+            }
+          },
+          "campos": {
+            "id": "ID",
+            "idTenacidade": "Tenacidade (ID)",
+            "nomeFantasia": "Nome fantasia",
+            "razaoSocial": "Razão social",
+            "sigla": "Sigla",
+            "cnpj": "CNPJ",
+            "cnes": "CNES",
+            "tipoUnidade": "Tipo unidade (1 caractere)",
+            "codigoExterno": "Código externo",
+            "ativo": "Ativo (S/N)",
+            "inscricaoMunicipal": "Inscrição municipal",
+            "naturezaOperacao": "Natureza operação",
+            "regimeTributacao": "Regime tributação",
+            "serieNotaFiscal": "Série NF (inteiro)",
+            "idAlmoxarifadoPadrao": "ID almoxarifado padrão",
+            "idMunicipioNotaFiscal": "ID município NF",
+            "descricaoServicoNotaFiscal": "Descrição serviço (NF)",
+            "cep": "CEP",
+            "tipoLogradouro": "Tipo logradouro",
+            "logradouro": "Logradouro",
+            "numero": "Número",
+            "complemento": "Complemento",
+            "bairro": "Bairro",
+            "cidade": "Cidade",
+            "estado": "UF",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "telefone": "Telefone",
+            "celular": "Celular",
+            "senhaInternet": "Senha internet",
+            "enviarSms": "Enviar SMS",
+            "procedenciaAtendimentoObrigatorio": "Procedência obrigatória",
+            "pertencerSimplesNacional": "Simples nacional",
+            "alterarLaboratorioApoio": "Alterar lab. apoio",
+            "indicacaoOrcamento": "Indicação orçamento",
+            "qtdDiasValidadeOrcamento": "Dias validade orçamento",
+            "enviarAmostra": "Enviar amostra",
+            "regraAgrupamentoAmostra": "Regra agrupamento amostra",
+            "amostraExternaInicio": "Amostra externa início",
+            "amostraExternaFim": "Amostra externa fim",
+            "amostraExternaAtual": "Amostra externa atual",
+            "listaProcedenciaPermitida": "Lista procedência permitida",
+            "listaConvenioPermitido": "Lista convênio permitido",
+            "nomeArquivoLogotipo": "Nome arquivo logotipo",
+            "nomeReferenciaLogotipo": "Nome referência logotipo",
+            "idUsuarioAuditoria": "Usuário (auditoria)",
+            "enderecoIpAuditoria": "Endereço IP (auditoria)",
+            "nomeAplicacaoAuditoria": "Aplicação (auditoria)"
+          },
+          "regrasAgrupamento": {
+            "opcao1": "Material + Recipiente",
+            "opcao2": "Setor + Material + Recipiente",
+            "opcao3": "Laboratório + Material + Recipiente",
+            "opcao4": "Laboratório + Setor + Material + Recipiente",
+            "opcao5": "Laboratório + Material + Recipiente + Volume"
+          },
+          "tipoUnidade": {
+            "matriz": "Matriz",
+            "filial": "Filial"
+          },
+          "cep": {
+            "invalido": "Informe um CEP válido para consulta.",
+            "naoEncontrado": "CEP não encontrado. Preencha o endereço manualmente.",
+            "erroConsulta": "Não foi possível consultar o CEP no momento."
+          },
+          "listas": {
+            "nenhumSelecionado": "Nenhum item selecionado.",
+            "modalProcedenciaTitulo": "Selecionar procedências permitidas",
+            "modalConvenioTitulo": "Selecionar convênios permitidos",
+            "naoSelecionados": "Não selecionados",
+            "selecionados": "Selecionados",
+            "filtroPlaceholder": "Filtrar itens..."
+          }
+        }
+      },
+      "analisadores": {
+        "tituloPagina": "Analisadores",
+        "placeholderBusca": "Buscar por código ou nome…",
+        "editarCadastro": "Abrir formulário de cadastro do analisador",
+        "colunas": {
+          "nome": "Nome"
+        }
+      },
+      "aplicacoes": {
+        "tituloPagina": "Aplicações (metadados)",
+        "placeholderBusca": "Buscar por código ou nome da aplicação…",
+        "editarCadastro": "Abrir formulário de cadastro da aplicação",
+        "colunas": {
+          "codigo": "Código",
+          "nome": "Nome",
+          "situacao": "Situação"
+        }
+      },
+      "unidadeFederacao": {
+        "tituloPagina": "UF / federação",
+        "placeholderBusca": "Buscar por ID, UF, código ou descrição…",
+        "editarCadastro": "Editar cadastro da UF",
+        "colunas": {
+          "sigla": "UF",
+          "codigo": "Código",
+          "descricao": "Descrição"
+        }
+      },
+      "vetEspecie": {
+        "tituloPagina": "Espécies (animal)",
+        "placeholderBusca": "Buscar por ID ou nome…",
+        "editarCadastro": "Editar cadastro da espécie",
+        "colunas": {
+          "nome": "Nome"
+        }
+      },
+      "vetRaca": {
+        "tituloPagina": "Raças (animal)",
+        "placeholderBusca": "Buscar por ID, espécie ou nome…",
+        "editarCadastro": "Editar cadastro da raça",
+        "colunas": {
+          "nome": "Nome",
+          "idVetEspecie": "Espécie (ID)"
+        }
+      },
+      "portaSerial": {
+        "tituloPagina": "Portas seriais",
+        "placeholderBusca": "Buscar por nome ou código…",
+        "editarCadastro": "Editar cadastro da porta serial",
+        "colunas": {
+          "nome": "Nome",
+          "situacao": "Situação"
+        }
+      },
+      "computadores": {
+        "tituloPagina": "Computadores",
+        "placeholderBusca": "Buscar por nome ou descrição…",
+        "editarCadastro": "Abrir formulário de cadastro do computador",
+        "colunas": {
+          "nome": "Nome",
+          "descricao": "Descrição",
+          "tipo": "Tipo"
+        }
+      },
+      "tenacidadeConfiguracao": {
+        "tituloPagina": "Configuração do laboratório",
+        "placeholderBusca": "Buscar pelo diretório de exportação…",
+        "editarCadastro": "Abrir formulário de configuração do laboratório",
+        "colunas": {
+          "codigo": "Código",
+          "idTenacidade": "Laboratório",
+          "timeout": "Timeout (min)",
+          "licencas": "Licenças",
+          "dirExportacao": "Dir. exportação"
+        },
+        "formulario": {
+          "tituloNovo": "Nova configuração do laboratório",
+          "tituloEditar": "Editar configuração do laboratório",
+          "subtituloNovo": "Parâmetros da infraestrutura por tenant (tenacidade_configuracao).",
+          "subtituloEditar": "Altere os parâmetros da configuração.",
+          "tituloComplemento": "Cód. {id} · {laboratorio}",
+          "secVinculoTitulo": "Identificação",
+          "secVinculoDescricao": "Laboratório vinculado (definido pela sessão).",
+          "secCfgVinculoImplantacaoDescricao": "Códigos da configuração vinculados à tenacidade em edição.",
+          "campoId": "Código",
+          "campoIdTenacidade": "Laboratório (ID)",
+          "campoTenacidadeLaboratorio": "Laboratório",
+          "tenacidadeCarregandoRotulo": "Carregando…",
+          "tenacidadeSomenteLeituraDica": "Somente leitura: o laboratório vem da sessão e não pode ser alterado nesta tela.",
+          "secInterfaceamentoTitulo": "Interfaceamento e liberação",
+          "secInterfaceamentoDescricao": "Comportamento de interface, numeração e liberação de resultados.",
+          "tituloGrupoCheckboxInterfaceamento": "Opções de interface e liberação",
+          "campoSomenteInterfaceamento": "Somente interfaceamento",
+          "campoUtilizarNumeracaoOrigemLiberacao": "Utilizar numeração de origem na liberação",
+          "campoUtilizarDeltacheckLiberacao": "Utilizar deltacheck na liberação",
+          "campoLiberarResultadoInterfaceadoBaixado": "Liberar resultado interfaceado baixado",
+          "campoLiberarResultadoInformado": "Liberar resultado informado",
+          "secOperacaoTitulo": "Operação do laboratório",
+          "secOperacaoDescricao": "Indicadores de domínio veterinário e captura de versão.",
+          "tituloGrupoCheckboxOperacao": "Parâmetros operacionais",
+          "campoInfotimeVet": "Infotime veterinário",
+          "campoCapturarVersaoExameApoio": "Capturar versão do exame (apoio)",
+          "secCaminhosTitulo": "Diretórios e mensagens",
+          "secCaminhosDescricao": "Caminhos de exportação, triagem e textos exibidos ao usuário.",
+          "campoDiretorioExportacaoResultado": "Diretório de exportação de resultado",
+          "campoDiretorioTriagemAmostra": "Diretório de triagem de amostra",
+          "campoMensagemExameRepetido": "Mensagem de exame repetido",
+          "campoListaSetorLiberaInformado": "Lista de setores que liberam informado",
+          "secEndpointsTitulo": "Endpoints",
+          "secEndpointsDescricao": "URLs de integração (pedido e chatbot).",
+          "campoEndpointPedido": "Endpoint de pedido",
+          "campoEndpointChatbot": "Endpoint do chatbot",
+          "secNumerosTitulo": "Sessão e licenças",
+          "secNumerosDescricao": "Tempo de sessão e quantidade de licenças.",
+          "campoTimeoutSessaoMinutos": "Timeout da sessão (minutos)",
+          "campoQuantidadeLicenca": "Quantidade de licenças",
+          "secAuditoriaTitulo": "Auditoria",
+          "secAuditoriaDescricao": "Rastreio preenchido pelo sistema (visível para suporte e implantação).",
+          "campoEnderecoIpAuditoria": "Endereço IP",
+          "campoNomeAplicacaoAuditoria": "Aplicação"
+        }
+      },
+      "labsApoio": {
+        "tituloPagina": "Laboratórios de apoio",
+        "placeholderBusca": "Buscar por código, nome ou sigla…",
+        "editarCadastro": "Abrir formulário de cadastro do laboratório de apoio",
+        "visualizarCadastro": "Abrir detalhe do laboratório de apoio (somente leitura)",
+        "colunas": {
+          "id": "Código",
+          "nome": "Nome",
+          "sigla": "Sigla",
+          "ativo": "Ativo"
+        },
+        "formulario": {
+          "tituloNovo": "Novo laboratório de apoio",
+          "tituloEditar": "Laboratório de apoio",
+          "subtituloNovo": "Cadastro global do laboratório parceiro (lab_apoio).",
+          "subtituloEditar": "Atualize nome, sigla e situação do registro.",
+          "secoes": {
+            "identificacao": {
+              "titulo": "Identificação",
+              "descricao": "Nome, sigla e situação ativa do laboratório de apoio."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "Rastreio preenchido pelo sistema (somente leitura; visível conforme perfil)."
+            }
+          },
+          "grupos": {
+            "principalTitulo": "Dados principais",
+            "principalDescricao": "Identificação utilizada em integrações e cadastros de exames em apoio."
+          },
+          "campos": {
+            "id": "Código",
+            "nome": "Nome",
+            "sigla": "Sigla",
+            "ativo": "Ativo",
+            "idUsuarioAuditoria": "Usuário (auditoria)",
+            "enderecoIpAuditoria": "IP (auditoria)",
+            "nomeAplicacaoAuditoria": "Aplicação (auditoria)"
+          }
+        }
+      },
+      "labsApoioWs": {
+        "tituloPagina": "Laboratórios de apoio WS",
+        "placeholderBusca": "Buscar por nome, sigla ou código do laboratório…",
+        "configurarUnidades": "Abrir configuração por unidade (webservice)",
+        "colunas": {
+          "idLabApoio": "Código",
+          "nome": "Nome",
+          "sigla": "Sigla",
+          "qtdUnidades": "Qtd. unidades"
+        }
+      },
+      "labApoioUnidade": {
+        "tituloPagina": "Laboratório de apoio por unidade",
+        "placeholderBusca": "Buscar por unidade, laboratório ou código B2B…",
+        "editarCadastro": "Abrir configuração de integração por unidade",
+        "erros": {
+          "labObrigatorio": "Selecione o laboratório de apoio.",
+          "unidadeObrigatoria": "Selecione a unidade de atendimento.",
+          "codigoB2bObrigatorio": "Informe o código B2B.",
+          "tipoConferenciaInvalido": "Tipo de conferência da amostra inválido.",
+          "saoMarcosLaudoPedido": "Para apoio São Marcos não é permitido laudo por pedido (valor 0).",
+          "credenciamentoDb": "Para apoio DB o credenciamento deve ser V2 ou V3.",
+          "proxyEnderecoObrigatorio": "Com proxy ativo, informe o endereço do proxy."
+        },
+        "integracao": {
+          "voltarLabsApoio": "« Voltar para laboratórios de apoio",
+          "titulo": "Integração por unidade (B2B)",
+          "subtitulo": "Laboratório de apoio n.º {id}.",
+          "abaNova": "Nova unidade"
+        },
+        "formulario": {
+          "tituloNovo": "Nova configuração por unidade",
+          "tituloEditar": "Editar configuração por unidade",
+          "subtituloNovo": "Integração B2B (lab_apoio_unidade).",
+          "subtituloEditar": "Ajuste parâmetros de webservice e envio.",
+          "secIdentTitulo": "Identificação",
+          "secIdentDescricao": "Laboratório, unidade e parâmetros principais.",
+          "fId": "Código",
+          "fIdLabApoio": "Laboratório de apoio",
+          "fIdUnidade": "Unidade de atendimento",
+          "fCodigoB2b": "Código B2B",
+          "fTipoConferenciaAmostra": "Conferência da amostra",
+          "optConferenciaIndividual": "Individual",
+          "optConferenciaExame": "Por exame",
+          "fUtilizarWebservice": "Utilizar webservice",
+          "optWebserviceSim": "Sim",
+          "optWebserviceMisto": "Misto",
+          "optWebserviceNao": "Não",
+          "secCaracTitulo": "Características",
+          "secCaracDescricao": "Quantidades, pendências e impressão.",
+          "fQtdExameAmostra": "Qtd. exame por amostra",
+          "fPendenciaExpedicao": "Pendência expedição",
+          "fEnviarInformacoesCliente": "Enviar informações do cliente",
+          "fAgruparExameAmostra": "Agrupar exame/amostra",
+          "fLaudoExameMaterial": "Laudo exame/material",
+          "optLaudoPedido": "Por pedido",
+          "optLaudoExame": "Por exame",
+          "optLaudoMaterial": "Por material",
+          "fPapelTimbrado": "Papel timbrado",
+          "fImpressoraEtiqueta": "Impressora de etiqueta",
+          "secWsTitulo": "Webservice",
+          "secWsDescricao": "URL, credenciais e contrato.",
+          "fUrlWebservice": "URL",
+          "fUsuarioWebservice": "Usuário",
+          "fSenhaWebservice": "Senha",
+          "fContratoWebservice": "Contrato",
+          "fCodigoCredenciamento": "Código credenciamento",
+          "secProxyTitulo": "Proxy",
+          "secProxyDescricao": "Quando o envio passa por proxy.",
+          "fUtilizarProxy": "Utilizar proxy",
+          "optSim": "Sim",
+          "optNao": "Não",
+          "fProxyWebservice": "Endereço do proxy",
+          "fPortaProxy": "Porta",
+          "fUsuarioProxy": "Usuário proxy",
+          "fSenhaProxy": "Senha proxy",
+          "secEnvioTitulo": "Opções de envio",
+          "secEnvioDescricao": "Flags adicionais de integração.",
+          "fEnviarExameSituacaoColeta": "Enviar situação de coleta do exame",
+          "fEnviarMedico": "Enviar médico",
+          "secAuditoriaTitulo": "Auditoria",
+          "secAuditoriaDescricao": "Rastreio preenchido pelo sistema.",
+          "fIdTenacidade": "Tenacidade",
+          "fIdUsuarioAuditoria": "Usuário (auditoria)",
+          "fEnderecoIpAuditoria": "Endereço IP",
+          "fNomeAplicacaoAuditoria": "Aplicação"
+        }
+      },
+      "locaisArmazenamento": {
+        "tituloPagina": "Locais de armazenamento",
+        "placeholderBusca": "Buscar por código ou descrição…",
+        "editarCadastro": "Abrir formulário de cadastro do local",
+        "colunas": {
+          "codigoArmazenamento": "Cód. armaz.",
+          "descricao": "Descrição"
+        }
+      },
+      "sorotecaMapa": {
+        "botaoNovaGrade": "Nova grade",
+        "tituloPagina": "Grades",
+        "placeholderBusca": "Buscar por nome da grade…",
+        "colunaNome": "Nome",
+        "colunaDimensoes": "Dimensões",
+        "colunaAtiva": "Situação",
+        "editarCadastroAria": "Editar cadastro da grade",
+        "subtituloPrivacidade": "Somente leitura. Não exibe nome nem outros dados identificáveis do paciente.",
+        "editarGradeCabecalho": "Editar grade",
+        "editarGradeSubtitulo": "Editar grade",
+        "selecioneGrade": "Escolha uma grade para ver o mapa de poços.",
+        "nenhumaGrade": "Nenhuma grade de soroteca encontrada para este laboratório.",
+        "verMapa": "Abrir mapa",
+        "voltarLista": "Voltar à lista de grades",
+        "carregando": "Carregando…",
+        "erroCarregar": "Não foi possível carregar os dados.",
+        "dimensoes": "{linhas} × {colunas} poços",
+        "ativaSim": "Ativa",
+        "ativaNao": "Inativa",
+        "avisosTitulo": "Avisos",
+        "semPosicaoTitulo": "Amostras sem posição interpretável nesta grade",
+        "legenda": "Legenda do mapa",
+        "legendaTitulo": "Legenda",
+        "estadoLivre": "Livre",
+        "estadoInativo": "Poço inativo",
+        "estadoOcupada": "Ocupada",
+        "estadoVencendo": "Vencendo",
+        "estadoVencida": "Vencida",
+        "estadoEmUso": "Em uso (fora da caixa)",
+        "estadoDescartada": "Descartada",
+        "estadoRejeitada": "Rejeitada",
+        "estadoConflito": "Conflito (várias amostras no mesmo poço)",
+        "codigoAmostra": "Cód. amostra",
+        "idAtendimento": "Atendimento",
+        "armazenarNestePocoAria": "Armazenar amostra neste poço",
+        "focoPoçoAria": "Definir foco para ver o resumo deste poço",
+        "cliquePoçoOperacoes": "Passe o cursor sobre o poço para ver detalhes; clique para armazenar, retirar ou ver opções.",
+        "dialogPocoTitulo": "Poço {poco}",
+        "dialogPocoFechar": "Fechar",
+        "pocoInativoAviso": "Este poço está inativo. Não é possível armazenar aqui.",
+        "detalheAmostrasTitulo": "Amostras neste poço",
+        "idAmostraLabel": "ID da amostra (atendimento)",
+        "idAmostraPlaceholder": "Informe o identificador numérico…",
+        "validacaoIdAmostra": "Informe o ID da amostra.",
+        "botaoArmazenar": "Armazenar",
+        "botaoRemover": "Retirar da posição",
+        "confirmarRemover": "Retirar esta amostra da posição nesta caixa?",
+        "operacaoEmDesenvolvimento": "Previsto no manual; ainda sem integração nesta tela.",
+        "botaoDescartar": "Descartar",
+        "botaoRepetir": "Repetir (recoleta)",
+        "erroOperacao": "Não foi possível concluir a operação."
+      },
+      "sorotecaCadastro": {
+        "campos": {
+          "id": "ID",
+          "codigo": "Código",
+          "descricao": "Descrição",
+          "nome": "Nome",
+          "fase": "Fase",
+          "ativo": "Ativo",
+          "permite_uso": "Permite uso",
+          "terminal": "Terminal",
+          "requer_tcle": "Requer TCLE",
+          "requer_auth": "Requer autenticação",
+          "impede_descarte": "Impede descarte",
+          "impede_uso": "Impede uso",
+          "requer_auth_liberacao": "Liberação autenticada",
+          "norma": "Norma",
+          "orgao": "Órgão",
+          "gravidade": "Gravidade",
+          "id_soroteca_sala": "ID sala",
+          "sala_codigo": "Sala (código)",
+          "id_soroteca_equipamento": "ID equipamento",
+          "tamanhoLinha": "Linhas",
+          "tamanhoColuna": "Colunas",
+          "idLocalArmazenamento": "Local armazenamento",
+          "id_soroteca_caixa": "ID caixa",
+          "linha": "Linha",
+          "coluna": "Coluna",
+          "rotulo": "Rótulo",
+          "prazo_dias": "Prazo (dias)",
+          "prioridade": "Prioridade",
+          "id_material_tipo": "Tipo material",
+          "id_finalidade": "Finalidade",
+          "id_norma": "Norma (ID)",
+          "id_atendimento_amostra": "Amostra",
+          "numero_aliquota": "Nº alíquota",
+          "data_validade": "Validade",
+          "id_soroteca_aliquota": "Alíquota",
+          "id_derivado_tipo": "Tipo derivado",
+          "data_preparacao": "Preparação",
+          "id_soroteca_posicao": "Posição",
+          "data_hora_entrada": "Entrada",
+          "data_hora_saida": "Saída",
+          "id_bloqueio_tipo": "Tipo bloqueio",
+          "motivo": "Motivo",
+          "data_hora_inicio": "Início",
+          "data_hora_movimento": "Movimento",
+          "id_movimento_tipo": "Tipo movimento",
+          "numero_lote": "Nº lote",
+          "data_hora_descarte": "Descarte",
+          "id_descarte_lote": "Lote",
+          "status_resolucao": "Resolução",
+          "data_hora_evento": "Evento",
+          "temperatura_c": "Temperatura (°C)",
+          "data_hora_leitura": "Leitura",
+          "status": "Status",
+          "operacao": "Operação",
+          "tabela": "Tabela",
+          "registro_id": "Registro"
+        }
+      },
+      "cadastrosSoroteca": {
+        "tituloPagina": "Cadastros da soroteca",
+        "carregando": "Carregando…",
+        "voltar": "Voltar",
+        "menuAria": "Tabelas da soroteca",
+        "placeholderBuscaListagem": "Buscar… (escolha a coluna em «Pesquisar por» e pressione Enter)",
+        "placeholderBusca": "Buscar (campo conforme coluna «Pesquisar por»)…",
+        "editarCadastro": "Editar registro",
+        "avisoSomenteLeitura": "Este recurso é somente consulta (log ou auditoria).",
+        "avisoRegistroProcesso": "Esta listagem exibe registros gerados por processos ou leituras de telemetria; não há cadastro manual nesta tela.",
+        "avisoCaixaGrades": "Para criar ou editar caixas com mapa de poços, use Módulos → Soroteca → Grades.",
+        "avisoCriacaoSomente": "Nesta versão a API permite apenas inclusão (edição por tela ainda não mapeada).",
+        "filtroIdCaixa": "Filtrar por ID da caixa",
+        "filtroIdCaixaPlaceholder": "ID numérico da caixa…",
+        "aplicarFiltroCaixa": "Aplicar filtro",
+        "formulario": {
+          "tituloNovo": "Novo registro",
+          "tituloEdicao": "Editar registro",
+          "secPrincipal": "Dados principais",
+          "semSuporteApi": "Este tipo de cadastro ainda não possui formulário habilitado na API nesta versão.",
+          "codigo": "Código",
+          "descricao": "Descrição",
+          "nome": "Nome",
+          "fase": "Fase",
+          "ativo": "Ativo",
+          "permiteUso": "Permite uso",
+          "terminal": "Terminal",
+          "requerTcle": "Requer TCLE",
+          "volumeNominalMl": "Volume nominal (ml)",
+          "aditivo": "Aditivo",
+          "corTampa": "Cor da tampa",
+          "temperaturaMinC": "Temperatura mín. (°C)",
+          "temperaturaMaxC": "Temperatura máx. (°C)",
+          "requerAuth": "Requer autenticação",
+          "impedeDescarte": "Impede descarte",
+          "impedeUso": "Impede uso",
+          "requerAuthLiberacao": "Requer autenticação para liberação",
+          "normaCampo": "Norma (referência)",
+          "descricaoLonga": "Descrição",
+          "orgao": "Órgão",
+          "gravidade": "Gravidade",
+          "salvar": "Salvar",
+          "excluir": "Excluir",
+          "confirmarExcluir": "Confirma excluir este status? Não será possível se estiver em uso por alíquota.",
+          "semEdicaoApi": "A edição por ID para este tipo ainda não está disponível na API.",
+          "idSorotecaSala": "ID da sala",
+          "idEquipamentoTipo": "ID do tipo de equipamento",
+          "temperaturaAlvoC": "Temperatura alvo (°C)",
+          "capacidadeTotal": "Capacidade total",
+          "fabricante": "Fabricante",
+          "modelo": "Modelo",
+          "numeroSerie": "Número de série",
+          "idSorotecaEquipamento": "ID do equipamento",
+          "posicaoNoEquipamento": "Posição no equipamento",
+          "idMaterialTipoOpcional": "ID do tipo de material (opcional)",
+          "idFinalidadeOpcional": "ID da finalidade (opcional)",
+          "idNormaOpcional": "ID da norma (opcional)",
+          "prazoDias": "Prazo (dias)",
+          "prazoMinimoDias": "Prazo mínimo (dias)",
+          "prioridade": "Prioridade",
+          "permiteProrrogacao": "Permite prorrogação",
+          "codigoExame": "Código do exame (opcional)",
+          "descricaoOpcional": "Descrição (opcional)",
+          "idSorotecaRack": "ID do rack",
+          "numLinhas": "Número de linhas",
+          "numColunas": "Número de colunas",
+          "idLocalArmazenamentoOpcional": "ID do local de armazenamento (opcional)",
+          "listaPocosInativos": "Lista de poços inativos"
+        },
+        "slugs": {
+          "amostra-status": "Status de amostra",
+          "material-tipo": "Tipo de material",
+          "recipiente-tipo": "Tipo de recipiente",
+          "equipamento-tipo": "Tipo de equipamento",
+          "movimento-tipo": "Tipo de movimento",
+          "bloqueio-tipo": "Tipo de bloqueio",
+          "residuo-grupo": "Grupo de resíduo",
+          "descarte-metodo": "Método de descarte",
+          "descarte-motivo": "Motivo de descarte",
+          "norma": "Norma",
+          "finalidade": "Finalidade",
+          "derivado-tipo": "Tipo de derivado",
+          "qualidade-evento-tipo": "Tipo de evento de qualidade",
+          "soroteca-sala": "Sala (soroteca)",
+          "soroteca-equipamento": "Equipamento (soroteca)",
+          "soroteca-rack": "Rack",
+          "soroteca-caixa": "Caixa",
+          "soroteca-posicao": "Posição",
+          "soroteca-retencao-regra": "Regra de retenção",
+          "soroteca-aliquota": "Alíquota",
+          "soroteca-derivado": "Derivado",
+          "soroteca-armazenamento": "Armazenamento",
+          "soroteca-bloqueio": "Bloqueio",
+          "soroteca-movimento": "Movimento",
+          "descarte-lote": "Lote de descarte",
+          "descarte-item": "Item de descarte",
+          "qualidade-evento": "Evento de qualidade",
+          "temperatura-log": "Log de temperatura",
+          "temperatura-quarentena": "Quarentena de temperatura",
+          "soroteca-auditoria": "Auditoria soroteca"
+        }
+      },
+      "sorotecaGrade": {
+        "formulario": {
+          "tituloNovo": "Nova grade",
+          "tituloEditar": "Editar grade",
+          "subtituloNovo": "Informe os dados da grade e, após salvar, use o mapa de poços conforme o fluxo do laboratório.",
+          "subtituloEditar": "Editar grade",
+          "secIdentificacaoDescricao": "Dados cadastrais, dimensões da grade e parâmetros operacionais.",
+          "secGradeMapaTitulo": "Grade",
+          "secGradeMapaDescricao": "Mapa da caixa e resumo do poço em foco.",
+          "dialogArmazenarTitulo": "Armazenar amostra no poço",
+          "dialogArmazenarPoco": "Poço",
+          "dialogArmazenarIdAmostra": "ID da amostra (atendimento)",
+          "dialogArmazenarConfirmar": "Armazenar",
+          "dialogArmazenarCancelar": "Cancelar",
+          "dialogArmazenarPlaceholderId": "Informe o ID…",
+          "dialogArmazenarValidacaoId": "Informe o ID da amostra.",
+          "armazenandoAmostra": "Armazenando…",
+          "voltar": "Voltar",
+          "cancelar": "Cancelar",
+          "salvar": "Salvar",
+          "salvando": "Salvando…",
+          "carregandoMapa": "Carregando mapa…",
+          "mapaIndisponivel": "Não foi possível carregar o mapa desta grade.",
+          "armazenarLote": "Armazenar em lote",
+          "descartarGrade": "Descartar grade",
+          "secPesquisaAmostraDescricao": "Busque por ID da amostra ou código numérico.",
+          "secHistoricoDescricao": "Registros de armazenamento e retirada nesta grade.",
+          "placeholderPesquisaAmostra": "ID ou código da amostra…",
+          "usarIdPesquisa": "Usar este ID no armazenamento",
+          "retirarDaGrade": "Retirar da grade",
+          "retirarDaGradePlaceholder": "ID da amostra a retirar…",
+          "retirandoAmostra": "Retirando…",
+          "historicoVazio": "Nenhum registro de histórico.",
+          "historicoCarregando": "Carregando histórico…",
+          "historicoColunaData": "Data",
+          "historicoColunaPoco": "Poço",
+          "historicoColunaObs": "Observação",
+          "dialogLoteTitulo": "Armazenamento em lote",
+          "dialogLoteAjuda": "Uma linha por amostra: ID da amostra, linha e coluna (0-based), separados por espaço ou vírgula.",
+          "dialogLotePlaceholder": "Ex.: 12345 0 2",
+          "dialogLoteConfirmar": "Armazenar lote",
+          "erroLoteParse": "Formato inválido em uma ou mais linhas.",
+          "dialogDescartarTitulo": "Descartar grade",
+          "dialogDescartarMensagem": "A grade será inativada. Opcionalmente remova o vínculo soroteca das amostras.",
+          "campoEsvaziarAmostras": "Esvaziar amostras desta grade",
+          "confirmarDescartar": "Confirmar",
+          "botaoCarregarMaisHistorico": "Carregar mais",
+          "secIdentificacao": "Identificação",
+          "campoCodigo": "Código",
+          "campoSituacao": "Situação",
+          "situacaoAtivada": "Ativada",
+          "situacaoDesativada": "Desativada",
+          "campoDescricao": "Descrição",
+          "campoSetor": "Setor",
+          "campoLocal": "Local",
+          "campoDiasAmostra": "Nº de dias das amostras",
+          "campoDataAlteracao": "Alteração",
+          "campoHora": "Hora",
+          "campoUsuario": "Usuário",
+          "secParametrosGrade": "Dimensões e parâmetros",
+          "campoTamanhoLinha": "Linhas",
+          "campoTamanhoColuna": "Colunas",
+          "campoListaPocosInativos": "Lista de poços inativos",
+          "idRegistro": "Id",
+          "codigoCaixa": "Código da caixa",
+          "campoTipoCabecalho": "Tipo de cabeçalho",
+          "secPesquisaAmostra": "Pesquisa amostra",
+          "botaoPesquisar": "Pesquisar",
+          "secHistorico": "Histórico",
+          "campoPocoHistorico": "Poço:",
+          "opcaoDropdownVazio": "(selecione)",
+          "resumoPocoTitulo": "Poço em foco",
+          "resumoPocoLegado": "Código (grade)",
+          "resumoPocoPlanilha": "Endereço",
+          "resumoPocoEstado": "Estado",
+          "armazenarNestePoco": "Armazenar neste poço",
+          "armazenagemExpressa": "Armazenagem expressa",
+          "dialogExpressoTitulo": "Armazenagem expressa",
+          "dialogExpressoAmostra": "Amostra (ID atendimento)",
+          "dialogExpressoPlaceholder": "Bipe ou informe o ID e pressione Enter…",
+          "dialogExpressoStatus": "Status da operação",
+          "expressoGradeCheia": "Não há poços livres nesta grade.",
+          "expressoSucessoLinha": "Amostra armazenada em {poco}.",
+          "expressoProximoLinha": "Próximo bip: poço {poco}.",
+          "expressoSemLivreInicio": "Não há poço livre para iniciar o bip.",
+          "expressoUltimoSemProximo": "Última amostra em {poco}. Não há mais poços livres.",
+          "dialogExpressoFechar": "Fechar"
+        }
+      },
+      "medicamentos": {
+        "tituloPagina": "Medicamentos",
+        "placeholderBusca": "Buscar por nome…",
+        "editarCadastro": "Abrir formulário de cadastro do medicamento",
+        "colunas": {
+          "nome": "Nome",
+          "situacao": "Situação"
+        }
+      },
+      "motivosDesconto": {
+        "tituloPagina": "Motivos de desconto",
+        "placeholderBusca": "Buscar por descrição ou código migração…",
+        "editarCadastro": "Abrir formulário de cadastro do motivo de desconto",
+        "colunas": {
+          "codigoMigracao": "Código migração",
+          "descricao": "Descrição",
+          "codigoExterno": "Código externo"
+        }
+      },
+      "tiposEvento": {
+        "tituloPagina": "Tipos de evento",
+        "placeholderBusca": "Buscar por descrição ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do tipo de evento",
+        "colunas": {
+          "descricao": "Descrição"
+        }
+      },
+      "motivosRetificacao": {
+        "tituloPagina": "Motivos de retificação",
+        "placeholderBusca": "Buscar por descrição ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do motivo de retificação",
+        "colunas": {
+          "descricao": "Descrição"
+        }
+      },
+      "motivoOrcamentoRejeicao": {
+        "tituloPagina": "Motivos de orçamento rejeição",
+        "placeholderBusca": "Buscar por nome, código migração, código externo ou ID…",
+        "editarCadastro": "Abrir formulário de cadastro do motivo de orçamento rejeição",
+        "colunas": {
+          "nome": "Nome",
+          "situacao": "Situação",
+          "codigoMigracao": "Cód. migração",
+          "codigoExterno": "Cód. externo"
+        }
+      },
+      "motivoExameRetificacao": {
+        "tituloPagina": "Motivos de exame retificação",
+        "placeholderBusca": "Buscar por descrição, código migração, código externo ou ID…",
+        "editarCadastro": "Abrir formulário de cadastro do motivo de exame retificação",
+        "colunas": {
+          "descricao": "Descrição",
+          "situacao": "Situação",
+          "codigoMigracao": "Cód. migração",
+          "codigoExterno": "Cód. externo"
+        }
+      },
+      "tiposIntegracao": {
+        "tituloPagina": "Tipos de integração",
+        "placeholderBusca": "Buscar por descrição, código migração ou ID…",
+        "editarCadastro": "Abrir formulário de cadastro do tipo de integração",
+        "colunas": {
+          "descricao": "Descrição",
+          "codigoMigracao": "Cód. migração",
+          "situacao": "Situação"
+        }
+      },
+      "tiposInterface": {
+        "tituloPagina": "Tipos de interface",
+        "placeholderBusca": "Buscar por descrição ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do tipo de interface",
+        "colunas": {
+          "descricao": "Descrição",
+          "situacao": "Situação"
+        }
+      },
+      "tiposIndicacao": {
+        "tituloPagina": "Tipos de indicação",
+        "placeholderBusca": "Buscar por descrição, código ou ID…",
+        "editarCadastro": "Abrir formulário de cadastro do tipo de indicação",
+        "colunas": {
+          "codigo": "Código",
+          "descricao": "Descrição",
+          "situacao": "Situação"
+        }
+      },
+      "motivosCancelamento": {
+        "tituloPagina": "Motivos de cancelamento",
+        "placeholderBusca": "Buscar por descrição ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do motivo de cancelamento",
+        "colunas": {
+          "descricao": "Descrição"
+        }
+      },
+      "motivosRecoleta": {
+        "tituloPagina": "Motivos de recoleta",
+        "placeholderBusca": "Buscar por descrição, migração, código externo ou ID…",
+        "editarCadastro": "Abrir formulário de cadastro do motivo de recoleta",
+        "colunas": {
+          "codigoMigracao": "Código migração",
+          "descricao": "Descrição",
+          "situacao": "Situação",
+          "codigoExterno": "Código externo"
+        }
+      },
+      "motivosQuarentena": {
+        "tituloPagina": "Motivos de quarentena",
+        "placeholderBusca": "Buscar por descrição ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do motivo de quarentena",
+        "colunas": {
+          "descricao": "Descrição"
+        }
+      },
+      "tiposPagamento": {
+        "tituloPagina": "Tipos de pagamento",
+        "placeholderBusca": "Buscar por descrição, código, bandeira, doc. obrigatório (S/N) ou ID…",
+        "editarCadastro": "Editar cadastro do tipo de pagamento",
+        "selecionarRegistro": "Selecionar tipo de pagamento",
+        "colunas": {
+          "codigo": "Cód.",
+          "descricao": "Descrição",
+          "maxParcelas": "Máx. parc.",
+          "bandeira": "Bandeira",
+          "docObrigatorio": "Doc. obrig."
+        }
+      },
+      "tiposRelatorio": {
+        "tituloPagina": "Tipos de relatório",
+        "placeholderBusca": "Buscar por descrição ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do tipo de relatório",
+        "colunas": {
+          "descricao": "Descrição",
+          "situacao": "Situação"
+        }
+      },
+      "feriados": {
+        "tituloPagina": "Feriados",
+        "placeholderBusca": "Buscar por descrição, data (AAAA-MM-DD) ou código…",
+        "editarCadastro": "Editar feriado",
+        "colunas": {
+          "descricao": "Descrição",
+          "data": "Data"
+        }
+      },
+      "tiposAplicacao": {
+        "tituloPagina": "Tipos de aplicação",
+        "placeholderBusca": "Buscar por descrição ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do tipo de aplicação",
+        "colunas": {
+          "descricao": "Descrição"
+        }
+      },
+      "tiposDestinoResultado": {
+        "tituloPagina": "Tipos de destino de resultado",
+        "placeholderBusca": "Buscar por descrição ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do tipo de destino de resultado",
+        "colunas": {
+          "descricao": "Descrição"
+        }
+      },
+      "tiposEstadoCivil": {
+        "tituloPagina": "Tipos de estado civil",
+        "placeholderBusca": "Buscar por descrição ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do tipo de estado civil",
+        "colunas": {
+          "descricao": "Descrição"
+        }
+      },
+      "situacoesColeta": {
+        "tituloPagina": "Situações de coleta",
+        "placeholderBusca": "Buscar por sigla ou nome…",
+        "editarCadastro": "Abrir formulário de cadastro da situação de coleta",
+        "colunas": {
+          "sigla": "Sigla",
+          "nome": "Nome"
+        }
+      },
+      "mapaDefinicao": {
+        "tituloPagina": "Definição de mapas",
+        "placeholderBusca": "Buscar por nome…",
+        "editarCadastro": "Abrir definição de mapa",
+        "colunas": {
+          "id": "Ordem",
+          "nome": "Descrição",
+          "ativo": "Ativo",
+          "ativoSim": "Sim",
+          "ativoNao": "Não"
+        },
+        "formulario": {
+          "tituloNovo": "Nova definição de mapa",
+          "tituloEditar": "Definição de mapa",
+          "subtituloNovo": "Defina nome, filtros e parâmetros da worklist de produção.",
+          "subtituloEditar": "Ajuste parâmetros e listas de critério.",
+          "secIdent": "Identificação",
+          "secIdentDesc": "Nome, situação e ordem do registro.",
+          "grupoPrincipalTitulo": "Dados principais",
+          "fOrdem": "Ordem",
+          "fDescricao": "Descrição",
+          "fAtivo": "Ativo",
+          "fSituacaoAtivo": "Situação",
+          "situacaoOpcaoAtivo": "Ativo",
+          "situacaoOpcaoSuspenso": "Suspenso",
+          "secCaracteristicas": "Características",
+          "secCaracteristicasDesc": "Unidade, relatório, exportação, ordenação e vínculos auxiliares.",
+          "grupoFlagsTitulo": "Amostra e prioridade",
+          "fIdUnidade": "Unidade",
+          "fIdRelatorio": "Relatório",
+          "fIdTipoExportacao": "Tipo de exportação",
+          "fOrdernarPor": "Ordenado por",
+          "lookupPlaceholderUnidade": "Digite sigla ou nome da unidade…",
+          "lookupPlaceholderRelatorio": "Digite nome ou descrição do relatório…",
+          "lookupPlaceholderSelecione": "Selecione…",
+          "tipoExport0": "Hermes Pardini",
+          "tipoExport1": "Álvaro",
+          "tipoExport2": "Lab Rede",
+          "tipoExport3": "Sérgio Franco",
+          "tipoExport4": "Diagnósticos Brasil",
+          "tipoExport6": "CSV",
+          "ordemC": "N.º do atendimento",
+          "ordemN": "Nome do cliente",
+          "ordemR": "Data/hora do resultado",
+          "ordemE": "Exame/material",
+          "ordemA": "Amostras",
+          "ordemU": "Número origem",
+          "secCritSetores": "Setores",
+          "secCritSetoresDesc": "Lista vazia = sem filtro. Com itens, restringe ao setor.",
+          "secCritExames": "Exames",
+          "secCritExamesDesc": "Lista vazia = sem filtro. Com itens, restringe ao código exame/material.",
+          "fListaCodigoExame": "Códigos exame material",
+          "secCritUnidades": "Unidades",
+          "secCritUnidadesDesc": "Lista vazia = sem filtro. Com itens, restringe à unidade.",
+          "fListaIdUnidade": "Unidades",
+          "secCritConvenios": "Convênios",
+          "secCritConveniosDesc": "Lista vazia = sem filtro. Com itens, restringe ao convênio.",
+          "fListaIdConvenio": "Convênios",
+          "secCritLabs": "Laboratórios",
+          "secCritLabsDesc": "Lista vazia = sem filtro. Com itens, restringe ao laboratório de apoio.",
+          "fListaIdLabApoio": "Laboratórios de Apoio",
+          "secCritUsuarios": "Usuários",
+          "secCritUsuariosDesc": "Lista vazia = sem filtro. Com itens, restringe ao usuário emissor do atendimento.",
+          "fListaIdUsuario": "Usuários",
+          "secCritProcedencias": "Procedências",
+          "secCritProcedenciasDesc": "Lista vazia = sem filtro. Com itens, restringe à procedência.",
+          "fListaIdProcedencia": "Procedências",
+          "fListaIdSetor": "Setores",
+          "lookupPlaceholderSetor": "Buscar setor por descrição ou id…",
+          "lookupAriaSetor": "Seleção de setores para o critério do mapa",
+          "critLookupCarregando": "Carregando opções…",
+          "critLookupVazio": "Nenhum item disponível.",
+          "critLookupFiltroVazio": "Nenhum resultado para o filtro.",
+          "lookupPlaceholderCritExames": "Buscar exame/material por código, nome ou id…",
+          "lookupAriaCritExames": "Seleção de exames e materiais para o critério do mapa",
+          "lookupPlaceholderCritUnidades": "Buscar unidade por sigla, nome ou id…",
+          "lookupAriaCritUnidades": "Seleção de unidades para o critério do mapa",
+          "lookupPlaceholderCritConvenios": "Buscar convênio por nome ou id…",
+          "lookupAriaCritConvenios": "Seleção de convênios para o critério do mapa",
+          "lookupPlaceholderCritLabs": "Buscar laboratório de apoio por nome ou id…",
+          "lookupAriaCritLabs": "Seleção de laboratórios de apoio para o critério do mapa",
+          "lookupPlaceholderCritUsuarios": "Buscar usuário por nome, login, e-mail ou id…",
+          "lookupAriaCritUsuarios": "Seleção de usuários para o critério do mapa",
+          "lookupPlaceholderCritProcedencias": "Buscar procedência por descrição, sigla ou id…",
+          "lookupAriaCritProcedencias": "Seleção de procedências para o critério do mapa",
+          "fSomenteAmostra": "Incluir somente amostra",
+          "fAceitaUrgente": "Aceita somente item urgente",
+          "secAuditoria": "Auditoria",
+          "secAuditoriaDesc": "Rastreio preenchido pelo sistema (somente leitura; visível conforme perfil).",
+          "fIp": "IP",
+          "fApp": "Aplicação"
+        }
+      },
+      "mapaProducao": {
+        "tituloPagina": "Mapas de produção",
+        "placeholderBusca": "Buscar por N.º, histórico, definição ou usuário emissor…",
+        "editarCadastro": "Abrir mapa de produção",
+        "visualizarMapa": "Visualizar mapa de produção",
+        "colunas": {
+          "id": "N.º",
+          "descricao": "Descrição / histórico",
+          "definicao": "Definição",
+          "emissor": "Usuário emissor",
+          "idDefinicao": "ID definição",
+          "inclusao": "Inclusão"
+        },
+        "formulario": {
+          "tituloNovo": "Novo mapa de produção",
+          "tituloEditar": "Mapa de produção",
+          "subtituloNovo": "Somente consulta: mapas são gerados pelo atendimento (mapa).",
+          "subtituloEditar": "Somente leitura — dados do mapa e dos exames vinculados.",
+          "secIdent": "Identificação",
+          "secIdentDesc": "N.º do mapa, definição e situação de impressão.",
+          "fNumMapa": "N.º do mapa",
+          "fIdDefinicao": "ID definição de mapa",
+          "fNomeDefinicao": "Descrição da definição",
+          "fMapaImpresso": "Mapa impresso",
+          "optSim": "Sim",
+          "optNao": "Não",
+          "secInclusaoEmissao": "Inclusão e última emissão",
+          "secInclusaoEmissaoDesc": "Dados de auditoria de fluxo (somente leitura).",
+          "fDataInclusao": "Inclusão (data/hora)",
+          "fDataEmissao": "Última emissão (data/hora)",
+          "fUsuarioEmissao": "Usuário (emissão)",
+          "fContadorExames": "Qtd. exames (itens no mapa)",
+          "fQtdImpressao": "Qtd. impressão",
+          "secExames": "Exames (atendimento)",
+          "secExamesDesc": "Itens de exame/material vinculados a este mapa.",
+          "fIdsExameMaterial": "IDs exame material do atendimento",
+          "secHistorico": "Informações / histórico",
+          "secHistoricoDesc": "Histórico ou descrição associada ao mapa.",
+          "fHistorico": "Histórico / descrição"
+        }
+      },
+      "monitorMapas": {
+        "tituloPagina": "Monitor de mapas de produção",
+        "placeholderBusca": "Buscar…",
+        "editarMapa": "Abrir cadastro do mapa de produção",
+        "abasFiltroAria": "Filtrar mapas abertos ou já impressos (fechados)",
+        "visualizarMapa": "Abrir cadastro do mapa de produção",
+        "abaNaoImpressos": "Em aberto",
+        "abaImpressos": "Impressos",
+        "timer": "Atualização automática em",
+        "segundos": "s",
+        "btnAtualizar": "Atualizar",
+        "btnMarcarTodos": "Marcar todos",
+        "btnDesmarcarTodos": "Desmarcar todos",
+        "btnImprimir": "Imprimir selecionados",
+        "btnConfigImpressora": "Configurar impressora",
+        "btnProcessar": "Processar selecionados",
+        "msgEmBreve": "Operação ainda não disponível na web (equivalente ao client legado).",
+        "colunaImprimir": "Impr.",
+        "colunaDescricao": "Descrição",
+        "colunas": {
+          "idMapa": "N.º mapa",
+          "definicao": "Definição",
+          "qtdExames": "Qtd. exames",
+          "inclusao": "Inclusão do mapa",
+          "impresso": "Impresso"
+        }
+      },
+      "modelosResultado": {
+        "tituloPagina": "Modelos de resultado",
+        "placeholderBusca": "Buscar por nome…",
+        "editarCadastro": "Abrir formulário de cadastro do modelo"
+      },
+      "exameMaterialLabApoio": {
+        "tituloPagina": "Exames laboratório de apoio (DE/PARA)",
+        "placeholderBusca": "Buscar por exame/material, laboratório ou código no apoio…",
+        "editarCadastro": "Abrir cadastro DE/PARA",
+        "colunas": {
+          "id": "ID",
+          "rotuloExameMaterial": "Exame/material",
+          "rotuloLabApoio": "Laboratório de apoio",
+          "codigoExameLabApoio": "Código exame (apoio)",
+          "codigoMaterialLabApoio": "Código material (apoio)",
+          "codigoMaterialReal": "Código material real"
+        },
+        "erros": {
+          "exameMaterialObrigatorio": "Selecione o exame/material.",
+          "labObrigatorio": "Selecione o laboratório de apoio."
+        },
+        "formulario": {
+          "tituloNovo": "Novo DE/PARA",
+          "tituloEditar": "DE/PARA exame × apoio",
+          "subtituloNovo": "Vincule um exame/material do catálogo ao laboratório de apoio e informe os códigos e flags usados na integração (exame_material_lab_apoio).",
+          "subtituloEditar": "Altere códigos ou flags; a unicidade é por exame/material e laboratório de apoio no tenant.",
+          "optSnVazio": "(não definido)",
+          "optSnSim": "Sim (S)",
+          "optSnNao": "Não (N)",
+          "secIdentTitulo": "Identificação",
+          "secIdentDescricao": "Exame/material interno e laboratório de apoio (catálogo).",
+          "secDeparaTitulo": "Códigos no apoio",
+          "secDeparaDescricao": "DE/PARA de exame e material conforme exige o webservice do laboratório.",
+          "secFlagsTitulo": "Envio de dados adicionais",
+          "secFlagsDescricao": "Flags S/N para campos opcionais no envio ao apoio.",
+          "secComplementoTitulo": "Complemento e referência",
+          "secComplementoDescricao": "Conservante, observações, chave/pergunta e valor de referência.",
+          "secAuditoriaTitulo": "Auditoria",
+          "secAuditoriaDescricao": "Preenchido pelo sistema.",
+          "fId": "ID",
+          "fIdExameMaterial": "Exame/material",
+          "fIdLabApoio": "Laboratório de apoio",
+          "fCodigoExameLabApoio": "Código exame no apoio",
+          "fCodigoMaterialLabApoio": "Código material no apoio",
+          "fCodigoMaterialReal": "Código material real",
+          "fRegraExameSecundario": "Regra exame secundário",
+          "fEnviarTempoDiurese": "Enviar tempo diurese",
+          "fEnviarTempoAmostra": "Enviar tempo amostra",
+          "fEnviarVolumeUrinario": "Enviar volume urinário",
+          "fEnviarIdadeGestacional": "Enviar idade gestacional",
+          "fEnviarDescricaoMaterial": "Enviar descrição material",
+          "fEnviarLinfocitosAbsoluto": "Enviar linfócitos absoluto",
+          "fConservante": "Conservante",
+          "fObservacoes": "Observações",
+          "fChave": "Chave",
+          "fPergunta": "Pergunta",
+          "fVerificarValorReferencia": "Verificar valor referência",
+          "fValorReferencia": "Valor referência",
+          "fIdUsuarioAuditoria": "Usuário (auditoria)",
+          "fEnderecoIpAuditoria": "IP (auditoria)",
+          "fNomeAplicacaoAuditoria": "Aplicação (auditoria)"
+        }
+      },
+      "questionarios": {
+        "tituloPagina": "Questionários",
+        "placeholderBusca": "Buscar por título ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do questionário",
+        "colunas": {
+          "titulo": "Título",
+          "dataInclusao": "Inclusão"
+        }
+      },
+      "recipientes": {
+        "tituloPagina": "Recipientes",
+        "placeholderBusca": "Buscar por descrição ou código…",
+        "editarCadastro": "Abrir formulário de cadastro do recipiente",
+        "colunas": {
+          "descricao": "Descrição",
+          "ativo": "Ativo"
+        }
+      },
+      "setores": {
+        "tituloPagina": "Setores",
+        "placeholderBusca": "Buscar por descrição, situação (S/N) ou ID…",
+        "colunas": {
+          "descricao": "Descrição",
+          "situacao": "Situação"
+        },
+        "selecionarRegistro": "Selecionar setor",
+        "editarCadastro": "Abrir formulário de cadastro do setor",
+        "formulario": {
+          "tituloNovo": "Novo setor",
+          "tituloEditar": "Setor",
+          "subtituloNovo": "Cadastre o setor de exames (setor).",
+          "subtituloEditar": "Atualize descrição, situação e códigos de integração.",
+          "secoes": {
+            "identificacao": {
+              "titulo": "Identificação",
+              "descricao": "Nome do setor, situação ativa e identificadores internos."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "Rastreio preenchido pelo sistema (somente leitura; visível conforme perfil)."
+            }
+          },
+          "grupos": {
+            "principalTitulo": "Dados principais",
+            "principalDescricao": "Descrição do setor e indicador de registro ativo.",
+            "codigosTitulo": "Códigos de integração",
+            "codigosDescricao": "Valores opcionais vindos de migração ou sistemas externos (apenas dígitos no código externo)."
+          },
+          "campos": {
+            "id": "Código",
+            "descricao": "Descrição",
+            "ativo": "Ativo",
+            "codigoMigracao": "Código migração",
+            "codigoExterno": "Código externo",
+            "idUsuarioAuditoria": "Usuário (auditoria)",
+            "enderecoIpAuditoria": "IP (auditoria)",
+            "nomeAplicacaoAuditoria": "Aplicação (auditoria)"
+          }
+        }
+      },
+      "usuarios": {
+        "tituloPagina": "Usuários",
+        "placeholderBusca": "Buscar por código, nome, login, e-mail ou situação (S/N)…",
+        "editarCadastro": "Abrir formulário de cadastro do usuário",
+        "colunas": {
+          "id": "Código",
+          "nome": "Nome",
+          "login": "Login",
+          "email": "E-mail",
+          "ativo": "Ativo"
+        },
+        "formulario": {
+          "novoTitulo": "Novo usuário",
+          "editarTitulo": "Usuário",
+          "subtituloNovo": "Cadastro de usuário do tenant. Campos com * são obrigatórios na inclusão (inclui senha inicial).",
+          "subtituloEditar": "Atualize dados, vínculo com unidade, perfil de acesso e indicadores.",
+          "secoes": {
+            "identificacao": {
+              "titulo": "Identificação",
+              "descricao": "Código, situação, unidade, perfil e nome do usuário."
+            },
+            "caracteristicas": {
+              "titulo": "Características",
+              "descricao": "Códigos de referência e caminhos de mídia (foto e assinatura) conforme cadastro no laboratório."
+            },
+            "documentos": {
+              "titulo": "Documentos e perfil",
+              "descricao": "Dados pessoais e documentos oficiais."
+            },
+            "endereco": {
+              "titulo": "Endereço",
+              "descricao": "Localização e CEP. Ao sair do CEP com 8 dígitos, o endereço pode ser preenchido automaticamente."
+            },
+            "contato": {
+              "titulo": "Contato",
+              "descricao": "E-mail e telefones."
+            },
+            "acesso": {
+              "titulo": "Acesso e regras",
+              "descricao": "Login, senha na inclusão e indicadores de liberação."
+            },
+            "auditoria": {
+              "titulo": "Auditoria",
+              "descricao": "Rastreio preenchido pelo sistema (somente leitura)."
+            }
+          },
+          "grupos": {
+            "situacaoRegistroTitulo": "Situação do registro",
+            "situacaoRegistroDescricao": "Código interno (edição) e se o usuário está ativo.",
+            "vinculoTitulo": "Unidade e perfil",
+            "vinculoDescricao": "Obrigatórios: unidade de lotação e grupo de permissões.",
+            "nomeTitulo": "Nome",
+            "perfilNascimentoTitulo": "Perfil e nascimento",
+            "documentosOficiaisTitulo": "Documentos oficiais",
+            "enderecoTitulo": "Endereço completo",
+            "contatoTitulo": "Meios de contato",
+            "credenciaisTitulo": "Credenciais",
+            "credenciaisDescricao": "Na edição, use o botão ao lado do login para alterar a senha. Na inclusão, informe a senha inicial conforme a política.",
+            "indicadoresTitulo": "Indicadores e liberações",
+            "indicadoresDescricao": "Flags de negócio associadas ao usuário.",
+            "indicadoresCheckboxTitulo": "Opções",
+            "codigosExternosTitulo": "Códigos",
+            "referenciasMidiaTitulo": "Arquivos de foto e assinatura",
+            "listasPermitidasTitulo": "Listas permitidas",
+            "laudoResultadoTitulo": "Laudo e resultado",
+            "laudoResultadoCheckboxTitulo": "Comportamento no laudo"
+          },
+          "campos": {
+            "codigo": "Código",
+            "ativo": "Ativo",
+            "unidade": "Unidade",
+            "nome": "Nome",
+            "sexo": "Sexo",
+            "dataNascimento": "Data de nascimento",
+            "cpf": "CPF",
+            "identidade": "Identidade",
+            "orgaoEmissor": "Órgão emissor",
+            "cartaoNacionalSaude": "Cartão nacional de saúde",
+            "cracha": "Crachá",
+            "cep": "CEP",
+            "tipoLogradouro": "Tipo de logradouro",
+            "logradouro": "Logradouro",
+            "numero": "Número",
+            "complemento": "Complemento",
+            "bairro": "Bairro",
+            "cidade": "Cidade",
+            "uf": "UF",
+            "email": "E-mail",
+            "telefone": "Telefone",
+            "celular": "Celular",
+            "login": "Login",
+            "senhaInclusao": "Senha (só inclusão)",
+            "liberarResultado": "Liberar resultado",
+            "motivoBloqueioImpressao": "Motivo bloqueio impressão",
+            "retirarQuarentena": "Retirar quarentena",
+            "listaConvenio": "Lista convênio",
+            "codigoAtivacao": "Código ativação",
+            "codigoExterno": "Código externo",
+            "codigoMigracao": "Código migração",
+            "nomeArquivoFotografia": "Nome arquivo fotografia",
+            "nomeReferenciaFotografia": "Nome referência fotografia",
+            "nomeArquivoAssinatura": "Nome arquivo assinatura",
+            "nomeReferenciaAssinatura": "Nome referência assinatura",
+            "listaUnidadePermitido": "Unidades permitidas",
+            "timeoutSessaoMinutos": "Timeout sessão (minutos)",
+            "alertarLaudoParcial": "Alertar laudo parcial",
+            "bloquearImpressaoLaudoParcial": "Bloquear impressão laudo parcial",
+            "alterarResultadoLiberado": "Alterar resultado liberado",
+            "visualizarLaudoAntesLiberacao": "Visualizar laudo antes da liberação",
+            "idUsuarioAuditoria": "Usuário (auditoria)",
+            "ipAuditoria": "IP (auditoria)",
+            "aplicacaoAuditoria": "Aplicação (auditoria)"
+          },
+          "grupoUsuarioLabel": "Grupo de usuário (perfil)",
+          "grupoUsuarioPlaceholder": "Selecione o grupo de usuário…",
+          "labelCodigo": "Código",
+          "labelAtivo": "Ativo",
+          "labelNome": "Nome",
+          "labelUnidade": "Unidade",
+          "erroCampoObrigatorio": "Preenchimento obrigatório.",
+          "erroListaUnidadePermitidoTamanho": "A lista de unidades permitidas excede o limite de 255 caracteres. Reduza a quantidade de unidades selecionadas.",
+          "listasUnidadesPermitidas": {
+            "nenhumSelecionado": "Nenhuma unidade selecionada.",
+            "modalTitulo": "Selecionar unidades permitidas",
+            "naoSelecionados": "Não selecionadas",
+            "selecionados": "Selecionadas",
+            "filtroPlaceholder": "Filtrar por sigla ou nome…",
+            "placeholderMultiSelect": "Selecione…"
+          },
+          "placeholderUnidadeLookup": "Digite sigla ou nome para filtrar…",
+          "ariaUnidadeLookup": "Unidade (busca por sigla ou nome)",
+          "labelLogin": "Login",
+          "labelEmail": "E-mail",
+          "labelTelefone": "Telefone",
+          "labelCelular": "Celular",
+          "labelSexo": "Sexo",
+          "labelDataNascimento": "Data nascimento",
+          "labelCpf": "CPF",
+          "labelIdentidade": "Identidade",
+          "labelOrgaoEmissor": "Orgão emissor",
+          "labelCartaoNacionalSaude": "Cartão nacional saúde",
+          "labelCracha": "Crachá",
+          "labelCep": "CEP",
+          "labelTipoLogradouro": "Tipo logradouro",
+          "labelLogradouro": "Logradouro",
+          "labelNumero": "Número",
+          "labelComplemento": "Complemento",
+          "labelBairro": "Bairro",
+          "labelCidade": "Cidade",
+          "labelUf": "UF",
+          "labelLiberarResultado": "Liberar resultado",
+          "labelMotivoBloqueioImpressao": "Motivo bloqueio impressão",
+          "labelRetirarQuarentena": "Retirar quarentena",
+          "labelListaConvenio": "Lista convênio",
+          "labelCodigoAtivacao": "Código ativação",
+          "labelSenhaInclusao": "Senha (só inclusão)",
+          "politicaSenhaUsuarioDica": "Obrigatória na inclusão: 8 a 100 caracteres, com ao menos uma minúscula, uma maiúscula e um dígito.",
+          "erroSenhaPoliticaForte": "A senha deve ter entre 8 e 100 caracteres e incluir ao menos uma letra minúscula, uma maiúscula e um dígito numérico.",
+          "labelSenha": "Senha",
+          "placeholderSexo": "Selecione",
+          "sexoMasculino": "Masculino",
+          "sexoFeminino": "Feminino",
+          "sexoIndefinido": "Indefinido",
+          "acaoBuscarUnidade": "Buscar unidade",
+          "acaoLimparUnidade": "Limpar unidade",
+          "buscandoEndereco": "Buscando endereço…",
+          "botaoAlterarSenha": "Alterar senha",
+          "botaoCancelar": "Cancelar",
+          "botaoConfirmar": "Confirmar",
+          "botaoSalvar": "Salvar",
+          "botaoSalvando": "Salvando...",
+          "botaoVoltar": "Voltar",
+          "botaoReautenticando": "Reautenticando...",
+          "reauthTitulo": "Sessão expirada - reautenticar",
+          "reauthMensagem": "Sua sessão expirou durante o salvamento. Reautentique para continuar sem perder os dados preenchidos.",
+          "dialogoSelecionarUnidade": "Selecionar unidade",
+          "carregandoSessao": "Carregando sessão…",
+          "trocaSenhaTituloPasso1": "Alterar senha do usuário",
+          "trocaSenhaTituloPasso2": "Confirmar alteração de senha",
+          "trocaSenhaMensagemPasso1": "Informe a nova senha e a confirmação. A senha deve ter entre 8 e 100 caracteres e incluir ao menos uma letra minúscula, uma maiúscula e um dígito numérico. Na etapa seguinte será solicitada a validação de segurança.",
+          "trocaSenhaMensagemPasso2Suporte": "Informe a senha do dia para validar o acesso técnico (suporte/implantação). Só a nova senha é gravada para o usuário deste cadastro.",
+          "trocaSenhaMensagemPasso2MesmoUsuario": "Informe a sua senha antiga para concluir a troca.",
+          "trocaSenhaMensagemPasso2Admin": "Informe a senha do seu usuário administrador para autorizar a alteração da senha de outro usuário.",
+          "trocaSenhaPlaceholderNova": "Nova senha (para o usuário deste cadastro)",
+          "trocaSenhaPlaceholderConfirmar": "Confirmar nova senha",
+          "trocaSenhaPlaceholderSenhaDia": "Senha do dia",
+          "trocaSenhaPlaceholderSenhaAntiga": "Senha antiga",
+          "trocaSenhaPlaceholderSenhaAdmin": "Senha do usuário administrador",
+          "trocaSenhaNovaObrigatoria": "Informe a nova senha.",
+          "trocaSenhaConfirmacaoDiferente": "A confirmação deve ser igual à nova senha.",
+          "trocaSenhaSenhaDiaObrigatoria": "Informe a senha do dia (validação do acesso técnico).",
+          "trocaSenhaAntigaObrigatoria": "Informe a senha antiga.",
+          "trocaSenhaAdminObrigatoria": "Informe a senha do seu usuário administrador.",
+          "trocaSenhaErroTitulo": "Não foi possível alterar a senha.",
+          "trocaSenhaErroGenerico": "Não foi possível concluir a operação. Verifique os dados e tente novamente ou contate o suporte."
+        }
+      },
+      "atendimentos": {
+        "tituloPagina": "Atendimentos",
+        "placeholderBusca": "Buscar por número, nome ou código…",
+        "colunas": {
+          "numero": "Número",
+          "paciente": "Paciente",
+          "codigoExterno": "Código externo",
+          "inclusao": "Inclusão"
+        },
+        "editarCadastro": "Abrir formulário do atendimento",
+        "formulario": {
+          "secoesWizard": {
+            "identificacaoCliente": {
+              "titulo": "Identificação e paciente",
+              "descricao": "Unidade, procedência e dados do paciente neste atendimento."
+            }
+          },
+          "wizard": {
+            "variosMedicos": "Selecionar mais de um médico",
+            "variosConvenios": "Selecionar mais de um convênio",
+            "variosExames": "Selecionar mais de um exame/material",
+            "variosPagamentos": "Selecionar mais de um pagamento"
+          },
+          "grupos": {
+            "clinicaOpcoes": "Opções clínicas"
+          },
+          "campos": {
+            "identificacaoExterna": "Identificação externa",
+            "orcamentoId": "Orçamento (id)",
+            "incluidoEm": "Incluído em",
+            "numeroAtendimento": "Número atendimento",
+            "unidade": "Unidade",
+            "procedencia": "Procedência",
+            "paciente": "Paciente",
+            "nomeProtocolo": "Nome",
+            "nomeSocialProtocolo": "Nome social",
+            "medicosLookup": "Médico(s)",
+            "conveniosLookup": "Convênio(s)",
+            "exameMaterialLookup": "Exame/Material",
+            "pagamentoConvenioLookup": "Convênio para novo pagamento",
+            "cid": "CID",
+            "atendimentoSigiloso": "Atendimento sigiloso",
+            "atendimentoPreferencial": "Atendimento preferencial",
+            "tenacidadeId": "Tenacidade (id)",
+            "usuarioAuditoriaId": "Usuário auditoria (id)",
+            "usuarioInclusaoId": "Usuário inclusão (id)",
+            "ipAplicacaoAuditoria": "IP / aplicação (auditoria)"
+          },
+          "hints": {
+            "auditoriaNovo": "Em novo atendimento, estes campos serão preenchidos após a primeira gravação.",
+            "pagamentoConvenioInclusao": "Somente convênio já vinculado a este atendimento. Inclusão manual aplica a cobrança imediata. Convênio faturado aparece com valores calculados automaticamente a partir dos exames.",
+            "pagamentoConvenioInclusaoAria": "Mais informações: convênio para novo pagamento"
+          },
+          "placeholders": {
+            "unidade": "Digite para buscar unidade",
+            "procedencia": "Digite para buscar procedência",
+            "paciente": "Digite nome, CPF ou sexo para buscar",
+            "medico": "Digite nome, CPF, e-mail ou telefone",
+            "convenio": "Digite sigla, nome, CNPJ ou cidade",
+            "exameMaterial": "Digite código, nome impressão ou nome técnico",
+            "pagamentoConvenio": "Busque entre os convênios já vinculados a este atendimento",
+            "cid": "Digite para buscar CID",
+            "nomeProtocolo": "Como gravado neste atendimento"
+          },
+          "resumoCliente": {
+            "cpf": "CPF",
+            "documento": "Documento",
+            "sexo": "Sexo",
+            "sexoMasculino": "Masculino",
+            "sexoFeminino": "Feminino",
+            "sexoIndeterminado": "Indeterminado",
+            "nascimento": "Nascimento",
+            "idade": "Idade",
+            "nomeSocialCadastro": "Nome social (cadastro)",
+            "celular": "Celular",
+            "telefone": "Telefone",
+            "email": "E-mail",
+            "endereco": "Endereço",
+            "idPrefixo": "ID {id}"
+          },
+          "tabelaPagamento": {
+            "acrescimo": "Acréscimo",
+            "restanteConvenio": "Pendente (convênio)",
+            "restanteConvenioTitulo": "Diferença entre o total de exames deste convênio e a soma do valor pago em todas as linhas deste convênio (campo calculado, não persiste no banco)."
+          },
+          "exameInclusaoRapida": {
+            "modalTitulo": "Convênio e médico do exame",
+            "convenio": "Convênio",
+            "convenioPlaceholder": "Selecione o convênio",
+            "convenioObrigatorio": "Selecione o convênio do exame para confirmar.",
+            "medico": "Médico solicitante",
+            "medicoOpcional": "(Nenhum)",
+            "checkboxMemoria": "Aplicar esta escolha aos próximos exames deste atendimento (não perguntar de novo)",
+            "confirmar": "Confirmar",
+            "cancelar": "Cancelar",
+            "cancelado": "O exame não foi incluído: confirme o convênio e o médico no diálogo ou cancele de forma explícita.",
+            "trocaVcPpSemUsuario": "Não foi possível registrar a coleta: sessão sem usuário identificado. Faça login novamente.",
+            "situacaoPlaceholder": "Situação…"
+          },
+          "listaVazia": {
+            "medicos": "Nenhum médico incluído.",
+            "convenios": "Nenhum convênio incluído.",
+            "exames": "Nenhum exame incluído.",
+            "pagamentos": "Nenhum pagamento incluído."
+          },
+          "clienteTituloPainelFallback": "Cliente"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+.liga-dialogo-sessao .p-dialog-header {
+  font-weight: 700;
+}
+
+.liga-dialogo-sessao-mensagem {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+.liga-dialogo-sessao-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.liga-dialogo-botao-secundario {
+  color: var(--text-color);
+}
+
+.liga-dialogo-botao-primario {
+  min-width: 8rem;
+}

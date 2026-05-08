@@ -1,0 +1,46 @@
+export class RespostaUsuarioDto {
+  id!: string;
+  idUnidade!: string | null;
+  /** Perfil (infolab_grupo_usuario). */
+  idGrupoUsuario!: string | null;
+  nome!: string | null;
+  login!: string | null;
+  email!: string | null;
+  telefone!: string | null;
+  celular!: string | null;
+  sexo!: string | null;
+  data_nascimento!: string | null;
+  ativo!: string | null;
+  cpf!: string | null;
+  cracha!: string | null;
+  identidade!: string | null;
+  cartao_nacional_saude!: string | null;
+  orgao_emissor!: string | null;
+  cep!: string | null;
+  tipo_logradouro!: string | null;
+  logradouro!: string | null;
+  numero!: string | null;
+  complemento!: string | null;
+  bairro!: string | null;
+  cidade!: string | null;
+  estado!: string | null;
+  codigo_ativacao!: string | null;
+  liberar_resultado!: string | null;
+  retirar_quarentena!: string | null;
+  motivo_bloqueio_impressao_resultado!: string | null;
+  lista_convenio_permitido!: string | null;
+  lista_unidade_permitido!: string | null;
+  codigo_externo!: string | null;
+  codigo_migracao!: string | null;
+  nome_arquivo_fotografia!: string | null;
+  nome_referencia_fotografia!: string | null;
+  nome_arquivo_assinatura!: string | null;
+  nome_referencia_assinatura!: string | null;
+  alertar_laudo_parcial!: string | null;
+  bloquear_impressao_laudo_parcial!: string | null;
+  alterar_resultado_liberado!: string | null;
+  visualizar_laudo_antes_liberacao!: string | null;
+  id_usuario_auditoria!: string | null;
+  endereco_ip_auditoria!: string | null;
+  nome_aplicacao_auditoria!: string | null;
+}

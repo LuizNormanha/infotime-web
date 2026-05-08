@@ -1,0 +1,74 @@
+{
+  "name": "api",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/api/dist"],
+      "cache": true,
+      "options": {
+        "command": "npm run build",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "command": "npx eslint \"{src,apps,libs,test}/**/*.ts\" --max-warnings=0",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "command": "npm run test",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "start:dev": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "command": "npm run start:dev",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "start:dev:watch": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "command": "npm run start:dev:watch",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "command": "npm run start",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "start:prod": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "command": "npm run start:prod",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "prisma:generate": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "command": "npm run prisma:generate",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["type:app", "scope:api"]
+}

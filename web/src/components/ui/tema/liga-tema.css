@@ -1,0 +1,74 @@
+/* Variáveis da marca Liga + ajustes sobre o tema PrimeReact (Lara light/dark green) */
+
+:root {
+  --liga-verde: #74c043;
+  --liga-verde-hover: #5fa336;
+  --liga-verde-escuro: #2d6a5e;
+  --liga-verde-link-claro: #8bc85a;
+  --liga-fundo-pagina: #f0f2f5;
+  --liga-texto-principal: #111111;
+  --liga-texto-secundario: #4a5568;
+  --liga-moldura-externa: #ffffff;
+  --liga-moldura-interna: #ffffff;
+  --liga-borda-suave: #e2e8f0;
+  --liga-sombra-moldura: 0 4px 24px rgba(15, 23, 42, 0.08);
+  --liga-fundo-barra-abas: color-mix(in srgb, var(--liga-fundo-pagina) 82%, var(--liga-borda-suave));
+  --liga-sombra-bloco: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --liga-borda-acento-barra: var(--liga-verde-escuro);
+  /* Listagem modo claro: realce ao passar o mouse (verde primavera suave) */
+  --liga-listagem-zebra-hover: color-mix(in srgb, #eef1f5 72%, var(--liga-verde) 28%);
+
+  --liga-font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: var(--liga-font-family);
+  --font-family: var(--liga-font-family);
+
+  --primary-color: var(--liga-verde);
+  --primary-color-text: #ffffff;
+  --text-color: var(--liga-texto-secundario);
+  --surface-ground: var(--liga-fundo-pagina);
+}
+
+html[data-theme="dark"] {
+  --liga-fundo-pagina: #0f1419;
+  --liga-texto-principal: #f3f4f6;
+  --liga-texto-secundario: #cbd5e1;
+  --liga-moldura-externa: #1a222c;
+  --liga-moldura-interna: #222c38;
+  /* Zebrado: par um pouco mais claro + verde; ímpar mais fechado — contraste elegante entre faixas */
+  --liga-listagem-zebra-par: color-mix(in srgb, #1a2622 58%, var(--liga-verde-escuro) 42%);
+  --liga-listagem-zebra-impar: color-mix(in srgb, #0c1210 68%, var(--liga-verde-escuro) 32%);
+  --liga-listagem-zebra-hover: color-mix(in srgb, var(--liga-listagem-zebra-par) 55%, var(--liga-verde) 35%);
+  /* Cabeçalho: verde primavera bem visível vs. zebrado (1ª linha mais fechada em verde-escuro) */
+  --liga-listagem-cabecalho-fundo: color-mix(in srgb, #070d0a 30%, var(--liga-verde) 70%);
+  --liga-listagem-cabecalho-fundo-ordenado: color-mix(in srgb, #050a08 22%, var(--liga-verde) 78%);
+  --liga-listagem-cabecalho-borda: color-mix(in srgb, var(--liga-verde) 88%, rgba(0, 0, 0, 0.42) 12%);
+  --liga-listagem-cabecalho-texto: #e8f5ec;
+  --liga-borda-suave: rgba(255, 255, 255, 0.12);
+  --liga-sombra-moldura: 0 4px 24px rgba(0, 0, 0, 0.45);
+  --liga-fundo-barra-abas: color-mix(in srgb, var(--liga-fundo-pagina) 92%, var(--liga-borda-suave));
+  --liga-sombra-bloco: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --liga-borda-acento-barra: var(--liga-verde-link-claro);
+  --liga-verde-link-claro: #9fd86a;
+
+  --primary-color: var(--liga-verde);
+  --primary-color-text: #ffffff;
+  --text-color: var(--liga-texto-secundario);
+  --text-color-secondary: #94a3b8;
+  --surface-ground: #0f1419;
+  --surface-card: #1a222c;
+  --surface-border: rgba(255, 255, 255, 0.1);
+  --surface-hover: rgba(255, 255, 255, 0.05);
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+/**
+ * Botões PrimeReact — cápsula contínua (mesmo padrão dos formulários / referência tipo Apple).
+ * Não altera posição nem tamanho; apenas o raio dos cantos.
+ */
+.p-button {
+  border-radius: 980px;
+}

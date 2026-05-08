@@ -1,0 +1,94 @@
+/* Painel resumo do cadastro (cliente) — reutilizado em atendimento e orçamento */
+
+.liga-cliente-resumo-cadastro-painel {
+  border: 1px solid var(--surface-border, #e2e8f0);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface-ground, #f8fafc);
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-cliente-resumo-cadastro-painel-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--surface-border, #e2e8f0);
+  background: var(--surface-card, #fff);
+}
+
+.liga-cliente-resumo-cadastro-painel-titulo {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-color, #0f172a);
+  max-width: 100%;
+}
+
+.liga-cliente-resumo-cadastro-painel-id {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-color-secondary, #64748b);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.liga-cliente-resumo-cadastro-painel-corpo {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.liga-cliente-resumo-cadastro-kv-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem 1.25rem;
+}
+
+@media (min-width: 520px) {
+  .liga-cliente-resumo-cadastro-kv-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .liga-cliente-resumo-cadastro-kv-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.liga-cliente-resumo-cadastro-kv {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.liga-cliente-resumo-cadastro-kv--wide {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 900px) {
+  .liga-cliente-resumo-cadastro-kv--wide {
+    grid-column: span 3;
+  }
+}
+
+.liga-cliente-resumo-cadastro-kv-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-color-secondary, #64748b);
+  line-height: 1.2;
+}
+
+.liga-cliente-resumo-cadastro-kv-valor {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--text-color, #1e293b);
+  word-break: break-word;
+}

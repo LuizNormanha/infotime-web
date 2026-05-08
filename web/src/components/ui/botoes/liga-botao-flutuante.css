@@ -1,0 +1,78 @@
+.liga-botao-flutuante {
+  position: fixed;
+  bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  right: max(1.25rem, env(safe-area-inset-right, 0px));
+  z-index: 45;
+  box-sizing: border-box;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--liga-verde) 35%, var(--liga-borda-suave));
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  background: var(--liga-verde);
+  color: #ffffff;
+  box-shadow:
+    0 0.35rem 1rem color-mix(in srgb, var(--liga-verde) 28%, transparent),
+    0 0.15rem 0.35rem rgba(15, 23, 42, 0.12);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.liga-botao-flutuante:hover {
+  background: var(--liga-verde-hover);
+  border-color: color-mix(in srgb, var(--liga-verde-hover) 45%, var(--liga-borda-suave));
+  box-shadow:
+    0 0.45rem 1.15rem color-mix(in srgb, var(--liga-verde) 35%, transparent),
+    0 0.2rem 0.4rem rgba(15, 23, 42, 0.14);
+}
+
+.liga-botao-flutuante:active {
+  transform: scale(0.96);
+}
+
+.liga-botao-flutuante:focus {
+  outline: none;
+}
+
+.liga-botao-flutuante:focus-visible {
+  outline: 2px solid var(--liga-verde-link-claro);
+  outline-offset: 3px;
+}
+
+.liga-botao-flutuante-rosto {
+  width: 1.65rem;
+  height: 1.65rem;
+  flex-shrink: 0;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html[data-theme="dark"] .liga-botao-flutuante {
+  background: color-mix(in srgb, var(--liga-verde) 72%, var(--liga-moldura-interna));
+  color: #f8fafc;
+  border-color: color-mix(in srgb, var(--liga-verde-link-claro) 55%, transparent);
+  box-shadow:
+    0 0.4rem 1.25rem rgba(0, 0, 0, 0.35),
+    0 0 0 1px color-mix(in srgb, var(--liga-verde) 20%, transparent);
+}
+
+html[data-theme="dark"] .liga-botao-flutuante:hover {
+  background: color-mix(in srgb, var(--liga-verde-hover) 78%, var(--liga-moldura-interna));
+  border-color: color-mix(in srgb, var(--liga-verde-link-claro) 65%, transparent);
+  box-shadow:
+    0 0.5rem 1.4rem rgba(0, 0, 0, 0.42),
+    0 0 0 1px color-mix(in srgb, var(--liga-verde-hover) 25%, transparent);
+}

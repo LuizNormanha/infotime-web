@@ -1,0 +1,23 @@
+{
+  "name": "@infolab/mcp-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Servidor MCP Infotime — tool infolab.crud_briefing para briefing de telas CRUD",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

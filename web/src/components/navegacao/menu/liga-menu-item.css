@@ -1,0 +1,32 @@
+.liga-menu-item {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+  border-radius: 980px;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  padding-left: calc(0.75rem + var(--liga-menu-profundidade, 0) * 0.85rem);
+}
+
+.liga-menu-item:hover {
+  border-color: var(--liga-borda-suave);
+  background: var(--liga-moldura-externa);
+}
+
+.liga-menu-item.ativo {
+  background: color-mix(in srgb, var(--liga-texto-secundario) 11%, var(--liga-moldura-externa));
+  color: var(--liga-texto-principal);
+  border-color: var(--liga-borda-suave);
+  box-shadow: inset 3px 0 0 0 var(--liga-texto-secundario);
+}
+
+.liga-menu-item-rotulo {
+  flex: 1;
+  text-align: left;
+}

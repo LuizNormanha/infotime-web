@@ -1,0 +1,90 @@
+# Dependências
+node_modules/
+
+# Nx (cache e dados locais; não versionar)
+.nx/
+
+# Builds e saídas
+dist/
+**/dist/
+.next/
+out/
+build/
+*.tsbuildinfo
+
+# Testes / cobertura
+coverage/
+.nyc_output/
+
+# Ambiente e segredos (manter apenas exemplos)
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Claude / Cursor — worktrees locais duplicam `api/` e `web/` e fazem o Nx falhar (“projects defined in multiple locations”)
+.claude/worktrees/
+
+# Cursor / IDE — versionar `.cursor/rules/` e `mcp.json` do projeto; demais arquivos locais ignorados
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
+!.cursor/mcp.json
+
+# MCP Infolab — permitir versionar o JS compilado (Cursor aponta para dist/index.js)
+!tools/infolab-mcp/dist/
+!tools/infolab-mcp/dist/**
+
+# SO e editores
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+*.suo
+*.user
+
+# Ferramentas / deploy
+.vercel/
+.turbo/
+*.pem
+
+# Prisma (SQLite local, se existir)
+*.db
+*.db-journal
+
+# Relatórios temporários (gerados por diagnósticos locais)
+audit*.json
+
+# ESLint
+.eslintcache
+
+# Temporários
+*.tmp
+*.temp
+.cache/
+
+# Microsoft Office — arquivos de bloqueio ao abrir documento (~$...)
+~$*
+
+# Lixo de redirecionamento "2>nul" rodado em Git Bash (cria arquivo literal `nul`,
+# nome reservado no Windows que quebra `git add`). Sempre ignorar.
+/nul
+**/nul
+
+# Documentação gerada (manter fonte .md no repositório; exportar .doc/.docx localmente ou em CI)
+docs/ROADMAP_MVP_FASES_INFOLAB.doc
+docs/roadmap-atendimento-dst-vs-oficial.docx
+package-lock.json
+.nxignore
+
+# Template monorepo — staging local e ZIPs gerados
+templates/monorepo-base/.staging/
+templates/monorepo-base/output/*.zip

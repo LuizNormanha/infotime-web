@@ -1,0 +1,49 @@
+{
+  "name": "liga-prj-template",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo template Liga: API NestJS + Prisma + Web Next.js (PrimeReact), shell reutilizável para produtos InfoTIME e derivados.",
+  "workspaces": ["api", "web"],
+  "scripts": {
+    "build": "nx run-many -t build -p api,web",
+    "build:api": "nx run api:build",
+    "build:web": "nx run web:build",
+    "lint": "nx run-many -t lint -p api,web",
+    "test": "nx run-many -t test -p api,web",
+    "dev:api": "nx run api:start:dev",
+    "dev:web": "nx run web:dev",
+    "dev": "node scripts/prisma-generate-dev.mjs && concurrently -n api,web -c blue,magenta \"nx run api:start:dev:watch\" \"nx run web:dev\"",
+    "prisma:baseline": "node scripts/prisma-baseline-marcar-aplicadas.mjs",
+    "mcp:infotime:build": "npm run build --prefix tools/infolab-mcp",
+    "template:zip": "node scripts/gerar-template-zip.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infotimeweb-repo/infotime-web.git"
+  },
+  "keywords": ["template", "monorepo", "nestjs", "nextjs", "primereact", "prisma"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/infotimeweb-repo/infotime-web/issues"
+  },
+  "homepage": "https://github.com/infotimeweb-repo/infotime-web#readme",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "devDependencies": {
+    "@nx/eslint": "22.6.4",
+    "@nx/jest": "22.6.4",
+    "@nx/next": "22.6.4",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.18.0",
+    "jest": "^30.0.2",
+    "nx": "22.6.4"
+  },
+  "nx": {},
+  "dependencies": {},
+  "overrides": {
+    "axios": "^1.14.0"
+  }
+}

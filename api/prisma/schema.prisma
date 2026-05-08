@@ -1,0 +1,1461 @@
+// Models no Prisma Client seguem a convenção de nomes já usada no repositório; tabelas físicas no
+// PostgreSQL (`liga_infotime`) mapeiam com `@@map("...")` para os nomes reais (ex.: `tenacidade`, `usuario`).
+
+generator client {
+  provider = "prisma-client-js"
+  // Fora de node_modules/.prisma — evita EPERM (rename do query_engine) no Windows Defender / Controlled folder access.
+  output   = "../generated/prisma-client"
+}
+
+// Papéis e privilégios PostgreSQL (LigaDev, papel RW da aplicação, GRANTs em public) são aplicados
+// pela migration `20260408120000_postgres_roles_e_privilegios` — não há sintaxe nativa no Prisma
+// para roles; use `prisma migrate` / `prisma migrate reset` para recriar o banco com essas regras.
+//
+// directUrl: usuário com permissão para migrations (_prisma_migrations, CREATE ROLE, etc.).
+// Prisma Client usa só DATABASE_URL; migrate/introspect usam DATABASE_URL_MIGRATE quando definido.
+// RLS por `app.current_tenant_id`: tabelas `usuario`, `cliente`, entre outras (ver migrations de RLS).
+// `tenacidade` e `tenacidade_configuracao` não usam RLS (migrations `20260409160000_remove_rls_infotime_tenacidade`, `20260422120000_remove_rls_infotime_tenacidade_configuracao`).
+// No ERP `liga_infotime`, `chave_acesso` / `data_expiracao` costumam estar em `tenacidade`. No layout LIS, domínio e `chave_jwt` podem estar em `tenacidade_configuracao` (migration `20260421143000_tenacidade_campos_para_configuracao`).
+// API: tenantRlsMiddleware (Express) + extensão Prisma.
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_MIGRATE")
+}
+
+/// Tabela física `tenacidade` — no `liga_infotime` (ERP) inclui razão social, chave de acesso e expiração na própria linha.
+/// Layout laboratório/LIS pode usar ainda `tenacidade_configuracao` (`infolab_tenacidade_configuracao`) para domínio/JWT.
+model infolab_tenacidade {
+  id_tenacidade             BigInt    @id @default(autoincrement())
+  id_usuario_auditoria      BigInt?
+  razao_social              String?   @db.VarChar(255)
+  nome_fantasia             String?   @db.VarChar(255)
+  chave_acesso              String?   @db.VarChar(255)
+  data_expiracao            DateTime? @db.Timestamp(6)
+  estoque                   String?   @db.Char(1)
+  ativo                     String?   @db.Char(1)
+  endereco_ip_auditoria     String?   @db.VarChar(50)
+  nome_aplicacao_auditoria  String?   @db.VarChar(255)
+  infolab_cliente                                                          infolab_cliente[]
+  infolab_cliente_indicacao                                                infolab_cliente_indicacao[]
+  infolab_convenio                                                         infolab_convenio[]
+  infolab_convenio_autorizador                                             infolab_convenio_autorizador[]
+  infolab_convenio_contato                                                 infolab_convenio_contato[]
+  infolab_convenio_email                                                   infolab_convenio_email[]
+  infolab_convenio_equivalencia                                            infolab_convenio_equivalencia[]
+  infolab_convenio_plano                                                   infolab_convenio_plano[]
+  infolab_convenio_tiss                                                    infolab_convenio_tiss[]
+  infolab_fatura                                                           infolab_fatura[]
+  infolab_fatura_item                                                      infolab_fatura_item[]
+  infolab_feriado                                                          infolab_feriado[]
+  infolab_grupo                                                            infolab_grupo[]
+  infolab_grupo_cliente                                                    infolab_grupo_cliente[]
+  infolab_grupo_usuario                                                    infolab_grupo_usuario[]
+  infolab_indicacao                                                        infolab_indicacao[]
+  infolab_medicamento                                                      infolab_medicamento[]
+  infolab_medico                                                           infolab_medico[]
+  infolab_medico_credencial_convenio                                       infolab_medico_credencial_convenio[]
+  infolab_motivo_cancelamento                                              infolab_motivo_cancelamento[]
+  infolab_motivo_desconto                                                  infolab_motivo_desconto[]
+  infolab_motivo_retificacao                                               infolab_motivo_retificacao[]
+  infolab_parametro_valor                                                  infolab_parametro_valor[]
+  infolab_procedencia                                                      infolab_procedencia[]
+  infolab_relatorio                                                        infolab_relatorio[]
+  infolab_serie_nota_fiscal_servico                                        infolab_serie_nota_fiscal_servico[]
+  infolab_sessao_suporte                                                   infolab_sessao_suporte[]
+  infolab_sessao_usuario                                                   infolab_sessao_usuario[]
+  infolab_setor                                                            infolab_setor[]
+  infolab_usuario_infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario infolab_usuario?                                     @relation("infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tenacidade_id_usuario_auditoria")
+  infolab_tenacidade_configuracao                                          infolab_tenacidade_configuracao[]
+  infolab_tipo_indicacao                                                   infolab_tipo_indicacao[]
+  infolab_tipo_pagamento                                                   infolab_tipo_pagamento[]
+  infolab_unidade                                                          infolab_unidade[]
+  infolab_unidade_email                                                    infolab_unidade_email[]
+  infolab_unidade_relatorio                                                infolab_unidade_relatorio[]
+  infolab_usuario                                                          infolab_usuario[]
+  infolab_versao_tiss                                                      infolab_versao_tiss[]
+  @@map("tenacidade")
+}
+
+model infolab_usuario {
+  id_usuario                                                                                                                                  BigInt                                               @id @default(autoincrement())
+  id_tenacidade                                                                                                                               BigInt?
+  id_unidade                                                                                                                                  BigInt?
+  id_grupo_usuario                                                                                                                            BigInt?
+  id_usuario_auditoria                                                                                                                        BigInt?
+  nome                                                                                                                                        String?                                              @db.VarChar(100)
+  sexo                                                                                                                                        String?                                              @db.Char(1)
+  data_nascimento                                                                                                                             DateTime?                                            @db.Date
+  login                                                                                                                                       String?                                              @db.VarChar(50)
+  senha                                                                                                                                       String?                                              @db.VarChar(100)
+  email                                                                                                                                       String?                                              @db.VarChar(255)
+  telefone                                                                                                                                    String?                                              @db.VarChar(30)
+  celular                                                                                                                                     String?                                              @db.VarChar(30)
+  nome_arquivo_fotografia                                                                                                                     String?                                              @db.VarChar(255)
+  nome_referencia_fotografia                                                                                                                  String?                                              @db.VarChar(255)
+  nome_arquivo_assinatura                                                                                                                     String?                                              @db.VarChar(255)
+  nome_referencia_assinatura                                                                                                                  String?                                              @db.VarChar(255)
+  cracha                                                                                                                                      String?                                              @db.VarChar(20)
+  cpf                                                                                                                                         String?                                              @db.Char(11)
+  identidade                                                                                                                                  String?                                              @db.VarChar(12)
+  cartao_nacional_saude                                                                                                                       String?                                              @db.VarChar(15)
+  orgao_emissor                                                                                                                               String?                                              @db.VarChar(8)
+  cep                                                                                                                                         String?                                              @db.Char(10)
+  tipo_logradouro                                                                                                                             String?                                              @db.VarChar(50)
+  logradouro                                                                                                                                  String?                                              @db.VarChar(100)
+  numero                                                                                                                                      String?                                              @db.VarChar(25)
+  complemento                                                                                                                                 String?                                              @default("") @db.VarChar(25)
+  bairro                                                                                                                                      String?                                              @db.VarChar(100)
+  cidade                                                                                                                                      String?                                              @db.VarChar(100)
+  estado                                                                                                                                      String?                                              @db.Char(2)
+  codigo_ativacao                                                                                                                             String?                                              @db.VarChar(50)
+  liberar_resultado                                                                                                                           String?                                              @db.VarChar(2)
+  retirar_quarentena                                                                                                                          String?                                              @db.Char(1)
+  motivo_bloqueio_impressao_resultado                                                                                                         String?                                              @db.Char(1)
+  lista_convenio_permitido                                                                                                                    String?                                              @default("") @db.VarChar(255)
+  lista_unidade_permitido                                                                                                                     String?                                              @db.VarChar(255)
+  alertar_laudo_parcial                                                                                                                       String?                                              @db.Char(1)
+  bloquear_impressao_laudo_parcial                                                                                                            String?                                              @db.Char(1)
+  alterar_resultado_liberado                                                                                                                  String?                                              @db.Char(1)
+  visualizar_laudo_antes_liberacao                                                                                                            String?                                              @db.Char(1)
+  codigo_externo                                                                                                                              String?                                              @db.VarChar(30)
+  codigo_migracao                                                                                                                             String?                                              @db.VarChar(10)
+  ativo                                                                                                                                       String?                                              @db.Char(1)
+  nome_aplicacao_auditoria                                                                                                                    String?                                              @db.VarChar(255)
+  endereco_ip_auditoria                                                                                                                       String?                                              @db.VarChar(20)
+  infolab_aplicacao                                                                                                                           infolab_aplicacao[]
+  infolab_cbo                                                                                                                                 infolab_cbo[]
+  infolab_cid                                                                                                                                 infolab_cid[]
+  infolab_cliente                                                                                                                             infolab_cliente[]
+  infolab_cliente_indicacao                                                                                                                   infolab_cliente_indicacao[]
+  infolab_conselho_regional                                                                                                                   infolab_conselho_regional[]
+  infolab_convenio                                                                                                                            infolab_convenio[]
+  infolab_convenio_autorizador                                                                                                                infolab_convenio_autorizador[]
+  infolab_convenio_contato                                                                                                                    infolab_convenio_contato[]
+  infolab_convenio_email                                                                                                                      infolab_convenio_email[]
+  infolab_convenio_equivalencia                                                                                                               infolab_convenio_equivalencia[]
+  infolab_convenio_plano                                                                                                                      infolab_convenio_plano[]
+  infolab_convenio_tiss                                                                                                                       infolab_convenio_tiss[]
+  infolab_especialidade_medica                                                                                                                infolab_especialidade_medica[]
+  infolab_fatura                                                                                                                              infolab_fatura[]
+  infolab_fatura_item                                                                                                                         infolab_fatura_item[]
+  infolab_feriado                                                                                                                             infolab_feriado[]
+  infolab_grupo                                                                                                                               infolab_grupo[]
+  infolab_grupo_cliente                                                                                                                       infolab_grupo_cliente[]
+  infolab_grupo_usuario                                                                                                                       infolab_grupo_usuario[]
+  infolab_indicacao                                                                                                                           infolab_indicacao[]
+  infolab_medicamento                                                                                                                         infolab_medicamento[]
+  infolab_medico                                                                                                                              infolab_medico[]
+  infolab_medico_credencial_convenio                                                                                                          infolab_medico_credencial_convenio[]
+  infolab_motivo_cancelamento                                                                                                                 infolab_motivo_cancelamento[]
+  infolab_motivo_desconto                                                                                                                     infolab_motivo_desconto[]
+  infolab_motivo_retificacao                                                                                                                  infolab_motivo_retificacao[]
+  infolab_procedencia                                                                                                                         infolab_procedencia[]
+  infolab_raca                                                                                                                                infolab_raca[]
+  infolab_relatorio                                                                                                                           infolab_relatorio[]
+  infolab_serie_nota_fiscal_servico                                                                                                           infolab_serie_nota_fiscal_servico[]
+  infolab_sessao_suporte                                                                                                                      infolab_sessao_suporte[]
+  infolab_sessao_usuario                                                                                                                      infolab_sessao_usuario[]
+  infolab_setor                                                                                                                               infolab_setor[]
+  infolab_tenacidade_infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario                                                                 infolab_tenacidade[]                                 @relation("infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario")
+  infolab_tipo_aplicacao                                                                                                                      infolab_tipo_aplicacao[]
+  infolab_tipo_estado_civil                                                                                                                   infolab_tipo_estado_civil[]
+  infolab_tipo_evento                                                                                                                         infolab_tipo_evento[]
+  infolab_tipo_indicacao                                                                                                                      infolab_tipo_indicacao[]
+  infolab_tipo_integracao                                                                                                                     infolab_tipo_integracao[]
+  infolab_tipo_interface                                                                                                                      infolab_tipo_interface[]
+  infolab_tipo_pagamento                                                                                                                      infolab_tipo_pagamento[]
+  infolab_tipo_relatorio                                                                                                                      infolab_tipo_relatorio[]
+  infolab_unidade_infolab_unidade_id_usuario_auditoriaToinfolab_usuario                                                                       infolab_unidade[]                                    @relation("infolab_unidade_id_usuario_auditoriaToinfolab_usuario")
+  infolab_unidade_email                                                                                                                       infolab_unidade_email[]
+  infolab_unidade_federacao                                                                                                                   infolab_unidade_federacao[]
+  infolab_unidade_relatorio                                                                                                                   infolab_unidade_relatorio[]
+  infolab_grupo_usuario_infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario                                                               infolab_grupo_usuario?                               @relation("infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario", fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_grupo_usuario")
+  infolab_tenacidade                                                                                                                          infolab_tenacidade?                                  @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_usuario_id_tenacidade")
+  infolab_unidade_infolab_usuario_id_unidadeToinfolab_unidade                                                                                 infolab_unidade?                                     @relation("infolab_usuario_id_unidadeToinfolab_unidade", fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_unidade")
+  infolab_usuario                                                                                                                             infolab_usuario?                                     @relation("infolab_usuarioToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_usuario_auditoria")
+  other_infolab_usuario                                                                                                                       infolab_usuario[]                                    @relation("infolab_usuarioToinfolab_usuario")
+  infolab_usuario_permissoes_infolab_usuario_id_usuario_auditoriaToinfolab_usuario                                                            infolab_usuario_permissoes[]                         @relation("infolab_usuario_permissoes_id_usuario_auditoriaToinfolab_usuario")
+  infolab_versao_tiss                                                                                                                         infolab_versao_tiss[]
+  infolab_vet_especie                                                                                                                         infolab_vet_especie[]
+  infolab_vet_raca                                                                                                                            infolab_vet_raca[]
+  @@map("usuario")
+}
+
+/// Motor de metadados: definição de aplicação (listagem/formulário). id_tenacidade=0 = padrão global.
+model infolab_aplicacao {
+  id_aplicacao             BigInt                    @id @default(autoincrement())
+  id_tenacidade            BigInt                    @default(0)
+  id_usuario_auditoria     BigInt?
+  codigo_aplicacao         String                    @db.VarChar(120)
+  nome_aplicacao           String                    @db.VarChar(180)
+  descricao_aplicacao      String?
+  nome_tabela_principal    String                    @db.VarChar(120)
+  nome_rota_frontend       String?                   @db.VarChar(200)
+  nome_endpoint_backend    String?                   @db.VarChar(200)
+  usa_listagem             Boolean                   @default(true)
+  usa_formulario           Boolean                   @default(true)
+  ativo                    Boolean                   @default(true)
+  dica_aplicacao           String?
+  observacao               String?
+  nome_aplicacao_auditoria String?                   @db.VarChar(120)
+  endereco_ip_auditoria    String?                   @db.VarChar(45)
+  infolab_usuario          infolab_usuario?          @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_infolab_aplicacao_id_usuario_auditoria")
+  infolab_aplicacao_campo  infolab_aplicacao_campo[]
+
+  @@unique([id_tenacidade, codigo_aplicacao], map: "uq_infolab_aplicacao_01")
+  @@index([id_tenacidade, codigo_aplicacao], map: "idx_infolab_aplicacao_01")
+  @@index([ativo], map: "idx_infolab_aplicacao_02")
+  @@map("aplicacao")
+}
+
+/// Metadados de campo (padrão). id_tenacidade=0 na linha base.
+/// Tabela de overrides por tenacidade (`infolab_aplicacao_campo_tenacidade`) foi removida
+/// pela migration `20260422130000_remove_infotime_aplicacao_campo_tenacidade`.
+model infolab_aplicacao_campo {
+  id_aplicacao_campo                    BigInt            @id @default(autoincrement())
+  id_tenacidade                         BigInt            @default(0)
+  id_aplicacao                          BigInt
+  id_usuario_auditoria                  BigInt?
+  codigo_campo                          String            @db.VarChar(120)
+  nome_campo                            String            @db.VarChar(180)
+  descricao_campo                       String?
+  origem_campo                          String?           @db.VarChar(180)
+  tipo_componente                       String            @db.VarChar(60)
+  tipo_dado                             String            @db.VarChar(60)
+  secao_formulario                      String?           @db.VarChar(100)
+  aba_formulario                        String?           @db.VarChar(100)
+  placeholder                           String?           @db.VarChar(200)
+  mascara                               String?           @db.VarChar(80)
+  dica_campo                            String?
+  obrigatorio_padrao                    Boolean           @default(false)
+  visivel_formulario_padrao             Boolean           @default(true)
+  editavel_formulario_padrao            Boolean           @default(true)
+  exibir_listagem_padrao                Boolean           @default(false)
+  permite_filtro_padrao                 Boolean           @default(false)
+  permite_ordenacao_padrao              Boolean           @default(false)
+  fixo_listagem_padrao                  Boolean           @default(false)
+  ordem_formulario_padrao               Int               @default(0)
+  ordem_listagem_padrao                 Int               @default(0)
+  participa_subtitulo_formulario_padrao Boolean           @default(false)
+  ordem_subtitulo_formulario_padrao     Int               @default(0)
+  largura_listagem_padrao               Int?
+  alinhamento_listagem_padrao           String            @default("left") @db.VarChar(10)
+  valor_padrao                          String?
+  validacao_json                        Json              @default("{}")
+  opcoes_json                           Json              @default("{}")
+  ativo                                 Boolean           @default(true)
+  nome_aplicacao_auditoria              String?           @db.VarChar(120)
+  endereco_ip_auditoria                 String?           @db.VarChar(45)
+  infolab_aplicacao                     infolab_aplicacao @relation(fields: [id_aplicacao], references: [id_aplicacao], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_aplicacao_campo_01")
+
+  @@unique([id_tenacidade, id_aplicacao, codigo_campo], map: "uq_infolab_aplicacao_campo_01")
+  @@index([id_aplicacao, ativo], map: "idx_infolab_aplicacao_campo_01")
+  @@index([id_aplicacao, ordem_formulario_padrao], map: "idx_infolab_aplicacao_campo_02")
+  @@index([id_aplicacao, exibir_listagem_padrao, ordem_listagem_padrao], map: "idx_infolab_aplicacao_campo_03")
+  @@index([id_tenacidade, id_aplicacao, codigo_campo], map: "idx_infolab_aplicacao_campo_04")
+  @@map("aplicacao_campo")
+}
+
+model infolab_cbo {
+  id_cbo                       BigInt                         @id @default(autoincrement())
+  id_usuario_auditoria         BigInt?
+  descricao                    String?                        @db.VarChar(255)
+  codigo_externo               String?                        @db.VarChar(30)
+  codigo_cbo                   Int?
+  endereco_ip_auditoria        String?                        @db.VarChar(20)
+  nome_aplicacao_auditoria     String?                        @db.VarChar(255)
+  infolab_usuario              infolab_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cbo_id_usuario_auditoria")
+  infolab_cliente              infolab_cliente[]
+  infolab_convenio_tiss        infolab_convenio_tiss[]
+  infolab_especialidade_medica infolab_especialidade_medica[]
+  @@map("cbo")
+}
+
+model infolab_cid {
+  id_cid                   BigInt                  @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  codigo_cid               String?                 @db.VarChar(8)
+  descricao                String?                 @db.VarChar(200)
+  descricao_cap            String?                 @db.VarChar(200)
+  descricao_categoria      String?                 @db.VarChar(200)
+  observacao               String?
+  endereco_ip_auditoria    String?                 @db.VarChar(20)
+  nome_aplicacao_auditoria String?                 @db.VarChar(255)
+  infolab_usuario          infolab_usuario?        @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cid_id_usuario_auditoria")
+  infolab_convenio_tiss    infolab_convenio_tiss[]
+  @@map("cid")
+}
+
+model infolab_cliente {
+  // Tabela física `cliente` (sem prefixo). A migration `20260507200000_infotime_view_clientes_compat`
+  // pode expor a view `clientes` para compatibilidade de leitura onde existir.
+  id_cliente                   BigInt                         @id @default(autoincrement())
+  id_tenacidade                BigInt
+  id_cliente_mae               BigInt?
+  id_cliente_pai               BigInt?
+  id_cliente_acompanhante      BigInt?
+  id_cbo                       BigInt?
+  id_raca                      BigInt?
+  id_etnia                     BigInt?
+  id_vet_raca                  BigInt?
+  id_vet_especie               BigInt?
+  id_necessidade_especial      BigInt?
+  id_usuario_auditoria         BigInt?
+  nome                         String?                        @db.VarChar(100)
+  nome_social                  String?                        @db.VarChar(100)
+  sexo                         String?                        @db.Char(1)
+  estado_civil                 String?                        @db.VarChar(1)
+  data_nascimento              DateTime?                      @db.Date
+  peso                         BigInt?
+  altura                       BigInt?
+  cpf                          String?                        @db.VarChar(11)
+  documento                    String?                        @db.VarChar(30)
+  codigo_passaporte            String?                        @db.VarChar(8)
+  diabetico                    String?                        @db.Char(1)
+  bloqueado                    String?                        @db.Char(1)
+  receber_mensagem             String?                        @db.Char(1)
+  falecido                     String?                        @db.Char(1)
+  cep                          String?                        @db.VarChar(10)
+  logradouro                   String?                        @db.VarChar(100)
+  numero                       String?                        @db.VarChar(10)
+  complemento                  String?                        @db.VarChar(50)
+  bairro                       String?                        @db.VarChar(100)
+  cidade                       String?                        @db.VarChar(100)
+  estado                       String?                        @db.Char(2)
+  endereco_referencia          String?                        @db.VarChar(100)
+  telefone                     String?                        @db.VarChar(30)
+  celular                      String?                        @db.VarChar(30)
+  email                        String?                        @db.VarChar(255)
+  data_inclusao                DateTime?                      @db.Timestamp(6)
+  data_admissao                DateTime?                      @db.Timestamp(6)
+  senha_internet               String?                        @db.VarChar(100)
+  observacao_resultado         String?
+  prontuario                   String?                        @db.VarChar(50)
+  codigo_externo               String?                        @db.VarChar(50)
+  codigo_migracao              BigInt?
+  endereco_ip_auditoria        String?                        @db.VarChar(20)
+  nome_aplicacao_auditoria     String?                        @db.VarChar(255)
+  infolab_cbo                  infolab_cbo?                   @relation(fields: [id_cbo], references: [id_cbo], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cbo")
+  infolab_cliente_acomp_rel    infolab_cliente?               @relation("infolab_cliente_id_cliente_acompanhanteToinfolab_cliente", fields: [id_cliente_acompanhante], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_acompanhante")
+  infolab_cliente_acomp        infolab_cliente[]              @relation("infolab_cliente_id_cliente_acompanhanteToinfolab_cliente")
+  infolab_cliente_mae_rel      infolab_cliente?               @relation("infolab_cliente_id_cliente_maeToinfolab_cliente", fields: [id_cliente_mae], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_mae")
+  infolab_cliente_mae          infolab_cliente[]              @relation("infolab_cliente_id_cliente_maeToinfolab_cliente")
+  infolab_cliente_pai_rel      infolab_cliente?               @relation("infolab_cliente_id_cliente_paiToinfolab_cliente", fields: [id_cliente_pai], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_pai")
+  infolab_cliente_pai          infolab_cliente[]              @relation("infolab_cliente_id_cliente_paiToinfolab_cliente")
+  infolab_etnia                infolab_etnia?                 @relation(fields: [id_etnia], references: [id_etnia], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_etnia")
+  infolab_raca                 infolab_raca?                  @relation(fields: [id_raca], references: [id_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_raca")
+  infolab_tenacidade           infolab_tenacidade             @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_cliente_id_tenacidade")
+  infolab_usuario              infolab_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_usuario_auditoria")
+  infolab_vet_especie          infolab_vet_especie?           @relation(fields: [id_vet_especie], references: [id_vet_especie], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_vet_especie")
+  infolab_vet_raca             infolab_vet_raca?              @relation(fields: [id_vet_raca], references: [id_vet_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_vet_raca")
+  @@map("cliente")
+}
+
+model infolab_cliente_indicacao {
+  id_cliente_indicacao     BigInt             @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_usuario_auditoria     BigInt?
+  descricao                String?            @db.VarChar(100)
+  codigo_migracao          Int?
+  codigo_externo           BigInt?
+  endereco_ip_auditoria    String?            @db.VarChar(20)
+  nome_aplicacao_auditoria String?            @db.VarChar(255)
+  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_cliente_indicacao_id_tenacidade")
+  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_indicacao_id_usuario_auditoria")
+  @@map("cliente_indicacao")
+}
+
+model infolab_conselho_regional {
+  id_conselho_regional     BigInt           @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  sigla                    String?          @db.VarChar(20)
+  descricao                String?          @db.VarChar(200)
+  endereco_ip_auditoria    String?          @db.VarChar(20)
+  nome_aplicacao_auditoria String?          @db.VarChar(255)
+  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_conselho_regional_id_usuario_auditoria")
+  infolab_medico           infolab_medico[]
+  @@map("conselho_regional")
+}
+
+model infolab_convenio {
+  id_convenio                                                         BigInt                               @id @default(autoincrement())
+  id_tenacidade                                                       BigInt
+  id_usuario_auditoria                                                BigInt?
+  id_convenio_autorizador                                             BigInt?                              @unique(map: "infolab_convenio_id_convenio_autorizador_key")
+  id_preco_tabela                                                     BigInt?
+  id_preco_fator                                                      BigInt?
+  id_relatorio_guia                                                   BigInt?
+  razao_social                                                        String?                              @db.VarChar(200)
+  nome_fantasia                                                       String?                              @db.VarChar(100)
+  sigla                                                               String?                              @db.VarChar(10)
+  cep                                                                 String?                              @db.VarChar(10)
+  tipo_logradouro                                                     String?                              @db.VarChar(50)
+  logradouro                                                          String?                              @db.VarChar(100)
+  bairro                                                              String?                              @db.VarChar(100)
+  cidade                                                              String?                              @db.VarChar(100)
+  estado                                                              String?                              @db.Char(2)
+  telefone                                                            String?                              @db.VarChar(50)
+  celular                                                             String?                              @db.VarChar(50)
+  cnpj                                                                String?                              @db.VarChar(50)
+  inscricao_municipal                                                 String?                              @db.VarChar(20)
+  inscricao_estadual                                                  String?                              @db.Char(17)
+  logotipo                                                            Bytes?
+  senha_internet                                                      String?                              @db.VarChar(64)
+  ativo                                                               String?                              @db.Char(1)
+  codigo_externo                                                      String?                              @db.VarChar(30)
+  codigo_migracao                                                     String?                              @db.VarChar(10)
+  codigo_credenciamento                                               String?                              @db.VarChar(30)
+  registro_ans                                                        String?                              @db.VarChar(10)
+  forma_cobranca                                                      String?                              @db.Char(1)
+  dia_conferencia                                                     Int?                                 @db.SmallInt
+  dia_envio_fatura                                                    Int?                                 @db.SmallInt
+  nome_arquivo_fatura                                                 String?                              @db.VarChar(50)
+  totalizar_valor_em                                                  String?                              @db.Char(1)
+  permitir_item_sem_valor                                             String?                              @db.Char(1)
+  documento_imprimir_atendimento                                      String?                              @db.Char(1)
+  numero_guia_obrigatorio                                             String?                              @db.Char(1)
+  quantidade_exame_guia                                               Int?                                 @db.SmallInt
+  numeracao_guia_automatica                                           String?                              @db.Char(1)
+  mascara_numero_guia                                                 String?                              @db.VarChar(30)
+  numero_autorizacao_obrigatorio                                      String?                              @db.Char(1)
+  mascara_numero_autorizacao                                          String?                              @db.VarChar(30)
+  sexo_cliente_obrigatorio                                            String?                              @db.Char(1)
+  data_nascimento_cliente_obrigatoria                                 String?                              @db.Char(1)
+  numero_matricula_cliente_obrigatorio                                String?                              @db.Char(1)
+  raca_cliente_obrigatoria                                            String?                              @db.Char(1)
+  nome_mae_cliente_obrigatorio                                        String?                              @db.Char(1)
+  tipo_documento_cliente                                              String?                              @db.Char(1)
+  medico_atendimento_obrigatorio                                      String?                              @db.Char(1)
+  crm_medico_obrigatorio                                              String?                              @db.Char(1)
+  data_pedido_medico_obrigatoria                                      String?                              @db.Char(1)
+  cid_obrigatorio                                                     String?                              @db.Char(1)
+  cpf_medico_obrigatorio                                              String?                              @db.Char(1)
+  conselho_medico_obrigatorio                                         String?                              @db.Char(1)
+  uf_medico_obrigatoria                                               String?                              @db.Char(1)
+  especialidade_medico_obrigatoria                                    String?                              @db.Char(1)
+  registro_unimed_medico_obrigatorio                                  String?                              @db.Char(1)
+  lista_exame_inativo                                                 String?                              @db.VarChar(300)
+  nome_documento_1                                                    String?                              @db.VarChar(30)
+  nome_documento_2                                                    String?                              @db.VarChar(30)
+  nome_documento_3                                                    String?                              @db.VarChar(30)
+  nome_documento_4                                                    String?                              @db.VarChar(30)
+  documento_obrigatorio_1                                             String?                              @db.Char(1)
+  documento_obrigatorio_2                                             String?                              @db.Char(1)
+  documento_obrigatorio_3                                             String?                              @db.Char(1)
+  documento_obrigatorio_4                                             String?                              @db.Char(1)
+  endereco_ip_auditoria                                               String?                              @db.VarChar(20)
+  nome_aplicacao_auditoria                                            String?                              @db.VarChar(255)
+  infolab_relatorio                                                   infolab_relatorio?                   @relation(fields: [id_relatorio_guia], references: [id_relatorio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_id_relatorio_guia")
+  infolab_tenacidade                                                  infolab_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_id_tenacidade")
+  infolab_usuario                                                     infolab_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_id_usuario_auditoria")
+  infolab_convenio_autorizador                                        infolab_convenio_autorizador?        @relation("convenio_para_autorizador", fields: [id_convenio_autorizador], references: [id_convenio_autorizador], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_id_convenio_autorizador")
+  infolab_convenio_contato                                            infolab_convenio_contato[]
+  infolab_convenio_email                                              infolab_convenio_email[]
+  infolab_convenio_equivalencia                                       infolab_convenio_equivalencia[]
+  infolab_convenio_plano                                              infolab_convenio_plano[]
+  infolab_convenio_tiss                                               infolab_convenio_tiss[]
+  infolab_fatura                                                      infolab_fatura[]
+  infolab_medico_credencial_convenio                                  infolab_medico_credencial_convenio[]
+  @@map("convenio")
+}
+
+model infolab_convenio_autorizador {
+  id_convenio_autorizador        BigInt             @id @default(autoincrement())
+  id_tenacidade                  BigInt
+  id_autorizador_tabela_mensagem BigInt?
+  id_usuario_auditoria           BigInt?
+  descricao                      String?            @db.VarChar(200)
+  sigla                          String?            @db.VarChar(30)
+  codigo_credenciamento          String?            @db.VarChar(50)
+  situacao                       String?            @db.Char(1)
+  diretorio_envio                String?            @db.VarChar(255)
+  diretorio_recebimento          String?            @db.VarChar(255)
+  qtd_maxima_item                Int?
+  ultimo_numero                  Int?
+  numero_maximo                  Int?
+  cnpj                           String?            @db.Char(17)
+  inscricao_estadual             String?            @db.VarChar(50)
+  cep                            String?            @db.Char(10)
+  logradouro                     String?            @db.VarChar(100)
+  tipo_logradouro                String?            @db.VarChar(50)
+  bairro                         String?            @db.VarChar(100)
+  cidade                         String?            @db.VarChar(100)
+  estado                         String?            @db.Char(2)
+  telefone                       String?            @db.VarChar(30)
+  contato                        String?
+  nummed                         Int?
+  servidor                       String?            @db.VarChar(100)
+  url                            String?            @db.VarChar(100)
+  login                          String?            @db.VarChar(40)
+  senha                          String?            @db.VarChar(64)
+  classe                         Int?
+  codigo_migracao                Int?
+  codigo_externo                 BigInt?
+  endereco_ip_auditoria          String?            @db.VarChar(20)
+  nome_aplicacao_auditoria       String?            @db.VarChar(255)
+  infolab_convenio               infolab_convenio?  @relation("convenio_para_autorizador")
+  infolab_tenacidade             infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_autorizador_id_tenacidade")
+  infolab_usuario                infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_autorizador_id_usuario_auditoria")
+  @@map("convenio_autorizador")
+}
+
+model infolab_convenio_contato {
+  id_convenio_contato      BigInt             @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_convenio              BigInt?
+  id_usuario_auditoria     BigInt?
+  nome                     String?            @db.VarChar(255)
+  cargo                    String?            @db.VarChar(255)
+  telefone                 String?            @db.VarChar(50)
+  ramal                    String?            @db.VarChar(50)
+  celular                  String?            @db.VarChar(50)
+  whatsapp                 String?            @db.VarChar(50)
+  observacoes              String?
+  endereco_ip_auditoria    String?            @db.VarChar(20)
+  nome_aplicacao_auditoria String?            @db.VarChar(255)
+  infolab_convenio         infolab_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_contato_id_convenio")
+  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_contato_id_tenacidade")
+  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_contato_id_usuario_auditoria")
+  @@map("convenio_contato")
+}
+
+model infolab_convenio_email {
+  id_convenio_email        BigInt             @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_convenio              BigInt?
+  id_usuario_auditoria     BigInt?
+  email                    String?            @db.VarChar(255)
+  tipo                     String?            @db.VarChar(255)
+  observacoes              String?
+  endereco_ip_auditoria    String?            @db.VarChar(20)
+  nome_aplicacao_auditoria String?            @db.VarChar(255)
+  infolab_convenio         infolab_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_email_id_convenio")
+  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_email_id_tenacidade")
+  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_email_id_usuario_auditoria")
+  @@map("convenio_email")
+}
+
+model infolab_convenio_equivalencia {
+  id_convenio_equivalencia      BigInt                  @id @default(autoincrement())
+  id_tenacidade                 BigInt
+  id_usuario_auditoria          BigInt?
+  id_convenio                   BigInt?
+  id_exame_material             BigInt?
+  id_exame_material_equivalente BigInt?
+  qtd_exame_material            Int?
+  endereco_ip_auditoria         String?                 @db.VarChar(20)
+  nome_aplicacao_auditoria      String?                 @db.VarChar(255)
+  infolab_convenio              infolab_convenio?       @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_equivalencia_id_convenio")
+  infolab_tenacidade            infolab_tenacidade      @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_equivalencia_id_tenacidade")
+  infolab_usuario               infolab_usuario?        @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_equivalencia_id_usuario_auditoria")
+  @@map("convenio_equivalencia")
+}
+
+model infolab_convenio_plano {
+  id_convenio_plano                  BigInt             @id @default(autoincrement())
+  id_tenacidade                      BigInt
+  id_convenio                        BigInt?
+  id_tabela_preco                    BigInt?
+  id_coeficiente_honorario           BigInt?
+  id_modelo_impressao                BigInt?
+  id_autorizador_convenio            BigInt?
+  id_usuario_auditoria               BigInt?
+  descricao                          String?            @db.VarChar(255)
+  dia_inicio_conferencia             Int?               @db.SmallInt
+  dia_envio_fatura                   Int?               @db.SmallInt
+  forma_cobranca                     String?            @db.VarChar(1)
+  exibir_instrucao_atendimento       String?            @default("") @db.Char(1)
+  instrucao_atendimento              String?
+  instrucao_faturamento              String?
+  autorizacao_obrigatoria            String?            @db.Char(1)
+  matricula_obrigatorio              String?            @db.Char(1)
+  data_pedido_obrigatorio            String?            @db.Char(1)
+  sexo_cliente_obrigatorio           String?            @db.Char(1)
+  documento_cliente_obrigatorio      String?            @db.Char(1)
+  medico_obrigatorio                 String?            @db.Char(1)
+  crm_obrigatorio                    String?            @db.Char(1)
+  cid_obrigatorio                    String?            @db.Char(1)
+  guia_obrigatorio                   String?            @db.Char(1)
+  guia_mascara                       String?            @db.VarChar(30)
+  guia_quantidade_exames             Int?
+  guia_relatorio                     String?            @db.VarChar(50)
+  mascara_matricula                  String?            @db.VarChar(30)
+  mascara_autorizacao                String?            @db.VarChar(30)
+  documento1_nome                    String?            @db.VarChar(30)
+  documento1_mascara                 String?            @db.VarChar(30)
+  documento1_obrigatorio             String?            @db.Char(1)
+  documento2_nome                    String?            @db.VarChar(30)
+  documento2_mascara                 String?            @db.VarChar(30)
+  documento2_obrigatorio             String?            @db.Char(1)
+  documento3_nome                    String?            @db.VarChar(30)
+  documento3_mascara                 String?            @db.VarChar(30)
+  documento3_obrigatorio             String?            @db.Char(1)
+  documento4_nome                    String?            @db.VarChar(30)
+  documento4_mascara                 String?            @db.VarChar(30)
+  documento4_obrigatorio             String?            @db.Char(1)
+  lista_exames_inativos              String?
+  codigo_credenciamento              String?            @db.VarChar(30)
+  planilha_nome_arquivo              String?            @db.VarChar(50)
+  planilha_campo_faltante            String?            @db.VarChar(2)
+  nome_arquivo_fatura                String?            @db.VarChar(50)
+  imprimir_atendimento               String?            @db.VarChar(1)
+  tipo_totalizar_valores             String?            @db.Char(1)
+  lista_relatorio_fatura             String?
+  valor_teto_fatura                  Decimal?           @db.Decimal(15, 2)
+  valor_piso_fatura                  Decimal?           @db.Decimal(15, 2)
+  valor_saldo_fatura                 Decimal?           @db.Decimal(15, 2)
+  qtd_copias_ficha_financeira        Int?
+  qtd_copias_resultado               Int?
+  permitir_item_sem_valor            String?            @db.Char(1)
+  numerar_guia_automatico            String?            @db.Char(1)
+  validar_matricula                  String?            @db.Char(1)
+  tipo_validacao_matricula           Int?
+  identificador_autorizador_convenio String?            @db.VarChar(5)
+  registro_ans                       String?            @db.VarChar(10)
+  incluir_somente_item_tabela_preco  String?            @db.Char(1)
+  exigir_data_nascimento_cliente     String?            @db.Char(1)
+  desconto_maximo_atendimento        Decimal?           @db.Decimal(15, 2)
+  regra_ao_exceder_teto              String?            @db.Char(1)
+  porcentagem_notificar_limite_teto  Decimal?           @db.Decimal(15, 2)
+  exigir_nome_conselho_medico        String?            @db.Char(1)
+  exigir_uf_conselho_medico          String?            @db.Char(1)
+  exigir_especialidade_medica        String?            @db.Char(1)
+  exigir_registro_unimed_medico      String?            @db.Char(1)
+  exibir_preco_item_atendimento      String?            @db.Char(1)
+  imprimir_declaracao_autorizacao    String?            @db.Char(1)
+  data_inicio_cota                   DateTime?          @db.Date
+  data_fim_cota                      DateTime?          @db.Date
+  enviar_mensagem                    String?            @db.Char(1)
+  instrucao_impressao_resultado      String?            @db.VarChar(4096)
+  cobrar_equivalencia_duplicada      String?            @db.Char(1)
+  exigir_cpf_medico                  String?            @db.Char(1)
+  cor_cliente_obrigatorio            String?            @db.Char(1)
+  alterar_data_fatura                String?            @db.Char(1)
+  nome_mae_obrigatorio               String?            @db.Char(1)
+  ativo                              String?            @db.Char(1)
+  codigo_externo                     String?            @db.VarChar(30)
+  codigo_migracao                    String?            @db.VarChar(10)
+  endereco_ip_auditoria              String?            @db.VarChar(20)
+  nome_aplicacao_auditoria           String?            @db.VarChar(255)
+  infolab_convenio                   infolab_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_plano_id_convenio")
+  infolab_tenacidade                 infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_plano_id_tenacidade")
+  infolab_usuario                    infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_plano_id_usuario_auditoria")
+  @@map("convenio_plano")
+}
+
+model infolab_convenio_tiss {
+  id_convenio_tiss                 BigInt             @id @default(autoincrement())
+  id_tenacidade                    BigInt
+  id_convenio                      BigInt?
+  id_cid                           BigInt?
+  id_medico                        BigInt?
+  id_cbo_padrao                    BigInt?
+  id_versao_tiss                   Int?
+  id_usuario_auditoria             BigInt?
+  codigo_tabela                    String?            @db.Char(2)
+  nome_plano_padrao                String?            @db.VarChar(40)
+  numero_lote                      Int?
+  sequencial_transacao             Int?
+  compactar_arquivo                String?            @db.Char(1)
+  mascara_arquivo_fatura           String?            @db.VarChar(100)
+  incrementar_numero_lote          String?            @db.Char(1)
+  incrementar_sequencial_transacao String?            @db.Char(1)
+  codigo_credenciamento_fatura     String?            @db.VarChar(30)
+  codigo_credenciamento_guia       String?            @db.VarChar(30)
+  mascara_observacao_fatura        String?            @db.VarChar(200)
+  tipo_envio_guia_operadora        Int?               @db.SmallInt
+  tipo_envio_guia_prestador        Int?               @db.SmallInt
+  item_sem_onus_guia_tiss          String?            @db.Char(1)
+  perfil_solicitante               String?            @db.Char(2)
+  tipo_saida_atendimento           Int?               @db.SmallInt
+  enviar_senha_autorizacao         String?            @db.Char(1)
+  tipo_identificacao_solicitante   String?            @db.Char(1)
+  tipo_identificacao_executante    String?            @db.Char(1)
+  codigo_credenciamento_executante String?            @db.VarChar(30)
+  executante_complementar          String?            @db.Char(1)
+  via_acesso                       String?            @db.Char(2)
+  tecnica_utilizada                String?            @db.Char(2)
+  incluir_reducao_acrescimo        String?            @db.Char(1)
+  incluir_quantidade_realizada     String?            @db.Char(1)
+  tipo_atendimento                 Int?               @db.SmallInt
+  agrupar_codigo_faturamento       String?            @db.Char(1)
+  indicacao_acidente               Int?               @db.SmallInt
+  outras_despesas                  String?            @db.Char(2)
+  saude_ocupacional                String?            @db.Char(2)
+  utilizar_como_data_lancamento    String?            @db.Char(1)
+  utilizar_como_data_autorizacao   String?            @db.Char(1)
+  paginar_guia_medico_solicitante  String?            @db.Char(1)
+  grau_participacao                String?            @db.VarChar(6)
+  agrupar_codigo_faturamento_xml   String?            @db.Char(1)
+  exibir_valor_guia                String?            @db.Char(1)
+  exibir_data_solicitacao          String?            @db.Char(1)
+  dividir_arquivo_100_guias        String?            @db.Char(1)
+  cnes_executante                  String?            @db.VarChar(7)
+  razao_social_executante          String?            @db.VarChar(100)
+  valor_reducao_acrescimo          String?            @db.VarChar(6)
+  validade_autorizacao             String?            @db.Char(1)
+  utilizar_como_data_solicitacao   String?            @db.Char(1)
+  utilizar_como_data_execucao      String?            @db.Char(1)
+  considerar_executante            String?            @db.Char(1)
+  equipe_sadt                      String?            @db.Char(1)
+  ordenar_por                      Int?               @db.SmallInt
+  cabecalho_guia_principal         Int?               @db.SmallInt
+  tipo_identificacao_cabecalho     Int?               @db.SmallInt
+  utilizar_como_data_procedimento  Int?               @db.SmallInt
+  tipo_consulta                    String?            @db.Char(1)
+  enviar_dados_executante          String?            @db.Char(1)
+  codificacao_hash                 Int?               @db.SmallInt
+  ativo                            String?            @db.Char(1)
+  endereco_ip_auditoria            String?            @db.VarChar(255)
+  nome_aplicacao_auditoria         String?            @db.VarChar(20)
+  infolab_cbo                      infolab_cbo?       @relation(fields: [id_cbo_padrao], references: [id_cbo], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_cbo_padrao")
+  infolab_cid                      infolab_cid?       @relation(fields: [id_cid], references: [id_cid], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_cid")
+  infolab_convenio                 infolab_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_convenio")
+  infolab_medico                   infolab_medico?    @relation(fields: [id_medico], references: [id_medico], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_medico")
+  infolab_tenacidade               infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_tiss_id_tenacidade")
+  infolab_usuario                  infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_usuario_auditoria")
+  @@map("convenio_tiss")
+}
+
+model infolab_especialidade_medica {
+  id_especialidade_medica  BigInt           @id @default(autoincrement())
+  id_cbo                   BigInt?
+  id_usuario_auditoria     BigInt?
+  descricao                String?          @db.VarChar(100)
+  codigo_ipsemg            String?          @db.VarChar(2)
+  codigo_externo           String?          @db.VarChar(30)
+  codigo_migracao          String?          @db.VarChar(6)
+  endereco_ip_auditoria    String?          @db.VarChar(20)
+  nome_aplicacao_auditoria String?          @db.VarChar(255)
+  infolab_cbo              infolab_cbo?     @relation(fields: [id_cbo], references: [id_cbo], onDelete: Restrict, onUpdate: Restrict, map: "fk_especialidade_medica_id_cbo")
+  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_especialidade_medica_id_usuario_auditoria")
+  infolab_medico           infolab_medico[]
+  @@map("especialidade_medica")
+}
+
+model infolab_etnia {
+  id_etnia        BigInt            @id @default(autoincrement())
+  id_raca         BigInt?
+  nome            String?           @db.VarChar(100)
+  infolab_cliente infolab_cliente[]
+  infolab_raca    infolab_raca?     @relation(fields: [id_raca], references: [id_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_etnia_id_raca")
+  @@map("etnia")
+}
+
+model infolab_fatura {
+  id_fatura                              BigInt                @id @default(autoincrement())
+  id_tenacidade                          BigInt
+  id_unidade                             BigInt?
+  id_receita                             BigInt?
+  id_convenio                            BigInt?
+  id_usuario_auditoria                   BigInt?
+  data_inicio                            DateTime?             @db.Date
+  data_fim                               DateTime?             @db.Date
+  data_previsao_enviar                   DateTime?             @db.Date
+  data_enviar                            DateTime?             @db.Date
+  data_previsao_baixa_inicio             DateTime?             @db.Date
+  data_previsao_baixa_fim                DateTime?             @db.Date
+  data_baixar                            DateTime?             @db.Date
+  lista_id_convenio                      String?               @db.VarChar(4000)
+  lista_id_medico                        String?               @db.VarChar(4000)
+  lista_id_unidade                       String?               @db.VarChar(4000)
+  lista_pendencia_resultado              String?               @db.VarChar(100)
+  lista_id_procedencia                   String?               @db.VarChar(100)
+  lista_situacao_coleta                  String?               @db.VarChar(20)
+  lista_id_setor                         String?               @db.VarChar(200)
+  qtd_total_atendimento                  Int?
+  qtd_total_exame_material               Int?
+  valor_total_exame_material             Decimal?              @db.Decimal(15, 2)
+  valor_total_exame_material_coeficiente Decimal?              @db.Decimal(15, 2)
+  valor_pago                             Decimal?              @db.Decimal(15, 2)
+  valor_glosa                            Decimal?              @db.Decimal(15, 2)
+  valor_desconto                         Decimal?              @db.Decimal(15, 2)
+  incluir_exame_ja_faturado              String?               @db.Char(1)
+  observacao                             String?               @db.VarChar(4000)
+  totalizar_valor_em                     String?               @db.Char(1)
+  somente_resultado_completo             String?               @db.Char(1)
+  numero_lote                            BigInt?
+  sequencia_transacao                    Int?
+  endereco_ip_auditoria                  String?               @db.VarChar(20)
+  nome_aplicacao_auditoria               String?               @db.VarChar(255)
+  infolab_convenio                       infolab_convenio?     @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_id_convenio")
+  infolab_tenacidade                     infolab_tenacidade    @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_fatura_id_tenacidade")
+  infolab_unidade                        infolab_unidade?      @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_id_unidade")
+  infolab_usuario                        infolab_usuario?      @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_id_usuario_auditoria")
+  infolab_fatura_item                    infolab_fatura_item[]
+  @@map("fatura")
+}
+
+model infolab_fatura_item {
+  id_fatura_item                     BigInt                              @id @default(autoincrement())
+  id_tenacidade                      BigInt
+  id_fatura                          BigInt?
+  id_atendimento                     BigInt?
+  id_atendimento_exame_material      BigInt?
+  id_usuario_auditoria               BigInt?
+  id_exame_material                  BigInt?
+  id_exame_material_pai              BigInt?
+  codigo_faturamento                 String?                             @db.VarChar(20)
+  valor_exame_material               Decimal?                            @db.Decimal(17, 4)
+  valor_exame_material_coeficiente   Decimal?                            @db.Decimal(17, 4)
+  qtd_exame_material                 Int?
+  numero_lote                        BigInt?
+  data_hora_faturamento              DateTime?                           @db.Timestamp(6)
+  numero_guia                        String?                             @db.VarChar(30)
+  senha_autorizacao                  String?                             @db.VarChar(64)
+  endereco_ip_auditoria              String?                             @db.VarChar(20)
+  nome_aplicacao_auditoria           String?                             @db.VarChar(255)
+  infolab_fatura                     infolab_fatura?                     @relation(fields: [id_fatura], references: [id_fatura], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_item_id_fatura")
+  infolab_tenacidade                 infolab_tenacidade                  @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_fatura_item_id_tenacidade")
+  infolab_usuario                    infolab_usuario?                    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_item_id_usuario_auditoria")
+  @@map("fatura_item")
+}
+
+model infolab_feriado {
+  id_feriado               BigInt             @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_usuario_auditoria     BigInt?
+  descricao                String?            @db.VarChar(200)
+  data_feriado             DateTime?          @db.Date
+  endereco_ip_auditoria    String?            @db.VarChar(20)
+  nome_aplicacao_auditoria String?            @db.VarChar(255)
+  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_feriado_id_tenacidade")
+  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_feriado_id_usuario_auditoria")
+  @@map("feriado")
+}
+
+model infolab_grupo {
+  id_grupo                     BigInt                         @id @default(autoincrement())
+  id_tenacidade                BigInt
+  id_usuario_auditoria         BigInt?
+  descricao                    String?                        @db.VarChar(100)
+  endereco_ip_auditoria        String?                        @db.VarChar(20)
+  nome_aplicacao_auditoria     String?                        @db.VarChar(255)
+  infolab_tenacidade           infolab_tenacidade             @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_grupo_id_tenacidade")
+  infolab_usuario              infolab_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_grupo_id_usuario_auditoria")
+  @@map("grupo")
+}
+
+model infolab_grupo_cliente {
+  id_grupo_cliente         BigInt             @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_usuario_auditoria     BigInt?
+  descricao                String?            @db.VarChar(100)
+  endereco_ip_auditoria    String?            @db.VarChar(20)
+  nome_aplicacao_auditoria String?            @db.VarChar(255)
+  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_grupo_cliente_id_tenacidade")
+  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_grupo_cliente_id_usuario_auditoria")
+  @@map("grupo_cliente")
+}
+
+model infolab_grupo_usuario {
+  id_grupo_usuario                                                        BigInt                       @id @default(autoincrement())
+  id_tenacidade                                                           BigInt
+  id_usuario_auditoria                                                    BigInt?
+  descricao                                                               String?                      @db.VarChar(200)
+  desconto_maximo                                                         BigInt?
+  acessa_auditoria                                                        String?                      @db.Char(1)
+  codigo_migracao                                                         Int?
+  codigo_externo                                                          BigInt?
+  endereco_ip_auditoria                                                   String?                      @db.VarChar(20)
+  nome_aplicacao_auditoria                                                String?                      @db.VarChar(255)
+  infolab_tenacidade                                                      infolab_tenacidade           @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_grupo_usuario_id_tenacidade")
+  infolab_usuario                                                         infolab_usuario?             @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_grupo_usuario_id_usuario_auditoria")
+  infolab_usuario_infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario infolab_usuario[]            @relation("infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario")
+  infolab_layout_formulario                                               infolab_layout_formulario[]
+  infolab_usuario_permissoes                                              infolab_usuario_permissoes[]
+  @@map("grupo_usuario")
+}
+
+model infolab_indicacao {
+  id_indicacao             BigInt             @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_usuario_auditoria     BigInt?
+  nome                     String?            @db.VarChar(60)
+  ativo                    String?            @db.Char(1)
+  endereco_ip_auditoria    String?            @db.VarChar(20)
+  nome_aplicacao_auditoria String?            @db.VarChar(255)
+  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_indicacao_id_tenacidade")
+  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_indicacao_id_usuario_auditoria")
+  @@map("indicacao")
+}
+
+model infolab_medicamento {
+  id_medicamento           BigInt             @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_usuario_auditoria     BigInt?
+  nome                     String?            @db.VarChar(80)
+  ativo                    String?            @db.Char(1)
+  endereco_ip_auditoria    String?            @db.VarChar(20)
+  nome_aplicacao_auditoria String?            @db.VarChar(255)
+  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_medicamento_id_tenacidade")
+  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_medicamento_id_usuario_auditoria")
+  @@map("medicamento")
+}
+
+model infolab_medico {
+  id_medico                                                                                                           BigInt                               @id @default(autoincrement())
+  id_tenacidade                                                                                                       BigInt
+  id_especialidade_medica                                                                                             BigInt?
+  id_conselho_regional                                                                                                BigInt?
+  id_medico_credencial_convenio                                                                                       BigInt?
+  id_usuario_auditoria                                                                                                BigInt?
+  nome                                                                                                                String?                              @db.VarChar(100)
+  cpf                                                                                                                 String?                              @db.Char(11)
+  estado_conselho                                                                                                     String?                              @db.Char(2)
+  numero_conselho                                                                                                     Int?
+  numero_cns                                                                                                          String?                              @db.VarChar(15)
+  registro_unimed                                                                                                     String?                              @db.VarChar(13)
+  sexo                                                                                                                String?                              @db.Char(1)
+  telefone                                                                                                            String?                              @db.VarChar(30)
+  celular                                                                                                             String?                              @db.VarChar(30)
+  email                                                                                                               String?                              @db.VarChar(50)
+  senha_internet                                                                                                      String?                              @db.VarChar(64)
+  lista_convenio_suspenso                                                                                             String?                              @db.VarChar(255)
+  ativo                                                                                                               String?                              @db.Char(1)
+  codigo_externo                                                                                                      String?                              @db.VarChar(10)
+  codigo_migracao                                                                                                     BigInt?
+  endereco_ip_auditoria                                                                                               String?                              @db.VarChar(20)
+  nome_aplicacao_auditoria                                                                                            String?                              @db.VarChar(255)
+  infolab_convenio_tiss                                                                                               infolab_convenio_tiss[]
+  infolab_conselho_regional                                                                                           infolab_conselho_regional?           @relation(fields: [id_conselho_regional], references: [id_conselho_regional], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_conselho_regional")
+  infolab_especialidade_medica                                                                                        infolab_especialidade_medica?        @relation(fields: [id_especialidade_medica], references: [id_especialidade_medica], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_especialidade_medica")
+  infolab_medico_credencial_convenio_infolab_medico_id_medico_credencial_convenioToinfolab_medico_credencial_convenio infolab_medico_credencial_convenio?  @relation("infolab_medico_id_medico_credencial_convenioToinfolab_medico_credencial_convenio", fields: [id_medico_credencial_convenio], references: [id_medico_credencial_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_medico_credencial_convenio")
+  infolab_tenacidade                                                                                                  infolab_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_medico_id_tenacidade")
+  infolab_usuario                                                                                                     infolab_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_usuario_auditoria")
+  infolab_medico_credencial_convenio_infolab_medico_credencial_convenio_id_medicoToinfolab_medico                     infolab_medico_credencial_convenio[] @relation("infolab_medico_credencial_convenio_id_medicoToinfolab_medico")
+  @@map("medico")
+}
+
+model infolab_medico_credencial_convenio {
+  id_medico_credencial_convenio                                                                   BigInt             @id @default(autoincrement())
+  id_tenacidade                                                                                   BigInt
+  id_medico                                                                                       BigInt?
+  id_convenio                                                                                     BigInt?
+  id_usuario_auditoria                                                                            BigInt?
+  codigo_prestador                                                                                String?            @db.VarChar(100)
+  endereco_ip_auditoria                                                                           String?            @db.VarChar(20)
+  nome_aplicacao_auditoria                                                                        String?            @db.VarChar(255)
+  infolab_medico_infolab_medico_id_medico_credencial_convenioToinfolab_medico_credencial_convenio infolab_medico[]   @relation("infolab_medico_id_medico_credencial_convenioToinfolab_medico_credencial_convenio")
+  infolab_convenio                                                                                infolab_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_convenio")
+  infolab_medico_infolab_medico_credencial_convenio_id_medicoToinfolab_medico                     infolab_medico?    @relation("infolab_medico_credencial_convenio_id_medicoToinfolab_medico", fields: [id_medico], references: [id_medico], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_medico")
+  infolab_tenacidade                                                                              infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_tenacidade")
+  infolab_usuario                                                                                 infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_usuario_auditoria")
+  @@map("medico_credencial_convenio")
+}
+
+model infolab_motivo_cancelamento {
+  id_motivo_cancelamento             BigInt                               @id @default(autoincrement())
+  id_tenacidade                      BigInt
+  id_usuario_auditoria               BigInt?
+  descricao                          String?                              @db.VarChar(200)
+  endereco_ip_auditoria              String?                              @db.VarChar(20)
+  nome_aplicacao_auditoria           String?                              @db.VarChar(255)
+  infolab_tenacidade                 infolab_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_motivo_cancelamento_id_tenacidade")
+  infolab_usuario                    infolab_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_motivo_cancelamento_id_usuario_auditoria")
+  @@map("motivo_cancelamento")
+}
+
+model infolab_motivo_desconto {
+  id_motivo_desconto            BigInt                          @id @default(autoincrement())
+  id_tenacidade                 BigInt
+  id_usuario_auditoria          BigInt?
+  descricao                     String?                         @db.VarChar(200)
+  codigo_migracao               Int?
+  codigo_externo                BigInt?
+  endereco_ip_auditoria         String?                         @db.VarChar(20)
+  nome_aplicacao_auditoria      String?                         @db.VarChar(255)
+  infolab_tenacidade            infolab_tenacidade              @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_motivo_desconto_id_tenacidade")
+  infolab_usuario               infolab_usuario?                @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_motivo_desconto_id_usuario_auditoria")
+  @@map("motivo_desconto")
+}
+
+model infolab_motivo_retificacao {
+  id_motivo_retificacao              BigInt                               @id @default(autoincrement())
+  id_tenacidade                      BigInt
+  id_usuario_auditoria               BigInt?
+  descricao                          String?                              @db.VarChar(200)
+  endereco_ip_auditoria              String?                              @db.VarChar(20)
+  nome_aplicacao_auditoria           String?                              @db.VarChar(255)
+  infolab_tenacidade                 infolab_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_motivo_retificacao_id_tenacidade")
+  infolab_usuario                    infolab_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_motivo_retificacao_id_usuario_auditoria")
+  @@map("motivo_retificacao")
+}
+
+model infolab_parametro_valor {
+  id_parametro_valor       BigInt             @id @default(autoincrement())
+  id_tenacidade            BigInt
+  parametro                String             @default("") @db.VarChar(255)
+  valor                    String?            @db.VarChar(255)
+  endereco_ip_auditoria    String?            @db.VarChar(20)
+  nome_aplicacao_auditoria String?            @db.VarChar(255)
+  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_parametro_valor_id_tenacidade")
+  @@map("parametro_valor")
+}
+
+model infolab_procedencia {
+  id_procedencia                 BigInt                           @id @default(autoincrement())
+  id_tenacidade                  BigInt
+  id_usuario_auditoria           BigInt?
+  descricao                      String?                          @db.VarChar(200)
+  sigla                          String?                          @db.VarChar(10)
+  email                          String?                          @db.VarChar(320)
+  senha_internet                 String?                          @db.VarChar(64)
+  setor                          String?                          @db.VarChar(50)
+  ala                            String?                          @db.VarChar(50)
+  leito                          String?                          @db.VarChar(50)
+  quarto                         String?                          @db.VarChar(50)
+  publica                        String?                          @db.Char(1)
+  urgente                        String?                          @db.Char(1)
+  ativo                          String?                          @db.Char(1)
+  codigo_externo                 String?                          @db.VarChar(30)
+  codigo_migracao                String?                          @db.VarChar(10)
+  endereco_ip_auditoria          String?                          @db.VarChar(20)
+  nome_aplicacao_auditoria       String?                          @db.VarChar(255)
+  infolab_usuario                infolab_usuario?                 @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_procedencia_infolab_usuario_auditoria")
+  infolab_tenacidade             infolab_tenacidade               @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_procedencia_id_tenacidade")
+  @@map("procedencia")
+}
+
+model infolab_raca {
+  id_raca                  BigInt            @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  endereco_ip_auditoria    String?           @db.VarChar(255)
+  nome_aplicacao_auditoria String?           @db.VarChar(255)
+  nome                     String?           @db.VarChar(80)
+  infolab_cliente          infolab_cliente[]
+  infolab_etnia            infolab_etnia[]
+  infolab_usuario          infolab_usuario?  @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_raca_id_usuario_auditoria")
+  @@map("raca")
+}
+
+model infolab_relatorio {
+  id_relatorio              BigInt                      @id @default(autoincrement())
+  id_tenacidade             BigInt
+  id_tipo_relatorio         BigInt?
+  id_usuario_auditoria      BigInt?
+  nome                      String?                     @db.VarChar(100)
+  descricao                 String?                     @default("") @db.VarChar(255)
+  arquivo                   String?                     @db.Char(1)
+  relatorio_arquivo         Bytes?
+  relatorio_arquivo_nome    String?                     @db.VarChar(255)
+  relatorio_html            String?
+  ativo                     String?                     @db.Char(1)
+  endereco_ip_auditoria     String?                     @db.VarChar(20)
+  nome_aplicacao_auditoria  String?                     @db.VarChar(255)
+  infolab_convenio          infolab_convenio[]
+  infolab_tenacidade        infolab_tenacidade          @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_relatorio_id_tenacidade")
+  infolab_tipo_relatorio    infolab_tipo_relatorio?     @relation(fields: [id_tipo_relatorio], references: [id_tipo_relatorio], onDelete: Restrict, onUpdate: Restrict, map: "fk_relatorio_id_tipo_relatorio")
+  infolab_usuario           infolab_usuario?            @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_relatorio_id_usuario_auditoria")
+  infolab_unidade_relatorio infolab_unidade_relatorio[]
+  @@map("relatorio")
+}
+
+model infolab_serie_nota_fiscal_servico {
+  id_serie_nota_fiscal_servico BigInt             @id @default(autoincrement())
+  id_tenacidade                BigInt
+  id_unidade                   BigInt
+  sigla                        String             @db.VarChar(10)
+  numeracao                    BigInt
+  tipo_nota_fiscal             Int?               @db.SmallInt
+  ativo                        String?            @db.Char(1)
+  ambiente                     Int?               @db.SmallInt
+  lote                         String?            @db.VarChar(20)
+  frase_secreta                String?            @db.VarChar(80)
+  senha_web                    String?            @db.VarChar(20)
+  usuario_web                  String?            @db.VarChar(20)
+  cer_arq                      Bytes?
+  cer_senha                    String?            @db.VarChar(20)
+  id_usuario_auditoria         BigInt?
+  endereco_ip_auditoria        String?            @db.VarChar(20)
+  nome_aplicacao_auditoria     String?            @db.VarChar(255)
+  infolab_tenacidade           infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_serie_nota_fiscal_servico_id_tenacidade")
+  infolab_unidade              infolab_unidade    @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_serie_nota_fiscal_servico_id_unidade")
+  infolab_usuario              infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_serie_nota_fiscal_servico_id_usuario_auditoria")
+  @@map("serie_nota_fiscal_servico")
+}
+
+model infolab_setor {
+  id_setor                 BigInt                   @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_usuario_auditoria     BigInt?
+  descricao                String?                  @db.VarChar(200)
+  ativo                    String?                  @db.Char(1)
+  codigo_migracao          Int?
+  codigo_externo           BigInt?
+  endereco_ip_auditoria    String?                  @db.VarChar(20)
+  nome_aplicacao_auditoria String?                  @db.VarChar(255)
+  infolab_tenacidade       infolab_tenacidade       @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_setor_id_tenacidade")
+  infolab_usuario          infolab_usuario?         @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_setor_id_usuario_auditoria")
+  @@map("setor")
+}
+
+model infolab_tenacidade_configuracao {
+  id_tenacidade_configuracao             BigInt             @id(map: "infolab_configuracao_tenacidade_pkey") @default(autoincrement())
+  id_tenacidade                          BigInt
+  razao_social                           String?            @db.VarChar(255)
+  nome_fantasia                          String?            @db.VarChar(255)
+  chave_acesso                           String?            @db.VarChar(255)
+  data_expiracao                         DateTime?          @db.Timestamp(6)
+  ultimo_ano                             BigInt?
+  ultimo_atendimento                     BigInt?            @default(0)
+  dominio_tenacidade                     String?            @unique @db.VarChar(255)
+  chave_jwt                              String?            @db.VarChar(255)
+  infolab_vet                            String?            @db.Char(1)
+  somente_interfaceamento                String?            @db.Char(1)
+  utilizar_numeracao_origem_liberacao    String?            @db.Char(1)
+  utilizar_deltacheck_liberacao          String?            @db.Char(1)
+  liberar_resultado_interfaceado_baixado String?            @db.Char(1)
+  capturar_versao_exame_apoio            String?            @db.Char(1)
+  diretorio_exportacao_resultado         String?            @db.VarChar(150)
+  diretorio_triagem_amostra              String?            @db.VarChar(150)
+  mensagem_exame_repetido                String?            @db.VarChar(200)
+  liberar_resultado_informado            String?            @db.Char(1)
+  lista_setor_libera_informado           String?            @db.VarChar(1000)
+  endpoint_pedido                        String?            @db.VarChar(255)
+  endpoint_chatbot                       String?            @db.VarChar(255)
+  endereco_ip_auditoria                  String?            @db.VarChar(20)
+  nome_aplicacao_auditoria               String?            @db.VarChar(255)
+  timeout_sessao_minutos                 Int?               @default(15)
+  quantidade_licenca                     Int?
+  infolab_tenacidade                     infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_tenacidade_configuracao_infolab_tenacidade")
+  @@map("tenacidade_configuracao")
+}
+
+model infolab_tipo_aplicacao {
+  id_tipo_aplicacao        BigInt           @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  endereco_ip_auditoria    String?          @db.VarChar(255)
+  nome_aplicacao_auditoria String?          @db.VarChar(255)
+  descricao                String?          @db.VarChar(255)
+  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_aplicacao_id_usuario_auditoria")
+  @@map("tipo_aplicacao")
+}
+
+model infolab_tipo_estado_civil {
+  id_tipo_estado_civil     BigInt           @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  descricao                String?          @db.VarChar(100)
+  endereco_ip_auditoria    String?          @db.VarChar(20)
+  nome_aplicacao_auditoria String?          @db.VarChar(255)
+  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_estado_civil_id_usuario_auditoria")
+  @@map("tipo_estado_civil")
+}
+
+model infolab_tipo_evento {
+  id_tipo_evento           BigInt           @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  endereco_ip_auditoria    String?          @db.VarChar(255)
+  nome_aplicacao_auditoria String?          @db.VarChar(255)
+  descricao                String?          @db.VarChar(100)
+  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_evento_id_usuario_auditoria")
+  @@map("tipo_evento")
+}
+
+model infolab_tipo_indicacao {
+  id_tipo_indicacao        BigInt              @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_usuario_auditoria     BigInt?
+  codigo                   String?             @db.VarChar(30)
+  descicao                 String?             @db.VarChar(100)
+  ativo                    String?             @db.Char(1)
+  nome_aplicacao_auditoria String?             @db.VarChar(20)
+  endereco_ip_auditoria    String?             @db.VarChar(255)
+  infolab_tenacidade       infolab_tenacidade  @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_tipo_indicacao_id_tenacidade")
+  infolab_usuario          infolab_usuario?    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_indicacao_id_usuario_auditoria")
+  @@map("tipo_indicacao")
+}
+
+model infolab_tipo_integracao {
+  id_tipo_integracao       BigInt               @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  endereco_ip_auditoria    String?              @db.VarChar(255)
+  nome_aplicacao_auditoria String?              @db.VarChar(255)
+  descricao                String?              @db.VarChar(100)
+  codigo_migracao          BigInt?
+  ativo                    String?              @db.Char(1)
+  infolab_usuario          infolab_usuario?     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_integracao_id_usuario_auditoria")
+  @@map("tipo_integracao")
+}
+
+model infolab_tipo_interface {
+  id_tipo_interface        BigInt                    @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  descricao                String?                   @db.VarChar(100)
+  ativo                    String?                   @db.Char(1)
+  nome_aplicacao_auditoria String?                   @db.VarChar(20)
+  endereco_ip_auditoria    String?                   @db.VarChar(255)
+  infolab_usuario          infolab_usuario?          @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_interface_id_usuario_auditoria")
+  @@map("tipo_interface")
+}
+
+model infolab_tipo_pagamento {
+  id_tipo_pagamento             BigInt                          @id @default(autoincrement())
+  id_tenacidade                 BigInt
+  id_usuario_auditoria          BigInt?
+  codigo_tipo_pagamento         String?                         @db.VarChar(2)
+  descricao                     String?                         @db.VarChar(100)
+  limite_parcelas               Int?                            @db.SmallInt
+  bandeira                      String?                         @db.VarChar(20)
+  documento_obrigatorio         String?                         @db.Char(1)
+  codigo_migracao               Int?
+  codigo_externo                BigInt?
+  endereco_ip_auditoria         String?                         @db.VarChar(20)
+  nome_aplicacao_auditoria      String?                         @db.VarChar(255)
+  infolab_tenacidade            infolab_tenacidade              @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_tipo_pagamento_id_tenacidade")
+  infolab_usuario               infolab_usuario?                @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_pagamento_id_usuario_auditoria")
+  @@map("tipo_pagamento")
+}
+
+model infolab_tipo_relatorio {
+  id_tipo_relatorio        BigInt              @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  endereco_ip_auditoria    String?             @db.VarChar(255)
+  nome_aplicacao_auditoria String?             @db.VarChar(255)
+  descricao                String?             @db.VarChar(100)
+  ativo                    String?             @db.Char(1)
+  infolab_relatorio        infolab_relatorio[]
+  infolab_usuario          infolab_usuario?    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_relatorio_id_usuario_auditoria")
+  @@map("tipo_relatorio")
+}
+
+model infolab_unidade {
+  id_unidade                                                            BigInt                                           @id @default(autoincrement())
+  id_tenacidade                                                         BigInt
+  id_almoxarifado_padrao                                                BigInt?
+  id_municipio_nota_fiscal                                              BigInt?
+  id_usuario_auditoria                                                  BigInt?
+  razao_social                                                          String?                                          @db.VarChar(100)
+  nome_fantasia                                                         String?                                          @db.VarChar(100)
+  cnpj                                                                  String?                                          @db.Char(17)
+  inscricao_municipal                                                   String?                                          @db.VarChar(15)
+  natureza_operacao                                                     Int?                                             @db.SmallInt
+  regime_tributacao                                                     Int?                                             @db.SmallInt
+  serie_nota_fiscal                                                     BigInt?
+  cnes                                                                  String?                                          @db.Char(7)
+  sigla                                                                 String?                                          @db.VarChar(10)
+  tipo_unidade                                                          String?                                          @db.Char(1)
+  cep                                                                   String?                                          @db.Char(10)
+  tipo_logradouro                                                       String?                                          @db.VarChar(50)
+  logradouro                                                            String?                                          @db.VarChar(100)
+  bairro                                                                String?                                          @db.VarChar(100)
+  numero                                                                String?                                          @db.VarChar(50)
+  complemento                                                           String?                                          @db.VarChar(50)
+  cidade                                                                String?                                          @db.VarChar(100)
+  estado                                                                String?                                          @db.Char(2)
+  latitude                                                              Float?
+  longitude                                                             Float?
+  telefone                                                              String?                                          @db.VarChar(30)
+  celular                                                               String?                                          @db.VarChar(30)
+  amostra_externa_inicio                                                BigInt?
+  amostra_externa_fim                                                   BigInt?
+  amostra_externa_atual                                                 BigInt?
+  senha_internet                                                        String?                                          @db.VarChar(64)
+  regra_agrupamento_amostra                                             Int?                                             @db.SmallInt
+  nome_arquivo_logotipo                                                 String?                                          @db.VarChar(255)
+  nome_referencia_logotipo                                              String?                                          @db.VarChar(255)
+  enviar_amostra                                                        String?                                          @db.Char(1)
+  enviar_sms                                                            String?                                          @db.Char(1)
+  procedencia_atendimento_obrigatorio                                   String?                                          @db.Char(1)
+  descricao_servico_nota_fiscal                                         String?
+  pertencer_simples_nacional                                            String?                                          @db.Char(1)
+  qtd_dias_validade_orcamento                                           Int?
+  alterar_laboratorio_apoio                                             String?                                          @db.Char(1)
+  lista_procedencia_permitida                                           String?                                          @default("") @db.VarChar(600)
+  lista_convenio_permitido                                              String?                                          @default("") @db.VarChar(600)
+  indicacao_orcamento                                                   String?                                          @db.Char(1)
+  ativo                                                                 String?                                          @db.Char(1)
+  codigo_externo                                                        String?                                          @db.VarChar(30)
+  endereco_ip_auditoria                                                 String?                                          @db.VarChar(20)
+  nome_aplicacao_auditoria                                              String?                                          @db.VarChar(255)
+  infolab_fatura                                                        infolab_fatura[]
+  infolab_serie_nota_fiscal_servico                                     infolab_serie_nota_fiscal_servico[]
+  infolab_tenacidade                                                    infolab_tenacidade                               @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_unidade_id_tenacidade")
+  infolab_usuario_infolab_unidade_id_usuario_auditoriaToinfolab_usuario infolab_usuario?                                 @relation("infolab_unidade_id_usuario_auditoriaToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_id_usuario_auditoria")
+  infolab_unidade_email                                                 infolab_unidade_email[]
+  infolab_unidade_relatorio                                             infolab_unidade_relatorio[]
+  infolab_usuario_infolab_usuario_id_unidadeToinfolab_unidade           infolab_usuario[]                                @relation("infolab_usuario_id_unidadeToinfolab_unidade")
+  @@map("unidade")
+}
+
+model infolab_unidade_email {
+  id_unidade_email         BigInt             @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_unidade               BigInt?
+  id_usuario_auditoria     BigInt?
+  smtp                     String?            @db.VarChar(320)
+  usuario                  String?            @db.VarChar(320)
+  assinatura               String?            @db.VarChar(1024)
+  senha                    String?            @db.VarChar(64)
+  porta                    Int?               @db.SmallInt
+  usar_ssl                 String?            @db.Char(1)
+  remetente                String?            @db.VarChar(320)
+  ativo                    String?            @db.Char(1)
+  codigo_externo           String?            @db.VarChar(30)
+  codigo_migracao          BigInt?
+  endereco_ip_auditoria    String?            @db.VarChar(20)
+  nome_aplicacao_auditoria String?            @db.VarChar(255)
+  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_unidade_email_id_tenacidade")
+  infolab_unidade          infolab_unidade?   @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_email_id_unidade")
+  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_email_id_usuario_auditoria")
+  @@map("unidade_email")
+}
+
+model infolab_unidade_federacao {
+  id_unidade_federacao     BigInt           @id @default(autoincrement())
+  id_usuario_auditoria     BigInt?
+  codigo                   Int?
+  sigla                    String?          @db.Char(2)
+  descricao                String?          @db.VarChar(100)
+  endereco_ip_auditoria    String?          @db.VarChar(20)
+  nome_aplicacao_auditoria String?          @db.VarChar(255)
+  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_federacao_id_usuario_auditoria")
+  @@map("unidade_federacao")
+}
+
+model infolab_unidade_relatorio {
+  id_unidade_relatorio     BigInt             @id @default(autoincrement())
+  id_tenacidade            BigInt
+  id_unidade               BigInt?
+  id_relatorio             BigInt?
+  id_usuario_auditoria     BigInt?
+  ativo                    String?            @db.Char(1)
+  endereco_ip_auditoria    String?            @db.VarChar(20)
+  nome_aplicacao_auditoria String?            @db.VarChar(255)
+  infolab_relatorio        infolab_relatorio? @relation(fields: [id_relatorio], references: [id_relatorio], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_relatorio_id_relatorio")
+  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_unidade_relatorio_id_tenacidade")
+  infolab_unidade          infolab_unidade?   @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_relatorio_id_unidade")
+  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_relatorio_id_usuario_auditoria")
+  @@map("unidade_relatorio")
+}
+
+model infolab_versao_tiss {
+  id_versao_tiss           Int                 @id @default(autoincrement())
+  id_tenacidade            BigInt?
+  id_usuario_auditoria     BigInt?
+  nome                     String?             @db.VarChar(8)
+  ativo                    String?             @db.Char(1)
+  endereco_ip_auditoria    String?             @db.VarChar(20)
+  nome_aplicacao_auditoria String?             @db.VarChar(255)
+  infolab_tenacidade       infolab_tenacidade? @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_versao_tiss_id_tenacidade")
+  infolab_usuario          infolab_usuario?    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_versao_tiss_id_usuario_auditoria")
+  @@map("versao_tiss")
+}
+
+model infolab_vet_especie {
+  id_vet_especie           BigInt                     @id
+  id_usuario_auditoria     BigInt?
+  nome                     String?                    @db.VarChar(80)
+  endereco_ip_auditoria    String?                    @db.VarChar(20)
+  nome_aplicacao_auditoria String?                    @db.VarChar(255)
+  infolab_cliente          infolab_cliente[]
+  infolab_usuario          infolab_usuario?           @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_especie_id_usuario_auditoria")
+  infolab_vet_raca         infolab_vet_raca[]
+  @@map("vet_especie")
+}
+
+model infolab_vet_raca {
+  id_vet_raca              BigInt                     @id
+  id_vet_especie           BigInt?
+  id_usuario_auditoria     BigInt?
+  nome                     String?                    @db.VarChar(100)
+  endereco_ip_auditoria    String?                    @db.VarChar(20)
+  nome_aplicacao_auditoria String?                    @db.VarChar(255)
+  infolab_cliente          infolab_cliente[]
+  infolab_usuario          infolab_usuario?           @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_raca_id_usuario_auditoria")
+  infolab_vet_especie      infolab_vet_especie?       @relation(fields: [id_vet_especie], references: [id_vet_especie], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_raca_id_vet_especie")
+  @@map("vet_raca")
+}
+
+model infolab_sessao_usuario {
+  id_sessao          BigInt             @id @default(autoincrement())
+  id_tenacidade      BigInt
+  id_usuario         BigInt
+  token_id           String             @db.VarChar(255)
+  data_criacao       DateTime           @default(now()) @db.Timestamp(6)
+  data_expiracao     DateTime           @db.Timestamp(6)
+  ativo              String             @default("S") @db.Char(1)
+  dispositivo        String?            @db.VarChar(255)
+  ip                 String?            @db.VarChar(45)
+  user_agent         String?            @db.VarChar(255)
+  infolab_tenacidade infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction, map: "fk_sessao_tenacidade")
+  infolab_usuario    infolab_usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_sessao_usuario")
+
+  @@unique([id_tenacidade, id_usuario], map: "ux_sessao_usuario_ativa")
+  @@index([token_id], map: "ix_sessao_token_id")
+  @@map("sessao_usuario")
+}
+
+model infolab_sessao_suporte {
+  id_sessao_suporte  BigInt             @id @default(autoincrement())
+  id_usuario         BigInt
+  id_tenacidade      BigInt
+  token_id           String             @unique @db.VarChar(255)
+  numero_chamado     String?            @db.VarChar(100)
+  motivo_acesso      String?
+  data_criacao       DateTime           @default(now()) @db.Timestamp(6)
+  data_expiracao     DateTime           @db.Timestamp(6)
+  ativo              String             @default("S") @db.Char(1)
+  ip                 String?            @db.VarChar(45)
+  dispositivo        String?            @db.VarChar(255)
+  user_agent         String?
+  infolab_tenacidade infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction)
+  infolab_usuario    infolab_usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([id_tenacidade], map: "idx_sessao_suporte_tenacidade")
+  @@index([token_id], map: "idx_sessao_suporte_token_id")
+  @@index([id_usuario], map: "idx_sessao_suporte_usuario")
+  @@map("sessao_suporte")
+}
+
+/// Catálogo de telas/menu (seed). `codigo` alinha ao slug do front (ex.: cliente, menu).
+model infolab_formulario {
+  id_formulario              BigInt                       @id @default(autoincrement())
+  codigo                     String                       @unique @db.VarChar(80)
+  descricao                  String?                      @db.VarChar(255)
+  ordem                      Int                          @default(0)
+  ativo                      Boolean                      @default(true)
+  infolab_layout_formulario  infolab_layout_formulario[]
+  infolab_usuario_permissoes infolab_usuario_permissoes[]
+
+  @@index([ativo, ordem])
+  @@map("formulario")
+}
+
+model infolab_usuario_permissoes {
+  id_usuario_permissao     BigInt                @id @default(autoincrement())
+  id_grupo_usuario         BigInt
+  id_formulario            BigInt
+  id_tenacidade            BigInt?
+  id_usuario_auditoria     BigInt?
+  administrador            String                @default("N") @db.Char(1)
+  incluir                  String                @default("N") @db.Char(1)
+  editar                   String                @default("N") @db.Char(1)
+  excluir                  String                @default("N") @db.Char(1)
+  endereco_ip_auditoria    String?               @db.VarChar(20)
+  nome_aplicacao_auditoria String?               @db.VarChar(255)
+  infolab_formulario       infolab_formulario    @relation(fields: [id_formulario], references: [id_formulario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_permissoes_id_formulario")
+  infolab_grupo_usuario    infolab_grupo_usuario @relation(fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Cascade, onUpdate: Restrict, map: "fk_usuario_permissoes_id_grupo_usuario")
+  infolab_usuario          infolab_usuario?      @relation("infolab_usuario_permissoes_id_usuario_auditoriaToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_permissoes_id_usuario_auditoria")
+
+  @@unique([id_grupo_usuario, id_formulario], map: "uq_usuario_permissoes_grupo_formulario")
+  @@index([id_formulario], map: "idx_usuario_permissoes_formulario")
+  @@index([id_grupo_usuario], map: "idx_usuario_permissoes_grupo")
+  @@index([id_tenacidade], map: "idx_usuario_permissoes_tenacidade")
+  @@map("usuario_permissoes")
+}
+
+/// Personalização por perfil (grupo de usuário): JSON único (layout, menu, etc.).
+model infolab_layout_formulario {
+  id_layout_formulario  BigInt                @id @default(autoincrement())
+  id_formulario         BigInt
+  id_grupo_usuario      BigInt
+  configuracao_json     String
+  infolab_formulario    infolab_formulario    @relation(fields: [id_formulario], references: [id_formulario], onDelete: Restrict, onUpdate: Cascade)
+  infolab_grupo_usuario infolab_grupo_usuario @relation(fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([id_grupo_usuario, id_formulario])
+  @@index([id_formulario])
+  @@map("layout_formulario")
+}

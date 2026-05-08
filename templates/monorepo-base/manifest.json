@@ -1,0 +1,81 @@
+{
+  "nomePacoteZip": "liga-prj-template",
+  "pastaRaizNoZip": "liga-prj-template",
+  "descricao": "Manifest legível para o gerador; mesmas regras estão em scripts/gerar-template-zip.mjs.",
+  "overlayDir": "templates/monorepo-base/overlay",
+  "migrationsModo": "overlay",
+  "apiSrcRemover": [
+    "cbo",
+    "cid",
+    "cliente",
+    "conselho-regional",
+    "especialidade-medica",
+    "etnia",
+    "feriado",
+    "grupo",
+    "indicacao",
+    "medicamento",
+    "medico",
+    "motivo-cancelamento",
+    "motivo-desconto",
+    "motivo-retificacao",
+    "procedencia",
+    "raca",
+    "serie-nota-fiscal-servico",
+    "setor",
+    "tipo-aplicacao",
+    "tipo-estado-civil",
+    "tipo-evento",
+    "tipo-indicacao",
+    "tipo-integracao",
+    "tipo-interface",
+    "tipo-pagamento",
+    "tipo-relatorio",
+    "unidade-atendimento",
+    "unidade-federacao",
+    "vet-especie",
+    "vet-raca"
+  ],
+  "webRemover": [
+    "web/src/components/cliente",
+    "web/src/components/financeiro"
+  ],
+  "excludeDirNames": [
+    "node_modules",
+    "dist",
+    ".next",
+    ".nx",
+    "coverage",
+    ".git",
+    "out",
+    "build"
+  ],
+  "excludePathPrefixesPosix": [
+    "templates/monorepo-base/.staging",
+    "templates/monorepo-base/output",
+    ".claude"
+  ],
+  "excludeCursorTree": true,
+  "includeCursorPartial": [".cursor/rules", ".cursor/mcp.json"],
+  "rootFiles": [
+    "package.json",
+    "package-lock.json",
+    "nx.json",
+    ".editorconfig",
+    ".gitignore",
+    ".nvmrc",
+    "SECURITY.md",
+    "README.md"
+  ],
+  "topLevelDirs": [
+    "api",
+    "web",
+    "scripts",
+    "ai",
+    "docs",
+    "mcp",
+    "tools",
+    ".github",
+    "templates"
+  ]
+}

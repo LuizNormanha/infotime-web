@@ -1,0 +1,267 @@
+/* Tela de login — layout cartão com topo Liga | InfoTIME (referência em imagem) */
+
+.liga-tela-login {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem 5.5rem;
+  box-sizing: border-box;
+  background: var(--liga-fundo-pagina);
+  font-family: var(--liga-font-family);
+}
+
+.liga-tela-login-conteudo {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+.liga-login-cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--liga-moldura-interna);
+  border-radius: 28px;
+  padding: 1.75rem 3rem 2.5rem;
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--liga-borda-suave);
+  box-shadow: var(--liga-sombra-moldura);
+}
+
+/*
+ * esq.: logo + “Fazer login”.
+ * dir.: InfoTIME fixo no canto superior direito; formulário centralizado na vertical na coluna,
+ * com padding-top para não sobrepor o InfoTIME.
+ */
+.liga-login-mockup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 3.25rem;
+  align-items: stretch;
+  width: 100%;
+}
+
+.liga-login-mockup-esq {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.liga-login-mockup-esq .liga-login-titulo-pagina {
+  margin-top: 2.35rem;
+}
+
+.liga-login-mockup-dir {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  /* Faixa reservada: marca InfoTIME (título + tagline) não encosta no 1º campo */
+  padding-top: 4.85rem;
+  box-sizing: border-box;
+}
+
+.liga-login-mockup-infotime {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.liga-login-mockup-form {
+  flex: 0 0 auto;
+  margin-top: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.liga-login-titulo-pagina {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--liga-texto-principal);
+  line-height: 1.25;
+}
+
+.liga-form-login {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.liga-texto-erro {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: #c53030;
+}
+
+html[data-theme="dark"] .liga-texto-erro {
+  color: #fca5a5;
+}
+
+.liga-texto-aviso-auth {
+  margin: 0.65rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--liga-texto-secundario, #5c5c5c);
+}
+
+html[data-theme="dark"] .liga-texto-aviso-auth {
+  color: var(--liga-texto-secundario, #a3a3a3);
+}
+
+/* Botão largura total dos campos + link abaixo */
+.liga-login-barra-acoes {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.65rem;
+  margin-top: 1.15rem;
+}
+
+.liga-login-botao-primario.p-button {
+  width: 100%;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.liga-login-link-recuperar.liga-link-recuperar {
+  align-self: center;
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Rodapé da página */
+.liga-tela-login-rodape-pagina {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  padding: 0.85rem 1.5rem 1rem;
+  box-sizing: border-box;
+  font-size: 0.75rem;
+  color: var(--liga-texto-secundario);
+  background: var(--liga-fundo-pagina);
+}
+
+.liga-login-idioma {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: default;
+  user-select: none;
+}
+
+.liga-login-idioma::after {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0.15rem;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--liga-texto-secundario);
+}
+
+.liga-login-rodape-dir {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+
+.liga-login-rodape-link {
+  color: var(--liga-texto-secundario);
+  text-decoration: none;
+}
+
+.liga-login-rodape-link:hover {
+  color: var(--liga-texto-principal);
+  text-decoration: underline;
+}
+
+html[data-theme="dark"] .liga-login-cartao {
+  border-color: var(--liga-borda-suave);
+  box-shadow: var(--liga-sombra-moldura);
+}
+
+@media (max-width: 720px) {
+  .liga-tela-login {
+    padding: 1rem 1rem 6rem;
+    justify-content: flex-start;
+    padding-top: 2rem;
+  }
+
+  .liga-login-cartao {
+    padding: 1.5rem 1.35rem 1.75rem;
+    border-radius: 22px;
+  }
+
+  .liga-login-mockup {
+    grid-template-columns: 1fr;
+    row-gap: 1.35rem;
+    column-gap: 0;
+  }
+
+  .liga-login-mockup-esq .liga-login-titulo-pagina {
+    margin-top: 1.35rem;
+  }
+
+  .liga-login-mockup-dir {
+    padding-top: 0;
+    justify-content: flex-start;
+  }
+
+  .liga-login-mockup-infotime {
+    position: relative;
+    align-self: flex-end;
+    pointer-events: auto;
+  }
+
+  .liga-login-mockup-form {
+    margin-top: 0.85rem;
+  }
+
+  .liga-tela-login-rodape-pagina {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .liga-login-rodape-dir {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 721px) {
+  .liga-tela-login {
+    padding: 2rem 1.5rem 5.5rem;
+  }
+
+  .liga-login-cartao {
+    min-height: min(420px, calc(100dvh - 9rem));
+  }
+}

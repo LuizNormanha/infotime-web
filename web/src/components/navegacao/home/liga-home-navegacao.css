@@ -1,0 +1,81 @@
+.liga-home-aviso-licenca {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  background: color-mix(in srgb, var(--liga-cor-aviso, #b45309) 12%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--liga-cor-aviso, #b45309) 35%, transparent);
+  width: 100%;
+}
+
+.liga-home-aviso-licenca-texto {
+  margin: 0;
+  flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.liga-home-aviso-licenca-fechar {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
+.liga-home {
+  box-sizing: border-box;
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: var(--liga-fundo-pagina);
+  color: var(--liga-texto-principal);
+}
+
+.liga-home-linha-principal {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.liga-home * {
+  font-family: var(--liga-font-family);
+}
+
+.liga-home .pi {
+  font-family: "primeicons";
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.liga-home button .pi {
+  cursor: inherit;
+  pointer-events: none;
+}
+
+.liga-home-corpo {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.liga-home-overlay {
+  display: none;
+}
+
+.liga-home-overlay.visivel {
+  display: block;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.38);
+  z-index: 25;
+}

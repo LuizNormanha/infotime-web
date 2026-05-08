@@ -1,0 +1,1284 @@
+/* Template de formulários (layout estilo painel lateral + cartão). Usa variáveis de liga-tema.css. */
+
+/** Aguardando metadados / definição efetiva — splash mínimo. */
+.liga-metadados-splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin: 0 auto;
+  padding: 1rem 1rem 1.15rem;
+  max-width: 14rem;
+  min-height: 6.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--liga-borda-suave);
+  background: color-mix(in srgb, var(--liga-moldura-interna) 92%, var(--liga-borda-suave));
+}
+
+.liga-metadados-splash-texto {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--liga-texto-secundario);
+  text-align: center;
+  line-height: 1.35;
+}
+
+.liga-metadados-splash .p-progress-spinner-circle {
+  stroke: var(--liga-verde);
+}
+
+.liga-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.liga-formulario-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.liga-formulario-titulo {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--liga-texto-principal);
+}
+
+.liga-formulario-titulo-icone {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  color: var(--liga-verde);
+  line-height: 1;
+}
+
+.liga-formulario-subtitulo {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--liga-texto-secundario);
+  max-width: 40rem;
+}
+
+.liga-formulario-acoes-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.liga-formulario-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1.25rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.liga-formulario-sidebar {
+  flex: 0 0 14rem;
+  border-radius: 12px;
+  border: 1px solid var(--liga-borda-suave);
+  background: color-mix(in srgb, var(--liga-moldura-interna) 88%, var(--liga-borda-suave));
+  padding: 0.5rem;
+  align-self: stretch;
+}
+
+.liga-formulario-sidebar-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.liga-formulario-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 980px;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.liga-formulario-nav-item:hover {
+  background: color-mix(in srgb, var(--liga-moldura-externa) 70%, transparent);
+  color: var(--liga-texto-principal);
+}
+
+.liga-formulario-nav-item-ativo {
+  background: color-mix(in srgb, var(--liga-verde) 14%, var(--liga-moldura-externa));
+  border-color: color-mix(in srgb, var(--liga-verde) 28%, var(--liga-borda-suave));
+  color: var(--liga-verde-escuro);
+  font-weight: 600;
+}
+
+html[data-theme="dark"] .liga-formulario-nav-item-ativo {
+  color: var(--liga-verde-link-claro);
+}
+
+.liga-formulario-nav-icone {
+  font-size: 1rem;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.liga-formulario-nav-texto {
+  flex: 1;
+  min-width: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  cursor: inherit;
+}
+
+.liga-formulario-main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.liga-formulario-cartao {
+  border-radius: 12px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-externa);
+  box-shadow: var(--liga-sombra-bloco);
+  padding: 1.15rem 1.25rem 1.35rem;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.liga-formulario-cartao .p-hidden-accessible input[type="text"],
+.liga-formulario-cartao .p-hidden-accessible textarea {
+  caret-color: transparent !important;
+}
+
+.liga-formulario-secao-cabecalho {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-bottom: var(
+    --liga-form-secao-cabecalho-mb,
+    1.4rem
+  );
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.liga-formulario-secao-cabecalho * {
+  cursor: inherit;
+}
+
+.liga-formulario-barra-verde {
+  width: 4px;
+  align-self: stretch;
+  min-height: 2rem;
+  border-radius: 2px;
+  background: var(--liga-borda-acento-barra);
+  flex-shrink: 0;
+}
+
+.liga-formulario-secao-cabecalho .liga-formulario-barra-verde {
+  margin-top: 0.2rem;
+}
+
+.liga-formulario-secao-cabecalho-textos {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.liga-formulario-secao-cabecalho-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 0.05rem;
+}
+
+.liga-formulario-secao-cabecalho-acoes .p-button {
+  cursor: pointer;
+}
+
+.liga-formulario-secao-titulo {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--liga-verde-escuro);
+}
+
+html[data-theme="dark"] .liga-formulario-secao-titulo {
+  color: var(--liga-verde-link-claro);
+}
+
+.liga-formulario-secao-descricao {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--liga-texto-secundario);
+}
+
+.liga-formulario-secao-conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* Abaixo da borda inferior do cartão (fora do group box). */
+.liga-formulario-legenda-obrigatorio-fora {
+  margin: 0.55rem 0 0;
+  padding: 0 0.05rem;
+  align-self: flex-start;
+  max-width: 100%;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #dc2626;
+  display: flex;
+  align-items: baseline;
+  gap: 0.28rem;
+}
+
+.liga-formulario-legenda-obrigatorio-fora-asterisco {
+  color: #dc2626;
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/**
+ * Grade 12 colunas no desktop: padrão span 6 (dois campos por linha).
+ * `colunas: 3` no layout → classe `--span-4` (quatro campos por linha).
+ * `colunas: 4` no layout → classe `--span-8` (ex.: descrição larga + campo estreito na mesma linha).
+ * `liga-formulario-campo-linha-toda` ocupa a linha inteira (span 12).
+ */
+.liga-formulario-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--liga-form-grid-gap-linha, 1.25rem)
+    var(--liga-form-grid-gap-coluna, 1.3rem);
+  width: 100%;
+}
+
+.liga-formulario-grid > .liga-formulario-campo {
+  grid-column: span 6;
+}
+
+.liga-formulario-grid > .liga-formulario-campo--span-4 {
+  grid-column: span 4;
+}
+
+.liga-formulario-grid > .liga-formulario-campo--span-8 {
+  grid-column: span 8;
+}
+
+.liga-formulario-grid > .liga-formulario-campo-linha-toda {
+  grid-column: 1 / -1;
+}
+
+/** Definição de mapa — quatro campos (lookups + dropdowns) em uma linha no desktop (§4.1 padroes/ui). */
+.liga-formulario-grid--mapa-def-param-uma-linha > .liga-formulario-campo {
+  grid-column: span 3;
+}
+
+/**
+ * Senha em cadastro (não-login): não usar `input type="password"` — o Chrome associa ao cofre
+ * e exibe lista de credenciais. `type="text"` + mascaramento evita isso (MCP padroes/ui §10).
+ */
+.liga-formulario-input-senha-cadastro-mascarada.p-inputtext {
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+
+.liga-formulario-input-senha-cadastro-mascarada--visivel.p-inputtext {
+  -webkit-text-security: none;
+  text-security: none;
+}
+
+.liga-formulario-secao-grupos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  width: 100%;
+}
+
+/** Sub-blocos com título (ex.: cliente “Nome civil e social”) — caixa para delimitar o grupo. */
+.liga-formulario-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.9rem 1rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--liga-borda-suave);
+  background: color-mix(in srgb, var(--liga-moldura-interna) 94%, var(--liga-borda-suave));
+}
+
+.liga-formulario-grupo-titulo {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--liga-texto-principal);
+}
+
+.liga-formulario-grupo-descricao {
+  margin: -0.15rem 0 0.05rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--liga-texto-secundario);
+}
+
+html[data-theme="dark"] .liga-formulario-grupo {
+  background: color-mix(in srgb, var(--liga-moldura-interna) 88%, var(--liga-borda-suave));
+}
+
+/* Dentro de `.liga-formulario-grupo`, o cartão já delimita o bloco — evita borda dupla no grupo de checkboxes. */
+.liga-formulario-grupo .liga-formulario-checkbox-grupo {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin-top: 0;
+}
+
+/* Checkboxes consecutivos: bloco em largura total, grade interna 2 colunas. */
+.liga-formulario-checkbox-grupo {
+  grid-column: 1 / -1;
+  margin-top: 0.15rem;
+  padding: 0.85rem 1rem 0.95rem;
+  border-radius: 10px;
+  border: 1px solid var(--liga-borda-suave);
+  background: color-mix(in srgb, var(--liga-moldura-interna) 94%, var(--liga-borda-suave));
+}
+
+.liga-formulario-checkbox-grupo-titulo {
+  margin: 0 0 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--liga-texto-secundario);
+}
+
+.liga-formulario-checkbox-grupo-interior {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 1.15rem;
+  align-items: center;
+}
+
+.liga-formulario-checkbox-grupo-interior .liga-formulario-campo {
+  display: contents;
+}
+
+html[data-theme="dark"] .liga-formulario-checkbox-grupo {
+  background: color-mix(in srgb, var(--liga-moldura-interna) 88%, var(--liga-borda-suave));
+}
+
+@media (max-width: 720px) {
+  .liga-formulario-grid {
+    grid-template-columns: 1fr;
+    gap: var(--liga-form-grid-gap-linha, 1.1rem) 0;
+  }
+
+  .liga-formulario-grid > .liga-formulario-campo,
+  .liga-formulario-grid > .liga-formulario-campo--span-4,
+  .liga-formulario-grid > .liga-formulario-campo--span-8,
+  .liga-formulario-grid > .liga-formulario-campo-linha-toda {
+    grid-column: 1 / -1;
+  }
+
+  .liga-formulario-checkbox-grupo-interior {
+    grid-template-columns: 1fr;
+  }
+
+  .liga-formulario-layout {
+    flex-direction: column;
+  }
+
+  .liga-formulario-sidebar {
+    flex: none;
+    width: 100%;
+  }
+
+  .liga-formulario-sidebar-lista {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .liga-formulario-nav-item {
+    flex: 1 1 auto;
+    min-width: 8rem;
+  }
+}
+
+.liga-formulario-campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--liga-form-campo-gap-interno, 0.5rem);
+  min-width: 0;
+}
+
+.liga-formulario-campo-linha-toda {
+  grid-column: 1 / -1;
+}
+
+.liga-formulario-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--liga-texto-principal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.liga-formulario-dica-campo {
+  display: block;
+  margin: -0.2rem 0 0.4rem;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--liga-texto-secundario);
+}
+
+.liga-formulario-obrigatorio {
+  color: #dc2626;
+  font-weight: 700;
+  margin-left: 0.15rem;
+}
+
+/**
+ * Chave gerada pelo banco e campos de auditoria (somente leitura na UI).
+ * Padrões: `LIGA_FORM_CLASS_INPUT_CHAVE_AUTOMATICA`, `LIGA_FORM_CLASS_INPUT_AUDITORIA`.
+ * Tema claro: cinza médio-claro (MCP padroes/ui §4.7) — mais escuro que cartão / input ativo.
+ */
+.liga-formulario-input--chave-automatica.p-inputtext.p-disabled,
+.liga-formulario-input--chave-automatica.p-inputtext:disabled,
+.liga-formulario-input--chave-automatica.p-inputtextarea.p-disabled,
+.liga-formulario-input--chave-automatica.p-inputtextarea:disabled,
+.liga-formulario-input--auditoria.p-inputtext.p-disabled,
+.liga-formulario-input--auditoria.p-inputtext:disabled,
+.liga-formulario-input--auditoria.p-inputtextarea.p-disabled,
+.liga-formulario-input--auditoria.p-inputtextarea:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  background: color-mix(in srgb, var(--liga-moldura-interna) 42%, var(--liga-borda-suave));
+  border-color: color-mix(in srgb, var(--liga-borda-suave) 72%, transparent);
+  color: var(--liga-texto-secundario);
+  font-variant-numeric: tabular-nums;
+}
+
+html:not([data-theme="dark"]) .liga-formulario-input--chave-automatica.p-inputtext.p-disabled,
+html:not([data-theme="dark"]) .liga-formulario-input--chave-automatica.p-inputtext:disabled,
+html:not([data-theme="dark"]) .liga-formulario-input--chave-automatica.p-inputtextarea.p-disabled,
+html:not([data-theme="dark"]) .liga-formulario-input--chave-automatica.p-inputtextarea:disabled,
+html:not([data-theme="dark"]) .liga-formulario-input--auditoria.p-inputtext.p-disabled,
+html:not([data-theme="dark"]) .liga-formulario-input--auditoria.p-inputtext:disabled,
+html:not([data-theme="dark"]) .liga-formulario-input--auditoria.p-inputtextarea.p-disabled,
+html:not([data-theme="dark"]) .liga-formulario-input--auditoria.p-inputtextarea:disabled {
+  background: color-mix(in srgb, #e2e8f0 72%, var(--liga-moldura-interna));
+  border-color: color-mix(in srgb, #cbd5e1 55%, var(--liga-borda-suave));
+}
+
+html[data-theme="dark"] .liga-formulario-input--chave-automatica.p-inputtext.p-disabled,
+html[data-theme="dark"] .liga-formulario-input--chave-automatica.p-inputtext:disabled,
+html[data-theme="dark"] .liga-formulario-input--chave-automatica.p-inputtextarea.p-disabled,
+html[data-theme="dark"] .liga-formulario-input--chave-automatica.p-inputtextarea:disabled,
+html[data-theme="dark"] .liga-formulario-input--auditoria.p-inputtext.p-disabled,
+html[data-theme="dark"] .liga-formulario-input--auditoria.p-inputtext:disabled,
+html[data-theme="dark"] .liga-formulario-input--auditoria.p-inputtextarea.p-disabled,
+html[data-theme="dark"] .liga-formulario-input--auditoria.p-inputtextarea:disabled {
+  background: color-mix(in srgb, var(--liga-moldura-interna) 38%, var(--liga-borda-suave));
+  border-color: color-mix(in srgb, var(--liga-borda-suave) 85%, transparent);
+  color: color-mix(in srgb, var(--liga-texto-secundario) 88%, var(--liga-texto-principal));
+}
+
+.liga-formulario-input.p-inputtext,
+.liga-formulario-input.p-inputtextarea,
+.liga-formulario-input.p-password input,
+.liga-formulario-input.p-dropdown,
+.p-autocomplete .p-inputtext.liga-formulario-input {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-interna);
+  color: var(--liga-texto-principal);
+  font-size: 0.9rem;
+  padding: 0.65rem 0.75rem;
+  box-sizing: border-box;
+}
+
+/* Campos sm sem classe liga-formulario-input: caret e texto não colados à borda. */
+.liga-formulario-cadastro-base .liga-formulario-campo input.p-inputtext,
+.liga-formulario-cadastro-base .liga-formulario-campo textarea.p-inputtextarea {
+  padding: 0.65rem 0.75rem;
+  box-sizing: border-box;
+}
+
+.liga-formulario-cadastro-base .liga-formulario-campo .p-dropdown {
+  border-radius: 10px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-interna);
+}
+
+.liga-formulario-cadastro-base .liga-formulario-campo .p-dropdown .p-dropdown-label {
+  padding: 0.65rem 0.75rem;
+  box-sizing: border-box;
+}
+
+.liga-formulario-cadastro-base .liga-formulario-campo .p-dropdown .p-dropdown-label.p-placeholder {
+  padding: 0.65rem 0.75rem;
+}
+
+.liga-formulario-input-native {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-interna);
+  color: var(--liga-texto-principal);
+  font-size: 0.9rem;
+}
+
+.liga-formulario-input-native:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
+  border-color: color-mix(in srgb, var(--liga-verde) 35%, var(--liga-borda-suave));
+}
+
+.liga-formulario-input-native:disabled,
+.liga-formulario-input-native--readonly:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  background: color-mix(in srgb, var(--liga-moldura-interna) 42%, var(--liga-borda-suave));
+  border-color: color-mix(in srgb, var(--liga-borda-suave) 72%, transparent);
+  color: var(--liga-texto-secundario);
+}
+
+html:not([data-theme="dark"]) .liga-formulario-input-native:disabled,
+html:not([data-theme="dark"]) .liga-formulario-input-native--readonly:disabled {
+  background: color-mix(in srgb, #e2e8f0 72%, var(--liga-moldura-interna));
+  border-color: color-mix(in srgb, #cbd5e1 55%, var(--liga-borda-suave));
+}
+
+/** View-only (`tipo: somenteLeitura`) — cinza médio-claro (MCP padroes/ui §4.7). */
+.liga-formulario-input--readonly.p-inputtext.p-disabled,
+.liga-formulario-input--readonly.p-inputtext:disabled,
+.liga-formulario-input--readonly.p-inputtextarea.p-disabled,
+.liga-formulario-input--readonly.p-inputtextarea:disabled,
+.liga-formulario-input--readonly.p-password .p-inputtext:disabled,
+.p-dropdown.liga-formulario-input--readonly.p-disabled,
+.p-dropdown.liga-formulario-input--readonly.p-disabled .p-inputtext {
+  opacity: 1;
+  cursor: not-allowed;
+  background: color-mix(in srgb, var(--liga-moldura-interna) 42%, var(--liga-borda-suave));
+  border-color: color-mix(in srgb, var(--liga-borda-suave) 72%, transparent);
+  color: var(--liga-texto-secundario);
+}
+
+html:not([data-theme="dark"]) .liga-formulario-input--readonly.p-inputtext.p-disabled,
+html:not([data-theme="dark"]) .liga-formulario-input--readonly.p-inputtext:disabled,
+html:not([data-theme="dark"]) .liga-formulario-input--readonly.p-inputtextarea.p-disabled,
+html:not([data-theme="dark"]) .liga-formulario-input--readonly.p-inputtextarea:disabled,
+html:not([data-theme="dark"]) .p-dropdown.liga-formulario-input--readonly.p-disabled,
+html:not([data-theme="dark"]) .p-dropdown.liga-formulario-input--readonly.p-disabled .p-inputtext {
+  background: color-mix(in srgb, #e2e8f0 72%, var(--liga-moldura-interna));
+  border-color: color-mix(in srgb, #cbd5e1 55%, var(--liga-borda-suave));
+}
+
+html[data-theme="dark"] .liga-formulario-input--readonly.p-inputtext.p-disabled,
+html[data-theme="dark"] .liga-formulario-input--readonly.p-inputtext:disabled,
+html[data-theme="dark"] .liga-formulario-input--readonly.p-inputtextarea.p-disabled,
+html[data-theme="dark"] .liga-formulario-input--readonly.p-inputtextarea:disabled,
+html[data-theme="dark"] .p-dropdown.liga-formulario-input--readonly.p-disabled .p-inputtext {
+  background: color-mix(in srgb, var(--liga-moldura-interna) 38%, var(--liga-borda-suave));
+  border-color: color-mix(in srgb, var(--liga-borda-suave) 85%, transparent);
+  color: color-mix(in srgb, var(--liga-texto-secundario) 88%, var(--liga-texto-principal));
+}
+
+.liga-formulario-leitura {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--liga-texto-secundario);
+  min-height: 2.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.liga-formulario-input.p-inputtext:enabled:focus,
+.liga-formulario-input.p-inputtextarea:enabled:focus,
+.liga-formulario-input.p-password input:enabled:focus {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
+  border-color: color-mix(in srgb, var(--liga-verde) 35%, var(--liga-borda-suave));
+}
+
+.liga-formulario-erro {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #dc2626;
+}
+
+.liga-formulario-cadastro-base {
+  /* Ritmo label/controle e grade — herdado pelos filhos */
+  --liga-form-campo-gap-interno: 0.5rem;
+  --liga-form-grid-gap-linha: 1.25rem;
+  --liga-form-grid-gap-coluna: 1.3rem;
+  --liga-form-secao-cabecalho-mb: 1.4rem;
+
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.liga-formulario-cadastro-splash-centro {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.liga-formulario-cadastro-carregando-splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  max-width: 22rem;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.liga-formulario-cadastro-carregando-visual {
+  position: relative;
+  width: 3.1rem;
+  height: 3.1rem;
+  flex-shrink: 0;
+}
+
+.liga-formulario-cadastro-carregando-anel {
+  position: absolute;
+  inset: 0;
+  border: 2.5px solid color-mix(in srgb, var(--liga-verde) 22%, transparent);
+  border-top-color: var(--liga-verde);
+  border-radius: 50%;
+  animation: liga-formulario-cadastro-carregando-giro 0.9s linear infinite;
+}
+
+.liga-formulario-cadastro-carregando-nucleo {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--liga-verde);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--liga-verde) 45%, transparent);
+  animation: liga-formulario-cadastro-carregando-pulso 1.35s ease-in-out infinite;
+}
+
+@keyframes liga-formulario-cadastro-carregando-giro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes liga-formulario-cadastro-carregando-pulso {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+.liga-formulario-cadastro-carregando-texto-principal {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--liga-texto-principal);
+  line-height: 1.25;
+}
+
+.liga-formulario-cadastro-carregando-texto-dica {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--liga-texto-secundario);
+  max-width: 19rem;
+}
+
+.liga-formulario-cadastro-carregando-pontos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+}
+
+.liga-formulario-cadastro-carregando-pontos span {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--liga-verde);
+  opacity: 0.38;
+  animation: liga-formulario-cadastro-carregando-dot 1.35s ease-in-out infinite;
+}
+
+.liga-formulario-cadastro-carregando-pontos span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.liga-formulario-cadastro-carregando-pontos span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes liga-formulario-cadastro-carregando-dot {
+  0%,
+  70%,
+  100% {
+    opacity: 0.32;
+    transform: translateY(0) scale(1);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.12);
+  }
+}
+
+.liga-formulario-cadastro-botao-salvar.p-button {
+  background: var(--liga-verde);
+  border-color: var(--liga-verde);
+  color: #ffffff;
+}
+
+.liga-formulario-cadastro-botao-salvar.p-button:enabled:hover {
+  background: var(--liga-verde-hover);
+  border-color: var(--liga-verde-hover);
+}
+
+/* Botão "Confirmar" dos painéis de detalhe (Atendimento / Mestre-Detalhe) — verde mais claro. */
+.liga-formulario-cadastro-botao-confirmar-detalhe.p-button {
+  /* Verde escuro para diferenciar do "Salvar" da mestre */
+  background: #558a2e;
+  border-color: #558a2e;
+  color: #ffffff;
+}
+
+.liga-formulario-cadastro-botao-confirmar-detalhe.p-button:enabled:hover {
+  background: #477426;
+  border-color: #477426;
+}
+
+.liga-formulario-campo > .liga-formulario-erro {
+  margin-top: 0.2rem;
+}
+
+.liga-formulario-input-com-acoes {
+  position: relative;
+}
+
+.liga-formulario-input-com-acoes > .p-inputtext,
+.liga-formulario-input-com-acoes > .p-dropdown,
+.liga-formulario-input-com-acoes > .p-calendar {
+  width: 100%;
+}
+
+/**
+ * InputNumber é `inline-flex` no PrimeReact — sem largura explícita o controle fica estreito
+ * no meio da célula da grade e parece um “vão” até o próximo campo (MCP padroes/ui §4.5).
+ */
+.liga-formulario-input-com-acoes > .p-inputnumber {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-formulario-input-com-acoes > .p-inputnumber .p-inputnumber-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100% !important;
+}
+
+/**
+ * Linha do orçamento (desconto % + motivo rejeição): mesma necessidade do InputNumber em grade
+ * (inline-flex), sem usar `.liga-formulario-input-com-acoes` (evita padding reservado a ações).
+ */
+.liga-formulario-orcamento-financeiro-linha {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2.35fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.liga-formulario-orcamento-financeiro-linha > .liga-formulario-campo {
+  min-width: 0;
+}
+
+.liga-formulario-orcamento-financeiro-linha .p-inputnumber {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.liga-formulario-orcamento-financeiro-linha .p-inputnumber .p-inputnumber-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100% !important;
+}
+
+.liga-formulario-orcamento-financeiro-linha .p-dropdown {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Linha 1 do orçamento: nome (lookup) + 6 campos; evita vazamento do grid */
+.liga-formulario-orcamento-linha-dados-cliente .liga-formulario-campo {
+  min-width: 0;
+}
+.liga-formulario-orcamento-linha-dados-cliente .liga-formulario-campo:first-child .liga-atendimento-lookup {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+.liga-formulario-orcamento-linha-dados-cliente
+  .liga-formulario-campo:first-child
+  .liga-atendimento-lookup
+  .p-inputtext {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.liga-formulario-orcamento-linha-dados-cliente
+  .liga-formulario-orcamento-campo-rotulo-compacto
+  .liga-formulario-campo-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.liga-formulario-orcamento-linha-dados-cliente
+  .liga-formulario-orcamento-campo-id-cliente
+  .liga-formulario-campo-label {
+  white-space: nowrap;
+}
+
+.liga-formulario-input-com-acoes__direita {
+  position: absolute;
+  right: 0.35rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  z-index: 2;
+}
+
+.liga-formulario-input-com-acoes .p-inputtext {
+  padding-right: 4.4rem;
+}
+
+.liga-formulario-input-com-acoes--senha-com-acao-extra .p-inputtext {
+  padding-right: 6.25rem;
+}
+
+.liga-formulario-input-com-acoes__direita .p-button {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.liga-multiselecao-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.liga-multiselecao-modal-input {
+  width: 100%;
+  min-height: 2.6rem;
+  border-radius: 10px;
+  border: 1px solid var(--liga-borda-suave);
+  background: var(--liga-moldura-interna);
+  color: var(--liga-texto-principal);
+  padding: 0.35rem 0.55rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.liga-multiselecao-modal-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.liga-multiselecao-modal-input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
+  border-color: color-mix(in srgb, var(--liga-verde) 35%, var(--liga-borda-suave));
+}
+
+.liga-multiselecao-modal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  min-height: 1.8rem;
+  flex: 1;
+  align-items: center;
+}
+
+.liga-multiselecao-modal-chips .p-chip {
+  background: color-mix(in srgb, var(--liga-moldura-interna) 90%, var(--liga-borda-suave));
+}
+
+.liga-multiselecao-modal-placeholder {
+  color: var(--liga-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.liga-multiselecao-modal-acao-secundaria {
+  display: none;
+}
+
+.liga-multiselecao-modal-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* MultiSelect + botão lista embutido (modal PickList auxiliar). */
+.liga-multiselecao-com-multiselect {
+  position: relative;
+  width: 100%;
+}
+
+.liga-multiselecao-com-multiselect .p-multiselect {
+  width: 100%;
+}
+
+.liga-multiselecao-com-multiselect .p-multiselect-label-container,
+.liga-multiselecao-com-multiselect .p-multiselect-label {
+  padding-right: 4.25rem;
+}
+
+.liga-multiselecao-com-multiselect__sandwich {
+  position: absolute;
+  top: 50%;
+  right: 2.35rem;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--liga-texto-secundario, #64748b);
+  cursor: pointer;
+}
+
+.liga-multiselecao-com-multiselect__sandwich:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--liga-verde) 12%, transparent);
+  color: var(--liga-texto-principal);
+}
+
+.liga-multiselecao-com-multiselect__sandwich:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* PrimeReact Calendar: mantém trigger visualmente dentro do input. */
+.liga-formulario-cadastro-base .liga-campo-com-botao-interno.p-calendar {
+  position: relative;
+}
+
+.liga-formulario-cadastro-base .liga-campo-com-botao-interno.p-calendar .p-inputtext {
+  padding-right: 2.2rem;
+}
+
+.liga-formulario-cadastro-base .liga-campo-com-botao-interno.p-calendar .p-datepicker-trigger {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  transform: translateY(-50%);
+  width: 1.75rem;
+  height: 1.75rem;
+  min-width: 1.75rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--liga-texto-secundario);
+  box-shadow: none;
+}
+
+.liga-formulario-cadastro-base .liga-campo-com-botao-interno.p-calendar .p-datepicker-trigger:hover {
+  background: color-mix(in srgb, var(--liga-borda-suave) 35%, transparent);
+  color: var(--liga-texto-principal);
+}
+
+.liga-formulario-acoes-secundaria.p-button.p-button-outlined {
+  border-color: var(--liga-borda-suave);
+  color: var(--liga-texto-secundario);
+}
+
+.liga-formulario-acoes-secundaria.p-button.p-button-outlined:enabled:hover {
+  background: var(--liga-moldura-interna);
+  color: var(--liga-texto-principal);
+}
+
+.liga-formulario-acoes-excluir.p-button.p-button-outlined {
+  border-color: color-mix(in srgb, #dc2626 45%, var(--liga-borda-suave));
+  color: #dc2626;
+}
+
+.liga-formulario-acoes-excluir.p-button.p-button-outlined:enabled:hover {
+  background: color-mix(in srgb, #dc2626 10%, var(--liga-moldura-interna));
+  color: #b91c1c;
+}
+
+.liga-formulario-acoes-excluir--sem-permissao.p-button.p-button-outlined {
+  opacity: 0.55;
+}
+
+.liga-formulario-dica-meta {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--liga-texto-secundario);
+}
+
+.liga-formulario-label-obrigatorio {
+  color: #dc2626;
+  font-weight: 700;
+  cursor: help;
+}
+
+@media (max-width: 720px) {
+  .liga-formulario-topo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .liga-formulario-acoes-topo {
+    justify-content: flex-start;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Calendar PrimeReact: painel compacto (overlay costuma ir para o `body`). */
+/* Classe: `LIGA_CALENDARIO_PANEL_CLASS` em `lib/calendario-datas-formulario.ts` */
+/* -------------------------------------------------------------------------- */
+.p-datepicker-panel.liga-datepicker-panel--compact {
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  max-width: min(16.5rem, 92vw);
+  padding: 0.4rem;
+}
+
+.p-datepicker-panel.liga-datepicker-panel--compact .p-datepicker-header {
+  padding: 0.3rem 0.35rem;
+  margin-bottom: 0.1rem;
+}
+
+.p-datepicker-panel.liga-datepicker-panel--compact .p-datepicker-title {
+  font-size: 0.88rem;
+}
+
+.p-datepicker-panel.liga-datepicker-panel--compact table th {
+  padding: 0.12rem;
+  font-size: 0.72rem;
+}
+
+.p-datepicker-panel.liga-datepicker-panel--compact table td {
+  padding: 0.08rem;
+}
+
+.p-datepicker-panel.liga-datepicker-panel--compact table td > span {
+  width: 1.55rem;
+  height: 1.55rem;
+  line-height: 1.55rem;
+  font-size: 0.78rem;
+}
+
+.p-datepicker-panel.liga-datepicker-panel--compact .p-datepicker-buttonbar {
+  padding-top: 0.25rem;
+  margin-top: 0.15rem;
+}
+
+.p-datepicker-panel.liga-datepicker-panel--compact .p-datepicker-buttonbar .p-button {
+  font-size: 0.78rem;
+  padding: 0.25rem 0.45rem;
+}
+
+.liga-formulario-campo-label {
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  cursor: default;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.liga-formulario-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.75rem;
+  min-width: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.liga-formulario-checkbox-label > span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.liga-formulario-titulo,
+.liga-formulario-subtitulo {
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  cursor: default;
+}
+
+/**
+ * Exame/material — linha do interruptor “Ativa no catálogo” (número da revisão nas abas; MCP padroes/ui §3.7 / §4).
+ */
+.exame-material-versao-ativa-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+}
+
+.exame-material-versao-ativa-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+/* Orçamento — grid exame/material: sem rolagem horizontal; colunas de convênio com largura útil (não “1.73rem”). */
+.liga-orcamento-exames-table-outer {
+  min-width: 0;
+}
+
+.liga-orcamento-exames-grid.p-datatable {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.liga-orcamento-exames-grid.p-datatable > .p-datatable-wrapper {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.liga-orcamento-exames-grid .p-paginator {
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 0.35rem;
+  column-gap: 0.25rem;
+  min-width: 0;
+  max-width: 100%;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  box-sizing: border-box;
+}
+
+.liga-orcamento-exames-grid .p-datatable-table {
+  width: 100% !important;
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.liga-orcamento-exames-grid .p-datatable-tbody > tr > td,
+.liga-orcamento-exames-grid .p-datatable-thead > tr > th,
+.liga-orcamento-exames-grid .p-datatable-tfoot > tr > td {
+  vertical-align: middle;
+}
+
+.liga-orcamento-exames-grid .p-inputnumber,
+.liga-orcamento-exames-grid .p-inputnumber .p-inputnumber-input {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.liga-orcamento-exames-grid .p-inputtext {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+

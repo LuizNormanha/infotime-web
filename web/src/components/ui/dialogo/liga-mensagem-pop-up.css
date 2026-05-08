@@ -1,0 +1,34 @@
+.liga-mensagem-pop-up .p-dialog-header {
+  font-weight: 700;
+}
+
+.liga-mensagem-pop-up-texto {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--text-color);
+  /* Respeita `\n` nas mensagens i18n (parágrafos legíveis em vez de uma única linha longa). */
+  white-space: pre-line;
+  max-width: min(36rem, 100%);
+}
+
+.liga-mensagem-pop-up-rodape {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.liga-mensagem-pop-up-rodape .p-button {
+  width: auto !important;
+  flex: 0 0 auto !important;
+}
+
+.liga-mensagem-pop-up-botao-secundario {
+  color: var(--text-color);
+  min-width: 7.5rem;
+}
+
+.liga-mensagem-pop-up-botao-primario {
+  min-width: 7.5rem;
+}

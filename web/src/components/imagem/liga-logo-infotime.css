@@ -1,0 +1,19 @@
+.liga-logo-infotime {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.liga-logo-infotime-icone {
+  display: block;
+  flex-shrink: 0;
+}
+
+.liga-logo-infotime-texto {
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--liga-texto-principal);
+}

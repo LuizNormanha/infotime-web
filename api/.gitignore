@@ -1,0 +1,11 @@
+# Específico da API (o restante está na raiz do monorepo)
+
+.env
+.env.*
+!.env.example
+
+# Cliente Prisma gerado (schema prisma: output = ../generated/prisma-client)
+/generated/
+
+# Evita lockfile duplicado no pacote workspace (o oficial fica na raiz)
+package-lock.json

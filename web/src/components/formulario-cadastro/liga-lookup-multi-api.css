@@ -1,0 +1,77 @@
+/**
+ * MultiSelect de catálogo (critérios em definição de mapa): chips como item ativo
+ * da sidebar do formulário; painel e linhas do catálogo.
+ */
+.liga-lookup-multi-api-ms.p-multiselect.p-disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  background: color-mix(in srgb, var(--liga-moldura-interna) 42%, var(--liga-borda-suave));
+  border-color: color-mix(in srgb, var(--liga-borda-suave) 72%, transparent);
+}
+
+html:not([data-theme="dark"]) .liga-lookup-multi-api-ms.p-multiselect.p-disabled {
+  background: color-mix(in srgb, #e2e8f0 72%, var(--liga-moldura-interna));
+  border-color: color-mix(in srgb, #cbd5e1 55%, var(--liga-borda-suave));
+}
+
+html[data-theme="dark"] .liga-lookup-multi-api-ms.p-multiselect.p-disabled {
+  background: color-mix(in srgb, var(--liga-moldura-interna) 38%, var(--liga-borda-suave));
+  border-color: color-mix(in srgb, var(--liga-borda-suave) 85%, transparent);
+}
+
+.liga-lookup-multi-api-ms.p-multiselect.p-multiselect-chip .p-multiselect-token {
+  background: color-mix(in srgb, var(--liga-verde) 14%, var(--liga-moldura-externa));
+  border: 1px solid color-mix(in srgb, var(--liga-verde) 28%, var(--liga-borda-suave));
+  color: var(--liga-verde-escuro);
+  border-radius: 980px;
+  padding: 0.2rem 0.45rem;
+  gap: 0.25rem;
+}
+
+.liga-lookup-multi-api-ms.p-multiselect.p-multiselect-chip .p-multiselect-token-label {
+  color: inherit;
+  font-weight: 600;
+  font-size: 0.8125rem;
+}
+
+html[data-theme="dark"] .liga-lookup-multi-api-ms.p-multiselect.p-multiselect-chip .p-multiselect-token {
+  color: var(--liga-verde-link-claro);
+}
+
+.liga-lookup-multi-api-ms.p-multiselect.p-multiselect-chip .p-multiselect-token-icon {
+  color: var(--liga-texto-secundario);
+}
+
+.liga-lookup-multi-api-ms.p-multiselect.p-multiselect-chip .p-multiselect-token-icon:hover {
+  color: var(--liga-verde-escuro);
+}
+
+html[data-theme="dark"] .liga-lookup-multi-api-ms.p-multiselect.p-multiselect-chip .p-multiselect-token-icon {
+  color: color-mix(in srgb, var(--liga-verde-link-claro) 65%, transparent);
+}
+
+html[data-theme="dark"] .liga-lookup-multi-api-ms.p-multiselect.p-multiselect-chip .p-multiselect-token-icon:hover {
+  color: var(--liga-verde-link-claro);
+}
+
+.liga-lookup-multi-api-panel .p-multiselect-items .p-multiselect-item {
+  align-items: flex-start;
+}
+
+.liga-lookup-multi-api-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.liga-lookup-multi-api-item__titulo {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.liga-lookup-multi-api-item__meta {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+}

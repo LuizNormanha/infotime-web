@@ -1,0 +1,19 @@
+.liga-alternar-tema.p-button {
+  font-size: 0.8rem;
+  color: var(--liga-texto-secundario);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.liga-alternar-tema.p-button .p-button-icon,
+.liga-alternar-tema.p-button .p-button-label {
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  cursor: inherit;
+}
+
+.liga-alternar-tema.p-button:hover {
+  color: var(--liga-verde);
+}
