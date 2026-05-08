@@ -1,0 +1,13 @@
+{
+  "arquivos": [
+    "Rules-indice.md",
+    "forms/listagem/README.md",
+    "forms/formulario/README.md",
+    "forms/formulario/cartao-selecao.md",
+    "Rules-shell-paginas.md",
+    "Rules-formulario-sidebar.md",
+    "Rules-formulario-etapas.md",
+    "Rules-componentes-campos.md",
+    "Rules-mensagens-erros.md"
+  ]
+}

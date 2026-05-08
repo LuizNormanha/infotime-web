@@ -106,7 +106,7 @@ export class UsuarioService {
   private whereCampoPesquisa(
     campoPesquisa: string,
     qTexto: string,
-  ): Prisma.infolab_usuarioWhereInput {
+  ): Prisma.infotime_usuarioWhereInput {
     const q = qTexto.trim();
     if (campoPesquisa === 'nome') {
       return { nome: { contains: q, mode: 'insensitive' } };
@@ -142,10 +142,10 @@ export class UsuarioService {
 
   private whereFiltroRefinado(
     jsonBruto: string | undefined,
-  ): Prisma.infolab_usuarioWhereInput {
+  ): Prisma.infotime_usuarioWhereInput {
     const root = parseJsonFiltroRefinado(jsonBruto);
     const permitidos = new Set(['nome', 'login', 'email', 'ativo']);
-    const partes: Prisma.infolab_usuarioWhereInput[] = [];
+    const partes: Prisma.infotime_usuarioWhereInput[] = [];
 
     for (const [campo, valBruto] of Object.entries(root)) {
       if (!permitidos.has(campo)) continue;
@@ -199,7 +199,7 @@ export class UsuarioService {
     todos?: boolean,
     query?: QueryListagemCrudPadrao,
   ): Promise<{ dados: RespostaListagemUsuarioDto[]; total: number }> {
-    const baseWhere: Prisma.infolab_usuarioWhereInput = {
+    const baseWhere: Prisma.infotime_usuarioWhereInput = {
       id_tenacidade: tenantContexto.idTenacidade,
     };
 
@@ -209,7 +209,7 @@ export class UsuarioService {
       query,
       todos,
       takeLegadoSemTodos: 500,
-      delegate: this.prisma.infolab_usuario,
+      delegate: this.prisma.infotime_usuario,
       baseWhere,
       camposPesquisaWhitelist: UsuarioService.CAMPOS_PESQUISA,
       montarWhereCampoPesquisa: (campo, q) => this.whereCampoPesquisa(campo, q),
@@ -233,8 +233,8 @@ export class UsuarioService {
         };
       },
       findManyLegado: ({ where, orderBy, select: sel, take }) =>
-        this.prisma.infolab_usuario.findMany({
-          where: where as Prisma.infolab_usuarioWhereInput,
+        this.prisma.infotime_usuario.findMany({
+          where: where as Prisma.infotime_usuarioWhereInput,
           orderBy,
           select: sel as typeof select,
           ...(take != null ? { take } : {}),
@@ -246,7 +246,7 @@ export class UsuarioService {
     id: string,
     tenantContexto: TenantContexto,
   ): Promise<{ dados: RespostaUsuarioDto }> {
-    const registro = await this.prisma.infolab_usuario.findUnique({
+    const registro = await this.prisma.infotime_usuario.findUnique({
       where: { id_usuario: BigInt(id) },
       select: { ...selectResposta, id_tenacidade: true },
     });
@@ -280,7 +280,7 @@ export class UsuarioService {
     );
     const idUnidade = this.parseIdNumericoOpcional(dto.idUnidade);
     try {
-      const criado = await this.prisma.infolab_usuario.create({
+      const criado = await this.prisma.infotime_usuario.create({
         data: {
           id_tenacidade: tenantContexto.idTenacidade,
           id_usuario_auditoria: tenantContexto.idUsuario,
@@ -352,7 +352,7 @@ export class UsuarioService {
     tenantContexto: TenantContexto,
     ip: string,
   ): Promise<{ id: string }> {
-    const existente = await this.prisma.infolab_usuario.findUnique({
+    const existente = await this.prisma.infotime_usuario.findUnique({
       where: { id_usuario: BigInt(id) },
       select: { id_tenacidade: true },
     });
@@ -371,7 +371,7 @@ export class UsuarioService {
         ? this.parseIdNumericoOpcional(dto.idUnidade)
         : undefined;
     try {
-      await this.prisma.infolab_usuario.update({
+      await this.prisma.infotime_usuario.update({
         where: { id_usuario: BigInt(id) },
         data: {
           id_usuario_auditoria: tenantContexto.idUsuario,
@@ -500,7 +500,7 @@ export class UsuarioService {
       throw new BadRequestException(MENSAGEM_SENHA_USUARIO_POLITICA_FORTE);
     }
     const idAlvoBigInt = BigInt(idAlvo);
-    const usuarioAlvo = await this.prisma.infolab_usuario.findUnique({
+    const usuarioAlvo = await this.prisma.infotime_usuario.findUnique({
       where: { id_usuario: idAlvoBigInt },
       select: { id_usuario: true, id_tenacidade: true },
     });
@@ -511,7 +511,7 @@ export class UsuarioService {
       throw new NotFoundException(`Usuário ${idAlvo} não encontrado.`);
     }
 
-    const usuarioLogado = await this.prisma.infolab_usuario.findUnique({
+    const usuarioLogado = await this.prisma.infotime_usuario.findUnique({
       where: { id_usuario: tenantContexto.idUsuario },
       select: {
         id_usuario: true,
@@ -566,7 +566,7 @@ export class UsuarioService {
     }
 
     const hashNovaSenha = await bcrypt.hash(novaSenha, 10);
-    await this.prisma.infolab_usuario.update({
+    await this.prisma.infotime_usuario.update({
       where: { id_usuario: idAlvoBigInt },
       data: {
         senha: hashNovaSenha,
@@ -576,7 +576,7 @@ export class UsuarioService {
       },
     });
 
-    const usuarioAtualizado = await this.prisma.infolab_usuario.findUnique({
+    const usuarioAtualizado = await this.prisma.infotime_usuario.findUnique({
       where: { id_usuario: idAlvoBigInt },
       select: { senha: true },
     });
@@ -597,7 +597,7 @@ export class UsuarioService {
     id: string,
     tenantContexto: TenantContexto,
   ): Promise<{ ok: boolean }> {
-    const existente = await this.prisma.infolab_usuario.findUnique({
+    const existente = await this.prisma.infotime_usuario.findUnique({
       where: { id_usuario: BigInt(id) },
       select: { id_tenacidade: true },
     });
@@ -605,7 +605,7 @@ export class UsuarioService {
       throw new NotFoundException(`Usuário ${id} não encontrado.`);
     }
     try {
-      await this.prisma.infolab_usuario.delete({
+      await this.prisma.infotime_usuario.delete({
         where: { id_usuario: BigInt(id) },
       });
     } catch (e: unknown) {
@@ -633,7 +633,7 @@ export class UsuarioService {
     if (idGrupoUsuario === undefined) return undefined;
     const s = idGrupoUsuario.trim();
     if (s === '') return null;
-    const g = await this.prisma.infolab_grupo_usuario.findFirst({
+    const g = await this.prisma.infotime_grupo_usuario.findFirst({
       where: {
         id_grupo_usuario: BigInt(s),
         id_tenacidade: idTenacidade,
@@ -758,7 +758,7 @@ export class UsuarioService {
     idGrupoUsuario: bigint | null,
   ): Promise<boolean> {
     if (!idGrupoUsuario) return false;
-    const regra = await this.prisma.infolab_usuario_permissoes.findFirst({
+    const regra = await this.prisma.infotime_usuario_permissoes.findFirst({
       where: {
         id_grupo_usuario: idGrupoUsuario,
         administrador: 'S',

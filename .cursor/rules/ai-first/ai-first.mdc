@@ -1,0 +1,32 @@
+---
+description: "IA aplicada: ai/domains, endpoint /ai/generate e alinhamento com o código"
+alwaysApply: true
+---
+
+# IA aplicada e contexto por domínio
+
+## Fonte de verdade para documentação de domínio (Markdown)
+
+- **Principal:** `ai/domains/<dominio>/` com `Context.md`, `Rules.md`, `Schema.md`, `Examples.md`.
+- **Runbook:** `ai/README.md` (comandos, env vars, produção vs dev).
+- **Implementação:** `api/src/ai/` (`POST /ai/generate` lê `Rules.md` do disco + modelo de chat OpenAI).
+
+## Prioridade ao implementar ou sugerir código
+
+1. **Código executável** (`api/`, `web/`), **DTOs**, **RLS/tenant** e **schema Prisma** versionado — isso define o que o sistema **faz**.
+2. **`ai/domains`** — regras e contexto para **humanos e IA** (IDE com `@` ou endpoint `generate`).
+3. **Suposições** — por último; quando faltar especificação, preferir perguntar.
+
+## Segurança nos prompts
+
+- Conteúdo em `ai/domains` deve ser **genérico de domínio**: sem dados reais de clientes, sem credenciais, sem identificadores de tenant no texto de exemplo.
+- O **tenant do JWT** não deve ser enviado aos prompts da OpenAI como contexto de negócio (o fluxo atual já separa isso).
+
+## "Agentes" no repositório
+
+- Em `api/src/ai/agents/` as classes **não** orquestram um multiagente autônomo; injetam **instruções de stack** (Nest vs Next) no `PromptBuilderService`. Evoluir para agentes reais é mudança de produto explícita.
+
+## Referências cruzadas
+
+- Use sempre caminhos **`ai/domains/<tema>/`** nos Markdown de domínio; evite menções à pasta antiga `mcp/`.
+- Domínios padrão do template: **`tenacidade`** e **`usuario`** (use estes ao precisar citar um domínio como exemplo neste repositório).

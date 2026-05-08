@@ -1,0 +1,31 @@
+---
+description: "Regras backend NestJS (API, Prisma, multi-tenant, RLS)"
+globs: ["api/**/*"]
+alwaysApply: true
+---
+
+# Backend (NestJS)
+
+- **Stack:** NestJS + TypeScript em `api/`.
+- Separar **controller → service**; não acessar Prisma diretamente no controller.
+- Entrada HTTP tipada com **DTOs** em pasta `dto/`, com `class-validator` / `class-transformer` conforme o projeto.
+- O **ValidationPipe** global valida e transforma o body; campos de escopo de tenant **não** devem ser aceitos do cliente quando o contrato for "tenant vem da sessão/JWT".
+- Onde o código já usa **`@TenantAtual()`**, **`@UsuarioAtual()`** e **`TenantContexto`**, seguir o mesmo padrão no escopo da tenacidade.
+- Respostas e erros: respeitar filtros e fábricas de exceção já usados na API (validação, Prisma, etc.).
+
+## Multi-tenant
+
+- Escopo por **tenacidade**; sessão Postgres com `app.current_tenant_id` (**RLS**), middleware e extensão Prisma na API — não depender só de filtros manuais esquecidos no código.
+- Nunca confiar em tenant vindo do body; usar contexto (TenantContexto, decorators) e respeitar RLS.
+
+## Prisma / dados
+
+- **Dados:** Prisma + PostgreSQL; usar o **cliente Prisma** configurado no projeto.
+- Nomes de modelo/coluna seguem o **schema** versionado (`api/prisma/schema.prisma`); o nome físico das tabelas vem do `@@map` (ex.: `tenacidade`, `usuario`). Vínculo com tenant em geral via **`id_tenacidade`** — não assumir `tenant_id` genérico sem olhar o modelo.
+- Em requisições autenticadas com tenant, confiar em **RLS + cliente Prisma estendido** em `api/src/prisma/`; em transações interativas, seguir padrões já documentados no código (ex.: storage de RLS em transação).
+- **Migrations e alterações de schema:** não adicionar colunas, índices, FKs ou novas tabelas **sem confirmação humana explícita** de que o modelo físico está correto (ver também regra global em `.cursor/rules/global/global.mdc`). Preferir alinhar FK/cardinalidade ao desenho já usado no banco (ex.: vínculo no pai vs. no filho) em vez de inventar colunas.
+
+## IA (`api/src/ai`)
+
+- Módulo **`AiModule`**: `POST /ai/generate` (lê `Rules.md` de `ai/domains` no disco + modelo de chat OpenAI). Ver **`ai/README.md`**.
+- Novos endpoints de domínio de negócio seguem o padrão controller → service → Prisma; a pasta `api/src/ai/` é **transversal** (assistência), não substitui módulos de negócio.

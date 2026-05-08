@@ -20,7 +20,7 @@ export type TenantLoginAtivo = {
   id_tenacidade: bigint;
   chave_jwt: string | null;
   data_expiracao: Date | null;
-  infolab_tenacidade_configuracao: {
+  infotime_tenacidade_configuracao: {
     timeout_sessao_minutos: number | null;
     quantidade_licenca: number | null;
   }[];
@@ -44,15 +44,13 @@ function eAusenciaFuncaoTenantDominio(e: unknown): boolean {
     const msg = meta?.message ?? '';
     return (
       msg.includes('42883') &&
-      (msg.includes('infotime_tenant_ativo_por_dominio') ||
-        msg.includes('infolab_tenant_ativo_por_dominio'))
+      msg.includes('tenant_ativo_por_dominio')
     );
   }
   if (e instanceof Prisma.PrismaClientUnknownRequestError) {
     return (
       e.message.includes('42883') &&
-      (e.message.includes('infotime_tenant_ativo_por_dominio') ||
-        e.message.includes('infolab_tenant_ativo_por_dominio'))
+      e.message.includes('tenant_ativo_por_dominio')
     );
   }
   return false;
@@ -139,7 +137,7 @@ export async function resolverTenantAtivoPorDominio(
     id_tenacidade: row.id_tenacidade,
     chave_jwt: row.chave_jwt,
     data_expiracao: row.data_expiracao,
-    infolab_tenacidade_configuracao: [
+    infotime_tenacidade_configuracao: [
       {
         timeout_sessao_minutos: row.timeout_sessao_minutos,
         quantidade_licenca: row.quantidade_licenca,

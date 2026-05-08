@@ -15,11 +15,11 @@ async function garantirUsuarioTecnicoGlobal(
   nome: string,
   hashPlaceholder: string,
 ) {
-  const existente = await db.infolab_usuario.findFirst({
+  const existente = await db.infotime_usuario.findFirst({
     where: { login, id_tenacidade: null },
   });
   if (existente) {
-    await db.infolab_usuario.update({
+    await db.infotime_usuario.update({
       where: { id_usuario: existente.id_usuario },
       data: {
         nome,
@@ -29,7 +29,7 @@ async function garantirUsuarioTecnicoGlobal(
     });
     return;
   }
-  await db.infolab_usuario.create({
+  await db.infotime_usuario.create({
     data: {
       login,
       nome,
@@ -47,12 +47,12 @@ async function garantirGrupoPerfil(
   descricao: string,
   idUsuarioAuditoria?: bigint,
 ) {
-  const existente = await db.infolab_grupo_usuario.findFirst({
+  const existente = await db.infotime_grupo_usuario.findFirst({
     where: { id_tenacidade: idTenacidade, descricao },
     select: { id_grupo_usuario: true },
   });
   if (existente) return existente.id_grupo_usuario;
-  const criado = await db.infolab_grupo_usuario.create({
+  const criado = await db.infotime_grupo_usuario.create({
     data: {
       id_tenacidade: idTenacidade,
       descricao,
@@ -71,17 +71,17 @@ async function main() {
     const NOME_FANTASIA = 'InfoTIME';
     const CHAVE_JWT = 'chave-jwt-local-liga-br';
 
-    const existente = await tx.infolab_tenacidade_configuracao.findFirst({
+    const existente = await tx.infotime_tenacidade_configuracao.findFirst({
       where: { dominio_tenacidade: 'liga.br' },
       select: { id_tenacidade: true },
     });
 
     if (existente) {
-      await tx.infolab_tenacidade.update({
+      await tx.infotime_tenacidade.update({
         where: { id_tenacidade: existente.id_tenacidade },
         data: { ativo: 'S' },
       });
-      await tx.infolab_tenacidade_configuracao.update({
+      await tx.infotime_tenacidade_configuracao.update({
         where: { dominio_tenacidade: 'liga.br' },
         data: {
           razao_social: RAZAO_SOCIAL,
@@ -92,11 +92,11 @@ async function main() {
       return { id_tenacidade: existente.id_tenacidade };
     }
 
-    const nova = await tx.infolab_tenacidade.create({
+    const nova = await tx.infotime_tenacidade.create({
       data: { ativo: 'S' },
       select: { id_tenacidade: true },
     });
-    await tx.infolab_tenacidade_configuracao.create({
+    await tx.infotime_tenacidade_configuracao.create({
       data: {
         id_tenacidade: nova.id_tenacidade,
         razao_social: RAZAO_SOCIAL,
@@ -115,7 +115,7 @@ async function main() {
   );
 
   for (const f of FORMULARIOS) {
-    await prisma.infolab_formulario.upsert({
+    await prisma.infotime_formulario.upsert({
       where: { codigo: f.codigo },
       update: { descricao: f.descricao, ordem: f.ordem, ativo: true },
       create: {
@@ -129,18 +129,18 @@ async function main() {
   }
   await prisma.$executeRaw`
     SELECT setval(
-      pg_get_serial_sequence('infolab_formulario', 'id_formulario'),
-      COALESCE((SELECT MAX(id_formulario) FROM infolab_formulario), 1)
+      pg_get_serial_sequence('formulario', 'id_formulario'),
+      COALESCE((SELECT MAX(id_formulario) FROM formulario), 1)
     )
   `;
   console.log(
-    `infolab_formulario: ${FORMULARIOS.length} entradas (upsert, ids fixos no create).`,
+    `formulario: ${FORMULARIOS.length} entradas (upsert, ids fixos no create).`,
   );
 
   await prisma.$transaction(async (tx) => {
     await setCurrentTenantLocal(tx, tenacidade.id_tenacidade);
 
-    const grupoAdminExistente = await tx.infolab_grupo_usuario.findFirst({
+    const grupoAdminExistente = await tx.infotime_grupo_usuario.findFirst({
       where: {
         id_tenacidade: tenacidade.id_tenacidade,
         descricao: 'Perfil técnico administrativo',
@@ -148,7 +148,7 @@ async function main() {
       select: { id_grupo_usuario: true },
     });
     const grupoAdminTecnico = grupoAdminExistente
-      ? await tx.infolab_grupo_usuario.update({
+      ? await tx.infotime_grupo_usuario.update({
           where: { id_grupo_usuario: grupoAdminExistente.id_grupo_usuario },
           data: {
             acessa_auditoria: 'S',
@@ -156,7 +156,7 @@ async function main() {
           },
           select: { id_grupo_usuario: true },
         })
-      : await tx.infolab_grupo_usuario.create({
+      : await tx.infotime_grupo_usuario.create({
           data: {
             id_tenacidade: tenacidade.id_tenacidade,
             descricao: 'Perfil técnico administrativo',
@@ -181,12 +181,12 @@ async function main() {
       tenacidade.id_tenacidade,
       'Modelo LIGA - Coletor',
     );
-    const formularioMenu = await tx.infolab_formulario.findUnique({
+    const formularioMenu = await tx.infotime_formulario.findUnique({
       where: { codigo: 'menu' },
       select: { id_formulario: true },
     });
     if (formularioMenu) {
-      await tx.infolab_usuario_permissoes.upsert({
+      await tx.infotime_usuario_permissoes.upsert({
         where: {
           id_grupo_usuario_id_formulario: {
             id_grupo_usuario: grupoAdminTecnico.id_grupo_usuario,
@@ -224,7 +224,7 @@ async function main() {
       const menuAtendente = ['dashboard', 'solucoes', 'cadastros-clientes', 'ajuda'];
       const menuColetor = ['dashboard', 'solucoes', 'ajuda'];
       const upsertMenu = async (idGrupo: bigint, menu: unknown) => {
-        await tx.infolab_layout_formulario.upsert({
+        await tx.infotime_layout_formulario.upsert({
           where: {
             id_grupo_usuario_id_formulario: {
               id_grupo_usuario: idGrupo,

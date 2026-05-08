@@ -20,7 +20,7 @@ export class LayoutService {
 
   /** Lista entradas do catálogo (seed) — útil para telas de configuração. */
   listarCatalogoFormularios() {
-    return this.prisma.infolab_formulario.findMany({
+    return this.prisma.infotime_formulario.findMany({
       where: { ativo: true },
       orderBy: { ordem: 'asc' },
       select: {
@@ -34,7 +34,7 @@ export class LayoutService {
 
   /** Grupos de usuário (perfil) do tenant — para cadastro de layout. */
   listarGruposPerfilTenant(idTenacidade: bigint) {
-    return this.prisma.infolab_grupo_usuario.findMany({
+    return this.prisma.infotime_grupo_usuario.findMany({
       where: { id_tenacidade: idTenacidade },
       orderBy: { id_grupo_usuario: 'asc' },
       select: {
@@ -46,15 +46,15 @@ export class LayoutService {
 
   /** Layouts já gravados (por perfil + formulário). */
   async listarPersonalizacoesLayout(idTenacidade: bigint) {
-    const rows = await this.prisma.infolab_layout_formulario.findMany({
+    const rows = await this.prisma.infotime_layout_formulario.findMany({
       where: {
-        infolab_grupo_usuario: { id_tenacidade: idTenacidade },
+        infotime_grupo_usuario: { id_tenacidade: idTenacidade },
       },
       select: {
         id_layout_formulario: true,
         id_grupo_usuario: true,
-        infolab_grupo_usuario: { select: { descricao: true } },
-        infolab_formulario: {
+        infotime_grupo_usuario: { select: { descricao: true } },
+        infotime_formulario: {
           select: { codigo: true, descricao: true, ordem: true },
         },
       },
@@ -63,13 +63,13 @@ export class LayoutService {
       const g = Number(a.id_grupo_usuario - b.id_grupo_usuario);
       if (g !== 0) return g;
       return (
-        (a.infolab_formulario.ordem ?? 0) - (b.infolab_formulario.ordem ?? 0)
+        (a.infotime_formulario.ordem ?? 0) - (b.infotime_formulario.ordem ?? 0)
       );
     });
   }
 
   private async idFormularioPorCodigo(codigo: string): Promise<bigint | null> {
-    const row = await this.prisma.infolab_formulario.findUnique({
+    const row = await this.prisma.infotime_formulario.findUnique({
       where: { codigo },
       select: { id_formulario: true },
     });
@@ -83,7 +83,7 @@ export class LayoutService {
   private async buscarGrupoDoUsuarioLogado(
     ctx: TenantContexto,
   ): Promise<bigint | null> {
-    const u = await this.prisma.infolab_usuario.findFirst({
+    const u = await this.prisma.infotime_usuario.findFirst({
       where: {
         id_usuario: ctx.idUsuario,
         OR: [
@@ -105,7 +105,7 @@ export class LayoutService {
     idGrupoSolicitado?: bigint | null,
   ): Promise<bigint | null> {
     if (idGrupoSolicitado != null) {
-      const g = await this.prisma.infolab_grupo_usuario.findFirst({
+      const g = await this.prisma.infotime_grupo_usuario.findFirst({
         where: {
           id_grupo_usuario: idGrupoSolicitado,
           id_tenacidade: ctx.idTenacidade,
@@ -156,7 +156,7 @@ export class LayoutService {
       return { secoes: [] };
     }
 
-    const row = await this.prisma.infolab_layout_formulario.findUnique({
+    const row = await this.prisma.infotime_layout_formulario.findUnique({
       where: {
         id_grupo_usuario_id_formulario: {
           id_grupo_usuario: idGrupo,
@@ -191,7 +191,7 @@ export class LayoutService {
       idGrupoUsuarioOpcional,
     );
 
-    await this.prisma.infolab_layout_formulario.upsert({
+    await this.prisma.infotime_layout_formulario.upsert({
       where: {
         id_grupo_usuario_id_formulario: {
           id_grupo_usuario: idGrupo,
@@ -224,7 +224,7 @@ export class LayoutService {
       return null;
     }
 
-    const row = await this.prisma.infolab_layout_formulario.findUnique({
+    const row = await this.prisma.infotime_layout_formulario.findUnique({
       where: {
         id_grupo_usuario_id_formulario: {
           id_grupo_usuario: idGrupo,
@@ -254,7 +254,7 @@ export class LayoutService {
       idGrupoUsuarioOpcional,
     );
 
-    await this.prisma.infolab_layout_formulario.upsert({
+    await this.prisma.infotime_layout_formulario.upsert({
       where: {
         id_grupo_usuario_id_formulario: {
           id_grupo_usuario: idGrupo,

@@ -34,14 +34,14 @@ function makeService() {
   const prisma = {
     $transaction: jest.fn(),
     $queryRaw: jest.fn(),
-    infolab_tenacidade: { findFirst: jest.fn() },
-    infolab_usuario: { findFirst: jest.fn(), update: jest.fn() },
-    infolab_sessao_usuario: {
+    infotime_tenacidade: { findFirst: jest.fn() },
+    infotime_usuario: { findFirst: jest.fn(), update: jest.fn() },
+    infotime_sessao_usuario: {
       findFirst: jest.fn(),
       create: jest.fn(),
       updateMany: jest.fn(),
     },
-    infolab_sessao_suporte: { create: jest.fn(), updateMany: jest.fn() },
+    infotime_sessao_suporte: { create: jest.fn(), updateMany: jest.fn() },
   } as unknown as PrismaService;
 
   const jwt = {
@@ -146,30 +146,30 @@ describe('ServicoAutenticacao — login (roteamento)', () => {
 describe('ServicoAutenticacao — logout', () => {
   it('chama updateMany em sessao_usuario para usuário normal', async () => {
     const { service, prisma } = makeService();
-    (prisma.infolab_sessao_usuario.updateMany as jest.Mock).mockResolvedValue({
+    (prisma.infotime_sessao_usuario.updateMany as jest.Mock).mockResolvedValue({
       count: 1,
     });
 
     await service.logout('jti-123', false);
 
-    expect(prisma.infolab_sessao_usuario.updateMany).toHaveBeenCalledWith(
+    expect(prisma.infotime_sessao_usuario.updateMany).toHaveBeenCalledWith(
       expect.objectContaining({ where: { token_id: 'jti-123' } }),
     );
-    expect(prisma.infolab_sessao_suporte.updateMany).not.toHaveBeenCalled();
+    expect(prisma.infotime_sessao_suporte.updateMany).not.toHaveBeenCalled();
   });
 
   it('chama updateMany em sessao_suporte para usuário suporte', async () => {
     const { service, prisma } = makeService();
-    (prisma.infolab_sessao_suporte.updateMany as jest.Mock).mockResolvedValue({
+    (prisma.infotime_sessao_suporte.updateMany as jest.Mock).mockResolvedValue({
       count: 1,
     });
 
     await service.logout('jti-456', true);
 
-    expect(prisma.infolab_sessao_suporte.updateMany).toHaveBeenCalledWith(
+    expect(prisma.infotime_sessao_suporte.updateMany).toHaveBeenCalledWith(
       expect.objectContaining({ where: { token_id: 'jti-456' } }),
     );
-    expect(prisma.infolab_sessao_usuario.updateMany).not.toHaveBeenCalled();
+    expect(prisma.infotime_sessao_usuario.updateMany).not.toHaveBeenCalled();
   });
 });
 
@@ -178,7 +178,7 @@ describe('ServicoAutenticacao — logout', () => {
 describe('ServicoAutenticacao — registrarAcessoSuporte', () => {
   it('chama updateMany com jti e dados corretos', async () => {
     const { service, prisma } = makeService();
-    (prisma.infolab_sessao_suporte.updateMany as jest.Mock).mockResolvedValue({
+    (prisma.infotime_sessao_suporte.updateMany as jest.Mock).mockResolvedValue({
       count: 1,
     });
 
@@ -187,7 +187,7 @@ describe('ServicoAutenticacao — registrarAcessoSuporte', () => {
       motivo_acesso: 'Suporte técnico',
     });
 
-    expect(prisma.infolab_sessao_suporte.updateMany).toHaveBeenCalledWith({
+    expect(prisma.infotime_sessao_suporte.updateMany).toHaveBeenCalledWith({
       where: { token_id: 'jti-789' },
       data: { numero_chamado: 'INC-001', motivo_acesso: 'Suporte técnico' },
     });
@@ -195,13 +195,13 @@ describe('ServicoAutenticacao — registrarAcessoSuporte', () => {
 
   it('aceita numero_chamado e motivo_acesso nulos', async () => {
     const { service, prisma } = makeService();
-    (prisma.infolab_sessao_suporte.updateMany as jest.Mock).mockResolvedValue({
+    (prisma.infotime_sessao_suporte.updateMany as jest.Mock).mockResolvedValue({
       count: 1,
     });
 
     await service.registrarAcessoSuporte('jti-000', {});
 
-    expect(prisma.infolab_sessao_suporte.updateMany).toHaveBeenCalledWith({
+    expect(prisma.infotime_sessao_suporte.updateMany).toHaveBeenCalledWith({
       where: { token_id: 'jti-000' },
       data: { numero_chamado: null, motivo_acesso: null },
     });

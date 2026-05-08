@@ -45,7 +45,7 @@ export class GrupoPerfilService {
   private whereCampoPesquisaGrupoPerfil(
     campoPesquisa: string,
     qTexto: string,
-  ): Prisma.infolab_grupo_usuarioWhereInput {
+  ): Prisma.infotime_grupo_usuarioWhereInput {
     if (campoPesquisa === 'descricao') {
       return {
         descricao: { contains: qTexto, mode: 'insensitive' },
@@ -63,10 +63,10 @@ export class GrupoPerfilService {
 
   private whereFiltroRefinadoGrupoPerfil(
     jsonBruto: string | undefined,
-  ): Prisma.infolab_grupo_usuarioWhereInput {
+  ): Prisma.infotime_grupo_usuarioWhereInput {
     const root = parseJsonFiltroRefinado(jsonBruto);
     const permitidos = new Set(['descricao']);
-    const partes: Prisma.infolab_grupo_usuarioWhereInput[] = [];
+    const partes: Prisma.infotime_grupo_usuarioWhereInput[] = [];
 
     for (const [campo, valBruto] of Object.entries(root)) {
       if (!permitidos.has(campo)) continue;
@@ -102,7 +102,7 @@ export class GrupoPerfilService {
   private async idFormularioMenu(
     tx: Prisma.TransactionClient | PrismaService,
   ): Promise<bigint | null> {
-    const f = await tx.infolab_formulario.findUnique({
+    const f = await tx.infotime_formulario.findUnique({
       where: { codigo: FORM_CODIGO_MENU },
       select: { id_formulario: true },
     });
@@ -115,7 +115,7 @@ export class GrupoPerfilService {
   ): Promise<unknown> {
     const idFormMenu = await this.idFormularioMenu(tx);
     if (!idFormMenu) return null;
-    const row = await tx.infolab_layout_formulario.findUnique({
+    const row = await tx.infotime_layout_formulario.findUnique({
       where: {
         id_grupo_usuario_id_formulario: {
           id_grupo_usuario: idGrupo,
@@ -139,7 +139,7 @@ export class GrupoPerfilService {
       throw new NotFoundException('Formulário "menu" não encontrado no catálogo.');
     }
     const json = serializarConfiguracaoMenu(menu);
-    await tx.infolab_layout_formulario.upsert({
+    await tx.infotime_layout_formulario.upsert({
       where: {
         id_grupo_usuario_id_formulario: {
           id_grupo_usuario: idGrupo,
@@ -164,7 +164,7 @@ export class GrupoPerfilService {
     tenantContexto: TenantContexto,
     ip: string,
   ): Promise<void> {
-    const origem = await tx.infolab_grupo_usuario.findFirst({
+    const origem = await tx.infotime_grupo_usuario.findFirst({
       where: {
         id_grupo_usuario: idGrupoOrigem,
         id_tenacidade: tenantContexto.idTenacidade,
@@ -175,11 +175,11 @@ export class GrupoPerfilService {
       throw new NotFoundException('Grupo de origem para clone não encontrado.');
     }
 
-    const regras = await tx.infolab_usuario_permissoes.findMany({
+    const regras = await tx.infotime_usuario_permissoes.findMany({
       where: { id_grupo_usuario: idGrupoOrigem },
     });
     for (const r of regras) {
-      await tx.infolab_usuario_permissoes.create({
+      await tx.infotime_usuario_permissoes.create({
         data: {
           id_grupo_usuario: idGrupoDestino,
           id_formulario: r.id_formulario,
@@ -205,7 +205,7 @@ export class GrupoPerfilService {
     todos?: boolean,
     query?: QueryListagemCrudPadrao,
   ): Promise<{ dados: RespostaListagemGrupoPerfilDto[]; total: number }> {
-    const baseWhere: Prisma.infolab_grupo_usuarioWhereInput = {
+    const baseWhere: Prisma.infotime_grupo_usuarioWhereInput = {
       id_tenacidade: tenantContexto.idTenacidade,
     };
 
@@ -218,7 +218,7 @@ export class GrupoPerfilService {
       query,
       todos,
       takeLegadoSemTodos: 50,
-      delegate: this.prisma.infolab_grupo_usuario,
+      delegate: this.prisma.infotime_grupo_usuario,
       baseWhere,
       camposPesquisaWhitelist: GrupoPerfilService.CAMPOS_PESQUISA,
       montarWhereCampoPesquisa: (campo, q) =>
@@ -234,8 +234,8 @@ export class GrupoPerfilService {
         };
       },
       findManyLegado: ({ where, orderBy, select: sel, take }) =>
-        this.prisma.infolab_grupo_usuario.findMany({
-          where: where as Prisma.infolab_grupo_usuarioWhereInput,
+        this.prisma.infotime_grupo_usuario.findMany({
+          where: where as Prisma.infotime_grupo_usuarioWhereInput,
           orderBy,
           select: sel as typeof select,
           ...(take != null ? { take } : {}),
@@ -247,13 +247,13 @@ export class GrupoPerfilService {
     id: string,
     tenantContexto: TenantContexto,
   ): Promise<{ dados: RespostaGrupoPerfilDto }> {
-    const registro = await this.prisma.infolab_grupo_usuario.findUnique({
+    const registro = await this.prisma.infotime_grupo_usuario.findUnique({
       where: { id_grupo_usuario: BigInt(id) },
       include: {
-        infolab_tenacidade: {
+        infotime_tenacidade: {
           select: {
             id_tenacidade: true,
-            infolab_tenacidade_configuracao: {
+            infotime_tenacidade_configuracao: {
               orderBy: { id_tenacidade_configuracao: 'asc' },
               take: 5,
               select: {
@@ -269,12 +269,12 @@ export class GrupoPerfilService {
     if (!registro || registro.id_tenacidade !== tenantContexto.idTenacidade) {
       throw new NotFoundException(`Grupo de usuário ${id} não encontrado.`);
     }
-    const permissoes = await this.prisma.infolab_usuario_permissoes.findMany({
+    const permissoes = await this.prisma.infotime_usuario_permissoes.findMany({
       where: { id_grupo_usuario: BigInt(id) },
       orderBy: { id_usuario_permissao: 'desc' },
       include: {
-        infolab_grupo_usuario: { select: { descricao: true } },
-        infolab_formulario: { select: { codigo: true, descricao: true } },
+        infotime_grupo_usuario: { select: { descricao: true } },
+        infotime_formulario: { select: { codigo: true, descricao: true } },
       },
     });
     const dadosPerm: RespostaListagemUsuarioPermissaoDto[] = permissoes.map(
@@ -282,17 +282,17 @@ export class GrupoPerfilService {
         id: r.id_usuario_permissao.toString(),
         idGrupoUsuario: r.id_grupo_usuario.toString(),
         idFormulario: r.id_formulario.toString(),
-        grupoUsuarioDescricao: r.infolab_grupo_usuario.descricao ?? null,
-        formularioCodigo: r.infolab_formulario.codigo,
-        formularioDescricao: r.infolab_formulario.descricao ?? null,
+        grupoUsuarioDescricao: r.infotime_grupo_usuario.descricao ?? null,
+        formularioCodigo: r.infotime_formulario.codigo,
+        formularioDescricao: r.infotime_formulario.descricao ?? null,
         administrador: snParaBool(r.administrador),
         incluir: snParaBool(r.incluir),
         editar: snParaBool(r.editar),
         excluir: snParaBool(r.excluir),
       }),
     );
-    const ten = registro.infolab_tenacidade;
-    const cfgs = ten?.infolab_tenacidade_configuracao ?? [];
+    const ten = registro.infotime_tenacidade;
+    const cfgs = ten?.infotime_tenacidade_configuracao ?? [];
     const cfg =
       cfgs.find((c) => (c.dominio_tenacidade ?? "").trim()) ?? cfgs[0];
     const nomeTen =
@@ -322,7 +322,7 @@ export class GrupoPerfilService {
   ): Promise<{ id: string }> {
     try {
       const id = await this.prisma.$transaction(async (tx) => {
-        const criado = await tx.infolab_grupo_usuario.create({
+        const criado = await tx.infotime_grupo_usuario.create({
           data: {
             id_tenacidade: tenantContexto.idTenacidade,
             id_usuario_auditoria: tenantContexto.idUsuario,
@@ -345,7 +345,7 @@ export class GrupoPerfilService {
         if (dto.permissoes?.length) {
           for (const p of dto.permissoes) {
             await this.validarFormulario(tx, p.idFormulario);
-            await tx.infolab_usuario_permissoes.create({
+            await tx.infotime_usuario_permissoes.create({
               data: {
                 id_grupo_usuario: idGrupo,
                 id_formulario: BigInt(p.idFormulario),
@@ -385,7 +385,7 @@ export class GrupoPerfilService {
     tenantContexto: TenantContexto,
     ip: string,
   ): Promise<{ id: string }> {
-    const existente = await this.prisma.infolab_grupo_usuario.findUnique({
+    const existente = await this.prisma.infotime_grupo_usuario.findUnique({
       where: { id_grupo_usuario: BigInt(id) },
       select: { id_tenacidade: true },
     });
@@ -395,7 +395,7 @@ export class GrupoPerfilService {
 
     try {
       await this.prisma.$transaction(async (tx) => {
-        await tx.infolab_grupo_usuario.update({
+        await tx.infotime_grupo_usuario.update({
           where: { id_grupo_usuario: BigInt(id) },
           data: {
             id_usuario_auditoria: tenantContexto.idUsuario,
@@ -436,7 +436,7 @@ export class GrupoPerfilService {
     tx: Prisma.TransactionClient,
     idFormulario: string,
   ): Promise<void> {
-    const f = await tx.infolab_formulario.findUnique({
+    const f = await tx.infotime_formulario.findUnique({
       where: { id_formulario: BigInt(idFormulario) },
       select: { id_formulario: true },
     });
@@ -452,7 +452,7 @@ export class GrupoPerfilService {
     tenantContexto: TenantContexto,
     ip: string,
   ): Promise<void> {
-    const existentes = await tx.infolab_usuario_permissoes.findMany({
+    const existentes = await tx.infotime_usuario_permissoes.findMany({
       where: { id_grupo_usuario: idGrupoUsuario },
       select: { id_usuario_permissao: true },
     });
@@ -463,7 +463,7 @@ export class GrupoPerfilService {
     );
     for (const e of existentes) {
       if (!idsMantidos.has(e.id_usuario_permissao)) {
-        await tx.infolab_usuario_permissoes.delete({
+        await tx.infotime_usuario_permissoes.delete({
           where: { id_usuario_permissao: e.id_usuario_permissao },
         });
       }
@@ -471,25 +471,25 @@ export class GrupoPerfilService {
     for (const p of linhas) {
       await this.validarFormulario(tx, p.idFormulario);
       if (p.id != null && p.id !== '') {
-        const atual = await tx.infolab_usuario_permissoes.findFirst({
+        const atual = await tx.infotime_usuario_permissoes.findFirst({
           where: {
             id_usuario_permissao: BigInt(p.id),
             id_grupo_usuario: idGrupoUsuario,
           },
           include: {
-            infolab_grupo_usuario: { select: { id_tenacidade: true } },
+            infotime_grupo_usuario: { select: { id_tenacidade: true } },
           },
         });
         if (
           !atual ||
-          atual.infolab_grupo_usuario.id_tenacidade !==
+          atual.infotime_grupo_usuario.id_tenacidade !==
             tenantContexto.idTenacidade
         ) {
           throw new NotFoundException(
             `Permissão ${p.id} não encontrada para este grupo.`,
           );
         }
-        await tx.infolab_usuario_permissoes.update({
+        await tx.infotime_usuario_permissoes.update({
           where: { id_usuario_permissao: BigInt(p.id) },
           data: {
             id_usuario_auditoria: tenantContexto.idUsuario,
@@ -503,7 +503,7 @@ export class GrupoPerfilService {
           },
         });
       } else {
-        await tx.infolab_usuario_permissoes.create({
+        await tx.infotime_usuario_permissoes.create({
           data: {
             id_grupo_usuario: idGrupoUsuario,
             id_formulario: BigInt(p.idFormulario),
@@ -524,7 +524,7 @@ export class GrupoPerfilService {
     id: string,
     tenantContexto: TenantContexto,
   ): Promise<{ ok: boolean }> {
-    const existente = await this.prisma.infolab_grupo_usuario.findUnique({
+    const existente = await this.prisma.infotime_grupo_usuario.findUnique({
       where: { id_grupo_usuario: BigInt(id) },
       select: { id_tenacidade: true },
     });
@@ -532,7 +532,7 @@ export class GrupoPerfilService {
       throw new NotFoundException(`Grupo de usuário ${id} não encontrado.`);
     }
     try {
-      await this.prisma.infolab_grupo_usuario.delete({
+      await this.prisma.infotime_grupo_usuario.delete({
         where: { id_grupo_usuario: BigInt(id) },
       });
     } catch (e: unknown) {

@@ -24,8 +24,8 @@ datasource db {
 }
 
 /// Tabela física `tenacidade` — no `liga_infotime` (ERP) inclui razão social, chave de acesso e expiração na própria linha.
-/// Layout laboratório/LIS pode usar ainda `tenacidade_configuracao` (`infolab_tenacidade_configuracao`) para domínio/JWT.
-model infolab_tenacidade {
+/// Layout laboratório/LIS pode usar ainda `tenacidade_configuracao` (`infotime_tenacidade_configuracao`) para domínio/JWT.
+model infotime_tenacidade {
   id_tenacidade             BigInt    @id @default(autoincrement())
   id_usuario_auditoria      BigInt?
   razao_social              String?   @db.VarChar(255)
@@ -36,48 +36,48 @@ model infolab_tenacidade {
   ativo                     String?   @db.Char(1)
   endereco_ip_auditoria     String?   @db.VarChar(50)
   nome_aplicacao_auditoria  String?   @db.VarChar(255)
-  infolab_cliente                                                          infolab_cliente[]
-  infolab_cliente_indicacao                                                infolab_cliente_indicacao[]
-  infolab_convenio                                                         infolab_convenio[]
-  infolab_convenio_autorizador                                             infolab_convenio_autorizador[]
-  infolab_convenio_contato                                                 infolab_convenio_contato[]
-  infolab_convenio_email                                                   infolab_convenio_email[]
-  infolab_convenio_equivalencia                                            infolab_convenio_equivalencia[]
-  infolab_convenio_plano                                                   infolab_convenio_plano[]
-  infolab_convenio_tiss                                                    infolab_convenio_tiss[]
-  infolab_fatura                                                           infolab_fatura[]
-  infolab_fatura_item                                                      infolab_fatura_item[]
-  infolab_feriado                                                          infolab_feriado[]
-  infolab_grupo                                                            infolab_grupo[]
-  infolab_grupo_cliente                                                    infolab_grupo_cliente[]
-  infolab_grupo_usuario                                                    infolab_grupo_usuario[]
-  infolab_indicacao                                                        infolab_indicacao[]
-  infolab_medicamento                                                      infolab_medicamento[]
-  infolab_medico                                                           infolab_medico[]
-  infolab_medico_credencial_convenio                                       infolab_medico_credencial_convenio[]
-  infolab_motivo_cancelamento                                              infolab_motivo_cancelamento[]
-  infolab_motivo_desconto                                                  infolab_motivo_desconto[]
-  infolab_motivo_retificacao                                               infolab_motivo_retificacao[]
-  infolab_parametro_valor                                                  infolab_parametro_valor[]
-  infolab_procedencia                                                      infolab_procedencia[]
-  infolab_relatorio                                                        infolab_relatorio[]
-  infolab_serie_nota_fiscal_servico                                        infolab_serie_nota_fiscal_servico[]
-  infolab_sessao_suporte                                                   infolab_sessao_suporte[]
-  infolab_sessao_usuario                                                   infolab_sessao_usuario[]
-  infolab_setor                                                            infolab_setor[]
-  infolab_usuario_infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario infolab_usuario?                                     @relation("infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tenacidade_id_usuario_auditoria")
-  infolab_tenacidade_configuracao                                          infolab_tenacidade_configuracao[]
-  infolab_tipo_indicacao                                                   infolab_tipo_indicacao[]
-  infolab_tipo_pagamento                                                   infolab_tipo_pagamento[]
-  infolab_unidade                                                          infolab_unidade[]
-  infolab_unidade_email                                                    infolab_unidade_email[]
-  infolab_unidade_relatorio                                                infolab_unidade_relatorio[]
-  infolab_usuario                                                          infolab_usuario[]
-  infolab_versao_tiss                                                      infolab_versao_tiss[]
+  infotime_cliente                                                          infotime_cliente[]
+  infotime_cliente_indicacao                                                infotime_cliente_indicacao[]
+  infotime_convenio                                                         infotime_convenio[]
+  infotime_convenio_autorizador                                             infotime_convenio_autorizador[]
+  infotime_convenio_contato                                                 infotime_convenio_contato[]
+  infotime_convenio_email                                                   infotime_convenio_email[]
+  infotime_convenio_equivalencia                                            infotime_convenio_equivalencia[]
+  infotime_convenio_plano                                                   infotime_convenio_plano[]
+  infotime_convenio_tiss                                                    infotime_convenio_tiss[]
+  infotime_fatura                                                           infotime_fatura[]
+  infotime_fatura_item                                                      infotime_fatura_item[]
+  infotime_feriado                                                          infotime_feriado[]
+  infotime_grupo                                                            infotime_grupo[]
+  infotime_grupo_cliente                                                    infotime_grupo_cliente[]
+  infotime_grupo_usuario                                                    infotime_grupo_usuario[]
+  infotime_indicacao                                                        infotime_indicacao[]
+  infotime_medicamento                                                      infotime_medicamento[]
+  infotime_medico                                                           infotime_medico[]
+  infotime_medico_credencial_convenio                                       infotime_medico_credencial_convenio[]
+  infotime_motivo_cancelamento                                              infotime_motivo_cancelamento[]
+  infotime_motivo_desconto                                                  infotime_motivo_desconto[]
+  infotime_motivo_retificacao                                               infotime_motivo_retificacao[]
+  infotime_parametro_valor                                                  infotime_parametro_valor[]
+  infotime_procedencia                                                      infotime_procedencia[]
+  infotime_relatorio                                                        infotime_relatorio[]
+  infotime_serie_nota_fiscal_servico                                        infotime_serie_nota_fiscal_servico[]
+  infotime_sessao_suporte                                                   infotime_sessao_suporte[]
+  infotime_sessao_usuario                                                   infotime_sessao_usuario[]
+  infotime_setor                                                            infotime_setor[]
+  infotime_usuario_infotime_tenacidade_id_usuario_auditoriaToinfotime_usuario infotime_usuario?                                     @relation("infotime_tenacidade_id_usuario_auditoriaToinfotime_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tenacidade_id_usuario_auditoria")
+  infotime_tenacidade_configuracao                                          infotime_tenacidade_configuracao[]
+  infotime_tipo_indicacao                                                   infotime_tipo_indicacao[]
+  infotime_tipo_pagamento                                                   infotime_tipo_pagamento[]
+  infotime_unidade                                                          infotime_unidade[]
+  infotime_unidade_email                                                    infotime_unidade_email[]
+  infotime_unidade_relatorio                                                infotime_unidade_relatorio[]
+  infotime_usuario                                                          infotime_usuario[]
+  infotime_versao_tiss                                                      infotime_versao_tiss[]
   @@map("tenacidade")
 }
 
-model infolab_usuario {
+model infotime_usuario {
   id_usuario                                                                                                                                  BigInt                                               @id @default(autoincrement())
   id_tenacidade                                                                                                                               BigInt?
   id_unidade                                                                                                                                  BigInt?
@@ -123,67 +123,67 @@ model infolab_usuario {
   ativo                                                                                                                                       String?                                              @db.Char(1)
   nome_aplicacao_auditoria                                                                                                                    String?                                              @db.VarChar(255)
   endereco_ip_auditoria                                                                                                                       String?                                              @db.VarChar(20)
-  infolab_aplicacao                                                                                                                           infolab_aplicacao[]
-  infolab_cbo                                                                                                                                 infolab_cbo[]
-  infolab_cid                                                                                                                                 infolab_cid[]
-  infolab_cliente                                                                                                                             infolab_cliente[]
-  infolab_cliente_indicacao                                                                                                                   infolab_cliente_indicacao[]
-  infolab_conselho_regional                                                                                                                   infolab_conselho_regional[]
-  infolab_convenio                                                                                                                            infolab_convenio[]
-  infolab_convenio_autorizador                                                                                                                infolab_convenio_autorizador[]
-  infolab_convenio_contato                                                                                                                    infolab_convenio_contato[]
-  infolab_convenio_email                                                                                                                      infolab_convenio_email[]
-  infolab_convenio_equivalencia                                                                                                               infolab_convenio_equivalencia[]
-  infolab_convenio_plano                                                                                                                      infolab_convenio_plano[]
-  infolab_convenio_tiss                                                                                                                       infolab_convenio_tiss[]
-  infolab_especialidade_medica                                                                                                                infolab_especialidade_medica[]
-  infolab_fatura                                                                                                                              infolab_fatura[]
-  infolab_fatura_item                                                                                                                         infolab_fatura_item[]
-  infolab_feriado                                                                                                                             infolab_feriado[]
-  infolab_grupo                                                                                                                               infolab_grupo[]
-  infolab_grupo_cliente                                                                                                                       infolab_grupo_cliente[]
-  infolab_grupo_usuario                                                                                                                       infolab_grupo_usuario[]
-  infolab_indicacao                                                                                                                           infolab_indicacao[]
-  infolab_medicamento                                                                                                                         infolab_medicamento[]
-  infolab_medico                                                                                                                              infolab_medico[]
-  infolab_medico_credencial_convenio                                                                                                          infolab_medico_credencial_convenio[]
-  infolab_motivo_cancelamento                                                                                                                 infolab_motivo_cancelamento[]
-  infolab_motivo_desconto                                                                                                                     infolab_motivo_desconto[]
-  infolab_motivo_retificacao                                                                                                                  infolab_motivo_retificacao[]
-  infolab_procedencia                                                                                                                         infolab_procedencia[]
-  infolab_raca                                                                                                                                infolab_raca[]
-  infolab_relatorio                                                                                                                           infolab_relatorio[]
-  infolab_serie_nota_fiscal_servico                                                                                                           infolab_serie_nota_fiscal_servico[]
-  infolab_sessao_suporte                                                                                                                      infolab_sessao_suporte[]
-  infolab_sessao_usuario                                                                                                                      infolab_sessao_usuario[]
-  infolab_setor                                                                                                                               infolab_setor[]
-  infolab_tenacidade_infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario                                                                 infolab_tenacidade[]                                 @relation("infolab_tenacidade_id_usuario_auditoriaToinfolab_usuario")
-  infolab_tipo_aplicacao                                                                                                                      infolab_tipo_aplicacao[]
-  infolab_tipo_estado_civil                                                                                                                   infolab_tipo_estado_civil[]
-  infolab_tipo_evento                                                                                                                         infolab_tipo_evento[]
-  infolab_tipo_indicacao                                                                                                                      infolab_tipo_indicacao[]
-  infolab_tipo_integracao                                                                                                                     infolab_tipo_integracao[]
-  infolab_tipo_interface                                                                                                                      infolab_tipo_interface[]
-  infolab_tipo_pagamento                                                                                                                      infolab_tipo_pagamento[]
-  infolab_tipo_relatorio                                                                                                                      infolab_tipo_relatorio[]
-  infolab_unidade_infolab_unidade_id_usuario_auditoriaToinfolab_usuario                                                                       infolab_unidade[]                                    @relation("infolab_unidade_id_usuario_auditoriaToinfolab_usuario")
-  infolab_unidade_email                                                                                                                       infolab_unidade_email[]
-  infolab_unidade_federacao                                                                                                                   infolab_unidade_federacao[]
-  infolab_unidade_relatorio                                                                                                                   infolab_unidade_relatorio[]
-  infolab_grupo_usuario_infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario                                                               infolab_grupo_usuario?                               @relation("infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario", fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_grupo_usuario")
-  infolab_tenacidade                                                                                                                          infolab_tenacidade?                                  @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_usuario_id_tenacidade")
-  infolab_unidade_infolab_usuario_id_unidadeToinfolab_unidade                                                                                 infolab_unidade?                                     @relation("infolab_usuario_id_unidadeToinfolab_unidade", fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_unidade")
-  infolab_usuario                                                                                                                             infolab_usuario?                                     @relation("infolab_usuarioToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_usuario_auditoria")
-  other_infolab_usuario                                                                                                                       infolab_usuario[]                                    @relation("infolab_usuarioToinfolab_usuario")
-  infolab_usuario_permissoes_infolab_usuario_id_usuario_auditoriaToinfolab_usuario                                                            infolab_usuario_permissoes[]                         @relation("infolab_usuario_permissoes_id_usuario_auditoriaToinfolab_usuario")
-  infolab_versao_tiss                                                                                                                         infolab_versao_tiss[]
-  infolab_vet_especie                                                                                                                         infolab_vet_especie[]
-  infolab_vet_raca                                                                                                                            infolab_vet_raca[]
+  infotime_aplicacao                                                                                                                           infotime_aplicacao[]
+  infotime_cbo                                                                                                                                 infotime_cbo[]
+  infotime_cid                                                                                                                                 infotime_cid[]
+  infotime_cliente                                                                                                                             infotime_cliente[]
+  infotime_cliente_indicacao                                                                                                                   infotime_cliente_indicacao[]
+  infotime_conselho_regional                                                                                                                   infotime_conselho_regional[]
+  infotime_convenio                                                                                                                            infotime_convenio[]
+  infotime_convenio_autorizador                                                                                                                infotime_convenio_autorizador[]
+  infotime_convenio_contato                                                                                                                    infotime_convenio_contato[]
+  infotime_convenio_email                                                                                                                      infotime_convenio_email[]
+  infotime_convenio_equivalencia                                                                                                               infotime_convenio_equivalencia[]
+  infotime_convenio_plano                                                                                                                      infotime_convenio_plano[]
+  infotime_convenio_tiss                                                                                                                       infotime_convenio_tiss[]
+  infotime_especialidade_medica                                                                                                                infotime_especialidade_medica[]
+  infotime_fatura                                                                                                                              infotime_fatura[]
+  infotime_fatura_item                                                                                                                         infotime_fatura_item[]
+  infotime_feriado                                                                                                                             infotime_feriado[]
+  infotime_grupo                                                                                                                               infotime_grupo[]
+  infotime_grupo_cliente                                                                                                                       infotime_grupo_cliente[]
+  infotime_grupo_usuario                                                                                                                       infotime_grupo_usuario[]
+  infotime_indicacao                                                                                                                           infotime_indicacao[]
+  infotime_medicamento                                                                                                                         infotime_medicamento[]
+  infotime_medico                                                                                                                              infotime_medico[]
+  infotime_medico_credencial_convenio                                                                                                          infotime_medico_credencial_convenio[]
+  infotime_motivo_cancelamento                                                                                                                 infotime_motivo_cancelamento[]
+  infotime_motivo_desconto                                                                                                                     infotime_motivo_desconto[]
+  infotime_motivo_retificacao                                                                                                                  infotime_motivo_retificacao[]
+  infotime_procedencia                                                                                                                         infotime_procedencia[]
+  infotime_raca                                                                                                                                infotime_raca[]
+  infotime_relatorio                                                                                                                           infotime_relatorio[]
+  infotime_serie_nota_fiscal_servico                                                                                                           infotime_serie_nota_fiscal_servico[]
+  infotime_sessao_suporte                                                                                                                      infotime_sessao_suporte[]
+  infotime_sessao_usuario                                                                                                                      infotime_sessao_usuario[]
+  infotime_setor                                                                                                                               infotime_setor[]
+  infotime_tenacidade_infotime_tenacidade_id_usuario_auditoriaToinfotime_usuario                                                                 infotime_tenacidade[]                                 @relation("infotime_tenacidade_id_usuario_auditoriaToinfotime_usuario")
+  infotime_tipo_aplicacao                                                                                                                      infotime_tipo_aplicacao[]
+  infotime_tipo_estado_civil                                                                                                                   infotime_tipo_estado_civil[]
+  infotime_tipo_evento                                                                                                                         infotime_tipo_evento[]
+  infotime_tipo_indicacao                                                                                                                      infotime_tipo_indicacao[]
+  infotime_tipo_integracao                                                                                                                     infotime_tipo_integracao[]
+  infotime_tipo_interface                                                                                                                      infotime_tipo_interface[]
+  infotime_tipo_pagamento                                                                                                                      infotime_tipo_pagamento[]
+  infotime_tipo_relatorio                                                                                                                      infotime_tipo_relatorio[]
+  infotime_unidade_infotime_unidade_id_usuario_auditoriaToinfotime_usuario                                                                       infotime_unidade[]                                    @relation("infotime_unidade_id_usuario_auditoriaToinfotime_usuario")
+  infotime_unidade_email                                                                                                                       infotime_unidade_email[]
+  infotime_unidade_federacao                                                                                                                   infotime_unidade_federacao[]
+  infotime_unidade_relatorio                                                                                                                   infotime_unidade_relatorio[]
+  infotime_grupo_usuario_infotime_usuario_id_grupo_usuarioToinfotime_grupo_usuario                                                               infotime_grupo_usuario?                               @relation("infotime_usuario_id_grupo_usuarioToinfotime_grupo_usuario", fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_grupo_usuario")
+  infotime_tenacidade                                                                                                                          infotime_tenacidade?                                  @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_usuario_id_tenacidade")
+  infotime_unidade_infotime_usuario_id_unidadeToinfotime_unidade                                                                                 infotime_unidade?                                     @relation("infotime_usuario_id_unidadeToinfotime_unidade", fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_unidade")
+  infotime_usuario                                                                                                                             infotime_usuario?                                     @relation("infotime_usuarioToinfotime_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_id_usuario_auditoria")
+  other_infotime_usuario                                                                                                                       infotime_usuario[]                                    @relation("infotime_usuarioToinfotime_usuario")
+  infotime_usuario_permissoes_infotime_usuario_id_usuario_auditoriaToinfotime_usuario                                                            infotime_usuario_permissoes[]                         @relation("infotime_usuario_permissoes_id_usuario_auditoriaToinfotime_usuario")
+  infotime_versao_tiss                                                                                                                         infotime_versao_tiss[]
+  infotime_vet_especie                                                                                                                         infotime_vet_especie[]
+  infotime_vet_raca                                                                                                                            infotime_vet_raca[]
   @@map("usuario")
 }
 
 /// Motor de metadados: definição de aplicação (listagem/formulário). id_tenacidade=0 = padrão global.
-model infolab_aplicacao {
+model infotime_aplicacao {
   id_aplicacao             BigInt                    @id @default(autoincrement())
   id_tenacidade            BigInt                    @default(0)
   id_usuario_auditoria     BigInt?
@@ -200,8 +200,8 @@ model infolab_aplicacao {
   observacao               String?
   nome_aplicacao_auditoria String?                   @db.VarChar(120)
   endereco_ip_auditoria    String?                   @db.VarChar(45)
-  infolab_usuario          infolab_usuario?          @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_infolab_aplicacao_id_usuario_auditoria")
-  infolab_aplicacao_campo  infolab_aplicacao_campo[]
+  infotime_usuario          infotime_usuario?          @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_infolab_aplicacao_id_usuario_auditoria")
+  infotime_aplicacao_campo  infotime_aplicacao_campo[]
 
   @@unique([id_tenacidade, codigo_aplicacao], map: "uq_infolab_aplicacao_01")
   @@index([id_tenacidade, codigo_aplicacao], map: "idx_infolab_aplicacao_01")
@@ -210,9 +210,9 @@ model infolab_aplicacao {
 }
 
 /// Metadados de campo (padrão). id_tenacidade=0 na linha base.
-/// Tabela de overrides por tenacidade (`infolab_aplicacao_campo_tenacidade`) foi removida
+/// Tabela de overrides por tenacidade (`infotime_aplicacao_campo_tenacidade`) foi removida
 /// pela migration `20260422130000_remove_infotime_aplicacao_campo_tenacidade`.
-model infolab_aplicacao_campo {
+model infotime_aplicacao_campo {
   id_aplicacao_campo                    BigInt            @id @default(autoincrement())
   id_tenacidade                         BigInt            @default(0)
   id_aplicacao                          BigInt
@@ -247,7 +247,7 @@ model infolab_aplicacao_campo {
   ativo                                 Boolean           @default(true)
   nome_aplicacao_auditoria              String?           @db.VarChar(120)
   endereco_ip_auditoria                 String?           @db.VarChar(45)
-  infolab_aplicacao                     infolab_aplicacao @relation(fields: [id_aplicacao], references: [id_aplicacao], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_aplicacao_campo_01")
+  infotime_aplicacao                     infotime_aplicacao @relation(fields: [id_aplicacao], references: [id_aplicacao], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_aplicacao_campo_01")
 
   @@unique([id_tenacidade, id_aplicacao, codigo_campo], map: "uq_infolab_aplicacao_campo_01")
   @@index([id_aplicacao, ativo], map: "idx_infolab_aplicacao_campo_01")
@@ -257,7 +257,7 @@ model infolab_aplicacao_campo {
   @@map("aplicacao_campo")
 }
 
-model infolab_cbo {
+model infotime_cbo {
   id_cbo                       BigInt                         @id @default(autoincrement())
   id_usuario_auditoria         BigInt?
   descricao                    String?                        @db.VarChar(255)
@@ -265,14 +265,14 @@ model infolab_cbo {
   codigo_cbo                   Int?
   endereco_ip_auditoria        String?                        @db.VarChar(20)
   nome_aplicacao_auditoria     String?                        @db.VarChar(255)
-  infolab_usuario              infolab_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cbo_id_usuario_auditoria")
-  infolab_cliente              infolab_cliente[]
-  infolab_convenio_tiss        infolab_convenio_tiss[]
-  infolab_especialidade_medica infolab_especialidade_medica[]
+  infotime_usuario              infotime_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cbo_id_usuario_auditoria")
+  infotime_cliente              infotime_cliente[]
+  infotime_convenio_tiss        infotime_convenio_tiss[]
+  infotime_especialidade_medica infotime_especialidade_medica[]
   @@map("cbo")
 }
 
-model infolab_cid {
+model infotime_cid {
   id_cid                   BigInt                  @id @default(autoincrement())
   id_usuario_auditoria     BigInt?
   codigo_cid               String?                 @db.VarChar(8)
@@ -282,12 +282,12 @@ model infolab_cid {
   observacao               String?
   endereco_ip_auditoria    String?                 @db.VarChar(20)
   nome_aplicacao_auditoria String?                 @db.VarChar(255)
-  infolab_usuario          infolab_usuario?        @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cid_id_usuario_auditoria")
-  infolab_convenio_tiss    infolab_convenio_tiss[]
+  infotime_usuario          infotime_usuario?        @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cid_id_usuario_auditoria")
+  infotime_convenio_tiss    infotime_convenio_tiss[]
   @@map("cid")
 }
 
-model infolab_cliente {
+model infotime_cliente {
   // Tabela física `cliente` (sem prefixo). A migration `20260507200000_infotime_view_clientes_compat`
   // pode expor a view `clientes` para compatibilidade de leitura onde existir.
   id_cliente                   BigInt                         @id @default(autoincrement())
@@ -336,23 +336,23 @@ model infolab_cliente {
   codigo_migracao              BigInt?
   endereco_ip_auditoria        String?                        @db.VarChar(20)
   nome_aplicacao_auditoria     String?                        @db.VarChar(255)
-  infolab_cbo                  infolab_cbo?                   @relation(fields: [id_cbo], references: [id_cbo], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cbo")
-  infolab_cliente_acomp_rel    infolab_cliente?               @relation("infolab_cliente_id_cliente_acompanhanteToinfolab_cliente", fields: [id_cliente_acompanhante], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_acompanhante")
-  infolab_cliente_acomp        infolab_cliente[]              @relation("infolab_cliente_id_cliente_acompanhanteToinfolab_cliente")
-  infolab_cliente_mae_rel      infolab_cliente?               @relation("infolab_cliente_id_cliente_maeToinfolab_cliente", fields: [id_cliente_mae], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_mae")
-  infolab_cliente_mae          infolab_cliente[]              @relation("infolab_cliente_id_cliente_maeToinfolab_cliente")
-  infolab_cliente_pai_rel      infolab_cliente?               @relation("infolab_cliente_id_cliente_paiToinfolab_cliente", fields: [id_cliente_pai], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_pai")
-  infolab_cliente_pai          infolab_cliente[]              @relation("infolab_cliente_id_cliente_paiToinfolab_cliente")
-  infolab_etnia                infolab_etnia?                 @relation(fields: [id_etnia], references: [id_etnia], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_etnia")
-  infolab_raca                 infolab_raca?                  @relation(fields: [id_raca], references: [id_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_raca")
-  infolab_tenacidade           infolab_tenacidade             @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_cliente_id_tenacidade")
-  infolab_usuario              infolab_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_usuario_auditoria")
-  infolab_vet_especie          infolab_vet_especie?           @relation(fields: [id_vet_especie], references: [id_vet_especie], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_vet_especie")
-  infolab_vet_raca             infolab_vet_raca?              @relation(fields: [id_vet_raca], references: [id_vet_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_vet_raca")
+  infotime_cbo                  infotime_cbo?                   @relation(fields: [id_cbo], references: [id_cbo], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cbo")
+  infotime_cliente_acomp_rel    infotime_cliente?               @relation("infotime_cliente_id_cliente_acompanhanteToinfotime_cliente", fields: [id_cliente_acompanhante], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_acompanhante")
+  infotime_cliente_acomp        infotime_cliente[]              @relation("infotime_cliente_id_cliente_acompanhanteToinfotime_cliente")
+  infotime_cliente_mae_rel      infotime_cliente?               @relation("infotime_cliente_id_cliente_maeToinfotime_cliente", fields: [id_cliente_mae], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_mae")
+  infotime_cliente_mae          infotime_cliente[]              @relation("infotime_cliente_id_cliente_maeToinfotime_cliente")
+  infotime_cliente_pai_rel      infotime_cliente?               @relation("infotime_cliente_id_cliente_paiToinfotime_cliente", fields: [id_cliente_pai], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_pai")
+  infotime_cliente_pai          infotime_cliente[]              @relation("infotime_cliente_id_cliente_paiToinfotime_cliente")
+  infotime_etnia                infotime_etnia?                 @relation(fields: [id_etnia], references: [id_etnia], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_etnia")
+  infotime_raca                 infotime_raca?                  @relation(fields: [id_raca], references: [id_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_raca")
+  infotime_tenacidade           infotime_tenacidade             @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_cliente_id_tenacidade")
+  infotime_usuario              infotime_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_usuario_auditoria")
+  infotime_vet_especie          infotime_vet_especie?           @relation(fields: [id_vet_especie], references: [id_vet_especie], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_vet_especie")
+  infotime_vet_raca             infotime_vet_raca?              @relation(fields: [id_vet_raca], references: [id_vet_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_vet_raca")
   @@map("cliente")
 }
 
-model infolab_cliente_indicacao {
+model infotime_cliente_indicacao {
   id_cliente_indicacao     BigInt             @id @default(autoincrement())
   id_tenacidade            BigInt
   id_usuario_auditoria     BigInt?
@@ -361,24 +361,24 @@ model infolab_cliente_indicacao {
   codigo_externo           BigInt?
   endereco_ip_auditoria    String?            @db.VarChar(20)
   nome_aplicacao_auditoria String?            @db.VarChar(255)
-  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_cliente_indicacao_id_tenacidade")
-  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_indicacao_id_usuario_auditoria")
+  infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_cliente_indicacao_id_tenacidade")
+  infotime_usuario          infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_indicacao_id_usuario_auditoria")
   @@map("cliente_indicacao")
 }
 
-model infolab_conselho_regional {
+model infotime_conselho_regional {
   id_conselho_regional     BigInt           @id @default(autoincrement())
   id_usuario_auditoria     BigInt?
   sigla                    String?          @db.VarChar(20)
   descricao                String?          @db.VarChar(200)
   endereco_ip_auditoria    String?          @db.VarChar(20)
   nome_aplicacao_auditoria String?          @db.VarChar(255)
-  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_conselho_regional_id_usuario_auditoria")
-  infolab_medico           infolab_medico[]
+  infotime_usuario          infotime_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_conselho_regional_id_usuario_auditoria")
+  infotime_medico           infotime_medico[]
   @@map("conselho_regional")
 }
 
-model infolab_convenio {
+model infotime_convenio {
   id_convenio                                                         BigInt                               @id @default(autoincrement())
   id_tenacidade                                                       BigInt
   id_usuario_auditoria                                                BigInt?
@@ -446,21 +446,21 @@ model infolab_convenio {
   documento_obrigatorio_4                                             String?                              @db.Char(1)
   endereco_ip_auditoria                                               String?                              @db.VarChar(20)
   nome_aplicacao_auditoria                                            String?                              @db.VarChar(255)
-  infolab_relatorio                                                   infolab_relatorio?                   @relation(fields: [id_relatorio_guia], references: [id_relatorio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_id_relatorio_guia")
-  infolab_tenacidade                                                  infolab_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_id_tenacidade")
-  infolab_usuario                                                     infolab_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_id_usuario_auditoria")
-  infolab_convenio_autorizador                                        infolab_convenio_autorizador?        @relation("convenio_para_autorizador", fields: [id_convenio_autorizador], references: [id_convenio_autorizador], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_id_convenio_autorizador")
-  infolab_convenio_contato                                            infolab_convenio_contato[]
-  infolab_convenio_email                                              infolab_convenio_email[]
-  infolab_convenio_equivalencia                                       infolab_convenio_equivalencia[]
-  infolab_convenio_plano                                              infolab_convenio_plano[]
-  infolab_convenio_tiss                                               infolab_convenio_tiss[]
-  infolab_fatura                                                      infolab_fatura[]
-  infolab_medico_credencial_convenio                                  infolab_medico_credencial_convenio[]
+  infotime_relatorio                                                   infotime_relatorio?                   @relation(fields: [id_relatorio_guia], references: [id_relatorio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_id_relatorio_guia")
+  infotime_tenacidade                                                  infotime_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_id_tenacidade")
+  infotime_usuario                                                     infotime_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_id_usuario_auditoria")
+  infotime_convenio_autorizador                                        infotime_convenio_autorizador?        @relation("convenio_para_autorizador", fields: [id_convenio_autorizador], references: [id_convenio_autorizador], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_id_convenio_autorizador")
+  infotime_convenio_contato                                            infotime_convenio_contato[]
+  infotime_convenio_email                                              infotime_convenio_email[]
+  infotime_convenio_equivalencia                                       infotime_convenio_equivalencia[]
+  infotime_convenio_plano                                              infotime_convenio_plano[]
+  infotime_convenio_tiss                                               infotime_convenio_tiss[]
+  infotime_fatura                                                      infotime_fatura[]
+  infotime_medico_credencial_convenio                                  infotime_medico_credencial_convenio[]
   @@map("convenio")
 }
 
-model infolab_convenio_autorizador {
+model infotime_convenio_autorizador {
   id_convenio_autorizador        BigInt             @id @default(autoincrement())
   id_tenacidade                  BigInt
   id_autorizador_tabela_mensagem BigInt?
@@ -494,13 +494,13 @@ model infolab_convenio_autorizador {
   codigo_externo                 BigInt?
   endereco_ip_auditoria          String?            @db.VarChar(20)
   nome_aplicacao_auditoria       String?            @db.VarChar(255)
-  infolab_convenio               infolab_convenio?  @relation("convenio_para_autorizador")
-  infolab_tenacidade             infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_autorizador_id_tenacidade")
-  infolab_usuario                infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_autorizador_id_usuario_auditoria")
+  infotime_convenio               infotime_convenio?  @relation("convenio_para_autorizador")
+  infotime_tenacidade             infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_autorizador_id_tenacidade")
+  infotime_usuario                infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_autorizador_id_usuario_auditoria")
   @@map("convenio_autorizador")
 }
 
-model infolab_convenio_contato {
+model infotime_convenio_contato {
   id_convenio_contato      BigInt             @id @default(autoincrement())
   id_tenacidade            BigInt
   id_convenio              BigInt?
@@ -514,13 +514,13 @@ model infolab_convenio_contato {
   observacoes              String?
   endereco_ip_auditoria    String?            @db.VarChar(20)
   nome_aplicacao_auditoria String?            @db.VarChar(255)
-  infolab_convenio         infolab_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_contato_id_convenio")
-  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_contato_id_tenacidade")
-  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_contato_id_usuario_auditoria")
+  infotime_convenio         infotime_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_contato_id_convenio")
+  infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_contato_id_tenacidade")
+  infotime_usuario          infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_contato_id_usuario_auditoria")
   @@map("convenio_contato")
 }
 
-model infolab_convenio_email {
+model infotime_convenio_email {
   id_convenio_email        BigInt             @id @default(autoincrement())
   id_tenacidade            BigInt
   id_convenio              BigInt?
@@ -530,13 +530,13 @@ model infolab_convenio_email {
   observacoes              String?
   endereco_ip_auditoria    String?            @db.VarChar(20)
   nome_aplicacao_auditoria String?            @db.VarChar(255)
-  infolab_convenio         infolab_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_email_id_convenio")
-  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_email_id_tenacidade")
-  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_email_id_usuario_auditoria")
+  infotime_convenio         infotime_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_email_id_convenio")
+  infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_email_id_tenacidade")
+  infotime_usuario          infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_email_id_usuario_auditoria")
   @@map("convenio_email")
 }
 
-model infolab_convenio_equivalencia {
+model infotime_convenio_equivalencia {
   id_convenio_equivalencia      BigInt                  @id @default(autoincrement())
   id_tenacidade                 BigInt
   id_usuario_auditoria          BigInt?
@@ -546,13 +546,13 @@ model infolab_convenio_equivalencia {
   qtd_exame_material            Int?
   endereco_ip_auditoria         String?                 @db.VarChar(20)
   nome_aplicacao_auditoria      String?                 @db.VarChar(255)
-  infolab_convenio              infolab_convenio?       @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_equivalencia_id_convenio")
-  infolab_tenacidade            infolab_tenacidade      @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_equivalencia_id_tenacidade")
-  infolab_usuario               infolab_usuario?        @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_equivalencia_id_usuario_auditoria")
+  infotime_convenio              infotime_convenio?       @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_equivalencia_id_convenio")
+  infotime_tenacidade            infotime_tenacidade      @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_equivalencia_id_tenacidade")
+  infotime_usuario               infotime_usuario?        @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_equivalencia_id_usuario_auditoria")
   @@map("convenio_equivalencia")
 }
 
-model infolab_convenio_plano {
+model infotime_convenio_plano {
   id_convenio_plano                  BigInt             @id @default(autoincrement())
   id_tenacidade                      BigInt
   id_convenio                        BigInt?
@@ -638,13 +638,13 @@ model infolab_convenio_plano {
   codigo_migracao                    String?            @db.VarChar(10)
   endereco_ip_auditoria              String?            @db.VarChar(20)
   nome_aplicacao_auditoria           String?            @db.VarChar(255)
-  infolab_convenio                   infolab_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_plano_id_convenio")
-  infolab_tenacidade                 infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_plano_id_tenacidade")
-  infolab_usuario                    infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_plano_id_usuario_auditoria")
+  infotime_convenio                   infotime_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_plano_id_convenio")
+  infotime_tenacidade                 infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_plano_id_tenacidade")
+  infotime_usuario                    infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_plano_id_usuario_auditoria")
   @@map("convenio_plano")
 }
 
-model infolab_convenio_tiss {
+model infotime_convenio_tiss {
   id_convenio_tiss                 BigInt             @id @default(autoincrement())
   id_tenacidade                    BigInt
   id_convenio                      BigInt?
@@ -709,16 +709,16 @@ model infolab_convenio_tiss {
   ativo                            String?            @db.Char(1)
   endereco_ip_auditoria            String?            @db.VarChar(255)
   nome_aplicacao_auditoria         String?            @db.VarChar(20)
-  infolab_cbo                      infolab_cbo?       @relation(fields: [id_cbo_padrao], references: [id_cbo], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_cbo_padrao")
-  infolab_cid                      infolab_cid?       @relation(fields: [id_cid], references: [id_cid], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_cid")
-  infolab_convenio                 infolab_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_convenio")
-  infolab_medico                   infolab_medico?    @relation(fields: [id_medico], references: [id_medico], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_medico")
-  infolab_tenacidade               infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_tiss_id_tenacidade")
-  infolab_usuario                  infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_usuario_auditoria")
+  infotime_cbo                      infotime_cbo?       @relation(fields: [id_cbo_padrao], references: [id_cbo], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_cbo_padrao")
+  infotime_cid                      infotime_cid?       @relation(fields: [id_cid], references: [id_cid], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_cid")
+  infotime_convenio                 infotime_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_convenio")
+  infotime_medico                   infotime_medico?    @relation(fields: [id_medico], references: [id_medico], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_medico")
+  infotime_tenacidade               infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_convenio_tiss_id_tenacidade")
+  infotime_usuario                  infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_convenio_tiss_id_usuario_auditoria")
   @@map("convenio_tiss")
 }
 
-model infolab_especialidade_medica {
+model infotime_especialidade_medica {
   id_especialidade_medica  BigInt           @id @default(autoincrement())
   id_cbo                   BigInt?
   id_usuario_auditoria     BigInt?
@@ -728,22 +728,22 @@ model infolab_especialidade_medica {
   codigo_migracao          String?          @db.VarChar(6)
   endereco_ip_auditoria    String?          @db.VarChar(20)
   nome_aplicacao_auditoria String?          @db.VarChar(255)
-  infolab_cbo              infolab_cbo?     @relation(fields: [id_cbo], references: [id_cbo], onDelete: Restrict, onUpdate: Restrict, map: "fk_especialidade_medica_id_cbo")
-  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_especialidade_medica_id_usuario_auditoria")
-  infolab_medico           infolab_medico[]
+  infotime_cbo              infotime_cbo?     @relation(fields: [id_cbo], references: [id_cbo], onDelete: Restrict, onUpdate: Restrict, map: "fk_especialidade_medica_id_cbo")
+  infotime_usuario          infotime_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_especialidade_medica_id_usuario_auditoria")
+  infotime_medico           infotime_medico[]
   @@map("especialidade_medica")
 }
 
-model infolab_etnia {
+model infotime_etnia {
   id_etnia        BigInt            @id @default(autoincrement())
   id_raca         BigInt?
   nome            String?           @db.VarChar(100)
-  infolab_cliente infolab_cliente[]
-  infolab_raca    infolab_raca?     @relation(fields: [id_raca], references: [id_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_etnia_id_raca")
+  infotime_cliente infotime_cliente[]
+  infotime_raca    infotime_raca?     @relation(fields: [id_raca], references: [id_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_etnia_id_raca")
   @@map("etnia")
 }
 
-model infolab_fatura {
+model infotime_fatura {
   id_fatura                              BigInt                @id @default(autoincrement())
   id_tenacidade                          BigInt
   id_unidade                             BigInt?
@@ -779,15 +779,15 @@ model infolab_fatura {
   sequencia_transacao                    Int?
   endereco_ip_auditoria                  String?               @db.VarChar(20)
   nome_aplicacao_auditoria               String?               @db.VarChar(255)
-  infolab_convenio                       infolab_convenio?     @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_id_convenio")
-  infolab_tenacidade                     infolab_tenacidade    @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_fatura_id_tenacidade")
-  infolab_unidade                        infolab_unidade?      @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_id_unidade")
-  infolab_usuario                        infolab_usuario?      @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_id_usuario_auditoria")
-  infolab_fatura_item                    infolab_fatura_item[]
+  infotime_convenio                       infotime_convenio?     @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_id_convenio")
+  infotime_tenacidade                     infotime_tenacidade    @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_fatura_id_tenacidade")
+  infotime_unidade                        infotime_unidade?      @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_id_unidade")
+  infotime_usuario                        infotime_usuario?      @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_id_usuario_auditoria")
+  infotime_fatura_item                    infotime_fatura_item[]
   @@map("fatura")
 }
 
-model infolab_fatura_item {
+model infotime_fatura_item {
   id_fatura_item                     BigInt                              @id @default(autoincrement())
   id_tenacidade                      BigInt
   id_fatura                          BigInt?
@@ -806,13 +806,13 @@ model infolab_fatura_item {
   senha_autorizacao                  String?                             @db.VarChar(64)
   endereco_ip_auditoria              String?                             @db.VarChar(20)
   nome_aplicacao_auditoria           String?                             @db.VarChar(255)
-  infolab_fatura                     infolab_fatura?                     @relation(fields: [id_fatura], references: [id_fatura], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_item_id_fatura")
-  infolab_tenacidade                 infolab_tenacidade                  @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_fatura_item_id_tenacidade")
-  infolab_usuario                    infolab_usuario?                    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_item_id_usuario_auditoria")
+  infotime_fatura                     infotime_fatura?                     @relation(fields: [id_fatura], references: [id_fatura], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_item_id_fatura")
+  infotime_tenacidade                 infotime_tenacidade                  @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_fatura_item_id_tenacidade")
+  infotime_usuario                    infotime_usuario?                    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_fatura_item_id_usuario_auditoria")
   @@map("fatura_item")
 }
 
-model infolab_feriado {
+model infotime_feriado {
   id_feriado               BigInt             @id @default(autoincrement())
   id_tenacidade            BigInt
   id_usuario_auditoria     BigInt?
@@ -820,36 +820,36 @@ model infolab_feriado {
   data_feriado             DateTime?          @db.Date
   endereco_ip_auditoria    String?            @db.VarChar(20)
   nome_aplicacao_auditoria String?            @db.VarChar(255)
-  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_feriado_id_tenacidade")
-  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_feriado_id_usuario_auditoria")
+  infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_feriado_id_tenacidade")
+  infotime_usuario          infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_feriado_id_usuario_auditoria")
   @@map("feriado")
 }
 
-model infolab_grupo {
+model infotime_grupo {
   id_grupo                     BigInt                         @id @default(autoincrement())
   id_tenacidade                BigInt
   id_usuario_auditoria         BigInt?
   descricao                    String?                        @db.VarChar(100)
   endereco_ip_auditoria        String?                        @db.VarChar(20)
   nome_aplicacao_auditoria     String?                        @db.VarChar(255)
-  infolab_tenacidade           infolab_tenacidade             @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_grupo_id_tenacidade")
-  infolab_usuario              infolab_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_grupo_id_usuario_auditoria")
+  infotime_tenacidade           infotime_tenacidade             @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_grupo_id_tenacidade")
+  infotime_usuario              infotime_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_grupo_id_usuario_auditoria")
   @@map("grupo")
 }
 
-model infolab_grupo_cliente {
+model infotime_grupo_cliente {
   id_grupo_cliente         BigInt             @id @default(autoincrement())
   id_tenacidade            BigInt
   id_usuario_auditoria     BigInt?
   descricao                String?            @db.VarChar(100)
   endereco_ip_auditoria    String?            @db.VarChar(20)
   nome_aplicacao_auditoria String?            @db.VarChar(255)
-  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_grupo_cliente_id_tenacidade")
-  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_grupo_cliente_id_usuario_auditoria")
+  infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_grupo_cliente_id_tenacidade")
+  infotime_usuario          infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_grupo_cliente_id_usuario_auditoria")
   @@map("grupo_cliente")
 }
 
-model infolab_grupo_usuario {
+model infotime_grupo_usuario {
   id_grupo_usuario                                                        BigInt                       @id @default(autoincrement())
   id_tenacidade                                                           BigInt
   id_usuario_auditoria                                                    BigInt?
@@ -860,15 +860,15 @@ model infolab_grupo_usuario {
   codigo_externo                                                          BigInt?
   endereco_ip_auditoria                                                   String?                      @db.VarChar(20)
   nome_aplicacao_auditoria                                                String?                      @db.VarChar(255)
-  infolab_tenacidade                                                      infolab_tenacidade           @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_grupo_usuario_id_tenacidade")
-  infolab_usuario                                                         infolab_usuario?             @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_grupo_usuario_id_usuario_auditoria")
-  infolab_usuario_infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario infolab_usuario[]            @relation("infolab_usuario_id_grupo_usuarioToinfolab_grupo_usuario")
-  infolab_layout_formulario                                               infolab_layout_formulario[]
-  infolab_usuario_permissoes                                              infolab_usuario_permissoes[]
+  infotime_tenacidade                                                      infotime_tenacidade           @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_grupo_usuario_id_tenacidade")
+  infotime_usuario                                                         infotime_usuario?             @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_grupo_usuario_id_usuario_auditoria")
+  infotime_usuario_infotime_usuario_id_grupo_usuarioToinfotime_grupo_usuario infotime_usuario[]            @relation("infotime_usuario_id_grupo_usuarioToinfotime_grupo_usuario")
+  infotime_layout_formulario                                               infotime_layout_formulario[]
+  infotime_usuario_permissoes                                              infotime_usuario_permissoes[]
   @@map("grupo_usuario")
 }
 
-model infolab_indicacao {
+model infotime_indicacao {
   id_indicacao             BigInt             @id @default(autoincrement())
   id_tenacidade            BigInt
   id_usuario_auditoria     BigInt?
@@ -876,12 +876,12 @@ model infolab_indicacao {
   ativo                    String?            @db.Char(1)
   endereco_ip_auditoria    String?            @db.VarChar(20)
   nome_aplicacao_auditoria String?            @db.VarChar(255)
-  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_indicacao_id_tenacidade")
-  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_indicacao_id_usuario_auditoria")
+  infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_indicacao_id_tenacidade")
+  infotime_usuario          infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_indicacao_id_usuario_auditoria")
   @@map("indicacao")
 }
 
-model infolab_medicamento {
+model infotime_medicamento {
   id_medicamento           BigInt             @id @default(autoincrement())
   id_tenacidade            BigInt
   id_usuario_auditoria     BigInt?
@@ -889,12 +889,12 @@ model infolab_medicamento {
   ativo                    String?            @db.Char(1)
   endereco_ip_auditoria    String?            @db.VarChar(20)
   nome_aplicacao_auditoria String?            @db.VarChar(255)
-  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_medicamento_id_tenacidade")
-  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_medicamento_id_usuario_auditoria")
+  infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_medicamento_id_tenacidade")
+  infotime_usuario          infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_medicamento_id_usuario_auditoria")
   @@map("medicamento")
 }
 
-model infolab_medico {
+model infotime_medico {
   id_medico                                                                                                           BigInt                               @id @default(autoincrement())
   id_tenacidade                                                                                                       BigInt
   id_especialidade_medica                                                                                             BigInt?
@@ -918,17 +918,17 @@ model infolab_medico {
   codigo_migracao                                                                                                     BigInt?
   endereco_ip_auditoria                                                                                               String?                              @db.VarChar(20)
   nome_aplicacao_auditoria                                                                                            String?                              @db.VarChar(255)
-  infolab_convenio_tiss                                                                                               infolab_convenio_tiss[]
-  infolab_conselho_regional                                                                                           infolab_conselho_regional?           @relation(fields: [id_conselho_regional], references: [id_conselho_regional], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_conselho_regional")
-  infolab_especialidade_medica                                                                                        infolab_especialidade_medica?        @relation(fields: [id_especialidade_medica], references: [id_especialidade_medica], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_especialidade_medica")
-  infolab_medico_credencial_convenio_infolab_medico_id_medico_credencial_convenioToinfolab_medico_credencial_convenio infolab_medico_credencial_convenio?  @relation("infolab_medico_id_medico_credencial_convenioToinfolab_medico_credencial_convenio", fields: [id_medico_credencial_convenio], references: [id_medico_credencial_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_medico_credencial_convenio")
-  infolab_tenacidade                                                                                                  infolab_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_medico_id_tenacidade")
-  infolab_usuario                                                                                                     infolab_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_usuario_auditoria")
-  infolab_medico_credencial_convenio_infolab_medico_credencial_convenio_id_medicoToinfolab_medico                     infolab_medico_credencial_convenio[] @relation("infolab_medico_credencial_convenio_id_medicoToinfolab_medico")
+  infotime_convenio_tiss                                                                                               infotime_convenio_tiss[]
+  infotime_conselho_regional                                                                                           infotime_conselho_regional?           @relation(fields: [id_conselho_regional], references: [id_conselho_regional], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_conselho_regional")
+  infotime_especialidade_medica                                                                                        infotime_especialidade_medica?        @relation(fields: [id_especialidade_medica], references: [id_especialidade_medica], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_especialidade_medica")
+  infotime_medico_credencial_convenio_infotime_medico_id_medico_credencial_convenioToinfotime_medico_credencial_convenio infotime_medico_credencial_convenio?  @relation("infotime_medico_id_medico_credencial_convenioToinfotime_medico_credencial_convenio", fields: [id_medico_credencial_convenio], references: [id_medico_credencial_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_medico_credencial_convenio")
+  infotime_tenacidade                                                                                                  infotime_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_medico_id_tenacidade")
+  infotime_usuario                                                                                                     infotime_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_id_usuario_auditoria")
+  infotime_medico_credencial_convenio_infotime_medico_credencial_convenio_id_medicoToinfotime_medico                     infotime_medico_credencial_convenio[] @relation("infotime_medico_credencial_convenio_id_medicoToinfotime_medico")
   @@map("medico")
 }
 
-model infolab_medico_credencial_convenio {
+model infotime_medico_credencial_convenio {
   id_medico_credencial_convenio                                                                   BigInt             @id @default(autoincrement())
   id_tenacidade                                                                                   BigInt
   id_medico                                                                                       BigInt?
@@ -937,27 +937,27 @@ model infolab_medico_credencial_convenio {
   codigo_prestador                                                                                String?            @db.VarChar(100)
   endereco_ip_auditoria                                                                           String?            @db.VarChar(20)
   nome_aplicacao_auditoria                                                                        String?            @db.VarChar(255)
-  infolab_medico_infolab_medico_id_medico_credencial_convenioToinfolab_medico_credencial_convenio infolab_medico[]   @relation("infolab_medico_id_medico_credencial_convenioToinfolab_medico_credencial_convenio")
-  infolab_convenio                                                                                infolab_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_convenio")
-  infolab_medico_infolab_medico_credencial_convenio_id_medicoToinfolab_medico                     infolab_medico?    @relation("infolab_medico_credencial_convenio_id_medicoToinfolab_medico", fields: [id_medico], references: [id_medico], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_medico")
-  infolab_tenacidade                                                                              infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_tenacidade")
-  infolab_usuario                                                                                 infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_usuario_auditoria")
+  infotime_medico_infotime_medico_id_medico_credencial_convenioToinfotime_medico_credencial_convenio infotime_medico[]   @relation("infotime_medico_id_medico_credencial_convenioToinfotime_medico_credencial_convenio")
+  infotime_convenio                                                                                infotime_convenio?  @relation(fields: [id_convenio], references: [id_convenio], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_convenio")
+  infotime_medico_infotime_medico_credencial_convenio_id_medicoToinfotime_medico                     infotime_medico?    @relation("infotime_medico_credencial_convenio_id_medicoToinfotime_medico", fields: [id_medico], references: [id_medico], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_medico")
+  infotime_tenacidade                                                                              infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_tenacidade")
+  infotime_usuario                                                                                 infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_medico_credencial_convenio_id_usuario_auditoria")
   @@map("medico_credencial_convenio")
 }
 
-model infolab_motivo_cancelamento {
+model infotime_motivo_cancelamento {
   id_motivo_cancelamento             BigInt                               @id @default(autoincrement())
   id_tenacidade                      BigInt
   id_usuario_auditoria               BigInt?
   descricao                          String?                              @db.VarChar(200)
   endereco_ip_auditoria              String?                              @db.VarChar(20)
   nome_aplicacao_auditoria           String?                              @db.VarChar(255)
-  infolab_tenacidade                 infolab_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_motivo_cancelamento_id_tenacidade")
-  infolab_usuario                    infolab_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_motivo_cancelamento_id_usuario_auditoria")
+  infotime_tenacidade                 infotime_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_motivo_cancelamento_id_tenacidade")
+  infotime_usuario                    infotime_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_motivo_cancelamento_id_usuario_auditoria")
   @@map("motivo_cancelamento")
 }
 
-model infolab_motivo_desconto {
+model infotime_motivo_desconto {
   id_motivo_desconto            BigInt                          @id @default(autoincrement())
   id_tenacidade                 BigInt
   id_usuario_auditoria          BigInt?
@@ -966,35 +966,35 @@ model infolab_motivo_desconto {
   codigo_externo                BigInt?
   endereco_ip_auditoria         String?                         @db.VarChar(20)
   nome_aplicacao_auditoria      String?                         @db.VarChar(255)
-  infolab_tenacidade            infolab_tenacidade              @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_motivo_desconto_id_tenacidade")
-  infolab_usuario               infolab_usuario?                @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_motivo_desconto_id_usuario_auditoria")
+  infotime_tenacidade            infotime_tenacidade              @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_motivo_desconto_id_tenacidade")
+  infotime_usuario               infotime_usuario?                @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_motivo_desconto_id_usuario_auditoria")
   @@map("motivo_desconto")
 }
 
-model infolab_motivo_retificacao {
+model infotime_motivo_retificacao {
   id_motivo_retificacao              BigInt                               @id @default(autoincrement())
   id_tenacidade                      BigInt
   id_usuario_auditoria               BigInt?
   descricao                          String?                              @db.VarChar(200)
   endereco_ip_auditoria              String?                              @db.VarChar(20)
   nome_aplicacao_auditoria           String?                              @db.VarChar(255)
-  infolab_tenacidade                 infolab_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_motivo_retificacao_id_tenacidade")
-  infolab_usuario                    infolab_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_motivo_retificacao_id_usuario_auditoria")
+  infotime_tenacidade                 infotime_tenacidade                   @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_motivo_retificacao_id_tenacidade")
+  infotime_usuario                    infotime_usuario?                     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_motivo_retificacao_id_usuario_auditoria")
   @@map("motivo_retificacao")
 }
 
-model infolab_parametro_valor {
+model infotime_parametro_valor {
   id_parametro_valor       BigInt             @id @default(autoincrement())
   id_tenacidade            BigInt
   parametro                String             @default("") @db.VarChar(255)
   valor                    String?            @db.VarChar(255)
   endereco_ip_auditoria    String?            @db.VarChar(20)
   nome_aplicacao_auditoria String?            @db.VarChar(255)
-  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_parametro_valor_id_tenacidade")
+  infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_parametro_valor_id_tenacidade")
   @@map("parametro_valor")
 }
 
-model infolab_procedencia {
+model infotime_procedencia {
   id_procedencia                 BigInt                           @id @default(autoincrement())
   id_tenacidade                  BigInt
   id_usuario_auditoria           BigInt?
@@ -1013,24 +1013,24 @@ model infolab_procedencia {
   codigo_migracao                String?                          @db.VarChar(10)
   endereco_ip_auditoria          String?                          @db.VarChar(20)
   nome_aplicacao_auditoria       String?                          @db.VarChar(255)
-  infolab_usuario                infolab_usuario?                 @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_procedencia_infolab_usuario_auditoria")
-  infolab_tenacidade             infolab_tenacidade               @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_procedencia_id_tenacidade")
+  infotime_usuario                infotime_usuario?                 @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_procedencia_infolab_usuario_auditoria")
+  infotime_tenacidade             infotime_tenacidade               @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_procedencia_id_tenacidade")
   @@map("procedencia")
 }
 
-model infolab_raca {
+model infotime_raca {
   id_raca                  BigInt            @id @default(autoincrement())
   id_usuario_auditoria     BigInt?
   endereco_ip_auditoria    String?           @db.VarChar(255)
   nome_aplicacao_auditoria String?           @db.VarChar(255)
   nome                     String?           @db.VarChar(80)
-  infolab_cliente          infolab_cliente[]
-  infolab_etnia            infolab_etnia[]
-  infolab_usuario          infolab_usuario?  @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_raca_id_usuario_auditoria")
+  infotime_cliente          infotime_cliente[]
+  infotime_etnia            infotime_etnia[]
+  infotime_usuario          infotime_usuario?  @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_raca_id_usuario_auditoria")
   @@map("raca")
 }
 
-model infolab_relatorio {
+model infotime_relatorio {
   id_relatorio              BigInt                      @id @default(autoincrement())
   id_tenacidade             BigInt
   id_tipo_relatorio         BigInt?
@@ -1044,15 +1044,15 @@ model infolab_relatorio {
   ativo                     String?                     @db.Char(1)
   endereco_ip_auditoria     String?                     @db.VarChar(20)
   nome_aplicacao_auditoria  String?                     @db.VarChar(255)
-  infolab_convenio          infolab_convenio[]
-  infolab_tenacidade        infolab_tenacidade          @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_relatorio_id_tenacidade")
-  infolab_tipo_relatorio    infolab_tipo_relatorio?     @relation(fields: [id_tipo_relatorio], references: [id_tipo_relatorio], onDelete: Restrict, onUpdate: Restrict, map: "fk_relatorio_id_tipo_relatorio")
-  infolab_usuario           infolab_usuario?            @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_relatorio_id_usuario_auditoria")
-  infolab_unidade_relatorio infolab_unidade_relatorio[]
+  infotime_convenio          infotime_convenio[]
+  infotime_tenacidade        infotime_tenacidade          @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_relatorio_id_tenacidade")
+  infotime_tipo_relatorio    infotime_tipo_relatorio?     @relation(fields: [id_tipo_relatorio], references: [id_tipo_relatorio], onDelete: Restrict, onUpdate: Restrict, map: "fk_relatorio_id_tipo_relatorio")
+  infotime_usuario           infotime_usuario?            @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_relatorio_id_usuario_auditoria")
+  infotime_unidade_relatorio infotime_unidade_relatorio[]
   @@map("relatorio")
 }
 
-model infolab_serie_nota_fiscal_servico {
+model infotime_serie_nota_fiscal_servico {
   id_serie_nota_fiscal_servico BigInt             @id @default(autoincrement())
   id_tenacidade                BigInt
   id_unidade                   BigInt
@@ -1070,13 +1070,13 @@ model infolab_serie_nota_fiscal_servico {
   id_usuario_auditoria         BigInt?
   endereco_ip_auditoria        String?            @db.VarChar(20)
   nome_aplicacao_auditoria     String?            @db.VarChar(255)
-  infolab_tenacidade           infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_serie_nota_fiscal_servico_id_tenacidade")
-  infolab_unidade              infolab_unidade    @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_serie_nota_fiscal_servico_id_unidade")
-  infolab_usuario              infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_serie_nota_fiscal_servico_id_usuario_auditoria")
+  infotime_tenacidade           infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_serie_nota_fiscal_servico_id_tenacidade")
+  infotime_unidade              infotime_unidade    @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_serie_nota_fiscal_servico_id_unidade")
+  infotime_usuario              infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_serie_nota_fiscal_servico_id_usuario_auditoria")
   @@map("serie_nota_fiscal_servico")
 }
 
-model infolab_setor {
+model infotime_setor {
   id_setor                 BigInt                   @id @default(autoincrement())
   id_tenacidade            BigInt
   id_usuario_auditoria     BigInt?
@@ -1086,12 +1086,12 @@ model infolab_setor {
   codigo_externo           BigInt?
   endereco_ip_auditoria    String?                  @db.VarChar(20)
   nome_aplicacao_auditoria String?                  @db.VarChar(255)
-  infolab_tenacidade       infolab_tenacidade       @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_setor_id_tenacidade")
-  infolab_usuario          infolab_usuario?         @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_setor_id_usuario_auditoria")
+  infotime_tenacidade       infotime_tenacidade       @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_setor_id_tenacidade")
+  infotime_usuario          infotime_usuario?         @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_setor_id_usuario_auditoria")
   @@map("setor")
 }
 
-model infolab_tenacidade_configuracao {
+model infotime_tenacidade_configuracao {
   id_tenacidade_configuracao             BigInt             @id(map: "infolab_configuracao_tenacidade_pkey") @default(autoincrement())
   id_tenacidade                          BigInt
   razao_social                           String?            @db.VarChar(255)
@@ -1102,7 +1102,7 @@ model infolab_tenacidade_configuracao {
   ultimo_atendimento                     BigInt?            @default(0)
   dominio_tenacidade                     String?            @unique @db.VarChar(255)
   chave_jwt                              String?            @db.VarChar(255)
-  infolab_vet                            String?            @db.Char(1)
+  infotime_vet                            String?            @map("infolab_vet") @db.Char(1)
   somente_interfaceamento                String?            @db.Char(1)
   utilizar_numeracao_origem_liberacao    String?            @db.Char(1)
   utilizar_deltacheck_liberacao          String?            @db.Char(1)
@@ -1119,41 +1119,41 @@ model infolab_tenacidade_configuracao {
   nome_aplicacao_auditoria               String?            @db.VarChar(255)
   timeout_sessao_minutos                 Int?               @default(15)
   quantidade_licenca                     Int?
-  infolab_tenacidade                     infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_tenacidade_configuracao_infolab_tenacidade")
+  infotime_tenacidade                     infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_tenacidade_configuracao_infolab_tenacidade")
   @@map("tenacidade_configuracao")
 }
 
-model infolab_tipo_aplicacao {
+model infotime_tipo_aplicacao {
   id_tipo_aplicacao        BigInt           @id @default(autoincrement())
   id_usuario_auditoria     BigInt?
   endereco_ip_auditoria    String?          @db.VarChar(255)
   nome_aplicacao_auditoria String?          @db.VarChar(255)
   descricao                String?          @db.VarChar(255)
-  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_aplicacao_id_usuario_auditoria")
+  infotime_usuario          infotime_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_aplicacao_id_usuario_auditoria")
   @@map("tipo_aplicacao")
 }
 
-model infolab_tipo_estado_civil {
+model infotime_tipo_estado_civil {
   id_tipo_estado_civil     BigInt           @id @default(autoincrement())
   id_usuario_auditoria     BigInt?
   descricao                String?          @db.VarChar(100)
   endereco_ip_auditoria    String?          @db.VarChar(20)
   nome_aplicacao_auditoria String?          @db.VarChar(255)
-  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_estado_civil_id_usuario_auditoria")
+  infotime_usuario          infotime_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_estado_civil_id_usuario_auditoria")
   @@map("tipo_estado_civil")
 }
 
-model infolab_tipo_evento {
+model infotime_tipo_evento {
   id_tipo_evento           BigInt           @id @default(autoincrement())
   id_usuario_auditoria     BigInt?
   endereco_ip_auditoria    String?          @db.VarChar(255)
   nome_aplicacao_auditoria String?          @db.VarChar(255)
   descricao                String?          @db.VarChar(100)
-  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_evento_id_usuario_auditoria")
+  infotime_usuario          infotime_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_evento_id_usuario_auditoria")
   @@map("tipo_evento")
 }
 
-model infolab_tipo_indicacao {
+model infotime_tipo_indicacao {
   id_tipo_indicacao        BigInt              @id @default(autoincrement())
   id_tenacidade            BigInt
   id_usuario_auditoria     BigInt?
@@ -1162,12 +1162,12 @@ model infolab_tipo_indicacao {
   ativo                    String?             @db.Char(1)
   nome_aplicacao_auditoria String?             @db.VarChar(20)
   endereco_ip_auditoria    String?             @db.VarChar(255)
-  infolab_tenacidade       infolab_tenacidade  @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_tipo_indicacao_id_tenacidade")
-  infolab_usuario          infolab_usuario?    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_indicacao_id_usuario_auditoria")
+  infotime_tenacidade       infotime_tenacidade  @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_tipo_indicacao_id_tenacidade")
+  infotime_usuario          infotime_usuario?    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_indicacao_id_usuario_auditoria")
   @@map("tipo_indicacao")
 }
 
-model infolab_tipo_integracao {
+model infotime_tipo_integracao {
   id_tipo_integracao       BigInt               @id @default(autoincrement())
   id_usuario_auditoria     BigInt?
   endereco_ip_auditoria    String?              @db.VarChar(255)
@@ -1175,22 +1175,22 @@ model infolab_tipo_integracao {
   descricao                String?              @db.VarChar(100)
   codigo_migracao          BigInt?
   ativo                    String?              @db.Char(1)
-  infolab_usuario          infolab_usuario?     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_integracao_id_usuario_auditoria")
+  infotime_usuario          infotime_usuario?     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_integracao_id_usuario_auditoria")
   @@map("tipo_integracao")
 }
 
-model infolab_tipo_interface {
+model infotime_tipo_interface {
   id_tipo_interface        BigInt                    @id @default(autoincrement())
   id_usuario_auditoria     BigInt?
   descricao                String?                   @db.VarChar(100)
   ativo                    String?                   @db.Char(1)
   nome_aplicacao_auditoria String?                   @db.VarChar(20)
   endereco_ip_auditoria    String?                   @db.VarChar(255)
-  infolab_usuario          infolab_usuario?          @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_interface_id_usuario_auditoria")
+  infotime_usuario          infotime_usuario?          @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_interface_id_usuario_auditoria")
   @@map("tipo_interface")
 }
 
-model infolab_tipo_pagamento {
+model infotime_tipo_pagamento {
   id_tipo_pagamento             BigInt                          @id @default(autoincrement())
   id_tenacidade                 BigInt
   id_usuario_auditoria          BigInt?
@@ -1203,24 +1203,24 @@ model infolab_tipo_pagamento {
   codigo_externo                BigInt?
   endereco_ip_auditoria         String?                         @db.VarChar(20)
   nome_aplicacao_auditoria      String?                         @db.VarChar(255)
-  infolab_tenacidade            infolab_tenacidade              @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_tipo_pagamento_id_tenacidade")
-  infolab_usuario               infolab_usuario?                @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_pagamento_id_usuario_auditoria")
+  infotime_tenacidade            infotime_tenacidade              @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_tipo_pagamento_id_tenacidade")
+  infotime_usuario               infotime_usuario?                @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_pagamento_id_usuario_auditoria")
   @@map("tipo_pagamento")
 }
 
-model infolab_tipo_relatorio {
+model infotime_tipo_relatorio {
   id_tipo_relatorio        BigInt              @id @default(autoincrement())
   id_usuario_auditoria     BigInt?
   endereco_ip_auditoria    String?             @db.VarChar(255)
   nome_aplicacao_auditoria String?             @db.VarChar(255)
   descricao                String?             @db.VarChar(100)
   ativo                    String?             @db.Char(1)
-  infolab_relatorio        infolab_relatorio[]
-  infolab_usuario          infolab_usuario?    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_relatorio_id_usuario_auditoria")
+  infotime_relatorio        infotime_relatorio[]
+  infotime_usuario          infotime_usuario?    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_relatorio_id_usuario_auditoria")
   @@map("tipo_relatorio")
 }
 
-model infolab_unidade {
+model infotime_unidade {
   id_unidade                                                            BigInt                                           @id @default(autoincrement())
   id_tenacidade                                                         BigInt
   id_almoxarifado_padrao                                                BigInt?
@@ -1269,17 +1269,17 @@ model infolab_unidade {
   codigo_externo                                                        String?                                          @db.VarChar(30)
   endereco_ip_auditoria                                                 String?                                          @db.VarChar(20)
   nome_aplicacao_auditoria                                              String?                                          @db.VarChar(255)
-  infolab_fatura                                                        infolab_fatura[]
-  infolab_serie_nota_fiscal_servico                                     infolab_serie_nota_fiscal_servico[]
-  infolab_tenacidade                                                    infolab_tenacidade                               @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_unidade_id_tenacidade")
-  infolab_usuario_infolab_unidade_id_usuario_auditoriaToinfolab_usuario infolab_usuario?                                 @relation("infolab_unidade_id_usuario_auditoriaToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_id_usuario_auditoria")
-  infolab_unidade_email                                                 infolab_unidade_email[]
-  infolab_unidade_relatorio                                             infolab_unidade_relatorio[]
-  infolab_usuario_infolab_usuario_id_unidadeToinfolab_unidade           infolab_usuario[]                                @relation("infolab_usuario_id_unidadeToinfolab_unidade")
+  infotime_fatura                                                        infotime_fatura[]
+  infotime_serie_nota_fiscal_servico                                     infotime_serie_nota_fiscal_servico[]
+  infotime_tenacidade                                                    infotime_tenacidade                               @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_unidade_id_tenacidade")
+  infotime_usuario_infotime_unidade_id_usuario_auditoriaToinfotime_usuario infotime_usuario?                                 @relation("infotime_unidade_id_usuario_auditoriaToinfotime_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_id_usuario_auditoria")
+  infotime_unidade_email                                                 infotime_unidade_email[]
+  infotime_unidade_relatorio                                             infotime_unidade_relatorio[]
+  infotime_usuario_infotime_usuario_id_unidadeToinfotime_unidade           infotime_usuario[]                                @relation("infotime_usuario_id_unidadeToinfotime_unidade")
   @@map("unidade")
 }
 
-model infolab_unidade_email {
+model infotime_unidade_email {
   id_unidade_email         BigInt             @id @default(autoincrement())
   id_tenacidade            BigInt
   id_unidade               BigInt?
@@ -1296,13 +1296,13 @@ model infolab_unidade_email {
   codigo_migracao          BigInt?
   endereco_ip_auditoria    String?            @db.VarChar(20)
   nome_aplicacao_auditoria String?            @db.VarChar(255)
-  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_unidade_email_id_tenacidade")
-  infolab_unidade          infolab_unidade?   @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_email_id_unidade")
-  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_email_id_usuario_auditoria")
+  infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_unidade_email_id_tenacidade")
+  infotime_unidade          infotime_unidade?   @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_email_id_unidade")
+  infotime_usuario          infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_email_id_usuario_auditoria")
   @@map("unidade_email")
 }
 
-model infolab_unidade_federacao {
+model infotime_unidade_federacao {
   id_unidade_federacao     BigInt           @id @default(autoincrement())
   id_usuario_auditoria     BigInt?
   codigo                   Int?
@@ -1310,11 +1310,11 @@ model infolab_unidade_federacao {
   descricao                String?          @db.VarChar(100)
   endereco_ip_auditoria    String?          @db.VarChar(20)
   nome_aplicacao_auditoria String?          @db.VarChar(255)
-  infolab_usuario          infolab_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_federacao_id_usuario_auditoria")
+  infotime_usuario          infotime_usuario? @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_federacao_id_usuario_auditoria")
   @@map("unidade_federacao")
 }
 
-model infolab_unidade_relatorio {
+model infotime_unidade_relatorio {
   id_unidade_relatorio     BigInt             @id @default(autoincrement())
   id_tenacidade            BigInt
   id_unidade               BigInt?
@@ -1323,14 +1323,14 @@ model infolab_unidade_relatorio {
   ativo                    String?            @db.Char(1)
   endereco_ip_auditoria    String?            @db.VarChar(20)
   nome_aplicacao_auditoria String?            @db.VarChar(255)
-  infolab_relatorio        infolab_relatorio? @relation(fields: [id_relatorio], references: [id_relatorio], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_relatorio_id_relatorio")
-  infolab_tenacidade       infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_unidade_relatorio_id_tenacidade")
-  infolab_unidade          infolab_unidade?   @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_relatorio_id_unidade")
-  infolab_usuario          infolab_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_relatorio_id_usuario_auditoria")
+  infotime_relatorio        infotime_relatorio? @relation(fields: [id_relatorio], references: [id_relatorio], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_relatorio_id_relatorio")
+  infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_unidade_relatorio_id_tenacidade")
+  infotime_unidade          infotime_unidade?   @relation(fields: [id_unidade], references: [id_unidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_relatorio_id_unidade")
+  infotime_usuario          infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_unidade_relatorio_id_usuario_auditoria")
   @@map("unidade_relatorio")
 }
 
-model infolab_versao_tiss {
+model infotime_versao_tiss {
   id_versao_tiss           Int                 @id @default(autoincrement())
   id_tenacidade            BigInt?
   id_usuario_auditoria     BigInt?
@@ -1338,37 +1338,37 @@ model infolab_versao_tiss {
   ativo                    String?             @db.Char(1)
   endereco_ip_auditoria    String?             @db.VarChar(20)
   nome_aplicacao_auditoria String?             @db.VarChar(255)
-  infolab_tenacidade       infolab_tenacidade? @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_versao_tiss_id_tenacidade")
-  infolab_usuario          infolab_usuario?    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_versao_tiss_id_usuario_auditoria")
+  infotime_tenacidade       infotime_tenacidade? @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_versao_tiss_id_tenacidade")
+  infotime_usuario          infotime_usuario?    @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_versao_tiss_id_usuario_auditoria")
   @@map("versao_tiss")
 }
 
-model infolab_vet_especie {
+model infotime_vet_especie {
   id_vet_especie           BigInt                     @id
   id_usuario_auditoria     BigInt?
   nome                     String?                    @db.VarChar(80)
   endereco_ip_auditoria    String?                    @db.VarChar(20)
   nome_aplicacao_auditoria String?                    @db.VarChar(255)
-  infolab_cliente          infolab_cliente[]
-  infolab_usuario          infolab_usuario?           @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_especie_id_usuario_auditoria")
-  infolab_vet_raca         infolab_vet_raca[]
+  infotime_cliente          infotime_cliente[]
+  infotime_usuario          infotime_usuario?           @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_especie_id_usuario_auditoria")
+  infotime_vet_raca         infotime_vet_raca[]
   @@map("vet_especie")
 }
 
-model infolab_vet_raca {
+model infotime_vet_raca {
   id_vet_raca              BigInt                     @id
   id_vet_especie           BigInt?
   id_usuario_auditoria     BigInt?
   nome                     String?                    @db.VarChar(100)
   endereco_ip_auditoria    String?                    @db.VarChar(20)
   nome_aplicacao_auditoria String?                    @db.VarChar(255)
-  infolab_cliente          infolab_cliente[]
-  infolab_usuario          infolab_usuario?           @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_raca_id_usuario_auditoria")
-  infolab_vet_especie      infolab_vet_especie?       @relation(fields: [id_vet_especie], references: [id_vet_especie], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_raca_id_vet_especie")
+  infotime_cliente          infotime_cliente[]
+  infotime_usuario          infotime_usuario?           @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_raca_id_usuario_auditoria")
+  infotime_vet_especie      infotime_vet_especie?       @relation(fields: [id_vet_especie], references: [id_vet_especie], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_raca_id_vet_especie")
   @@map("vet_raca")
 }
 
-model infolab_sessao_usuario {
+model infotime_sessao_usuario {
   id_sessao          BigInt             @id @default(autoincrement())
   id_tenacidade      BigInt
   id_usuario         BigInt
@@ -1379,15 +1379,15 @@ model infolab_sessao_usuario {
   dispositivo        String?            @db.VarChar(255)
   ip                 String?            @db.VarChar(45)
   user_agent         String?            @db.VarChar(255)
-  infolab_tenacidade infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction, map: "fk_sessao_tenacidade")
-  infolab_usuario    infolab_usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_sessao_usuario")
+  infotime_tenacidade infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction, map: "fk_sessao_tenacidade")
+  infotime_usuario    infotime_usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_sessao_usuario")
 
   @@unique([id_tenacidade, id_usuario], map: "ux_sessao_usuario_ativa")
   @@index([token_id], map: "ix_sessao_token_id")
   @@map("sessao_usuario")
 }
 
-model infolab_sessao_suporte {
+model infotime_sessao_suporte {
   id_sessao_suporte  BigInt             @id @default(autoincrement())
   id_usuario         BigInt
   id_tenacidade      BigInt
@@ -1400,8 +1400,8 @@ model infolab_sessao_suporte {
   ip                 String?            @db.VarChar(45)
   dispositivo        String?            @db.VarChar(255)
   user_agent         String?
-  infolab_tenacidade infolab_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction)
-  infolab_usuario    infolab_usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
+  infotime_tenacidade infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction)
+  infotime_usuario    infotime_usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([id_tenacidade], map: "idx_sessao_suporte_tenacidade")
   @@index([token_id], map: "idx_sessao_suporte_token_id")
@@ -1410,20 +1410,20 @@ model infolab_sessao_suporte {
 }
 
 /// Catálogo de telas/menu (seed). `codigo` alinha ao slug do front (ex.: cliente, menu).
-model infolab_formulario {
+model infotime_formulario {
   id_formulario              BigInt                       @id @default(autoincrement())
   codigo                     String                       @unique @db.VarChar(80)
   descricao                  String?                      @db.VarChar(255)
   ordem                      Int                          @default(0)
   ativo                      Boolean                      @default(true)
-  infolab_layout_formulario  infolab_layout_formulario[]
-  infolab_usuario_permissoes infolab_usuario_permissoes[]
+  infotime_layout_formulario  infotime_layout_formulario[]
+  infotime_usuario_permissoes infotime_usuario_permissoes[]
 
   @@index([ativo, ordem])
   @@map("formulario")
 }
 
-model infolab_usuario_permissoes {
+model infotime_usuario_permissoes {
   id_usuario_permissao     BigInt                @id @default(autoincrement())
   id_grupo_usuario         BigInt
   id_formulario            BigInt
@@ -1435,9 +1435,9 @@ model infolab_usuario_permissoes {
   excluir                  String                @default("N") @db.Char(1)
   endereco_ip_auditoria    String?               @db.VarChar(20)
   nome_aplicacao_auditoria String?               @db.VarChar(255)
-  infolab_formulario       infolab_formulario    @relation(fields: [id_formulario], references: [id_formulario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_permissoes_id_formulario")
-  infolab_grupo_usuario    infolab_grupo_usuario @relation(fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Cascade, onUpdate: Restrict, map: "fk_usuario_permissoes_id_grupo_usuario")
-  infolab_usuario          infolab_usuario?      @relation("infolab_usuario_permissoes_id_usuario_auditoriaToinfolab_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_permissoes_id_usuario_auditoria")
+  infotime_formulario       infotime_formulario    @relation(fields: [id_formulario], references: [id_formulario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_permissoes_id_formulario")
+  infotime_grupo_usuario    infotime_grupo_usuario @relation(fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Cascade, onUpdate: Restrict, map: "fk_usuario_permissoes_id_grupo_usuario")
+  infotime_usuario          infotime_usuario?      @relation("infotime_usuario_permissoes_id_usuario_auditoriaToinfotime_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_usuario_permissoes_id_usuario_auditoria")
 
   @@unique([id_grupo_usuario, id_formulario], map: "uq_usuario_permissoes_grupo_formulario")
   @@index([id_formulario], map: "idx_usuario_permissoes_formulario")
@@ -1447,13 +1447,13 @@ model infolab_usuario_permissoes {
 }
 
 /// Personalização por perfil (grupo de usuário): JSON único (layout, menu, etc.).
-model infolab_layout_formulario {
+model infotime_layout_formulario {
   id_layout_formulario  BigInt                @id @default(autoincrement())
   id_formulario         BigInt
   id_grupo_usuario      BigInt
   configuracao_json     String
-  infolab_formulario    infolab_formulario    @relation(fields: [id_formulario], references: [id_formulario], onDelete: Restrict, onUpdate: Cascade)
-  infolab_grupo_usuario infolab_grupo_usuario @relation(fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Cascade, onUpdate: Cascade)
+  infotime_formulario    infotime_formulario    @relation(fields: [id_formulario], references: [id_formulario], onDelete: Restrict, onUpdate: Cascade)
+  infotime_grupo_usuario infotime_grupo_usuario @relation(fields: [id_grupo_usuario], references: [id_grupo_usuario], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([id_grupo_usuario, id_formulario])
   @@index([id_formulario])

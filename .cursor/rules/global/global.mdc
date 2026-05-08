@@ -1,0 +1,43 @@
+---
+description: "Regras globais, contexto do repositório e nomenclatura"
+alwaysApply: true
+---
+
+# Regras Globais
+
+- **Repositório:** frontend Next.js (React) + TypeScript em `web/`; backend NestJS + TypeScript em `api/`; dados com Prisma + PostgreSQL.
+- Sempre seguir a arquitetura definida no projeto.
+- Evitar duplicação de código.
+- Preferir código simples e legível.
+- Não criar soluções desnecessariamente complexas.
+- Reutilizar padrões existentes antes de criar novos.
+- Feature que utilizam mestre detalhe devem sempre enviar em transação, se o pai falha não grava nada no banco, se o filho falha não grava nada no banco.
+
+## Nomenclatura
+
+- Preferir **português (pt-BR)** em **classes, funções, variáveis e tipos** que expressem **regra de negócio ou domínio** (ex.: tenacidade, usuario, cadastro, permissão), alinhado ao schema Prisma, DTOs e módulos já existentes.
+- **Inglês** quando fizer sentido: sufixos e papéis do ecossistema (`Controller`, `Service`, `Dto`, `Module`, hooks `use…`), nomes impostos por bibliotecas/frameworks, ou consistência com o arquivo/módulo alterado.
+
+## Domínio e documentação (`ai/`)
+
+- Regras e contexto por domínio em Markdown: **`ai/domains/<dominio>/`** (`Context.md`, `Rules.md`, `Schema.md`, `Examples.md`). Ver runbook **`ai/README.md`**.
+- Não inventar regra de negócio contradizendo o **código** (`api/`, `web/`), o **schema Prisma** e a documentação em `ai/domains` quando ela existir para o tema.
+- Quando houver dúvida entre documentação e código executável, **confirmar no schema/código**; a documentação em `ai/domains` orienta humanos e fluxos de IA — o deploy continua governado pelo repositório de código e migrations.
+
+## Consistência
+
+- Ao gerar código novo, alinhar com módulos e convenções existentes em `api/` e `web/`.
+- Seguir estrutura de pastas existente.
+
+## Banco de dados e schema
+
+- **Não** criar migrations, alterar tabelas/colunas do PostgreSQL nem o `schema.prisma` com novos campos ou FKs **sem confirmação explícita de um humano** (requisito de produto/arquitetura aprovado).
+- Em caso de dúvida sobre o modelo físico (nome da coluna, lado da FK, cardinalidade), **parar e perguntar** ao invés de supor e aplicar no banco.
+- Ajustes já solicitados e validados pelo time podem seguir o fluxo normal de migration + Prisma após essa confirmação.
+
+## Git — commits e pull requests
+
+- Mensagens de **commit** e textos de **PR** (título, descrição, bullets) em **português (pt-BR)**, claros e em frases completas.
+- Pode-se usar **Conventional Commits** com tipo em inglês (`feat`, `fix`, `docs`, `chore`, etc.) **ou** escopo; o **assunto e o corpo** devem estar em pt-BR (ex.: `feat(api): adiciona validação de tenacidade`).
+- Focar no **porquê** e no **efeito** para quem revisa ou faz deploy; evitar lista só de nomes de arquivos sem contexto.
+- Não incluir dados sensíveis, credenciais, tokens nem identificadores reais de cliente/tenant nas mensagens.

@@ -105,7 +105,7 @@ export class ServicoAutenticacao {
 
     const resultado = await this.prisma.$transaction(async (tx) => {
       await setCurrentTenantLocal(tx, tenant.id_tenacidade);
-      const usuario = await tx.infolab_usuario.findFirst({
+      const usuario = await tx.infotime_usuario.findFirst({
         where: {
           login: { equals: loginLocal, mode: 'insensitive' },
           id_tenacidade: tenant.id_tenacidade,
@@ -122,7 +122,7 @@ export class ServicoAutenticacao {
       if (!senhaValida)
         throw new UnauthorizedException('Credenciais inválidas');
 
-      const sessaoAtiva = await tx.infolab_sessao_usuario.findFirst({
+      const sessaoAtiva = await tx.infotime_sessao_usuario.findFirst({
         where: {
           id_usuario: usuario.id_usuario,
           id_tenacidade: tenant.id_tenacidade,
@@ -169,7 +169,7 @@ export class ServicoAutenticacao {
 
       const resultado = await this.prisma.$transaction(async (tx) => {
         await setCurrentTenantLocal(tx, tenant.id_tenacidade);
-        const usuario = await tx.infolab_usuario.findFirst({
+        const usuario = await tx.infotime_usuario.findFirst({
           where: {
             login: { equals: loginLocal, mode: 'insensitive' },
             id_tenacidade: tenant.id_tenacidade,
@@ -222,7 +222,7 @@ export class ServicoAutenticacao {
       // Preferência: usuário global (id_tenacidade NULL), como no seed.
       // Fallback: mesmo login cadastrado na tenacidade do domínio (RLS já permite ambos).
       const usuario =
-        (await tx.infolab_usuario.findFirst({
+        (await tx.infotime_usuario.findFirst({
           where: {
             login: { equals: parteLocal, mode: 'insensitive' },
             id_tenacidade: null,
@@ -230,7 +230,7 @@ export class ServicoAutenticacao {
           },
           select: SELECT_USUARIO_LOGIN,
         })) ??
-        (await tx.infolab_usuario.findFirst({
+        (await tx.infotime_usuario.findFirst({
           where: {
             login: { equals: parteLocal, mode: 'insensitive' },
             id_tenacidade: tenant.id_tenacidade,
@@ -254,7 +254,7 @@ export class ServicoAutenticacao {
       const agora = new Date();
       const expiracao = new Date(agora.getTime() + timeoutMinutos * 60 * 1000);
 
-      await tx.infolab_sessao_suporte.create({
+      await tx.infotime_sessao_suporte.create({
         data: {
           id_usuario: usuario.id_usuario,
           id_tenacidade: tenant.id_tenacidade,
@@ -292,12 +292,12 @@ export class ServicoAutenticacao {
 
   async logout(jti: string, isSuporte: boolean): Promise<void> {
     if (isSuporte) {
-      await this.prisma.infolab_sessao_suporte.updateMany({
+      await this.prisma.infotime_sessao_suporte.updateMany({
         where: { token_id: jti },
         data: { ativo: 'N' },
       });
     } else {
-      await this.prisma.infolab_sessao_usuario.updateMany({
+      await this.prisma.infotime_sessao_usuario.updateMany({
         where: { token_id: jti },
         data: { ativo: 'N' },
       });
@@ -310,7 +310,7 @@ export class ServicoAutenticacao {
     jti: string,
     dto: DtoRegistrarAcesso,
   ): Promise<void> {
-    await this.prisma.infolab_sessao_suporte.updateMany({
+    await this.prisma.infotime_sessao_suporte.updateMany({
       where: { token_id: jti },
       data: {
         numero_chamado: dto.numero_chamado ?? null,
@@ -337,7 +337,7 @@ export class ServicoAutenticacao {
 
     let usuario: { id_grupo_usuario: bigint | null } | null = null;
     try {
-      usuario = await this.prisma.infolab_usuario.findFirst({
+      usuario = await this.prisma.infotime_usuario.findFirst({
         where: { id_usuario: idUsuario },
         select: { id_grupo_usuario: true },
       });
@@ -375,11 +375,11 @@ export class ServicoAutenticacao {
 
     // `tela` = slug (`codigo`) ou id numérico (`id_formulario`), alinhado ao catálogo em seed.
     const formulario = /^\d+$/.test(codigoTela)
-      ? await this.prisma.infolab_formulario.findFirst({
+      ? await this.prisma.infotime_formulario.findFirst({
           where: { id_formulario: BigInt(codigoTela), ativo: true },
           select: { id_formulario: true },
         })
-      : await this.prisma.infolab_formulario.findFirst({
+      : await this.prisma.infotime_formulario.findFirst({
           where: {
             codigo: { equals: codigoTela, mode: 'insensitive' },
             ativo: true,
@@ -387,7 +387,7 @@ export class ServicoAutenticacao {
           select: { id_formulario: true },
         });
 
-    // Sem registro no catálogo: não bloqueia — só `infolab_usuario_permissoes` restringe quando existe linha.
+    // Sem registro no catálogo: não bloqueia — só `infotime_usuario_permissoes` restringe quando existe linha.
     if (!formulario) {
       return {
         tela: codigoTela,
@@ -398,7 +398,7 @@ export class ServicoAutenticacao {
       };
     }
 
-    const regra = await this.prisma.infolab_usuario_permissoes.findFirst({
+    const regra = await this.prisma.infotime_usuario_permissoes.findFirst({
       where: {
         id_grupo_usuario: usuario.id_grupo_usuario,
         id_formulario: formulario.id_formulario,
@@ -410,7 +410,7 @@ export class ServicoAutenticacao {
       },
     });
 
-    // Sem linha em infolab_usuario_permissoes para (grupo, form) → não “faz parte” da matriz → tudo permitido.
+    // Sem linha em infotime_usuario_permissoes para (grupo, form) → não “faz parte” da matriz → tudo permitido.
     if (!regra) {
       return {
         tela: codigoTela,
@@ -431,7 +431,7 @@ export class ServicoAutenticacao {
   }
 
   /**
-   * Mapa de permissões por `codigo` de `infolab_formulario` para o perfil do utilizador.
+   * Mapa de permissões por `codigo` de `infotime_formulario` para o perfil do utilizador.
    * Mesma regra que `obterPermissoesTela`: sem linha na tabela para (grupo, form) → tudo permitido;
    * com linha → cada ação só se `S`.
    */
@@ -448,7 +448,7 @@ export class ServicoAutenticacao {
     } as const;
 
     if (ehSuporte) {
-      const formularios = await this.prisma.infolab_formulario.findMany({
+      const formularios = await this.prisma.infotime_formulario.findMany({
         where: { ativo: true },
         select: { codigo: true },
       });
@@ -461,7 +461,7 @@ export class ServicoAutenticacao {
 
     let usuario: { id_grupo_usuario: bigint | null } | null = null;
     try {
-      usuario = await this.prisma.infolab_usuario.findFirst({
+      usuario = await this.prisma.infotime_usuario.findFirst({
         where: { id_usuario: idUsuario },
         select: { id_grupo_usuario: true },
       });
@@ -471,7 +471,7 @@ export class ServicoAutenticacao {
         e.code === 'P2022' &&
         String(e.meta?.['column'] ?? '').includes('id_grupo_usuario');
       if (colunaAusentePerfil) {
-        const formularios = await this.prisma.infolab_formulario.findMany({
+        const formularios = await this.prisma.infotime_formulario.findMany({
           where: { ativo: true },
           select: { codigo: true },
         });
@@ -491,7 +491,7 @@ export class ServicoAutenticacao {
       throw new UnauthorizedException('Usuário não encontrado na sessão atual.');
     }
 
-    const formularios = await this.prisma.infolab_formulario.findMany({
+    const formularios = await this.prisma.infotime_formulario.findMany({
       where: { ativo: true },
       select: { id_formulario: true, codigo: true },
     });
@@ -508,7 +508,7 @@ export class ServicoAutenticacao {
       return { porCodigo };
     }
 
-    const regras = await this.prisma.infolab_usuario_permissoes.findMany({
+    const regras = await this.prisma.infotime_usuario_permissoes.findMany({
       where: { id_grupo_usuario: usuario.id_grupo_usuario },
       select: {
         id_formulario: true,
@@ -552,7 +552,7 @@ export class ServicoAutenticacao {
   }> {
     let dominioTenacidadeSessao: string | null = null;
     try {
-      const cfgs = await this.prisma.infolab_tenacidade_configuracao.findMany({
+      const cfgs = await this.prisma.infotime_tenacidade_configuracao.findMany({
         where: { id_tenacidade: BigInt(user.tenantId) },
         orderBy: { id_tenacidade_configuracao: 'asc' },
         select: { dominio_tenacidade: true },
@@ -582,7 +582,7 @@ export class ServicoAutenticacao {
   // ─── Helpers privados ────────────────────────────────────────────────────────
 
   /**
-   * Licença SaaS (`infolab_tenacidade_configuracao.data_expiracao`): bloqueia login se vencida;
+   * Licença SaaS (`infotime_tenacidade_configuracao.data_expiracao`): bloqueia login se vencida;
    * retorna aviso se faltar ≤10 dias (MCP login).
    */
   private avaliarLicencaTenant(
@@ -618,7 +618,7 @@ export class ServicoAutenticacao {
   ): Promise<void> {
     if (!quantidadeLicenca) return; // sem limite configurado
 
-    const sessoesAtivas = await tx.infolab_sessao_usuario.count({
+    const sessoesAtivas = await tx.infotime_sessao_usuario.count({
       where: {
         id_tenacidade: idTenacidade,
         ativo: 'S',
@@ -649,7 +649,7 @@ export class ServicoAutenticacao {
     tenant: {
       id_tenacidade: bigint;
       chave_jwt: string | null;
-      infolab_tenacidade_configuracao: {
+      infotime_tenacidade_configuracao: {
         timeout_sessao_minutos: number | null;
         quantidade_licenca: number | null;
       }[];
@@ -657,7 +657,7 @@ export class ServicoAutenticacao {
     req: Request,
     avisoLicenca: string | null = null,
   ): Promise<RespostaLogin> {
-    const configuracao = tenant.infolab_tenacidade_configuracao[0];
+    const configuracao = tenant.infotime_tenacidade_configuracao[0];
 
     const timeoutMinutos = this.resolverTimeout(configuracao);
 
@@ -665,7 +665,7 @@ export class ServicoAutenticacao {
     const agora = new Date();
     const expiracao = new Date(agora.getTime() + timeoutMinutos * 60 * 1000);
 
-    // RLS em infolab_sessao_usuario exige app.current_tenant_id na mesma transação (a transação do login já terminou).
+    // RLS em infotime_sessao_usuario exige app.current_tenant_id na mesma transação (a transação do login já terminou).
     await this.prisma.$transaction(async (tx) => {
       await setCurrentTenantLocal(tx, tenant.id_tenacidade);
       // Uma linha por (tenant, usuário) — @@unique. Novo login atualiza essa linha (upsert), não insere outra.
@@ -674,7 +674,7 @@ export class ServicoAutenticacao {
         tenant.id_tenacidade,
         configuracao?.quantidade_licenca,
       );
-      await tx.infolab_sessao_usuario.upsert({
+      await tx.infotime_sessao_usuario.upsert({
         where: {
           id_tenacidade_id_usuario: {
             id_tenacidade: tenant.id_tenacidade,
@@ -739,7 +739,7 @@ export class ServicoAutenticacao {
    */
   private async garantirChaveJwtTenant(idTenacidade: bigint): Promise<string> {
     const candidata = gerarChaveJwtTenant();
-    const linhas = await this.prisma.infolab_tenacidade_configuracao.findMany({
+    const linhas = await this.prisma.infotime_tenacidade_configuracao.findMany({
       where: { id_tenacidade: idTenacidade },
       orderBy: { id_tenacidade_configuracao: 'asc' },
       select: {

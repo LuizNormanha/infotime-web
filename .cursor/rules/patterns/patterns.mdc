@@ -1,0 +1,13 @@
+---
+description: "Padrões de UI e CRUD"
+alwaysApply: false
+---
+
+# Patterns
+
+- Todas as telas devem seguir layout padrão do projeto.
+- Todas as telas devem seguir o padrão de listagem + formulario-cadastro quando o fluxo incluir ambos.
+- Utilizar componentes reutilizáveis.
+- Manter consistência visual.
+- Para documentação de domínio alinhada à tela, considerar `ai/domains/<tema>/` (ver `ai/README.md`); sugestões via API em `POST /ai/generate` quando aplicável.
+- Domínios padrão do template para exemplos: **`tenacidade`** e **`usuario`** (citar estes ao precisar ilustrar um domínio neste repositório).

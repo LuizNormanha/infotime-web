@@ -69,7 +69,7 @@ O Cursor **não** passa a ler `ai/domains` automaticamente em todo chat. Para a 
 
 ### 5.1 Criar ou alterar um domínio
 
-Crie (ou edite) `ai/domains/<dominio>/Context.md`, `Rules.md`, `Schema.md`, `Examples.md`. O endpoint `generate` usa principalmente **`Rules.md`** no prompt; `Context.md` e os demais servem a humanos e à IDE quando você os referencia com `@`.
+Crie (ou edite) `ai/domains/<dominio>/Context.md`, `Rules.md`, `Schema.md`, `Examples.md`. O endpoint `generate` monta o texto de regras assim: se existir **`Rules.manifest.json`** na pasta do domínio, concatena os arquivos listados em `arquivos` (Markdown na ordem); caso contrário, lê só **`Rules.md`**. Arquivos listados que não existem em disco são silenciosamente ignorados (ver `api/src/ai/services/leitor-markdown-dominio.service.ts`). `Context.md` e os demais servem a humanos e à IDE quando você os referencia com `@`.
 
 ### 5.2 Desenvolver uma tela ou feature “seguindo as regras”
 

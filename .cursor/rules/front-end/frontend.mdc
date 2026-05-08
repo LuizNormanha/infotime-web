@@ -1,0 +1,22 @@
+---
+description: "Regras frontend Next.js (web/, i18n, BFF)"
+globs: ["web/**/*"]
+alwaysApply: true
+---
+
+# Frontend (Next.js)
+
+- **Stack:** Next.js (React) + TypeScript em `web/`.
+- Utilizar componentes reutilizáveis.
+- Evitar lógica de negócio no componente; separar UI de lógica.
+
+## i18n
+
+- Evitar textos de interface fixos em português/inglês no meio do componente quando o padrão da tela for usar mensagens.
+- Utilizar o sistema de tradução do projeto; mensagens em `web/src/app/(comum)/i18n/mensagens/`.
+
+## Consumo de API / BFF
+
+- Seguir padrão existente (fetch/BFF), alinhado a rotas **BFF** em Next quando for o fluxo do projeto.
+- Chamadas à API com **credenciais/cookies** quando aplicável; manter consistência com autenticação.
+- O recurso **`ai`** está permitido no BFF (`web/src/app/api/[...path]/route.ts`): `POST /api/ai/generate` segue o mesmo padrão de cookie JWT que o restante da API.

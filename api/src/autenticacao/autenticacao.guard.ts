@@ -80,7 +80,7 @@ export class GuardAutenticacaoJwtMultiTenant implements CanActivate {
     tenantId: string,
     jti: string,
   ): Promise<void> {
-    const cfgs = await this.prisma.infolab_tenacidade_configuracao.findMany({
+    const cfgs = await this.prisma.infotime_tenacidade_configuracao.findMany({
       where: { id_tenacidade: BigInt(tenantId) },
       orderBy: { id_tenacidade_configuracao: 'asc' },
       select: {
@@ -96,7 +96,7 @@ export class GuardAutenticacaoJwtMultiTenant implements CanActivate {
 
     this.jwtService.verify(token, { secret: cfg.chave_jwt });
 
-    const sessao = await this.prisma.infolab_sessao_usuario.findFirst({
+    const sessao = await this.prisma.infotime_sessao_usuario.findFirst({
       where: { token_id: jti, ativo: 'S', data_expiracao: { gt: new Date() } },
       select: { id_sessao: true, id_usuario: true },
     });
@@ -106,7 +106,7 @@ export class GuardAutenticacaoJwtMultiTenant implements CanActivate {
     const timeoutMin = cfg.timeout_sessao_minutos ?? 15;
 
     const novaExpiracao = new Date(Date.now() + timeoutMin * 60 * 1000);
-    await this.prisma.infolab_sessao_usuario.update({
+    await this.prisma.infotime_sessao_usuario.update({
       where: { id_sessao: sessao.id_sessao },
       data: { data_expiracao: novaExpiracao },
     });
@@ -124,7 +124,7 @@ export class GuardAutenticacaoJwtMultiTenant implements CanActivate {
 
     this.jwtService.verify(token, { secret: secretKey });
 
-    const sessao = await this.prisma.infolab_sessao_suporte.findFirst({
+    const sessao = await this.prisma.infotime_sessao_suporte.findFirst({
       where: {
         token_id: jti,
         id_tenacidade: BigInt(tenantId),
@@ -139,7 +139,7 @@ export class GuardAutenticacaoJwtMultiTenant implements CanActivate {
     const timeoutMin = 15;
 
     const novaExpiracao = new Date(Date.now() + timeoutMin * 60 * 1000);
-    await this.prisma.infolab_sessao_suporte.update({
+    await this.prisma.infotime_sessao_suporte.update({
       where: { id_sessao_suporte: sessao.id_sessao_suporte },
       data: { data_expiracao: novaExpiracao },
     });

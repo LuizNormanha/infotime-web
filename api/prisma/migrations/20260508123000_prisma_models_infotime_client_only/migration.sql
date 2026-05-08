@@ -1,0 +1,3 @@
+-- Sem alterações DDL: renomeação apenas dos models no `schema.prisma` para o prefixo
+-- `infotime_*` no cliente Prisma. Tabelas, colunas e nomes de constraints no PostgreSQL
+-- permanecem os já aplicados pelas migrations anteriores (incl. `map:` explícitos no schema).

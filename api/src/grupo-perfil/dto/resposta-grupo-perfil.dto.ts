@@ -5,7 +5,7 @@ export class RespostaGrupoPerfilDto {
   descricao!: string | null;
   /** FK tenant — somente leitura na UI (escopo do tenant). */
   idTenacidade!: string;
-  /** Nome amigável resolvido em `infolab_tenacidade` (fantasia ou razão social). */
+  /** Nome amigável resolvido na tabela física `tenacidade` (modelo Prisma `infotime_tenacidade`): fantasia ou razão social. */
   tenacidadeNomeExibicao!: string | null;
   id_usuario_auditoria!: string | null;
   endereco_ip_auditoria!: string | null;

@@ -48,7 +48,7 @@ export class UsuarioPermissoesService {
   private whereCampoPesquisa(
     campoPesquisa: string,
     qTexto: string,
-  ): Prisma.infolab_usuario_permissoesWhereInput {
+  ): Prisma.infotime_usuario_permissoesWhereInput {
     const q = qTexto.trim();
     if (campoPesquisa === 'id') {
       try {
@@ -59,21 +59,21 @@ export class UsuarioPermissoesService {
     }
     if (campoPesquisa === 'grupoUsuarioDescricao') {
       return {
-        infolab_grupo_usuario: {
+        infotime_grupo_usuario: {
           descricao: { contains: q, mode: 'insensitive' },
         },
       };
     }
     if (campoPesquisa === 'formularioCodigo') {
       return {
-        infolab_formulario: {
+        infotime_formulario: {
           codigo: { contains: q, mode: 'insensitive' },
         },
       };
     }
     if (campoPesquisa === 'formularioDescricao') {
       return {
-        infolab_formulario: {
+        infotime_formulario: {
           descricao: { contains: q, mode: 'insensitive' },
         },
       };
@@ -83,14 +83,14 @@ export class UsuarioPermissoesService {
 
   private whereFiltroRefinado(
     jsonBruto: string | undefined,
-  ): Prisma.infolab_usuario_permissoesWhereInput {
+  ): Prisma.infotime_usuario_permissoesWhereInput {
     const root = parseJsonFiltroRefinado(jsonBruto);
     const permitidos = new Set([
       'grupoUsuarioDescricao',
       'formularioCodigo',
       'formularioDescricao',
     ]);
-    const partes: Prisma.infolab_usuario_permissoesWhereInput[] = [];
+    const partes: Prisma.infotime_usuario_permissoesWhereInput[] = [];
 
     for (const [campo, valBruto] of Object.entries(root)) {
       if (!permitidos.has(campo)) continue;
@@ -110,21 +110,21 @@ export class UsuarioPermissoesService {
 
       if (campo === 'grupoUsuarioDescricao') {
         partes.push({
-          infolab_grupo_usuario: {
+          infotime_grupo_usuario: {
             descricao: { contains: contem, mode: 'insensitive' },
           },
         });
       }
       if (campo === 'formularioCodigo') {
         partes.push({
-          infolab_formulario: {
+          infotime_formulario: {
             codigo: { contains: contem, mode: 'insensitive' },
           },
         });
       }
       if (campo === 'formularioDescricao') {
         partes.push({
-          infolab_formulario: {
+          infotime_formulario: {
             descricao: { contains: contem, mode: 'insensitive' },
           },
         });
@@ -143,8 +143,8 @@ export class UsuarioPermissoesService {
     dados: RespostaListagemUsuarioPermissaoDto[];
     total: number;
   }> {
-    const baseWhere: Prisma.infolab_usuario_permissoesWhereInput = {
-      infolab_grupo_usuario: {
+    const baseWhere: Prisma.infotime_usuario_permissoesWhereInput = {
+      infotime_grupo_usuario: {
         id_tenacidade: tenantContexto.idTenacidade,
       },
     };
@@ -157,15 +157,15 @@ export class UsuarioPermissoesService {
       incluir: true,
       editar: true,
       excluir: true,
-      infolab_grupo_usuario: { select: { descricao: true } },
-      infolab_formulario: { select: { codigo: true, descricao: true } },
+      infotime_grupo_usuario: { select: { descricao: true } },
+      infotime_formulario: { select: { codigo: true, descricao: true } },
     };
 
     return executarListagemCrudCatalogo({
       query,
       todos,
       takeLegadoSemTodos: 500,
-      delegate: this.prisma.infolab_usuario_permissoes,
+      delegate: this.prisma.infotime_usuario_permissoes,
       baseWhere,
       camposPesquisaWhitelist: UsuarioPermissoesService.CAMPOS_PESQUISA,
       montarWhereCampoPesquisa: (campo, q) => this.whereCampoPesquisa(campo, q),
@@ -181,16 +181,16 @@ export class UsuarioPermissoesService {
           incluir: string;
           editar: string;
           excluir: string;
-          infolab_grupo_usuario: { descricao: string | null };
-          infolab_formulario: { codigo: string; descricao: string | null };
+          infotime_grupo_usuario: { descricao: string | null };
+          infotime_formulario: { codigo: string; descricao: string | null };
         };
         return {
           id: r.id_usuario_permissao.toString(),
           idGrupoUsuario: r.id_grupo_usuario.toString(),
           idFormulario: r.id_formulario.toString(),
-          grupoUsuarioDescricao: r.infolab_grupo_usuario.descricao ?? null,
-          formularioCodigo: r.infolab_formulario.codigo,
-          formularioDescricao: r.infolab_formulario.descricao ?? null,
+          grupoUsuarioDescricao: r.infotime_grupo_usuario.descricao ?? null,
+          formularioCodigo: r.infotime_formulario.codigo,
+          formularioDescricao: r.infotime_formulario.descricao ?? null,
           administrador: snParaBool(r.administrador),
           incluir: snParaBool(r.incluir),
           editar: snParaBool(r.editar),
@@ -198,8 +198,8 @@ export class UsuarioPermissoesService {
         };
       },
       findManyLegado: ({ where, orderBy, select: sel, take }) =>
-        this.prisma.infolab_usuario_permissoes.findMany({
-          where: where as Prisma.infolab_usuario_permissoesWhereInput,
+        this.prisma.infotime_usuario_permissoes.findMany({
+          where: where as Prisma.infotime_usuario_permissoesWhereInput,
           orderBy,
           select: sel as typeof select,
           ...(take != null ? { take } : {}),
@@ -211,18 +211,18 @@ export class UsuarioPermissoesService {
     id: string,
     tenantContexto: TenantContexto,
   ): Promise<{ dados: RespostaUsuarioPermissaoDto }> {
-    const registro = await this.prisma.infolab_usuario_permissoes.findUnique({
+    const registro = await this.prisma.infotime_usuario_permissoes.findUnique({
       where: { id_usuario_permissao: BigInt(id) },
       include: {
-        infolab_grupo_usuario: {
+        infotime_grupo_usuario: {
           select: { id_tenacidade: true, descricao: true },
         },
-        infolab_formulario: { select: { codigo: true, descricao: true } },
+        infotime_formulario: { select: { codigo: true, descricao: true } },
       },
     });
     if (
       !registro ||
-      registro.infolab_grupo_usuario.id_tenacidade !==
+      registro.infotime_grupo_usuario.id_tenacidade !==
         tenantContexto.idTenacidade
     ) {
       throw new NotFoundException(`Permissão de usuário ${id} não encontrada.`);
@@ -235,7 +235,7 @@ export class UsuarioPermissoesService {
     tenantContexto: TenantContexto,
     ip: string,
   ): Promise<{ id: string }> {
-    const grupo = await this.prisma.infolab_grupo_usuario.findFirst({
+    const grupo = await this.prisma.infotime_grupo_usuario.findFirst({
       where: {
         id_grupo_usuario: BigInt(dto.idGrupoUsuario),
         id_tenacidade: tenantContexto.idTenacidade,
@@ -248,7 +248,7 @@ export class UsuarioPermissoesService {
       );
     }
 
-    const formulario = await this.prisma.infolab_formulario.findUnique({
+    const formulario = await this.prisma.infotime_formulario.findUnique({
       where: { id_formulario: BigInt(dto.idFormulario) },
       select: { id_formulario: true },
     });
@@ -257,7 +257,7 @@ export class UsuarioPermissoesService {
     }
 
     try {
-      const criado = await this.prisma.infolab_usuario_permissoes.create({
+      const criado = await this.prisma.infotime_usuario_permissoes.create({
         data: {
           id_grupo_usuario: BigInt(dto.idGrupoUsuario),
           id_formulario: BigInt(dto.idFormulario),
@@ -291,15 +291,15 @@ export class UsuarioPermissoesService {
     tenantContexto: TenantContexto,
     ip: string,
   ): Promise<{ id: string }> {
-    const existente = await this.prisma.infolab_usuario_permissoes.findUnique({
+    const existente = await this.prisma.infotime_usuario_permissoes.findUnique({
       where: { id_usuario_permissao: BigInt(id) },
       include: {
-        infolab_grupo_usuario: { select: { id_tenacidade: true } },
+        infotime_grupo_usuario: { select: { id_tenacidade: true } },
       },
     });
     if (
       !existente ||
-      existente.infolab_grupo_usuario.id_tenacidade !==
+      existente.infotime_grupo_usuario.id_tenacidade !==
         tenantContexto.idTenacidade
     ) {
       throw new NotFoundException(`Permissão de usuário ${id} não encontrada.`);
@@ -315,7 +315,7 @@ export class UsuarioPermissoesService {
         : existente.id_formulario;
 
     if (dto.idGrupoUsuario !== undefined) {
-      const g = await this.prisma.infolab_grupo_usuario.findFirst({
+      const g = await this.prisma.infotime_grupo_usuario.findFirst({
         where: {
           id_grupo_usuario: idGrupo,
           id_tenacidade: tenantContexto.idTenacidade,
@@ -330,7 +330,7 @@ export class UsuarioPermissoesService {
     }
 
     if (dto.idFormulario !== undefined) {
-      const f = await this.prisma.infolab_formulario.findUnique({
+      const f = await this.prisma.infotime_formulario.findUnique({
         where: { id_formulario: idForm },
         select: { id_formulario: true },
       });
@@ -340,7 +340,7 @@ export class UsuarioPermissoesService {
     }
 
     try {
-      await this.prisma.infolab_usuario_permissoes.update({
+      await this.prisma.infotime_usuario_permissoes.update({
         where: { id_usuario_permissao: BigInt(id) },
         data: {
           id_usuario_auditoria: tenantContexto.idUsuario,
@@ -382,20 +382,20 @@ export class UsuarioPermissoesService {
     id: string,
     tenantContexto: TenantContexto,
   ): Promise<{ ok: boolean }> {
-    const existente = await this.prisma.infolab_usuario_permissoes.findUnique({
+    const existente = await this.prisma.infotime_usuario_permissoes.findUnique({
       where: { id_usuario_permissao: BigInt(id) },
       include: {
-        infolab_grupo_usuario: { select: { id_tenacidade: true } },
+        infotime_grupo_usuario: { select: { id_tenacidade: true } },
       },
     });
     if (
       !existente ||
-      existente.infolab_grupo_usuario.id_tenacidade !==
+      existente.infotime_grupo_usuario.id_tenacidade !==
         tenantContexto.idTenacidade
     ) {
       throw new NotFoundException(`Permissão de usuário ${id} não encontrada.`);
     }
-    await this.prisma.infolab_usuario_permissoes.delete({
+    await this.prisma.infotime_usuario_permissoes.delete({
       where: { id_usuario_permissao: BigInt(id) },
     });
     return { ok: true };
@@ -412,16 +412,16 @@ export class UsuarioPermissoesService {
     id_usuario_auditoria: bigint | null;
     endereco_ip_auditoria: string | null;
     nome_aplicacao_auditoria: string | null;
-    infolab_grupo_usuario: { descricao: string | null };
-    infolab_formulario: { codigo: string; descricao: string | null };
+    infotime_grupo_usuario: { descricao: string | null };
+    infotime_formulario: { codigo: string; descricao: string | null };
   }): RespostaUsuarioPermissaoDto {
     return {
       id: registro.id_usuario_permissao.toString(),
       idGrupoUsuario: registro.id_grupo_usuario.toString(),
       idFormulario: registro.id_formulario.toString(),
-      grupoUsuarioDescricao: registro.infolab_grupo_usuario.descricao ?? null,
-      formularioCodigo: registro.infolab_formulario.codigo,
-      formularioDescricao: registro.infolab_formulario.descricao ?? null,
+      grupoUsuarioDescricao: registro.infotime_grupo_usuario.descricao ?? null,
+      formularioCodigo: registro.infotime_formulario.codigo,
+      formularioDescricao: registro.infotime_formulario.descricao ?? null,
       administrador: snParaBool(registro.administrador),
       incluir: snParaBool(registro.incluir),
       editar: snParaBool(registro.editar),

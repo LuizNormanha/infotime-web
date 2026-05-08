@@ -5,7 +5,7 @@ import { CampoDicionarioDto } from './dto/campo-dicionario.dto';
 @Injectable()
 export class DicionarioService {
   private readonly metadados: Record<string, CampoDicionarioDto[]> = {
-    infolab_tenacidade: [
+    infotime_tenacidade: [
       {
         chave: 'id_tenacidade',
         tipo_banco: 'BigInt',
@@ -46,7 +46,7 @@ export class DicionarioService {
         eh_tenant: false,
       },
     ],
-    infolab_usuario: [
+    infotime_usuario: [
       {
         chave: 'id_usuario',
         tipo_banco: 'BigInt',
@@ -106,7 +106,7 @@ export class DicionarioService {
         eh_tenant: false,
       },
     ],
-    infolab_grupo_usuario: [
+    infotime_grupo_usuario: [
       {
         chave: 'id_grupo_usuario',
         tipo_banco: 'BigInt',
@@ -136,7 +136,7 @@ export class DicionarioService {
         eh_tenant: false,
       },
     ],
-    infolab_aplicacao: [
+    infotime_aplicacao: [
       {
         chave: 'id_aplicacao',
         tipo_banco: 'BigInt',
@@ -177,7 +177,7 @@ export class DicionarioService {
         eh_tenant: false,
       },
     ],
-    infolab_aplicacao_campo: [
+    infotime_aplicacao_campo: [
       {
         chave: 'id_aplicacao_campo',
         tipo_banco: 'BigInt',
@@ -218,7 +218,7 @@ export class DicionarioService {
         eh_tenant: false,
       },
     ],
-    infolab_formulario: [
+    infotime_formulario: [
       {
         chave: 'id_formulario',
         tipo_banco: 'BigInt',
