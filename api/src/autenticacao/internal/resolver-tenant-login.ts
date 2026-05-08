@@ -67,12 +67,12 @@ async function buscarTenantAtivoPorDominioInfoTIME(
       480::int AS timeout_sessao_minutos,
       NULL::int AS quantidade_licenca,
       t.data_expiracao
-    FROM tenacidade t
+    FROM infotime_tenacidade t
     WHERE t.ativo = 'S'
       AND (
         EXISTS (
           SELECT 1
-          FROM usuario u
+          FROM infotime_usuario u
           WHERE u.id_tenacidade = t.id_tenacidade
             AND COALESCE(u.ativo, 'S') = 'S'
             AND u.email IS NOT NULL
@@ -80,7 +80,7 @@ async function buscarTenantAtivoPorDominioInfoTIME(
             AND lower(trim(split_part(trim(u.email), '@', 2))) = lower(trim(${dominio}))
         )
         OR (
-          (SELECT count(*)::bigint FROM tenacidade t2 WHERE t2.ativo = 'S') = 1
+          (SELECT count(*)::bigint FROM infotime_tenacidade t2 WHERE t2.ativo = 'S') = 1
         )
       )
     ORDER BY t.id_tenacidade

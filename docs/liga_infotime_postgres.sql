@@ -943,7 +943,7 @@ CREATE TABLE infotime_temperatura_opcao (
 	unidade_temperatura bpchar(1) NULL,
 	ordem_exibicao int2 NOT NULL,
 	ativo bpchar(1) NULL,
-	CONSTRAINT infolab_temperatura_opcao_pkey PRIMARY KEY (id_temperatura_opcao)
+	CONSTRAINT infotime_temperatura_opcao_pkey PRIMARY KEY (id_temperatura_opcao)
 );
 CREATE UNIQUE INDEX uq_temperatura_opcao_ordem_exibicao ON public.infotime_temperatura_opcao USING btree (ordem_exibicao);
 
@@ -1564,7 +1564,7 @@ CREATE TABLE infotime_tenacidade_configuracao (
 	ultimo_atendimento int8 DEFAULT 0 NULL,
 	dominio_tenacidade varchar(255) NULL,
 	chave_jwt varchar(255) NULL,
-	infolab_vet bpchar(1) NULL,
+	vet bpchar(1) NULL,
 	somente_interfaceamento bpchar(1) NULL,
 	utilizar_numeracao_origem_liberacao bpchar(1) NULL,
 	utilizar_deltacheck_liberacao bpchar(1) NULL,
@@ -1581,8 +1581,8 @@ CREATE TABLE infotime_tenacidade_configuracao (
 	nome_aplicacao_auditoria varchar(255) NULL,
 	timeout_sessao_minutos int4 DEFAULT 15 NULL,
 	quantidade_licenca int4 NULL,
-	CONSTRAINT infolab_configuracao_tenacidade_pkey PRIMARY KEY (id_tenacidade_configuracao),
-	CONSTRAINT fk_infolab_tenacidade_configuracao_infolab_tenacidade FOREIGN KEY (id_tenacidade) REFERENCES infotime_tenacidade(id_tenacidade)
+	CONSTRAINT infotime_configuracao_tenacidade_pkey PRIMARY KEY (id_tenacidade_configuracao),
+	CONSTRAINT fk_infotime_tenacidade_configuracao_infotime_tenacidade FOREIGN KEY (id_tenacidade) REFERENCES infotime_tenacidade(id_tenacidade)
 );
 CREATE UNIQUE INDEX tenacidade_configuracao_dominio_tenacidade_key ON public.infotime_tenacidade_configuracao USING btree (dominio_tenacidade);
 

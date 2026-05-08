@@ -129,12 +129,12 @@ async function main() {
   }
   await prisma.$executeRaw`
     SELECT setval(
-      pg_get_serial_sequence('formulario', 'id_formulario'),
-      COALESCE((SELECT MAX(id_formulario) FROM formulario), 1)
+      pg_get_serial_sequence('infotime_formulario', 'id_formulario'),
+      COALESCE((SELECT MAX(id_formulario) FROM infotime_formulario), 1)
     )
   `;
   console.log(
-    `formulario: ${FORMULARIOS.length} entradas (upsert, ids fixos no create).`,
+    `infotime_formulario: ${FORMULARIOS.length} entradas (upsert, ids fixos no create).`,
   );
 
   await prisma.$transaction(async (tx) => {

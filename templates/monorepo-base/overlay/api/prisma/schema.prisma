@@ -31,7 +31,7 @@ model infotime_tenacidade {
   infotime_usuario                 infotime_usuario[]
   infotime_usuario_infotime_tenacidade_id_usuario_auditoriaToinfotime_usuario infotime_usuario? @relation("infotime_tenacidade_id_usuario_auditoriaToinfotime_usuario", fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tenacidade_id_usuario_auditoria")
 
-  @@map("tenacidade")
+  @@map("infotime_tenacidade")
 }
 
 model infotime_usuario {
@@ -92,7 +92,7 @@ model infotime_usuario {
   other_infotime_usuario infotime_usuario[] @relation("infotime_usuarioToinfotime_usuario")
   infotime_usuario_permissoes_infotime_usuario_id_usuario_auditoriaToinfotime_usuario infotime_usuario_permissoes[] @relation("infotime_usuario_permissoes_id_usuario_auditoriaToinfotime_usuario")
 
-  @@map("usuario")
+  @@map("infotime_usuario")
 }
 
 model infotime_grupo_usuario {
@@ -113,11 +113,11 @@ model infotime_grupo_usuario {
   infotime_layout_formulario infotime_layout_formulario[]
   infotime_usuario_permissoes infotime_usuario_permissoes[]
 
-  @@map("grupo_usuario")
+  @@map("infotime_grupo_usuario")
 }
 
 model infotime_tenacidade_configuracao {
-  id_tenacidade_configuracao             BigInt    @id(map: "infolab_configuracao_tenacidade_pkey") @default(autoincrement())
+  id_tenacidade_configuracao             BigInt    @id(map: "infotime_configuracao_tenacidade_pkey") @default(autoincrement())
   id_tenacidade                          BigInt
   razao_social                           String?   @db.VarChar(255)
   nome_fantasia                          String?   @db.VarChar(255)
@@ -127,7 +127,7 @@ model infotime_tenacidade_configuracao {
   ultimo_atendimento                     BigInt?   @default(0)
   dominio_tenacidade                     String?   @unique @db.VarChar(255)
   chave_jwt                              String?   @db.VarChar(255)
-  infotime_vet                            String?   @map("infolab_vet") @db.Char(1)
+  vet                                     String?   @db.Char(1)
   somente_interfaceamento                String?   @db.Char(1)
   utilizar_numeracao_origem_liberacao    String?   @db.Char(1)
   utilizar_deltacheck_liberacao          String?   @db.Char(1)
@@ -145,9 +145,9 @@ model infotime_tenacidade_configuracao {
   timeout_sessao_minutos                 Int?      @default(15)
   quantidade_licenca                     Int?
 
-  infotime_tenacidade infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_tenacidade_configuracao_infolab_tenacidade")
+  infotime_tenacidade infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: NoAction, onUpdate: NoAction, map: "fk_infotime_tenacidade_configuracao_infotime_tenacidade")
 
-  @@map("tenacidade_configuracao")
+  @@map("infotime_tenacidade_configuracao")
 }
 
 model infotime_aplicacao {
@@ -167,13 +167,13 @@ model infotime_aplicacao {
   observacao               String?
   nome_aplicacao_auditoria String?                   @db.VarChar(120)
   endereco_ip_auditoria    String?                   @db.VarChar(45)
-  infotime_usuario          infotime_usuario?          @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_infolab_aplicacao_id_usuario_auditoria")
+  infotime_usuario          infotime_usuario?          @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_infotime_aplicacao_id_usuario_auditoria")
   infotime_aplicacao_campo  infotime_aplicacao_campo[]
 
-  @@unique([id_tenacidade, codigo_aplicacao], map: "uq_infolab_aplicacao_01")
-  @@index([id_tenacidade, codigo_aplicacao], map: "idx_infolab_aplicacao_01")
-  @@index([ativo], map: "idx_infolab_aplicacao_02")
-  @@map("aplicacao")
+  @@unique([id_tenacidade, codigo_aplicacao], map: "uq_infotime_aplicacao_01")
+  @@index([id_tenacidade, codigo_aplicacao], map: "idx_infotime_aplicacao_01")
+  @@index([ativo], map: "idx_infotime_aplicacao_02")
+  @@map("infotime_aplicacao")
 }
 
 model infotime_aplicacao_campo {
@@ -211,14 +211,14 @@ model infotime_aplicacao_campo {
   ativo                                 Boolean           @default(true)
   nome_aplicacao_auditoria              String?           @db.VarChar(120)
   endereco_ip_auditoria                 String?           @db.VarChar(45)
-  infotime_aplicacao                     infotime_aplicacao @relation(fields: [id_aplicacao], references: [id_aplicacao], onDelete: NoAction, onUpdate: NoAction, map: "fk_infolab_aplicacao_campo_01")
+  infotime_aplicacao                     infotime_aplicacao @relation(fields: [id_aplicacao], references: [id_aplicacao], onDelete: NoAction, onUpdate: NoAction, map: "fk_infotime_aplicacao_campo_01")
 
-  @@unique([id_tenacidade, id_aplicacao, codigo_campo], map: "uq_infolab_aplicacao_campo_01")
-  @@index([id_aplicacao, ativo], map: "idx_infolab_aplicacao_campo_01")
-  @@index([id_aplicacao, ordem_formulario_padrao], map: "idx_infolab_aplicacao_campo_02")
-  @@index([id_aplicacao, exibir_listagem_padrao, ordem_listagem_padrao], map: "idx_infolab_aplicacao_campo_03")
-  @@index([id_tenacidade, id_aplicacao, codigo_campo], map: "idx_infolab_aplicacao_campo_04")
-  @@map("aplicacao_campo")
+  @@unique([id_tenacidade, id_aplicacao, codigo_campo], map: "uq_infotime_aplicacao_campo_01")
+  @@index([id_aplicacao, ativo], map: "idx_infotime_aplicacao_campo_01")
+  @@index([id_aplicacao, ordem_formulario_padrao], map: "idx_infotime_aplicacao_campo_02")
+  @@index([id_aplicacao, exibir_listagem_padrao, ordem_listagem_padrao], map: "idx_infotime_aplicacao_campo_03")
+  @@index([id_tenacidade, id_aplicacao, codigo_campo], map: "idx_infotime_aplicacao_campo_04")
+  @@map("infotime_aplicacao_campo")
 }
 
 model infotime_sessao_usuario {
@@ -237,7 +237,7 @@ model infotime_sessao_usuario {
 
   @@unique([id_tenacidade, id_usuario], map: "ux_sessao_usuario_ativa")
   @@index([token_id], map: "ix_sessao_token_id")
-  @@map("sessao_usuario")
+  @@map("infotime_sessao_usuario")
 }
 
 model infotime_sessao_suporte {
@@ -259,7 +259,7 @@ model infotime_sessao_suporte {
   @@index([id_tenacidade], map: "idx_sessao_suporte_tenacidade")
   @@index([token_id], map: "idx_sessao_suporte_token_id")
   @@index([id_usuario], map: "idx_sessao_suporte_usuario")
-  @@map("sessao_suporte")
+  @@map("infotime_sessao_suporte")
 }
 
 model infotime_formulario {
@@ -272,7 +272,7 @@ model infotime_formulario {
   infotime_usuario_permissoes infotime_usuario_permissoes[]
 
   @@index([ativo, ordem])
-  @@map("formulario")
+  @@map("infotime_formulario")
 }
 
 model infotime_usuario_permissoes {
@@ -295,7 +295,7 @@ model infotime_usuario_permissoes {
   @@index([id_formulario], map: "idx_usuario_permissoes_formulario")
   @@index([id_grupo_usuario], map: "idx_usuario_permissoes_grupo")
   @@index([id_tenacidade], map: "idx_usuario_permissoes_tenacidade")
-  @@map("usuario_permissoes")
+  @@map("infotime_usuario_permissoes")
 }
 
 model infotime_layout_formulario {
@@ -308,5 +308,5 @@ model infotime_layout_formulario {
 
   @@unique([id_grupo_usuario, id_formulario])
   @@index([id_formulario])
-  @@map("layout_formulario")
+  @@map("infotime_layout_formulario")
 }

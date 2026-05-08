@@ -756,7 +756,7 @@ export class ServicoAutenticacao {
     }
     const rows = await this.prisma.$queryRaw<[{ chave_jwt: string | null }]>(
       Prisma.sql`
-        UPDATE tenacidade_configuracao
+        UPDATE infotime_tenacidade_configuracao
         SET chave_jwt = COALESCE(chave_jwt, ${candidata})
         WHERE id_tenacidade_configuracao = ${alvo.id_tenacidade_configuracao}
         RETURNING chave_jwt

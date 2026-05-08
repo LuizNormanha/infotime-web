@@ -63,3 +63,6 @@ if (!sql.startsWith('-- DDL exportado do banco Liga Infotime')) {
 
 fs.writeFileSync(ddlPath, sql, 'utf8');
 console.log(`Atualizado: ${ddlPath} (${names.size} tabelas mapeadas)`);
+console.log(
+  'Regenerar mapa/migration Prisma: node scripts/ddl/build-table-rename-map.mjs',
+);

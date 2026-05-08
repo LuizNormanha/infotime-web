@@ -1,0 +1,1117 @@
+{
+  "meta": {
+    "generatedAt": "2026-05-08T18:41:12.359Z",
+    "sourceDdl": "docs/liga_infotime_postgres.sql",
+    "note": "Renomeação física alinhada ao export DDL com prefixo infotime_. Tabelas criadas só por migrations posteriores (ex.: soroteca infolab_*) não aparecem aqui."
+  },
+  "pairs": [
+    {
+      "from": "agencia",
+      "to": "infotime_agencia",
+      "wave": "A"
+    },
+    {
+      "from": "agenda",
+      "to": "infotime_agenda",
+      "wave": "A"
+    },
+    {
+      "from": "agenda_evento",
+      "to": "infotime_agenda_evento",
+      "wave": "A"
+    },
+    {
+      "from": "agenda_usuario",
+      "to": "infotime_agenda_usuario",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado",
+      "to": "infotime_almoxarifado",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_baixa",
+      "to": "infotime_almoxarifado_baixa",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_baixa_produto",
+      "to": "infotime_almoxarifado_baixa_produto",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_entrada",
+      "to": "infotime_almoxarifado_entrada",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_entrada_parcela",
+      "to": "infotime_almoxarifado_entrada_parcela",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_entrada_parcela_rateio",
+      "to": "infotime_almoxarifado_entrada_parcela_rateio",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_entrada_produto",
+      "to": "infotime_almoxarifado_entrada_produto",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_importacao_xml",
+      "to": "infotime_almoxarifado_importacao_xml",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_motivo_baixa",
+      "to": "infotime_almoxarifado_motivo_baixa",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_produto",
+      "to": "infotime_almoxarifado_produto",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_produto_classificacao",
+      "to": "infotime_almoxarifado_produto_classificacao",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_produto_estoque",
+      "to": "infotime_almoxarifado_produto_estoque",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_produto_grupo",
+      "to": "infotime_almoxarifado_produto_grupo",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_produto_local_armazenamento",
+      "to": "infotime_almoxarifado_produto_local_armazenamento",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_produto_volume",
+      "to": "infotime_almoxarifado_produto_volume",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_requisicao",
+      "to": "infotime_almoxarifado_requisicao",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_requisicao_produto",
+      "to": "infotime_almoxarifado_requisicao_produto",
+      "wave": "A"
+    },
+    {
+      "from": "almoxarifado_usuario_atender",
+      "to": "infotime_almoxarifado_usuario_atender",
+      "wave": "A"
+    },
+    {
+      "from": "aplicacao",
+      "to": "infotime_aplicacao",
+      "wave": "B"
+    },
+    {
+      "from": "aplicacao_sync",
+      "to": "infotime_aplicacao_sync",
+      "wave": "A"
+    },
+    {
+      "from": "auditoria",
+      "to": "infotime_auditoria",
+      "wave": "A"
+    },
+    {
+      "from": "auditoria_campo",
+      "to": "infotime_auditoria_campo",
+      "wave": "A"
+    },
+    {
+      "from": "avaliacao",
+      "to": "infotime_avaliacao",
+      "wave": "A"
+    },
+    {
+      "from": "banco",
+      "to": "infotime_banco",
+      "wave": "A"
+    },
+    {
+      "from": "bandeira_cartao",
+      "to": "infotime_bandeira_cartao",
+      "wave": "A"
+    },
+    {
+      "from": "boleto",
+      "to": "infotime_boleto",
+      "wave": "A"
+    },
+    {
+      "from": "boleto_nota_fiscal",
+      "to": "infotime_boleto_nota_fiscal",
+      "wave": "A"
+    },
+    {
+      "from": "calendario",
+      "to": "infotime_calendario",
+      "wave": "A"
+    },
+    {
+      "from": "cargo",
+      "to": "infotime_cargo",
+      "wave": "A"
+    },
+    {
+      "from": "cargo_classificacao",
+      "to": "infotime_cargo_classificacao",
+      "wave": "A"
+    },
+    {
+      "from": "cargo_classificacao_nivel",
+      "to": "infotime_cargo_classificacao_nivel",
+      "wave": "A"
+    },
+    {
+      "from": "cargo_classificacao_nivel_salario",
+      "to": "infotime_cargo_classificacao_nivel_salario",
+      "wave": "A"
+    },
+    {
+      "from": "categoria_produto",
+      "to": "infotime_categoria_produto",
+      "wave": "A"
+    },
+    {
+      "from": "categoria_produto_tarefa",
+      "to": "infotime_categoria_produto_tarefa",
+      "wave": "A"
+    },
+    {
+      "from": "cbo",
+      "to": "infotime_cbo",
+      "wave": "A"
+    },
+    {
+      "from": "centro_custo",
+      "to": "infotime_centro_custo",
+      "wave": "A"
+    },
+    {
+      "from": "centro_custo_vigencia",
+      "to": "infotime_centro_custo_vigencia",
+      "wave": "A"
+    },
+    {
+      "from": "cheque",
+      "to": "infotime_cheque",
+      "wave": "A"
+    },
+    {
+      "from": "cid10",
+      "to": "infotime_cid10",
+      "wave": "A"
+    },
+    {
+      "from": "cliente",
+      "to": "infotime_cliente",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_aluno",
+      "to": "infotime_cliente_aluno",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_canal",
+      "to": "infotime_cliente_canal",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_comunicacao",
+      "to": "infotime_cliente_comunicacao",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_contato",
+      "to": "infotime_cliente_contato",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_documento",
+      "to": "infotime_cliente_documento",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_equipamento",
+      "to": "infotime_cliente_equipamento",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_equipamento_acessorio",
+      "to": "infotime_cliente_equipamento_acessorio",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_equipamento_chamado",
+      "to": "infotime_cliente_equipamento_chamado",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_equipamento_peca_troca",
+      "to": "infotime_cliente_equipamento_peca_troca",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_equipamento_servico",
+      "to": "infotime_cliente_equipamento_servico",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_plano_conta",
+      "to": "infotime_cliente_plano_conta",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_plano_conta_legacy",
+      "to": "infotime_cliente_plano_conta_legacy",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_senha",
+      "to": "infotime_cliente_senha",
+      "wave": "A"
+    },
+    {
+      "from": "cliente_telefone",
+      "to": "infotime_cliente_telefone",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador",
+      "to": "infotime_colaborador",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_atestado",
+      "to": "infotime_colaborador_atestado",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_avaliacao",
+      "to": "infotime_colaborador_avaliacao",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_comp_rendimento",
+      "to": "infotime_colaborador_comp_rendimento",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_comunicacao",
+      "to": "infotime_colaborador_comunicacao",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_contra_cheque",
+      "to": "infotime_colaborador_contra_cheque",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_documento",
+      "to": "infotime_colaborador_documento",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_exame",
+      "to": "infotime_colaborador_exame",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_ferias",
+      "to": "infotime_colaborador_ferias",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_ferias_gozadas",
+      "to": "infotime_colaborador_ferias_gozadas",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_folha_ponto",
+      "to": "infotime_colaborador_folha_ponto",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_medida_disciplinar",
+      "to": "infotime_colaborador_medida_disciplinar",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_plano_conta",
+      "to": "infotime_colaborador_plano_conta",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_reajuste",
+      "to": "infotime_colaborador_reajuste",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_salario_adiantamento",
+      "to": "infotime_colaborador_salario_adiantamento",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_tarefa",
+      "to": "infotime_colaborador_tarefa",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_tarefa_historico",
+      "to": "infotime_colaborador_tarefa_historico",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_tarefa_legacy",
+      "to": "infotime_colaborador_tarefa_legacy",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_tarefa_motivo_prorrogacao",
+      "to": "infotime_colaborador_tarefa_motivo_prorrogacao",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_tarifa",
+      "to": "infotime_colaborador_tarifa",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_telefone",
+      "to": "infotime_colaborador_telefone",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_vale_alimentacao_transporte",
+      "to": "infotime_colaborador_vale_alimentacao_transporte",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_viagem",
+      "to": "infotime_colaborador_viagem",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_viagem_adiantamento",
+      "to": "infotime_colaborador_viagem_adiantamento",
+      "wave": "A"
+    },
+    {
+      "from": "colaborador_viagem_despesa",
+      "to": "infotime_colaborador_viagem_despesa",
+      "wave": "A"
+    },
+    {
+      "from": "coleta_domiciliar",
+      "to": "infotime_coleta_domiciliar",
+      "wave": "A"
+    },
+    {
+      "from": "comunicacao",
+      "to": "infotime_comunicacao",
+      "wave": "A"
+    },
+    {
+      "from": "concorrente",
+      "to": "infotime_concorrente",
+      "wave": "A"
+    },
+    {
+      "from": "configuracao",
+      "to": "infotime_configuracao",
+      "wave": "A"
+    },
+    {
+      "from": "configuracao_cobranca",
+      "to": "infotime_configuracao_cobranca",
+      "wave": "A"
+    },
+    {
+      "from": "consumo",
+      "to": "infotime_consumo",
+      "wave": "A"
+    },
+    {
+      "from": "consumo_item",
+      "to": "infotime_consumo_item",
+      "wave": "A"
+    },
+    {
+      "from": "conta_caixa",
+      "to": "infotime_conta_caixa",
+      "wave": "A"
+    },
+    {
+      "from": "conta_caixa_documento",
+      "to": "infotime_conta_caixa_documento",
+      "wave": "A"
+    },
+    {
+      "from": "conta_caixa_registro",
+      "to": "infotime_conta_caixa_registro",
+      "wave": "A"
+    },
+    {
+      "from": "conta_caixa_registro_lancamento",
+      "to": "infotime_conta_caixa_registro_lancamento",
+      "wave": "A"
+    },
+    {
+      "from": "conta_caixa_senha",
+      "to": "infotime_conta_caixa_senha",
+      "wave": "A"
+    },
+    {
+      "from": "conta_caixa_transferencia",
+      "to": "infotime_conta_caixa_transferencia",
+      "wave": "A"
+    },
+    {
+      "from": "conta_caixa_usuario",
+      "to": "infotime_conta_caixa_usuario",
+      "wave": "A"
+    },
+    {
+      "from": "conta_telefone",
+      "to": "infotime_conta_telefone",
+      "wave": "A"
+    },
+    {
+      "from": "contrato",
+      "to": "infotime_contrato",
+      "wave": "A"
+    },
+    {
+      "from": "contrato_item",
+      "to": "infotime_contrato_item",
+      "wave": "A"
+    },
+    {
+      "from": "contrato_tarefa",
+      "to": "infotime_contrato_tarefa",
+      "wave": "A"
+    },
+    {
+      "from": "contrato_tarefa_atividade",
+      "to": "infotime_contrato_tarefa_atividade",
+      "wave": "A"
+    },
+    {
+      "from": "email_enviado",
+      "to": "infotime_email_enviado",
+      "wave": "A"
+    },
+    {
+      "from": "email_modelo",
+      "to": "infotime_email_modelo",
+      "wave": "A"
+    },
+    {
+      "from": "empresa",
+      "to": "infotime_empresa",
+      "wave": "A"
+    },
+    {
+      "from": "empresa_documento",
+      "to": "infotime_empresa_documento",
+      "wave": "A"
+    },
+    {
+      "from": "empresa_nota_fiscal",
+      "to": "infotime_empresa_nota_fiscal",
+      "wave": "A"
+    },
+    {
+      "from": "empresa_operadora",
+      "to": "infotime_empresa_operadora",
+      "wave": "A"
+    },
+    {
+      "from": "empresa_senha",
+      "to": "infotime_empresa_senha",
+      "wave": "A"
+    },
+    {
+      "from": "extrato_conta",
+      "to": "infotime_extrato_conta",
+      "wave": "A"
+    },
+    {
+      "from": "fatura",
+      "to": "infotime_fatura",
+      "wave": "A"
+    },
+    {
+      "from": "fatura_item",
+      "to": "infotime_fatura_item",
+      "wave": "A"
+    },
+    {
+      "from": "fechamento_financeiro",
+      "to": "infotime_fechamento_financeiro",
+      "wave": "A"
+    },
+    {
+      "from": "feriado",
+      "to": "infotime_feriado",
+      "wave": "A"
+    },
+    {
+      "from": "fluxo_caixa",
+      "to": "infotime_fluxo_caixa",
+      "wave": "A"
+    },
+    {
+      "from": "formulario",
+      "to": "infotime_formulario",
+      "wave": "B"
+    },
+    {
+      "from": "fornecedor",
+      "to": "infotime_fornecedor",
+      "wave": "A"
+    },
+    {
+      "from": "fornecedor_comunicacao",
+      "to": "infotime_fornecedor_comunicacao",
+      "wave": "A"
+    },
+    {
+      "from": "fornecedor_contato",
+      "to": "infotime_fornecedor_contato",
+      "wave": "A"
+    },
+    {
+      "from": "fornecedor_documento",
+      "to": "infotime_fornecedor_documento",
+      "wave": "A"
+    },
+    {
+      "from": "fornecedor_plano_conta",
+      "to": "infotime_fornecedor_plano_conta",
+      "wave": "A"
+    },
+    {
+      "from": "grupo_documento",
+      "to": "infotime_grupo_documento",
+      "wave": "A"
+    },
+    {
+      "from": "grupo_usuario",
+      "to": "infotime_grupo_usuario",
+      "wave": "B"
+    },
+    {
+      "from": "grupo_usuario_aplicacao",
+      "to": "infotime_grupo_usuario_aplicacao",
+      "wave": "A"
+    },
+    {
+      "from": "grupo_usuario_aplicacao_bloco",
+      "to": "infotime_grupo_usuario_aplicacao_bloco",
+      "wave": "A"
+    },
+    {
+      "from": "grupo_usuario_aplicacao_campo",
+      "to": "infotime_grupo_usuario_aplicacao_campo",
+      "wave": "A"
+    },
+    {
+      "from": "indice_reajuste",
+      "to": "infotime_indice_reajuste",
+      "wave": "A"
+    },
+    {
+      "from": "indice_reajuste_data",
+      "to": "infotime_indice_reajuste_data",
+      "wave": "A"
+    },
+    {
+      "from": "info_lab_acesso",
+      "to": "infotime_info_lab_acesso",
+      "wave": "A"
+    },
+    {
+      "from": "info_lab_noticias",
+      "to": "infotime_info_lab_noticias",
+      "wave": "A"
+    },
+    {
+      "from": "infolab_temperatura_opcao",
+      "to": "infotime_temperatura_opcao",
+      "wave": "A"
+    },
+    {
+      "from": "lancamento_despesa",
+      "to": "infotime_lancamento_despesa",
+      "wave": "A"
+    },
+    {
+      "from": "lancamento_despesa_rateio",
+      "to": "infotime_lancamento_despesa_rateio",
+      "wave": "A"
+    },
+    {
+      "from": "lancamento_receita",
+      "to": "infotime_lancamento_receita",
+      "wave": "A"
+    },
+    {
+      "from": "lancamento_receita_rateio",
+      "to": "infotime_lancamento_receita_rateio",
+      "wave": "A"
+    },
+    {
+      "from": "layout_formulario",
+      "to": "infotime_layout_formulario",
+      "wave": "B"
+    },
+    {
+      "from": "mensagem_padrao",
+      "to": "infotime_mensagem_padrao",
+      "wave": "A"
+    },
+    {
+      "from": "municipio",
+      "to": "infotime_municipio",
+      "wave": "A"
+    },
+    {
+      "from": "negociacao",
+      "to": "infotime_negociacao",
+      "wave": "A"
+    },
+    {
+      "from": "negociacao_motivo_perda",
+      "to": "infotime_negociacao_motivo_perda",
+      "wave": "A"
+    },
+    {
+      "from": "negociacao_proposta_fase",
+      "to": "infotime_negociacao_proposta_fase",
+      "wave": "A"
+    },
+    {
+      "from": "negociacao_tarefa",
+      "to": "infotime_negociacao_tarefa",
+      "wave": "A"
+    },
+    {
+      "from": "nota_fiscal",
+      "to": "infotime_nota_fiscal",
+      "wave": "A"
+    },
+    {
+      "from": "operadora",
+      "to": "infotime_operadora",
+      "wave": "A"
+    },
+    {
+      "from": "patrimonio_bem",
+      "to": "infotime_patrimonio_bem",
+      "wave": "A"
+    },
+    {
+      "from": "patrimonio_bem_atualizacao",
+      "to": "infotime_patrimonio_bem_atualizacao",
+      "wave": "A"
+    },
+    {
+      "from": "patrimonio_bem_evento",
+      "to": "infotime_patrimonio_bem_evento",
+      "wave": "A"
+    },
+    {
+      "from": "patrimonio_bem_foto",
+      "to": "infotime_patrimonio_bem_foto",
+      "wave": "A"
+    },
+    {
+      "from": "patrimonio_categoria",
+      "to": "infotime_patrimonio_categoria",
+      "wave": "A"
+    },
+    {
+      "from": "patrimonio_estado",
+      "to": "infotime_patrimonio_estado",
+      "wave": "A"
+    },
+    {
+      "from": "patrimonio_localizacao",
+      "to": "infotime_patrimonio_localizacao",
+      "wave": "A"
+    },
+    {
+      "from": "pessoa",
+      "to": "infotime_pessoa",
+      "wave": "A"
+    },
+    {
+      "from": "plano_conta",
+      "to": "infotime_plano_conta",
+      "wave": "A"
+    },
+    {
+      "from": "pop_documento",
+      "to": "infotime_pop_documento",
+      "wave": "A"
+    },
+    {
+      "from": "processamento",
+      "to": "infotime_processamento",
+      "wave": "A"
+    },
+    {
+      "from": "produto",
+      "to": "infotime_produto",
+      "wave": "A"
+    },
+    {
+      "from": "proposta",
+      "to": "infotime_proposta",
+      "wave": "A"
+    },
+    {
+      "from": "proposta_andamento",
+      "to": "infotime_proposta_andamento",
+      "wave": "A"
+    },
+    {
+      "from": "proposta_dimensao",
+      "to": "infotime_proposta_dimensao",
+      "wave": "A"
+    },
+    {
+      "from": "proposta_fase",
+      "to": "infotime_proposta_fase",
+      "wave": "A"
+    },
+    {
+      "from": "proposta_item",
+      "to": "infotime_proposta_item",
+      "wave": "A"
+    },
+    {
+      "from": "regiao_estadual",
+      "to": "infotime_regiao_estadual",
+      "wave": "A"
+    },
+    {
+      "from": "retorno",
+      "to": "infotime_retorno",
+      "wave": "A"
+    },
+    {
+      "from": "retorno_api_pix",
+      "to": "infotime_retorno_api_pix",
+      "wave": "A"
+    },
+    {
+      "from": "sessao_suporte",
+      "to": "infotime_sessao_suporte",
+      "wave": "B"
+    },
+    {
+      "from": "sessao_usuario",
+      "to": "infotime_sessao_usuario",
+      "wave": "B"
+    },
+    {
+      "from": "site_acesso",
+      "to": "infotime_site_acesso",
+      "wave": "A"
+    },
+    {
+      "from": "site_contato",
+      "to": "infotime_site_contato",
+      "wave": "A"
+    },
+    {
+      "from": "site_setor_laboratorio",
+      "to": "infotime_site_setor_laboratorio",
+      "wave": "A"
+    },
+    {
+      "from": "site_tipo_assunto",
+      "to": "infotime_site_tipo_assunto",
+      "wave": "A"
+    },
+    {
+      "from": "site_trabalhe_conosco",
+      "to": "infotime_site_trabalhe_conosco",
+      "wave": "A"
+    },
+    {
+      "from": "situacao_atividade",
+      "to": "infotime_situacao_atividade",
+      "wave": "A"
+    },
+    {
+      "from": "situacao_cliente",
+      "to": "infotime_situacao_cliente",
+      "wave": "A"
+    },
+    {
+      "from": "situacao_colaborador",
+      "to": "infotime_situacao_colaborador",
+      "wave": "A"
+    },
+    {
+      "from": "situacao_documento",
+      "to": "infotime_situacao_documento",
+      "wave": "A"
+    },
+    {
+      "from": "situacao_fase",
+      "to": "infotime_situacao_fase",
+      "wave": "A"
+    },
+    {
+      "from": "situacao_fornecedor",
+      "to": "infotime_situacao_fornecedor",
+      "wave": "A"
+    },
+    {
+      "from": "situacao_tarefa",
+      "to": "infotime_situacao_tarefa",
+      "wave": "A"
+    },
+    {
+      "from": "situacao_tarefa_implantacao",
+      "to": "infotime_situacao_tarefa_implantacao",
+      "wave": "A"
+    },
+    {
+      "from": "talao_cheque",
+      "to": "infotime_talao_cheque",
+      "wave": "A"
+    },
+    {
+      "from": "taxa_cartao",
+      "to": "infotime_taxa_cartao",
+      "wave": "A"
+    },
+    {
+      "from": "tenacidade",
+      "to": "infotime_tenacidade",
+      "wave": "B"
+    },
+    {
+      "from": "tenacidade_configuracao",
+      "to": "infotime_tenacidade_configuracao",
+      "wave": "B"
+    },
+    {
+      "from": "tipo_agenda_categoria",
+      "to": "infotime_tipo_agenda_categoria",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_agente",
+      "to": "infotime_tipo_agente",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_cliente",
+      "to": "infotime_tipo_cliente",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_cobranca",
+      "to": "infotime_tipo_cobranca",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_colaborador",
+      "to": "infotime_tipo_colaborador",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_contrato",
+      "to": "infotime_tipo_contrato",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_despesa_viagem",
+      "to": "infotime_tipo_despesa_viagem",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_documento",
+      "to": "infotime_tipo_documento",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_equipamento",
+      "to": "infotime_tipo_equipamento",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_equipamento_acessorio",
+      "to": "infotime_tipo_equipamento_acessorio",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_equipamento_calibracao",
+      "to": "infotime_tipo_equipamento_calibracao",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_equipamento_peca",
+      "to": "infotime_tipo_equipamento_peca",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_especie",
+      "to": "infotime_tipo_especie",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_estado_civil",
+      "to": "infotime_tipo_estado_civil",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_evento",
+      "to": "infotime_tipo_evento",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_finalidade_viagem",
+      "to": "infotime_tipo_finalidade_viagem",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_meio_transporte",
+      "to": "infotime_tipo_meio_transporte",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_mensagem",
+      "to": "infotime_tipo_mensagem",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_motivo_reajuste",
+      "to": "infotime_tipo_motivo_reajuste",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_negocio",
+      "to": "infotime_tipo_negocio",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_patrimonio_bem",
+      "to": "infotime_tipo_patrimonio_bem",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_patrimonio_bem_evento",
+      "to": "infotime_tipo_patrimonio_bem_evento",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_pessoa",
+      "to": "infotime_tipo_pessoa",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_servico",
+      "to": "infotime_tipo_servico",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_situacao_colaborador_ferias",
+      "to": "infotime_tipo_situacao_colaborador_ferias",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_situacao_colaborador_ferias_gozadas",
+      "to": "infotime_tipo_situacao_colaborador_ferias_gozadas",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_tarefa",
+      "to": "infotime_tipo_tarefa",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_tarefa_implantacao",
+      "to": "infotime_tipo_tarefa_implantacao",
+      "wave": "A"
+    },
+    {
+      "from": "tipo_tarifa",
+      "to": "infotime_tipo_tarifa",
+      "wave": "A"
+    },
+    {
+      "from": "treinamento",
+      "to": "infotime_treinamento",
+      "wave": "A"
+    },
+    {
+      "from": "treinamento_usuario",
+      "to": "infotime_treinamento_usuario",
+      "wave": "A"
+    },
+    {
+      "from": "usuario",
+      "to": "infotime_usuario",
+      "wave": "B"
+    },
+    {
+      "from": "usuario_grupo_usuario",
+      "to": "infotime_usuario_grupo_usuario",
+      "wave": "A"
+    },
+    {
+      "from": "usuario_permissoes",
+      "to": "infotime_usuario_permissoes",
+      "wave": "B"
+    },
+    {
+      "from": "vale_alimentacao_transporte",
+      "to": "infotime_vale_alimentacao_transporte",
+      "wave": "A"
+    },
+    {
+      "from": "venda_direta",
+      "to": "infotime_venda_direta",
+      "wave": "A"
+    },
+    {
+      "from": "venda_direta_item",
+      "to": "infotime_venda_direta_item",
+      "wave": "A"
+    },
+    {
+      "from": "webcam",
+      "to": "infotime_webcam",
+      "wave": "A"
+    }
+  ],
+  "counts": {
+    "total": 221
+  }
+}
