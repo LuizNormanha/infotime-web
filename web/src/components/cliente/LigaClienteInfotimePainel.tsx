@@ -29,7 +29,7 @@ function ListaClienteInfotimeInterna({
   const listagemHook = useListagemCrudServidor({
     resourcePath: "/api/clientes",
     campoPesquisaInicial: "nomeFantasia",
-    linhasPorPaginaInicial: 20,
+    linhasPorPaginaInicial: 10,
   });
   const colunas = useMemo(() => CLIENTE_INFOTIME_COLUNAS_LISTAGEM, []);
 
@@ -41,7 +41,7 @@ function ListaClienteInfotimeInterna({
       registros={listagemHook.registros}
       colunas={colunas}
       chavePrimaria="idCliente"
-      linhasPorPaginaPadrao={20}
+      linhasPorPaginaPadrao={10}
       textoBotaoNovo={t("lista.botaoNovo")}
       placeholderBusca={t("lista.placeholderBusca")}
       textoNenhumRegistro={t("lista.vazio")}

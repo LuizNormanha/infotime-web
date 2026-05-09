@@ -1,9 +1,12 @@
 $ErrorActionPreference = 'SilentlyContinue'
-$ports = 3003, 3004
-$ids = Get-NetTCPConnection -State Listen -LocalPort $ports | Select-Object -ExpandProperty OwningProcess -Unique
-foreach ($pid in $ids) {
-    Write-Host "Stopping PID $pid"
-    Stop-Process -Id $pid -Force
+$ports = @(3003, 3004)
+foreach ($port in $ports) {
+  $conns = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
+  if (-not $conns) { continue }
+  foreach ($c in @($conns)) {
+    $procId = [int]$c.OwningProcess
+    if ($procId -le 0) { continue }
+    Write-Host "[dev] Porta ${port}: encerrando PID $procId"
+    Stop-Process -Id $procId -Force -ErrorAction SilentlyContinue
+  }
 }
-Start-Sleep -Seconds 2
-Get-NetTCPConnection -State Listen -LocalPort $ports | Select-Object LocalPort, OwningProcess | Format-Table -AutoSize

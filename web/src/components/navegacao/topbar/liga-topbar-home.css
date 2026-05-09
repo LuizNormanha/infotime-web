@@ -86,8 +86,8 @@
   border-radius: 50%;
   background: var(--liga-moldura-interna);
   color: var(--liga-texto-secundario);
-  width: 2.25rem;
-  height: 2.25rem;
+  width: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -193,8 +193,8 @@
   border-radius: 980px;
   background: var(--liga-moldura-interna);
   color: var(--liga-texto-secundario);
-  width: 2.25rem;
-  height: 2.25rem;
+  width: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
   display: inline-flex;
   align-items: center;
   justify-content: center;

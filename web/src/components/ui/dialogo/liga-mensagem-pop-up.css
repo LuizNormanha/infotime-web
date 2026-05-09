@@ -32,3 +32,32 @@
 .liga-mensagem-pop-up-botao-primario {
   min-width: 7.5rem;
 }
+
+/** Ação destrutiva principal (ex.: confirmar exclusão): sólido vermelho, texto branco. */
+.liga-mensagem-pop-up-botao-primario-destrutivo {
+  min-width: 7.5rem;
+}
+
+.liga-mensagem-pop-up-botao-primario-destrutivo.p-button:not(:disabled) {
+  background: #dc2626;
+  border-color: #b91c1c;
+  color: #fff;
+}
+
+.liga-mensagem-pop-up-botao-primario-destrutivo.p-button:not(:disabled):hover {
+  background: #b91c1c;
+  border-color: #991b1b;
+  color: #fff;
+}
+
+html[data-theme="dark"] .liga-mensagem-pop-up-botao-primario-destrutivo.p-button:not(:disabled) {
+  background: #dc2626;
+  border-color: #f87171;
+  color: #fff;
+}
+
+html[data-theme="dark"] .liga-mensagem-pop-up-botao-primario-destrutivo.p-button:not(:disabled):hover {
+  background: #b91c1c;
+  border-color: #fca5a5;
+  color: #fff;
+}

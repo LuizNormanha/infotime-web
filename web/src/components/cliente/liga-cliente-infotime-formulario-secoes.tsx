@@ -4,11 +4,14 @@ import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 import { InputMask } from "primereact/inputmask";
+import { InputSwitch } from "primereact/inputswitch";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { RadioButton } from "primereact/radiobutton";
 
 import type { LigaFormularioSecao } from "@/components/formulario-base/LigaFormularioBase";
+import { valorSnParaSwitch } from "@/lib/valor-sn-para-switch";
+import { LIGA_CALENDARIO_GRUPO_CLASS, LIGA_CALENDARIO_PANEL_CLASS } from "@/lib/calendario-datas-formulario";
 
 import { ClienteInfotimeEnderecoMapaOsm } from "./ClienteInfotimeEnderecoMapaOsm";
 import type { Campos } from "./LigaClienteInfotimeFormulario";
@@ -37,10 +40,11 @@ export type CtxSecoesClienteInfotime = {
   tenantPrincipal: boolean;
   idCliente: string | null;
   docObrigatorioUi: boolean;
-  snOpts: { label: string; value: string }[];
   labelRazao: string;
   opcoesUf: { label: string; value: string }[];
   abrirMapaEnderecoModal: () => void;
+  /** Garante commit do CEP do InputMask ao sair do campo (ViaCEP/Nominatim). */
+  aoSairDoCampoCep: (valorMascarado: string) => void;
 };
 
 export function criarSecoesFormularioClienteInfotime(
@@ -60,10 +64,10 @@ export function criarSecoesFormularioClienteInfotime(
     tenantPrincipal,
     idCliente,
     docObrigatorioUi,
-    snOpts,
     labelRazao,
     opcoesUf,
     abrirMapaEnderecoModal,
+    aoSairDoCampoCep,
   } = p;
 
   const rotuloCodigo = (idCliente ?? "").trim();
@@ -79,6 +83,27 @@ export function criarSecoesFormularioClienteInfotime(
     return n == null ? "" : String(n);
   }
 
+  function normalizarSituacaoTag(s: string): "ativo" | "inativo" | "lead" | "prospect" | "outro" {
+    const t = s.trim().toLocaleLowerCase("pt-BR");
+    if (t === "ativo") return "ativo";
+    if (t === "inativo") return "inativo";
+    if (t === "lead") return "lead";
+    if (t === "prospect") return "prospect";
+    return "outro";
+  }
+
+  const templateSituacao = (opt?: { label: string; value: string }) => {
+    if (!opt?.label) return null;
+    const tipo = normalizarSituacaoTag(opt.label);
+    return (
+      <span
+        className={`liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--${tipo}`}
+      >
+        {opt.label}
+      </span>
+    );
+  };
+
   const latMapa = parseCoordenadaDigitada(campos.latitude);
   const lonMapa = parseCoordenadaDigitada(campos.longitude);
 
@@ -87,87 +112,141 @@ export function criarSecoesFormularioClienteInfotime(
     titulo: t("secIdentificacao"),
     icone: "pi-id-card",
     conteudo: (
-      <>
-        <div className="liga-cliente-infotime-form-primeira-linha">
-          <div className="liga-cliente-infotime-campo-primeira-linha">
-            <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="razao">
-              {labelRazao} *
-            </label>
-            <div className="liga-cliente-infotime-primeira-linha-controles">
-              <InputText
-                id="razao"
-                className="w-full"
-                value={campos.razaoSocial}
-                onChange={(e) =>
-                  setCampos((prev) => ({ ...prev, razaoSocial: e.target.value }))
-                }
-              />
+      <div className="liga-cliente-infotime-form-ident-secao">
+        <div className="liga-cliente-infotime-form-ident">
+          <div className="liga-cliente-infotime-form-ident-grid">
+            <div className="liga-cliente-infotime-campo-primeira-linha liga-cliente-infotime-form-ident-cel-fantasia">
+              <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="nf">
+                {labelFantasia} *
+              </label>
+              <div className="liga-cliente-infotime-primeira-linha-controles">
+                <InputText
+                  id="nf"
+                  className="w-full"
+                  value={campos.nomeFantasia}
+                  onChange={(e) =>
+                    setCampos((prev) => ({ ...prev, nomeFantasia: e.target.value }))
+                  }
+                />
+              </div>
             </div>
-          </div>
-          <div className="liga-cliente-infotime-campo-primeira-linha">
-            <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="tp-j">
-              {t("tipoPessoa")}
-            </label>
-            <div className="liga-cliente-infotime-primeira-linha-controles">
-              <div
-                className="liga-cliente-infotime-radio-linha"
-                role="radiogroup"
-                aria-label={t("tipoPessoa")}
+            <div className="liga-cliente-infotime-campo-primeira-linha liga-cliente-infotime-form-ident-cel-situacao">
+              <label
+                className="liga-cliente-infotime-primeira-linha-label"
+                htmlFor="liga-cli-situacao-linha1"
               >
-                <RadioButton
-                  inputId="tp-j"
-                  checked={campos.tipoPessoa === "J"}
-                  onChange={() => setCampos((prev) => ({ ...prev, tipoPessoa: "J" }))}
+                {t("situacao")} *
+              </label>
+              <div className="liga-cliente-infotime-primeira-linha-controles">
+                <Dropdown
+                  inputId="liga-cli-situacao-linha1"
+                  className="w-full"
+                  value={campos.idSituacaoCliente || null}
+                  options={dropdownOpts.situacoes}
+                  itemTemplate={templateSituacao}
+                  valueTemplate={(opt) =>
+                    templateSituacao(opt as { label: string; value: string } | undefined)
+                  }
+                  onChange={(e) =>
+                    setCampos((prev) => ({ ...prev, idSituacaoCliente: str(e.value) }))
+                  }
+                  placeholder={t("selecione")}
                 />
-                <label htmlFor="tp-j">{t("pessoaJuridica")}</label>
-                <RadioButton
-                  inputId="tp-f"
-                  checked={campos.tipoPessoa === "F"}
-                  onChange={() => setCampos((prev) => ({ ...prev, tipoPessoa: "F" }))}
+              </div>
+            </div>
+            <div className="liga-cliente-infotime-campo-primeira-linha liga-cliente-infotime-form-ident-cel-tipo">
+              <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="tp-j">
+                {t("tipoPessoa")}
+              </label>
+              <div className="liga-cliente-infotime-primeira-linha-controles">
+                <div
+                  className="liga-cliente-infotime-radio-linha"
+                  role="radiogroup"
+                  aria-label={t("tipoPessoa")}
+                >
+                  <RadioButton
+                    inputId="tp-j"
+                    checked={campos.tipoPessoa === "J"}
+                    onChange={() => setCampos((prev) => ({ ...prev, tipoPessoa: "J" }))}
+                  />
+                  <label htmlFor="tp-j">{t("pessoaJuridica")}</label>
+                  <RadioButton
+                    inputId="tp-f"
+                    checked={campos.tipoPessoa === "F"}
+                    onChange={() => setCampos((prev) => ({ ...prev, tipoPessoa: "F" }))}
+                  />
+                  <label htmlFor="tp-f">{t("pessoaFisica")}</label>
+                </div>
+              </div>
+            </div>
+            <div className="liga-cliente-infotime-campo-primeira-linha liga-cliente-infotime-form-ident-cel-id">
+              <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="codigo">
+                ID
+              </label>
+              <div className="liga-cliente-infotime-primeira-linha-controles">
+                <InputText id="codigo" className="w-full" value={rotuloCodigo} disabled />
+              </div>
+            </div>
+            <div className="liga-cliente-infotime-campo-primeira-linha liga-cliente-infotime-form-ident-cel-razao">
+              <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="razao">
+                {labelRazao} *
+              </label>
+              <div className="liga-cliente-infotime-primeira-linha-controles">
+                <InputText
+                  id="razao"
+                  className="w-full"
+                  value={campos.razaoSocial}
+                  onChange={(e) =>
+                    setCampos((prev) => ({ ...prev, razaoSocial: e.target.value }))
+                  }
                 />
-                <label htmlFor="tp-f">{t("pessoaFisica")}</label>
+              </div>
+            </div>
+            <div className="liga-cliente-infotime-form-ident-conta-municipio">
+              <div className="liga-cliente-infotime-campo-primeira-linha">
+                <label
+                  className="liga-cliente-infotime-primeira-linha-label"
+                  htmlFor="liga-cli-conta"
+                >
+                  {t("contaCaixa")} *
+                </label>
+                <div className="liga-cliente-infotime-primeira-linha-controles">
+                  <Dropdown
+                    inputId="liga-cli-conta"
+                    className="w-full"
+                    value={campos.idContaCaixa || null}
+                    options={dropdownOpts.contas}
+                    onChange={(e) =>
+                      setCampos((prev) => ({ ...prev, idContaCaixa: str(e.value) }))
+                    }
+                    placeholder={t("selecione")}
+                  />
+                </div>
+              </div>
+              <div className="liga-cliente-infotime-campo-primeira-linha">
+                <label
+                  className="liga-cliente-infotime-primeira-linha-label"
+                  htmlFor="liga-cli-municipio"
+                >
+                  {t("municipio")}
+                </label>
+                <div className="liga-cliente-infotime-primeira-linha-controles">
+                  <Dropdown
+                    inputId="liga-cli-municipio"
+                    className="w-full"
+                    value={campos.idMunicipio || null}
+                    options={dropdownOpts.municipios}
+                    filter
+                    onChange={(e) =>
+                      setCampos((prev) => ({ ...prev, idMunicipio: str(e.value) }))
+                    }
+                    placeholder={t("selecione")}
+                    showClear
+                  />
+                </div>
               </div>
             </div>
           </div>
-          <div className="liga-cliente-infotime-campo-primeira-linha">
-            <label
-              className="liga-cliente-infotime-primeira-linha-label"
-              htmlFor="liga-cli-situacao-linha1"
-            >
-              {t("situacao")} *
-            </label>
-            <div className="liga-cliente-infotime-primeira-linha-controles">
-              <Dropdown
-                inputId="liga-cli-situacao-linha1"
-                className="w-full"
-                value={campos.idSituacaoCliente || null}
-                options={dropdownOpts.situacoes}
-                onChange={(e) =>
-                  setCampos((prev) => ({ ...prev, idSituacaoCliente: str(e.value) }))
-                }
-                placeholder={t("selecione")}
-              />
-            </div>
-          </div>
-          <div className="liga-cliente-infotime-campo-primeira-linha">
-            <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="codigo">
-              {t("codigo")}
-            </label>
-            <div className="liga-cliente-infotime-primeira-linha-controles">
-              <InputText id="codigo" className="w-full" value={rotuloCodigo} disabled />
-            </div>
-          </div>
-        </div>
-        <div className="liga-cliente-infotime-form-linha-fantasia-so">
-          <label className="liga-cliente-infotime-label" htmlFor="nf">
-            {labelFantasia} *
-          </label>
-          <InputText
-            id="nf"
-            className="w-full"
-            value={campos.nomeFantasia}
-            onChange={(e) => setCampos((prev) => ({ ...prev, nomeFantasia: e.target.value }))}
-          />
         </div>
         {ehPf ? (
           <div className="liga-cliente-infotime-form-grid2">
@@ -197,55 +276,42 @@ export function criarSecoesFormularioClienteInfotime(
                 }
                 dateFormat="dd/mm/yy"
                 showIcon
+                iconPos="right"
+                className={`w-full ${LIGA_CALENDARIO_GRUPO_CLASS}`}
+                panelClassName={LIGA_CALENDARIO_PANEL_CLASS}
               />
             </div>
           </div>
         ) : null}
-        <div className="liga-cliente-infotime-form-ident-conta-municipio">
+        <div className="liga-cliente-infotime-form-linha-contatos-observacoes liga-cliente-infotime-form-ident-contatos-linha">
           <div>
-            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-conta">
-              {t("contaCaixa")} *
+            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-contatos-ta">
+              {t("contatos")}
             </label>
-            <Dropdown
-              inputId="liga-cli-conta"
+            <InputTextarea
+              id="liga-cli-contatos-ta"
+              rows={10}
               className="w-full"
-              value={campos.idContaCaixa || null}
-              options={dropdownOpts.contas}
+              value={campos.contatos}
+              onChange={(e) => setCampos((prev) => ({ ...prev, contatos: e.target.value }))}
+            />
+          </div>
+          <div>
+            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-info-adic-ident">
+              {t("infoAdicionaisEndereco")}
+            </label>
+            <InputTextarea
+              id="liga-cli-info-adic-ident"
+              rows={10}
+              className="w-full"
+              value={campos.observacoes}
               onChange={(e) =>
-                setCampos((prev) => ({ ...prev, idContaCaixa: str(e.value) }))
+                setCampos((prev) => ({ ...prev, observacoes: e.target.value }))
               }
-              placeholder={t("selecione")}
-            />
-          </div>
-          <div>
-            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-municipio">
-              {t("municipio")}
-            </label>
-            <Dropdown
-              inputId="liga-cli-municipio"
-              className="w-full"
-              value={campos.idMunicipio || null}
-              options={dropdownOpts.municipios}
-              filter
-              onChange={(e) => setCampos((prev) => ({ ...prev, idMunicipio: str(e.value) }))}
-              placeholder={t("selecione")}
-              showClear
             />
           </div>
         </div>
-        <div>
-          <label className="liga-cliente-infotime-label" htmlFor="liga-cli-contatos-ta">
-            {t("contatos")}
-          </label>
-          <InputTextarea
-            id="liga-cli-contatos-ta"
-            rows={6}
-            className="w-full"
-            value={campos.contatos}
-            onChange={(e) => setCampos((prev) => ({ ...prev, contatos: e.target.value }))}
-          />
-        </div>
-      </>
+      </div>
     ),
   };
 
@@ -254,50 +320,12 @@ export function criarSecoesFormularioClienteInfotime(
     titulo: t("abaDadosAdicionais"),
     icone: "pi-info-circle",
     conteudo: (
-      <>
+      <div className="liga-cliente-infotime-form-dados-add-secao">
         <div className="liga-cliente-infotime-form-dados-add-linha1">
-          <div className="liga-cliente-infotime-form-da1-col-chave">
-            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-chave-acesso">
-              {t("chaveAcesso")}
-            </label>
-            <InputText
-              id="liga-cli-chave-acesso"
-              className="w-full"
-              value={campos.chaveAcesso}
-              disabled
-            />
-          </div>
-          <div className="liga-cliente-infotime-form-da1-col-data">
-            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-data-exp">
-              {t("dataExpiracao")}
-            </label>
-            <Calendar
-              inputId="liga-cli-data-exp"
-              className="w-full"
-              value={campos.dataExpiracao}
-              onChange={(e) =>
-                setCampos((prev) => ({
-                  ...prev,
-                  dataExpiracao: e.value instanceof Date ? e.value : null,
-                }))
-              }
-              dateFormat="dd/mm/yy"
-              showIcon
-            />
-          </div>
-          <div className="liga-cliente-infotime-form-da1-col-qtd">
-            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-qtd-lic">
-              {t("qtdLicenca")}
-            </label>
-            <InputText
-              id="liga-cli-qtd-lic"
-              className="w-full"
-              inputMode="numeric"
-              value={campos.qtdLicenca}
-              onChange={(e) => setCampos((prev) => ({ ...prev, qtdLicenca: e.target.value }))}
-            />
-          </div>
-          <div className="liga-cliente-infotime-form-da1-col-canal">
+          <div
+            className="liga-cliente-infotime-form-da1-col-canal"
+            data-liga-foco-inicial
+          >
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-canal-da">
               {t("canal")}
             </label>
@@ -313,21 +341,62 @@ export function criarSecoesFormularioClienteInfotime(
               showClear
             />
           </div>
+          <div className="liga-cliente-infotime-form-da1-col-data">
+            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-data-exp">
+              {t("dataExpiracao")}
+            </label>
+            <Calendar
+              inputId="liga-cli-data-exp"
+              className={`w-full ${LIGA_CALENDARIO_GRUPO_CLASS}`}
+              panelClassName={LIGA_CALENDARIO_PANEL_CLASS}
+              value={campos.dataExpiracao}
+              onChange={(e) =>
+                setCampos((prev) => ({
+                  ...prev,
+                  dataExpiracao: e.value instanceof Date ? e.value : null,
+                }))
+              }
+              dateFormat="dd/mm/yy"
+              showIcon
+              iconPos="right"
+            />
+          </div>
+          <div className="liga-cliente-infotime-form-da1-col-qtd">
+            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-qtd-lic">
+              {t("qtdLicenca")}
+            </label>
+            <InputText
+              id="liga-cli-qtd-lic"
+              className="w-full"
+              inputMode="numeric"
+              value={campos.qtdLicenca}
+              onChange={(e) => setCampos((prev) => ({ ...prev, qtdLicenca: e.target.value }))}
+            />
+          </div>
+          <div className="liga-cliente-infotime-form-da1-col-chave">
+            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-chave-acesso">
+              {t("chaveAcesso")}
+            </label>
+            <InputText
+              id="liga-cli-chave-acesso"
+              className="w-full"
+              value={campos.chaveAcesso}
+              disabled
+            />
+          </div>
           <div className="liga-cliente-infotime-form-da1-col-cli-pub">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-cli-pub">
               {t("clientePublico")}
             </label>
-            <Dropdown
-              inputId="liga-cli-cli-pub"
-              className="w-full"
-              value={campos.clientePublico || null}
-              options={snOpts}
-              onChange={(e) =>
-                setCampos((prev) => ({ ...prev, clientePublico: str(e.value) }))
-              }
-              placeholder={t("selecione")}
-              showClear
-            />
+            <div className="liga-cliente-infotime-char1-switch">
+              <InputSwitch
+                inputId="liga-cli-cli-pub"
+                checked={valorSnParaSwitch(campos.clientePublico)}
+                onChange={(e) =>
+                  setCampos((prev) => ({ ...prev, clientePublico: e.value ? "S" : "N" }))
+                }
+              />
+            </div>
           </div>
         </div>
         <div className="liga-cliente-infotime-form-dados-add-linha2">
@@ -340,22 +409,6 @@ export function criarSecoesFormularioClienteInfotime(
               className="w-full"
               value={campos.homepage}
               onChange={(e) => setCampos((prev) => ({ ...prev, homepage: e.target.value }))}
-            />
-          </div>
-          <div>
-            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-tipo-cli">
-              {t("tipoCliente")}
-            </label>
-            <Dropdown
-              inputId="liga-cli-tipo-cli"
-              className="w-full"
-              value={campos.idTipoCliente || null}
-              options={dropdownOpts.tipos}
-              onChange={(e) =>
-                setCampos((prev) => ({ ...prev, idTipoCliente: str(e.value) }))
-              }
-              placeholder={t("selecione")}
-              showClear
             />
           </div>
           <div>
@@ -374,24 +427,38 @@ export function criarSecoesFormularioClienteInfotime(
               showClear
             />
           </div>
-          <div>
-            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-emite-bol">
-              {t("emiteBoleto")}
+          <div className="liga-cliente-infotime-form-da2-col-tipo-ate-fim-chave">
+            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-tipo-cli">
+              {t("tipoCliente")}
             </label>
             <Dropdown
-              inputId="liga-cli-emite-bol"
+              inputId="liga-cli-tipo-cli"
               className="w-full"
-              value={campos.emiteBoleto || null}
-              options={snOpts}
+              value={campos.idTipoCliente || null}
+              options={dropdownOpts.tipos}
               onChange={(e) =>
-                setCampos((prev) => ({ ...prev, emiteBoleto: str(e.value) }))
+                setCampos((prev) => ({ ...prev, idTipoCliente: str(e.value) }))
               }
               placeholder={t("selecione")}
               showClear
             />
           </div>
+          <div>
+            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-emite-bol">
+              {t("emiteBoleto")}
+            </label>
+            <div className="liga-cliente-infotime-char1-switch">
+              <InputSwitch
+                inputId="liga-cli-emite-bol"
+                checked={valorSnParaSwitch(campos.emiteBoleto)}
+                onChange={(e) =>
+                  setCampos((prev) => ({ ...prev, emiteBoleto: e.value ? "S" : "N" }))
+                }
+              />
+            </div>
+          </div>
         </div>
-      </>
+      </div>
     ),
   };
 
@@ -406,11 +473,20 @@ export function criarSecoesFormularioClienteInfotime(
               {labelDoc}
               {docObrigatorioUi ? " *" : ""}
             </label>
-            <InputText
+            <InputMask
+              key={ehPf ? "liga-cli-doc-mascara-cpf" : "liga-cli-doc-mascara-cnpj"}
               id="liga-cli-doc-cnpj"
+              mask={ehPf ? "999.999.999-99" : "99.999.999/9999-99"}
+              unmask
+              autoClear={false}
               className="w-full"
-              value={campos.cnpj}
-              onChange={(e) => setCampos((prev) => ({ ...prev, cnpj: e.target.value }))}
+              value={campos.cnpj.replace(/\D/g, "").slice(0, ehPf ? 11 : 14)}
+              onChange={(e) =>
+                setCampos((prev) => ({
+                  ...prev,
+                  cnpj: String(e.value ?? "").replace(/\D/g, "").slice(0, ehPf ? 11 : 14),
+                }))
+              }
             />
           </div>
           <div>
@@ -458,7 +534,8 @@ export function criarSecoesFormularioClienteInfotime(
             </label>
             <Calendar
               inputId="liga-cli-doc-dem"
-              className="w-full"
+              className={`w-full ${LIGA_CALENDARIO_GRUPO_CLASS}`}
+              panelClassName={LIGA_CALENDARIO_PANEL_CLASS}
               value={campos.dataEmissaoCr}
               onChange={(e) =>
                 setCampos((prev) => ({
@@ -468,6 +545,7 @@ export function criarSecoesFormularioClienteInfotime(
               }
               dateFormat="dd/mm/yy"
               showIcon
+              iconPos="right"
             />
           </div>
           <div>
@@ -476,7 +554,8 @@ export function criarSecoesFormularioClienteInfotime(
             </label>
             <Calendar
               inputId="liga-cli-doc-dvm"
-              className="w-full"
+              className={`w-full ${LIGA_CALENDARIO_GRUPO_CLASS}`}
+              panelClassName={LIGA_CALENDARIO_PANEL_CLASS}
               value={campos.dataValidadeCr}
               onChange={(e) =>
                 setCampos((prev) => ({
@@ -486,6 +565,7 @@ export function criarSecoesFormularioClienteInfotime(
               }
               dateFormat="dd/mm/yy"
               showIcon
+              iconPos="right"
             />
           </div>
           {idCliente && campos.numeroAntigo ? (
@@ -519,8 +599,8 @@ export function criarSecoesFormularioClienteInfotime(
     icone: "pi-map-marker",
     conteudo: (
       <div className="liga-cliente-infotime-endereco-bloco">
-        <div className="liga-cliente-infotime-endereco-linha liga-cliente-infotime-endereco-linha--cep-logra">
-          <div>
+        <div className="liga-cliente-infotime-endereco-grid-duas-linhas">
+          <div className="liga-cliente-infotime-endereco-cel liga-cliente-infotime-endereco-gdl-r1c1">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-cep">
               {t("cep")}
             </label>
@@ -536,10 +616,29 @@ export function criarSecoesFormularioClienteInfotime(
                   cep: String(e.value ?? "").replace(/\D/g, "").slice(0, 8),
                 }))
               }
+              onBlur={(e) =>
+                aoSairDoCampoCep(String((e.target as HTMLInputElement).value ?? ""))
+              }
               className="w-full"
             />
           </div>
-          <div>
+          <div className="liga-cliente-infotime-endereco-cel liga-cliente-infotime-endereco-gdl-r1c2">
+            <label
+              className="liga-cliente-infotime-label liga-cliente-infotime-endereco-label-nowrap"
+              htmlFor="liga-cli-end-tipo-log"
+            >
+              {t("tipoLogradouro")}
+            </label>
+            <InputText
+              id="liga-cli-end-tipo-log"
+              className="w-full"
+              value={campos.tipoLogradouro}
+              onChange={(e) =>
+                setCampos((prev) => ({ ...prev, tipoLogradouro: e.target.value }))
+              }
+            />
+          </div>
+          <div className="liga-cliente-infotime-endereco-cel liga-cliente-infotime-endereco-gdl-r1c3">
             <label
               className="liga-cliente-infotime-label liga-cliente-infotime-endereco-label-nowrap"
               htmlFor="liga-cli-end-logr"
@@ -553,7 +652,7 @@ export function criarSecoesFormularioClienteInfotime(
               onChange={(e) => setCampos((prev) => ({ ...prev, logradouro: e.target.value }))}
             />
           </div>
-          <div>
+          <div className="liga-cliente-infotime-endereco-cel liga-cliente-infotime-endereco-gdl-r1c4">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-num">
               {t("numero")}
             </label>
@@ -564,7 +663,7 @@ export function criarSecoesFormularioClienteInfotime(
               onChange={(e) => setCampos((prev) => ({ ...prev, numero: e.target.value }))}
             />
           </div>
-          <div>
+          <div className="liga-cliente-infotime-endereco-cel liga-cliente-infotime-endereco-gdl-r1c5">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-comp">
               {t("complemento")}
             </label>
@@ -577,10 +676,7 @@ export function criarSecoesFormularioClienteInfotime(
               }
             />
           </div>
-        </div>
-
-        <div className="liga-cliente-infotime-endereco-linha liga-cliente-infotime-endereco-linha--local">
-          <div>
+          <div className="liga-cliente-infotime-endereco-cel liga-cliente-infotime-endereco-gdl-r2c1">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-bairro">
               {t("bairro")}
             </label>
@@ -591,7 +687,7 @@ export function criarSecoesFormularioClienteInfotime(
               onChange={(e) => setCampos((prev) => ({ ...prev, bairro: e.target.value }))}
             />
           </div>
-          <div>
+          <div className="liga-cliente-infotime-endereco-cel liga-cliente-infotime-endereco-gdl-r2c2">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-cidade">
               {t("cidade")}
             </label>
@@ -602,7 +698,7 @@ export function criarSecoesFormularioClienteInfotime(
               onChange={(e) => setCampos((prev) => ({ ...prev, cidade: e.target.value }))}
             />
           </div>
-          <div>
+          <div className="liga-cliente-infotime-endereco-cel liga-cliente-infotime-endereco-gdl-r2c3">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-lat">
               {t("latitude")}
             </label>
@@ -623,7 +719,7 @@ export function criarSecoesFormularioClienteInfotime(
               }}
             />
           </div>
-          <div>
+          <div className="liga-cliente-infotime-endereco-cel liga-cliente-infotime-endereco-gdl-r2c4">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-lon">
               {t("longitude")}
             </label>
@@ -644,7 +740,7 @@ export function criarSecoesFormularioClienteInfotime(
               }}
             />
           </div>
-          <div>
+          <div className="liga-cliente-infotime-endereco-cel liga-cliente-infotime-endereco-gdl-r2c5">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-uf-dd">
               {t("estado")}
             </label>
@@ -668,8 +764,8 @@ export function criarSecoesFormularioClienteInfotime(
           </div>
         </div>
 
-        <div className="liga-cliente-infotime-endereco-linha liga-cliente-infotime-endereco-linha--regiao">
-          <div>
+        <div className="liga-cliente-infotime-endereco-linha liga-cliente-infotime-endereco-linha--regiao-contato">
+          <div className="liga-cliente-infotime-endereco-rc liga-cliente-infotime-endereco-rc-regiao">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-regiao">
               {t("regiaoEstadual")}
             </label>
@@ -685,27 +781,8 @@ export function criarSecoesFormularioClienteInfotime(
               showClear
             />
           </div>
-          <div>
-            <label
-              className="liga-cliente-infotime-label liga-cliente-infotime-endereco-label-nowrap"
-              htmlFor="liga-cli-end-tipo-log"
-            >
-              {t("tipoLogradouro")}
-            </label>
-            <InputText
-              id="liga-cli-end-tipo-log"
-              className="w-full"
-              value={campos.tipoLogradouro}
-              onChange={(e) =>
-                setCampos((prev) => ({ ...prev, tipoLogradouro: e.target.value }))
-              }
-            />
-          </div>
-        </div>
-
-        <div className="liga-cliente-infotime-endereco-linha liga-cliente-infotime-endereco-linha--contato">
-          <div className="liga-cliente-infotime-endereco-celula-telefones">
-            <div>
+          <div className="liga-cliente-infotime-endereco-rc liga-cliente-infotime-endereco-rc-tel-cel">
+            <div className="liga-cliente-infotime-endereco-rc-inner">
               <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-tel">
                 {t("telefone")}
               </label>
@@ -714,6 +791,7 @@ export function criarSecoesFormularioClienteInfotime(
                 mask="(99) 9999-9999"
                 unmask
                 autoClear={false}
+                className="w-full"
                 value={campos.telefone.replace(/\D/g, "").slice(0, 10)}
                 onChange={(e) =>
                   setCampos((prev) => ({
@@ -723,7 +801,7 @@ export function criarSecoesFormularioClienteInfotime(
                 }
               />
             </div>
-            <div>
+            <div className="liga-cliente-infotime-endereco-rc-inner">
               <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-cel">
                 {t("celular")}
               </label>
@@ -732,6 +810,7 @@ export function criarSecoesFormularioClienteInfotime(
                 mask="(99) 99999-9999"
                 unmask
                 autoClear={false}
+                className="w-full"
                 value={campos.celular.replace(/\D/g, "").slice(0, 11)}
                 onChange={(e) =>
                   setCampos((prev) => ({
@@ -742,7 +821,7 @@ export function criarSecoesFormularioClienteInfotime(
               />
             </div>
           </div>
-          <div>
+          <div className="liga-cliente-infotime-endereco-rc liga-cliente-infotime-endereco-rc-email">
             <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-email">
               {t("email")}
             </label>
@@ -754,19 +833,6 @@ export function criarSecoesFormularioClienteInfotime(
               onChange={(e) => setCampos((prev) => ({ ...prev, email: e.target.value }))}
             />
           </div>
-          <div>
-            <label className="liga-cliente-infotime-label" htmlFor="liga-cli-end-info-ad">
-              {t("infoAdicionaisEndereco")}
-            </label>
-            <InputText
-              id="liga-cli-end-info-ad"
-              className="w-full"
-              value={campos.observacoes}
-              onChange={(e) =>
-                setCampos((prev) => ({ ...prev, observacoes: e.target.value }))
-              }
-            />
-          </div>
         </div>
 
         <div className="liga-cliente-infotime-endereco-mapa-wrap">
@@ -774,15 +840,13 @@ export function criarSecoesFormularioClienteInfotime(
             <span className="liga-cliente-infotime-label">{t("mapaLocalizacao")}</span>
             <Button
               type="button"
+              label={t("mapaExpandirBotao")}
               icon="pi pi-map"
-              rounded
               outlined
               severity="secondary"
-              className="liga-cliente-infotime-endereco-mapa-botao-circulo"
+              className="liga-cliente-infotime-endereco-mapa-botao-expandir"
               onClick={abrirMapaEnderecoModal}
               aria-label={t("mapaExpandirAria")}
-              tooltip={t("mapaExpandir")}
-              tooltipOptions={{ position: "bottom" }}
             />
           </div>
           <ClienteInfotimeEnderecoMapaOsm

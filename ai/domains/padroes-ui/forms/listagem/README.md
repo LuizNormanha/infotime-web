@@ -18,6 +18,10 @@ Este documento descreve **layout, textos (i18n), interações e contrato HTTP** 
 | Estado + `fetch` servidor | `web/src/hooks/useListagemCrudServidor.ts` |
 | Montagem da query | `web/src/lib/listagem-servidor-query.ts` |
 
+**Botões da toolbar (Novo, Exportar, busca, ícones):** altura e forma padronizadas — ver [`../../ui/botoes-listagem-formulario.md`](../../ui/botoes-listagem-formulario.md).
+
+**Checklist com listagem + formulário + foco:** ver [`../formulario/normas-transversais-ui-cadastro.md`](../formulario/normas-transversais-ui-cadastro.md).
+
 ---
 
 ## Visão geral do fluxo

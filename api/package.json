@@ -13,7 +13,7 @@
     "senha-do-dia": "node scripts/senha-do-dia.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "node ../scripts/prisma-generate-dev.mjs && nest start --watch",
+    "start:dev": "node ../scripts/liberar-portas-dev.mjs && node ../scripts/prisma-generate-dev.mjs && nest start --watch",
     "start:dev:watch": "nest start --watch",
     "start:debug": "node ../scripts/prisma-generate-dev.mjs && nest start --debug --watch",
     "start:prod": "node dist/src/main.js",

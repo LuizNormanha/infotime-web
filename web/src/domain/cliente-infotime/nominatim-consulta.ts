@@ -34,6 +34,12 @@ export function chaveEnderecoInfotimeParaGeocode(d: EnderecoParaGeocode): string
   ].join("|");
 }
 
+/** CEP só dígitos (até 8) — primeiro campo de `chaveEnderecoInfotimeParaGeocode`. */
+export function cep8DaChaveGeocodeInfotime(chave: string): string {
+  const i = chave.indexOf("|");
+  return i === -1 ? chave : chave.slice(0, i);
+}
+
 /** Do mais específico ao mais genérico (inclui só CEP enquanto ViaCEP ainda não preencheu cidade/UF). */
 export function consultasNominatimInfotime(d: EnderecoParaGeocode): string[] {
   const cid = d.cidade.trim();

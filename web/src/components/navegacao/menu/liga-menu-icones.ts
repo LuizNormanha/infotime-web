@@ -5,7 +5,7 @@ const ICONE_MENU_OVERRIDES: Record<string, string> = {
   "infotime-template-app": "pi-cog",
   dashboard: "pi-sliders-h",
   "cad-acesso-usuário": "pi-users",
-  "cadastros-clientes": "pi-user",
+  "cadastros-clientes": "pi-users",
   "cad-estoque-fornecedores-fabricantes": "pi-user-plus",
   cadastros: "pi-cog",
   "infotime-cad-acessos": "pi-key",

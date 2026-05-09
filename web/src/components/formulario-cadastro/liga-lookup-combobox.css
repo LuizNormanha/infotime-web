@@ -14,7 +14,7 @@
 .liga-atendimento-lookup .p-inputtext {
   width: 100%;
   min-width: 0;
-  padding-right: 2.75rem;
+  padding-right: 2.95rem;
   border-radius: 8px;
 }
 
@@ -26,11 +26,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
   padding: 0;
   border: none;
-  border-radius: 6px;
+  border-radius: 980px;
   background: transparent;
   color: var(--text-color-secondary, #64748b);
   cursor: pointer;

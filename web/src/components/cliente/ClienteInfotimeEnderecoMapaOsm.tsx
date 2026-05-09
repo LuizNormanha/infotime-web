@@ -4,6 +4,8 @@ type Props = {
   lat: number | null;
   lon: number | null;
   mensagemSemCoordenadas: string;
+  /** `embutido`: pré-visualização baixa no formulário; `dialog`: área ampla no modal. */
+  apresentacao?: "embutido" | "dialog";
 };
 
 /**
@@ -14,7 +16,18 @@ export function ClienteInfotimeEnderecoMapaOsm({
   lat,
   lon,
   mensagemSemCoordenadas,
+  apresentacao = "embutido",
 }: Props) {
+  const classeCascaIframe =
+    apresentacao === "dialog"
+      ? "liga-cliente-infotime-endereco-mapa-iframe-casca liga-cliente-infotime-endereco-mapa-iframe-casca--dialog"
+      : "liga-cliente-infotime-endereco-mapa-iframe-casca";
+
+  const classeVazio =
+    apresentacao === "dialog"
+      ? "liga-cliente-infotime-endereco-mapa-vazio liga-cliente-infotime-endereco-mapa-vazio--dialog"
+      : "liga-cliente-infotime-endereco-mapa-vazio";
+
   if (
     lat == null ||
     lon == null ||
@@ -25,9 +38,7 @@ export function ClienteInfotimeEnderecoMapaOsm({
     lon < -180 ||
     lon > 180
   ) {
-    return (
-      <div className="liga-cliente-infotime-endereco-mapa-vazio">{mensagemSemCoordenadas}</div>
-    );
+    return <div className={classeVazio}>{mensagemSemCoordenadas}</div>;
   }
 
   const delta = 0.008;
@@ -35,13 +46,16 @@ export function ClienteInfotimeEnderecoMapaOsm({
   const src = `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bbox)}&layer=mapnik&marker=${encodeURIComponent(`${lat},${lon}`)}`;
 
   return (
-    <iframe
-      title="Mapa do endereço"
-      className="liga-cliente-infotime-endereco-mapa-iframe"
-      src={src}
-      loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
-      scrolling="no"
-    />
+    <div className={classeCascaIframe}>
+      <iframe
+        key={`${lat},${lon}`}
+        title="Mapa do endereço"
+        className="liga-cliente-infotime-endereco-mapa-iframe"
+        src={src}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        scrolling="no"
+      />
+    </div>
   );
 }

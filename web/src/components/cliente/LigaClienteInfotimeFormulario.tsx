@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { useTranslations } from "next-intl";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -14,11 +15,14 @@ import {
   solicitarReautenticacaoGlobal,
 } from "@/lib/autenticacao/withSessionGuard";
 import {
+  cep8DaChaveGeocodeInfotime,
   chaveEnderecoInfotimeParaGeocode,
   consultasNominatimInfotime,
 } from "@/domain/cliente-infotime/nominatim-consulta";
+import { separarTipoENomeLogradouroViacep } from "@/domain/cliente-infotime/viacep-logradouro";
 import { OPCOES_UF_BRASIL_FORMULARIO } from "@/domain/cliente-infotime/ufs-brasil";
 
+import "@/components/ui/dialogo/liga-mensagem-pop-up.css";
 import { ClienteInfotimeEnderecoMapaOsm } from "./ClienteInfotimeEnderecoMapaOsm";
 import { criarSecoesFormularioClienteInfotime } from "./liga-cliente-infotime-formulario-secoes";
 
@@ -82,6 +86,10 @@ export type Campos = {
   numeroAntigo: string;
   idClienteInfolab: string;
 };
+
+type ResultadoPersistirCliente =
+  | { ok: true; msgKey: "salvo" | "criado"; idParaSalvo: string | null }
+  | { ok: false };
 
 function camposVazio(): Campos {
   return {
@@ -300,16 +308,56 @@ function montarPayload(campos: Campos): Record<string, unknown> {
   };
 }
 
-const SN_OPTS = [
-  { label: "Sim", value: "S" },
-  { label: "Não", value: "N" },
-];
-
 function parseCoordenadaDigitada(raw: string): number | null {
   const s = raw.trim().replace(",", ".");
   if (s === "") return null;
   const n = Number.parseFloat(s);
   return Number.isFinite(n) ? n : null;
+}
+
+/** Coordenadas só para comparação (evita falso «sujo» por diferença de precisão float). */
+function coordenadaParaComparacao(raw: string): string {
+  const n = parseCoordenadaDigitada(raw);
+  if (n == null) return "";
+  return String(Math.round(n * 1e6) / 1e6);
+}
+
+/** Data «só dia» em UTC (alinha a strings `YYYY-MM-DD` vindas da API). */
+function dataSomenteDiaUtcParaComparacao(d: Date | null): string | null {
+  if (!d || Number.isNaN(d.getTime())) return null;
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+/** Snapshot estável para detectar alterações não salvas. */
+function serializarCamposParaComparacao(c: Campos): string {
+  return JSON.stringify({
+    ...c,
+    latitude: coordenadaParaComparacao(c.latitude),
+    longitude: coordenadaParaComparacao(c.longitude),
+    dataNascimento: dataSomenteDiaUtcParaComparacao(c.dataNascimento),
+    dataExpiracao: dataSomenteDiaUtcParaComparacao(c.dataExpiracao),
+    dataEmissaoCr: dataSomenteDiaUtcParaComparacao(c.dataEmissaoCr),
+    dataValidadeCr: dataSomenteDiaUtcParaComparacao(c.dataValidadeCr),
+  });
+}
+
+function formatarDocumentoTitulo(doc: string): string {
+  const d = doc.replace(/\D/g, "");
+  if (d.length === 11) return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  if (d.length === 14) return d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+  return doc.trim();
+}
+
+function normalizarSituacaoTag(s: string): "ativo" | "inativo" | "lead" | "prospect" | "outro" {
+  const t = s.trim().toLocaleLowerCase("pt-BR");
+  if (t === "ativo") return "ativo";
+  if (t === "inativo") return "inativo";
+  if (t === "lead") return "lead";
+  if (t === "prospect") return "prospect";
+  return "outro";
 }
 
 export function LigaClienteInfotimeFormulario({
@@ -323,9 +371,15 @@ export function LigaClienteInfotimeFormulario({
   const feedback = useLigaFeedback();
   const [carregando, setCarregando] = useState(idCliente != null);
   const [salvando, setSalvando] = useState(false);
+  const [excluindo, setExcluindo] = useState(false);
   const [campos, setCampos] = useState<Campos>(() => camposVazio());
   const [lookups, setLookups] = useState<LigaClienteLookups | null>(null);
   const [mapaEnderecoModalAberto, setMapaEnderecoModalAberto] = useState(false);
+  const [baselineComparacao, setBaselineComparacao] = useState<string | null>(null);
+  const [dialogoAlteracoesNaoSalvasAberto, setDialogoAlteracoesNaoSalvasAberto] =
+    useState(false);
+  const [dialogoConfirmarExclusaoAberto, setDialogoConfirmarExclusaoAberto] =
+    useState(false);
   const cepViaCepAplicadoRef = useRef("");
   const geocodeResolvidoParaChaveRef = useRef<string | null>(null);
   const ehPf = campos.tipoPessoa === "F";
@@ -352,13 +406,16 @@ export function LigaClienteInfotimeFormulario({
 
   const carregar = useCallback(async () => {
     if (!idCliente) {
-      setCampos(camposVazio());
+      const vazio = camposVazio();
+      setCampos(vazio);
       cepViaCepAplicadoRef.current = "";
       geocodeResolvidoParaChaveRef.current = null;
+      setBaselineComparacao(serializarCamposParaComparacao(vazio));
       setCarregando(false);
       return;
     }
     setCarregando(true);
+    setBaselineComparacao(null);
     try {
       const res = await fetch(`/api/clientes/${encodeURIComponent(idCliente)}`, {
         credentials: "include",
@@ -367,6 +424,8 @@ export function LigaClienteInfotimeFormulario({
       const json = (await res.json()) as { dados?: Record<string, unknown> };
       const carregado = jsonParaCampos(json.dados ?? {});
       setCampos(carregado);
+      const serialBase = serializarCamposParaComparacao(carregado);
+      setBaselineComparacao(serialBase);
       const cep8 = carregado.cep.replace(/\D/g, "").slice(0, 8);
       cepViaCepAplicadoRef.current = cep8.length === 8 ? cep8 : "";
       const latOk = parseCoordenadaDigitada(carregado.latitude);
@@ -395,6 +454,11 @@ export function LigaClienteInfotimeFormulario({
   useEffect(() => {
     void carregar();
   }, [carregar]);
+
+  const formularioEstaSujo = useMemo(() => {
+    if (carregando || baselineComparacao === null) return false;
+    return serializarCamposParaComparacao(campos) !== baselineComparacao;
+  }, [campos, carregando, baselineComparacao]);
 
   const dropdownOpts = useMemo(() => {
     const mapOp = (items: { id: string; descricao?: string | null; rotulo?: string | null }[]) =>
@@ -457,6 +521,20 @@ export function LigaClienteInfotimeFormulario({
     [enderecoParaGeo],
   );
 
+  /**
+   * PrimeReact InputMask por vezes só consolida o valor no DOM ao sair do campo.
+   * `flushSync` garante que `campos.cep` e os efeitos (ViaCEP + Nominatim) vejam o CEP imediatamente,
+   * espelhando o fluxo estável do `ClienteFormulario` em infolab-dst-app.
+   */
+  const aoSairDoCampoCep = useCallback((valorMascarado: string) => {
+    const digitos = String(valorMascarado ?? "")
+      .replace(/\D/g, "")
+      .slice(0, 8);
+    flushSync(() => {
+      setCampos((prev) => (digitos === prev.cep ? prev : { ...prev, cep: digitos }));
+    });
+  }, []);
+
   /** ViaCEP ao digitar 8 dígitos (mesmo fluxo do infolab-dst-app). */
   useEffect(() => {
     const digitos = campos.cep.replace(/\D/g, "").slice(0, 8);
@@ -473,26 +551,60 @@ export function LigaClienteInfotimeFormulario({
       })
         .then((r) => r.json())
         .then((data: { erro?: boolean; logradouro?: string; complemento?: string; bairro?: string; localidade?: string; uf?: string }) => {
-          if (!data || data.erro === true) return;
-          cepViaCepAplicadoRef.current = digitos;
-          geocodeResolvidoParaChaveRef.current = null;
-          setCampos((prev) => ({
-            ...prev,
-            logradouro: (data.logradouro ?? "").trim()
-              ? (data.logradouro ?? "").trim().toUpperCase()
-              : prev.logradouro,
-            bairro: (data.bairro ?? "").trim()
-              ? (data.bairro ?? "").trim().toUpperCase()
-              : prev.bairro,
-            cidade: (data.localidade ?? "").trim()
-              ? (data.localidade ?? "").trim().toUpperCase()
-              : prev.cidade,
-            estado: (data.uf ?? prev.estado).trim().toUpperCase().slice(0, 2),
-            complemento:
-              data.complemento?.trim() && !prev.complemento.trim()
-                ? data.complemento.trim()
-                : prev.complemento,
-          }));
+          if (!data || data.erro === true) {
+            setCampos((prev) => {
+              const atual = prev.cep.replace(/\D/g, "").slice(0, 8);
+              if (atual !== digitos) return prev;
+              geocodeResolvidoParaChaveRef.current = null;
+              return prev;
+            });
+            return;
+          }
+          setCampos((prev) => {
+            const atual = prev.cep.replace(/\D/g, "").slice(0, 8);
+            if (atual !== digitos) {
+              return prev;
+            }
+            /** Novo CEP → endereço mudou; coords antigas não correspondem mais à chave de geocode. */
+            geocodeResolvidoParaChaveRef.current = null;
+            cepViaCepAplicadoRef.current = digitos;
+            const rawLogradouro = (data.logradouro ?? "").trim();
+            const { tipo: tipoViacep, nome: nomeViacep } =
+              separarTipoENomeLogradouroViacep(rawLogradouro);
+            const tipoLogradouroViacep =
+              tipoViacep && nomeViacep.trim()
+                ? tipoViacep.toUpperCase()
+                : prev.tipoLogradouro;
+            const logradouroViacep =
+              rawLogradouro
+                ? tipoViacep && nomeViacep.trim()
+                  ? nomeViacep.toUpperCase()
+                  : rawLogradouro.toUpperCase()
+                : prev.logradouro;
+            const next = {
+              ...prev,
+              tipoLogradouro: tipoLogradouroViacep,
+              logradouro: logradouroViacep,
+              bairro: (data.bairro ?? "").trim()
+                ? (data.bairro ?? "").trim().toUpperCase()
+                : prev.bairro,
+              cidade: (data.localidade ?? "").trim()
+                ? (data.localidade ?? "").trim().toUpperCase()
+                : prev.cidade,
+              estado: (data.uf ?? prev.estado).trim().toUpperCase().slice(0, 2),
+              complemento:
+                data.complemento?.trim() && !prev.complemento.trim()
+                  ? data.complemento.trim()
+                  : prev.complemento,
+              latitude: "",
+              longitude: "",
+            };
+            /** Baseline acompanha preenchimento automático ViaCEP (evita falso «sujo» ao voltar). */
+            queueMicrotask(() => {
+              setBaselineComparacao(serializarCamposParaComparacao(next));
+            });
+            return next;
+          });
         })
         .catch(() => {});
     }, 450);
@@ -502,18 +614,31 @@ export function LigaClienteInfotimeFormulario({
     };
   }, [campos.cep]);
 
-  /** Geocodificação via Nominatim (proxy `/api/geo/nominatim`), espelhando infolab-dst-app. */
+  /**
+   * Geocodificação via Nominatim — mesma regra de `ClienteFormulario` (infolab-dst-apps):
+   * sem consultas espera o endereço ficar completo (não invalida a ref de geocode);
+   * coordenadas já exibidas sem ref → marca chave para não disparar falso positivo;
+   * chave já resolvida com coordenadas → não refaz; senão consulta em cadeia.
+   */
   useEffect(() => {
     if (consultasNominatim.length === 0) {
+      /** Não zerar `geocodeResolvidoParaChaveRef` aqui: com CEP incompleto as consultas somem,
+       *  mas coords antigas + ref null faziam o seed marcar a chave nova sem chamar o Nominatim. */
       return;
     }
     const latOk = parseCoordenadaDigitada(campos.latitude);
     const lonOk = parseCoordenadaDigitada(campos.longitude);
     const temCoord = latOk != null && lonOk != null;
+
+    if (temCoord && geocodeResolvidoParaChaveRef.current === null) {
+      geocodeResolvidoParaChaveRef.current = chaveGeocodeEndereco;
+      return;
+    }
     if (temCoord && geocodeResolvidoParaChaveRef.current === chaveGeocodeEndereco) {
       return;
     }
 
+    const cepAgendadoGeocode = cep8DaChaveGeocodeInfotime(chaveGeocodeEndereco);
     const ac = new AbortController();
     const atraso = window.setTimeout(() => {
       void (async () => {
@@ -527,12 +652,33 @@ export function LigaClienteInfotimeFormulario({
             if (!res.ok) continue;
             const j = (await res.json()) as { lat?: number | null; lon?: number | null };
             if (j.lat == null || j.lon == null) continue;
-            geocodeResolvidoParaChaveRef.current = chaveGeocodeEndereco;
-            setCampos((prev) => ({
-              ...prev,
-              latitude: String(j.lat),
-              longitude: String(j.lon),
-            }));
+            setCampos((prev) => {
+              const cepAtual = prev.cep.replace(/\D/g, "").slice(0, 8);
+              if (cepAtual !== cepAgendadoGeocode) {
+                return prev;
+              }
+              const chaveAtual = chaveEnderecoInfotimeParaGeocode({
+                cep: prev.cep,
+                tipoLogradouro: prev.tipoLogradouro,
+                logradouro: prev.logradouro,
+                numero: prev.numero,
+                complemento: prev.complemento,
+                bairro: prev.bairro,
+                cidade: prev.cidade,
+                estado: prev.estado,
+              });
+              geocodeResolvidoParaChaveRef.current = chaveAtual;
+              const next = {
+                ...prev,
+                latitude: String(j.lat),
+                longitude: String(j.lon),
+              };
+              /** Baseline acompanha geocode Nominatim (evita falso «sujo» ao voltar sem editar). */
+              queueMicrotask(() => {
+                setBaselineComparacao(serializarCamposParaComparacao(next));
+              });
+              return next;
+            });
             return;
           } catch {
             /* abort / rede */
@@ -546,81 +692,128 @@ export function LigaClienteInfotimeFormulario({
     };
   }, [consultasNominatim, chaveGeocodeEndereco, campos.latitude, campos.longitude]);
 
-  const aoSalvar = () =>
-    executarComPrecheckSessao(async () => {
-      if (!campos.razaoSocial.trim() || !campos.nomeFantasia.trim()) {
-        feedback.aviso(t("validacaoCabecalho"));
-        return;
-      }
-      if (!campos.idSituacaoCliente.trim() || !campos.idContaCaixa.trim()) {
-        feedback.aviso(t("validacaoAbasObrigatorias"));
-        return;
-      }
-      const situacaoNum = Number(campos.idSituacaoCliente);
-      const docObrigatorio = situacaoNum !== 3 && Number.isFinite(situacaoNum);
-      if (docObrigatorio && campos.cnpj.replace(/\D/g, "").length === 0) {
-        feedback.aviso(t("validacaoDocumento"));
-        return;
+  const persistirCliente = useCallback(async (): Promise<ResultadoPersistirCliente> => {
+    if (!campos.razaoSocial.trim() || !campos.nomeFantasia.trim()) {
+      feedback.aviso(t("validacaoCabecalho"));
+      return { ok: false };
+    }
+    if (!campos.idSituacaoCliente.trim() || !campos.idContaCaixa.trim()) {
+      feedback.aviso(t("validacaoAbasObrigatorias"));
+      return { ok: false };
+    }
+    const situacaoNumVal = Number(campos.idSituacaoCliente);
+    const docObrigatorioVal = situacaoNumVal !== 3 && Number.isFinite(situacaoNumVal);
+    if (docObrigatorioVal && campos.cnpj.replace(/\D/g, "").length === 0) {
+      feedback.aviso(t("validacaoDocumento"));
+      return { ok: false };
+    }
+
+    const payload = montarPayload(campos);
+    setSalvando(true);
+    try {
+      if (idCliente) {
+        const res = await fetch(`/api/clientes/${encodeURIComponent(idCliente)}`, {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const corpo = await res.text();
+        if (!res.ok) {
+          const det = extrairMensagemErroApiJson(corpo);
+          if (det) {
+            feedback.erroDetalhado(tFeedback("erroSalvar"), det);
+          } else {
+            feedback.erroSalvar();
+          }
+          return { ok: false };
+        }
+        return { ok: true, msgKey: "salvo", idParaSalvo: idCliente };
       }
 
-      const payload = montarPayload(campos);
-      setSalvando(true);
-      try {
-        if (idCliente) {
-          const res = await fetch(`/api/clientes/${encodeURIComponent(idCliente)}`, {
-            method: "PUT",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          const corpo = await res.text();
-          if (!res.ok) {
-            const det = extrairMensagemErroApiJson(corpo);
-            if (det) {
-              feedback.erroDetalhado(tFeedback("erroSalvar"), det);
-            } else {
-              feedback.erroSalvar();
-            }
-            return;
-          }
-          feedback.sucessoMensagem(t("salvo"));
-          aoSalvo(idCliente);
+      const res = await fetch("/api/clientes", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const corpo = await res.text();
+      if (!res.ok) {
+        const det = extrairMensagemErroApiJson(corpo);
+        if (det) {
+          feedback.erroDetalhado(tFeedback("erroSalvar"), det);
         } else {
-          const res = await fetch("/api/clientes", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          const corpo = await res.text();
-          if (!res.ok) {
-            const det = extrairMensagemErroApiJson(corpo);
-            if (det) {
-              feedback.erroDetalhado(tFeedback("erroSalvar"), det);
-            } else {
-              feedback.erroSalvar();
-            }
-            return;
-          }
-          let json: { id?: string };
-          try {
-            json = JSON.parse(corpo) as { id?: string };
-          } catch {
-            feedback.erroJsonParse();
-            return;
-          }
-          feedback.sucessoMensagem(t("criado"));
-          if (json.id) aoSalvo(json.id);
-          else aoVoltar();
+          feedback.erroSalvar();
         }
-      } catch {
-        feedback.erroSalvar();
-      } finally {
-        setSalvando(false);
+        return { ok: false };
       }
-    }, (acaoPendente) =>
-      solicitarReautenticacaoGlobal(() => void acaoPendente()),
-    );
+      let json: { id?: string };
+      try {
+        json = JSON.parse(corpo) as { id?: string };
+      } catch {
+        feedback.erroJsonParse();
+        return { ok: false };
+      }
+      const idNovo = json.id?.trim() ? json.id.trim() : null;
+      return { ok: true, msgKey: "criado", idParaSalvo: idNovo };
+    } catch {
+      feedback.erroSalvar();
+      return { ok: false };
+    } finally {
+      setSalvando(false);
+    }
+  }, [campos, idCliente, feedback, t, tFeedback]);
+
+  const aplicarSucessoPersistencia = useCallback(
+    (r: Extract<ResultadoPersistirCliente, { ok: true }>, antesDeNavegar?: () => void) => {
+      feedback.sucessoMensagem(t(r.msgKey));
+      antesDeNavegar?.();
+      if (r.idParaSalvo) aoSalvo(r.idParaSalvo);
+      else aoVoltar();
+    },
+    [aoSalvo, aoVoltar, feedback, t],
+  );
+
+  const aoSalvar = useCallback(
+    () =>
+      executarComPrecheckSessao(
+        async () => {
+          const r = await persistirCliente();
+          if (r.ok) aplicarSucessoPersistencia(r);
+        },
+        (acaoPendente) => solicitarReautenticacaoGlobal(() => void acaoPendente()),
+      ),
+    [aplicarSucessoPersistencia, persistirCliente],
+  );
+
+  const salvarEVoltarDoDialogo = useCallback(
+    () =>
+      executarComPrecheckSessao(
+        async () => {
+          const r = await persistirCliente();
+          if (r.ok) {
+            aplicarSucessoPersistencia(r, () =>
+              setDialogoAlteracoesNaoSalvasAberto(false),
+            );
+          }
+        },
+        (acaoPendente) => solicitarReautenticacaoGlobal(() => void acaoPendente()),
+      ),
+    [aplicarSucessoPersistencia, persistirCliente],
+  );
+
+  const tentarVoltar = useCallback(() => {
+    if (!formularioEstaSujo) {
+      aoVoltar();
+      return;
+    }
+    setDialogoAlteracoesNaoSalvasAberto(true);
+  }, [formularioEstaSujo, aoVoltar]);
+
+  const aoEsconderDialogoPendencia = useCallback(() => {
+    if (salvando) return;
+    setDialogoAlteracoesNaoSalvasAberto(false);
+  }, [salvando]);
 
   const aoGerarChave = () =>
     executarComPrecheckSessao(async () => {
@@ -641,6 +834,47 @@ export function LigaClienteInfotimeFormulario({
       solicitarReautenticacaoGlobal(() => void acaoPendente()),
     );
 
+  const executarExclusaoCliente = useCallback(async () => {
+    if (!idCliente) return;
+    setExcluindo(true);
+    try {
+      const res = await fetch(`/api/clientes/${encodeURIComponent(idCliente)}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        feedback.erroDetalhado(t("erroExcluir"));
+        return;
+      }
+      setDialogoConfirmarExclusaoAberto(false);
+      feedback.sucessoMensagem(t("excluido"));
+      aoVoltar();
+    } catch {
+      feedback.erroDetalhado(t("erroExcluir"));
+    } finally {
+      setExcluindo(false);
+    }
+  }, [idCliente, aoVoltar, feedback, t]);
+
+  const confirmarExclusaoNoDialogo = useCallback(
+    () =>
+      executarComPrecheckSessao(
+        () => void executarExclusaoCliente(),
+        (acaoPendente) => solicitarReautenticacaoGlobal(() => void acaoPendente()),
+      ),
+    [executarExclusaoCliente],
+  );
+
+  const aoClicarBotaoExcluir = useCallback(() => {
+    if (!idCliente) return;
+    setDialogoConfirmarExclusaoAberto(true);
+  }, [idCliente]);
+
+  const aoEsconderDialogoExclusao = useCallback(() => {
+    if (excluindo) return;
+    setDialogoConfirmarExclusaoAberto(false);
+  }, [excluindo]);
+
   const labelRazao = ehPf ? t("labelNome") : t("labelRazaoSocial");
   const labelFantasia = ehPf ? t("labelNomeSocial") : t("labelNomeFantasia");
   const labelIe = ehPf ? t("labelRg") : t("labelIe");
@@ -649,6 +883,13 @@ export function LigaClienteInfotimeFormulario({
 
   const situacaoNum = Number(campos.idSituacaoCliente);
   const docObrigatorioUi = situacaoNum !== 3 && Number.isFinite(situacaoNum);
+  const situacaoSelecionada = useMemo(
+    () =>
+      dropdownOpts.situacoes.find((x) => x.value === campos.idSituacaoCliente)?.label?.trim() ??
+      "",
+    [dropdownOpts.situacoes, campos.idSituacaoCliente],
+  );
+  const docTitulo = formatarDocumentoTitulo(campos.cnpj);
 
   const secoesFormulario = useMemo(
     () =>
@@ -666,10 +907,10 @@ export function LigaClienteInfotimeFormulario({
         tenantPrincipal,
         idCliente,
         docObrigatorioUi,
-        snOpts: SN_OPTS,
         labelRazao,
         opcoesUf: OPCOES_UF_BRASIL_FORMULARIO,
         abrirMapaEnderecoModal: () => setMapaEnderecoModalAberto(true),
+        aoSairDoCampoCep,
       }),
     [
       t,
@@ -684,6 +925,7 @@ export function LigaClienteInfotimeFormulario({
       tenantPrincipal,
       idCliente,
       docObrigatorioUi,
+      aoSairDoCampoCep,
     ],
   );
 
@@ -695,12 +937,140 @@ export function LigaClienteInfotimeFormulario({
     );
   }
 
-  const tituloFormulario = idCliente ? t("tituloEditar") : t("tituloNovo");
+  const tituloFormulario = t("tituloCabecalho");
+  const subtituloFormulario = idCliente
+    ? t("subtituloCabecalhoEditar")
+    : t("subtituloCabecalhoNovo");
+  const sufixoTitulo = (
+    <span
+      className="liga-cliente-infotime-titulo-resumo liga-cliente-infotime-titulo-resumo--faixa"
+      aria-label={t("cabecalhoResumoAria")}
+    >
+      {idCliente ? (
+        <span className="liga-cliente-infotime-titulo-item">
+          <i className="pi pi-tag liga-cliente-infotime-titulo-item-icone" aria-hidden />
+          <span className="liga-cliente-infotime-titulo-chip liga-cliente-infotime-titulo-chip--id">
+            {idCliente}
+          </span>
+        </span>
+      ) : null}
+      <span className="liga-cliente-infotime-titulo-item">
+        <i className="pi pi-briefcase liga-cliente-infotime-titulo-item-icone" aria-hidden />
+        <span className="liga-cliente-infotime-titulo-texto liga-cliente-infotime-titulo-texto--fantasia">
+          {campos.nomeFantasia.trim() || "—"}
+        </span>
+      </span>
+      {docTitulo ? (
+        <span className="liga-cliente-infotime-titulo-item">
+          <i className="pi pi-id-card liga-cliente-infotime-titulo-item-icone" aria-hidden />
+          <span className="liga-cliente-infotime-titulo-chip">{docTitulo}</span>
+        </span>
+      ) : null}
+      {situacaoSelecionada ? (
+        <span className="liga-cliente-infotime-titulo-item liga-cliente-infotime-titulo-item--situacao">
+          <span
+            className={`liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--${normalizarSituacaoTag(situacaoSelecionada)}`}
+          >
+            {situacaoSelecionada}
+          </span>
+        </span>
+      ) : null}
+    </span>
+  );
+
   const latDialog = parseCoordenadaDigitada(campos.latitude);
   const lonDialog = parseCoordenadaDigitada(campos.longitude);
 
   return (
-    <section className="liga-cliente-infotime-form" style={{ padding: "0.5rem 0 1rem" }}>
+    <section
+      className={`liga-cliente-infotime-form${idCliente ? "" : " liga-cliente-infotime-form--inclusao"}`}
+      style={{ padding: "0.5rem 0 1rem" }}
+    >
+      <Dialog
+        visible={dialogoAlteracoesNaoSalvasAberto}
+        onHide={aoEsconderDialogoPendencia}
+        header={t("pendenciaVoltarTitulo")}
+        className="liga-mensagem-pop-up"
+        style={{ width: "min(92vw, 32rem)" }}
+        closable={!salvando}
+        dismissableMask={!salvando}
+        draggable={false}
+        footer={
+          <div className="liga-mensagem-pop-up-rodape liga-cliente-infotime-dialogo-pendencia-rodape">
+            <Button
+              type="button"
+              label={t("pendenciaVoltarContinuarEditando")}
+              severity="secondary"
+              outlined
+              rounded
+              className="liga-mensagem-pop-up-botao-secundario"
+              disabled={salvando}
+              onClick={aoEsconderDialogoPendencia}
+            />
+            <Button
+              type="button"
+              label={t("pendenciaVoltarDescartar")}
+              severity="danger"
+              outlined
+              rounded
+              disabled={salvando}
+              onClick={() => {
+                setDialogoAlteracoesNaoSalvasAberto(false);
+                aoVoltar();
+              }}
+            />
+            <Button
+              type="button"
+              label={t("pendenciaVoltarSalvar")}
+              icon="pi pi-save"
+              rounded
+              loading={salvando}
+              disabled={salvando}
+              className="liga-mensagem-pop-up-botao-primario"
+              onClick={() => void salvarEVoltarDoDialogo()}
+            />
+          </div>
+        }
+      >
+        <p className="liga-mensagem-pop-up-texto">{t("pendenciaVoltarMensagem")}</p>
+      </Dialog>
+      <Dialog
+        visible={dialogoConfirmarExclusaoAberto}
+        onHide={aoEsconderDialogoExclusao}
+        header={t("dialogoExcluirTitulo")}
+        className="liga-mensagem-pop-up"
+        style={{ width: "min(92vw, 32rem)" }}
+        closable={!excluindo}
+        dismissableMask={!excluindo}
+        draggable={false}
+        footer={
+          <div className="liga-mensagem-pop-up-rodape liga-cliente-infotime-dialogo-exclusao-rodape">
+            <Button
+              type="button"
+              label={t("dialogoExcluirCancelar")}
+              severity="secondary"
+              outlined
+              rounded
+              className="liga-mensagem-pop-up-botao-secundario"
+              disabled={excluindo}
+              onClick={aoEsconderDialogoExclusao}
+            />
+            <Button
+              type="button"
+              label={t("dialogoExcluirConfirmar")}
+              icon="pi pi-trash"
+              severity="danger"
+              rounded
+              loading={excluindo}
+              disabled={excluindo}
+              className="liga-mensagem-pop-up-botao-primario-destrutivo"
+              onClick={() => void confirmarExclusaoNoDialogo()}
+            />
+          </div>
+        }
+      >
+        <p className="liga-mensagem-pop-up-texto">{t("dialogoExcluirMensagem")}</p>
+      </Dialog>
       <Dialog
         visible={mapaEnderecoModalAberto}
         onHide={() => setMapaEnderecoModalAberto(false)}
@@ -711,6 +1081,7 @@ export function LigaClienteInfotimeFormulario({
       >
         <div className="liga-cliente-infotime-mapa-dialog-corpo">
           <ClienteInfotimeEnderecoMapaOsm
+            apresentacao="dialog"
             lat={latDialog}
             lon={lonDialog}
             mensagemSemCoordenadas={t("mapaSemCoordenadas")}
@@ -719,22 +1090,27 @@ export function LigaClienteInfotimeFormulario({
       </Dialog>
       <LigaFormularioBase
         titulo={tituloFormulario}
-        iconeTitulo="pi-users"
+        subtitulo={subtituloFormulario}
+        subtituloAgrupadoAoTitulo
+        sufixoTitulo={sufixoTitulo}
         tituloComBarraVerde
+        iconeTitulo="pi-user"
         barraAcoes={
           <div className="liga-cliente-infotime-form-barra-acoes">
             <Button
               type="button"
               label={t("voltar")}
+              icon="pi pi-arrow-left"
               severity="secondary"
               outlined
-              onClick={aoVoltar}
+              onClick={tentarVoltar}
             />
             {tenantPrincipal ? (
               <>
                 <Button
                   type="button"
                   label={t("gerarChave")}
+                  icon="pi pi-key"
                   outlined
                   disabled={
                     !idCliente ||
@@ -745,15 +1121,8 @@ export function LigaClienteInfotimeFormulario({
                 />
                 <Button
                   type="button"
-                  label={t("downloadCurto")}
-                  outlined
-                  severity="secondary"
-                  disabled={!idCliente || (campos.chaveAcesso ?? "").trim().length <= 5}
-                  onClick={() => feedback.aviso(t("downloadLicencaIndisponivel"))}
-                />
-                <Button
-                  type="button"
                   label={t("licencaToolbar")}
+                  icon="pi pi-file"
                   outlined
                   severity="secondary"
                   disabled={!idCliente || (campos.chaveAcesso ?? "").trim().length <= 5}
@@ -765,9 +1134,23 @@ export function LigaClienteInfotimeFormulario({
             <Button
               type="button"
               label={t("salvar")}
+              icon="pi pi-save"
               loading={salvando}
               onClick={() => void aoSalvar()}
             />
+            {idCliente ? (
+              <Button
+                type="button"
+                label={t("excluir")}
+                icon="pi pi-trash"
+                severity="danger"
+                outlined
+                title={t("excluir")}
+                loading={excluindo}
+                disabled={salvando}
+                onClick={aoClicarBotaoExcluir}
+              />
+            ) : null}
           </div>
         }
         temLegendaCamposObrigatorios

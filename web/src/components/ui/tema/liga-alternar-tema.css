@@ -4,6 +4,10 @@
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
 }
 
 .liga-alternar-tema.p-button .p-button-icon,

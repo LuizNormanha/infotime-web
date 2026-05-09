@@ -18,6 +18,11 @@ export type TipoCampoFormulario =
   /** Coluna `ativo` (S/N no banco): `InputSwitch` na UI; estado tipicamente boolean ou S/N conforme a tela. */
   | "ativo"
   /**
+   * Coluna `CHAR(1)` / flag de um caractere no banco (ex.: S/N): `InputSwitch`;
+   * estado em `S`/`N` (ou legado boolean / string vazia).
+   */
+  | "char1"
+  /**
    * Exceção rara: rádios S/N com rótulos customizados. **Não** usar para o campo padrão `ativo`
    * (usar `tipo: "ativo"` + Switch — `mcp/padroes/ui` rules §7.4).
    */

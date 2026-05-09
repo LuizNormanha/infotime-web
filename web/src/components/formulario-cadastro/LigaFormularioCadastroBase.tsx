@@ -34,6 +34,7 @@ import {
   type LigaFormularioEtapasControle,
   type NavegacaoSecoes,
 } from "../formulario-base/LigaFormularioBase";
+import { focarPrimeiroCampoHabilitado } from "../formulario-base/focar-primeiro-campo-secao";
 import type {
   CampoFormularioCadastro,
   LayoutFormularioCadastro,
@@ -46,11 +47,13 @@ import { usePermissaoPerfilTelaAtiva } from "@/hooks/usePermissaoPerfilTelaAtiva
 import { LigaMensagemPopUp } from "@/components/ui/dialogo/LigaMensagemPopUp";
 import {
   formatarDateCalendarioSomenteDia,
+  LIGA_CALENDARIO_GRUPO_CLASS,
   LIGA_CALENDARIO_PANEL_CLASS,
   parseIsoParaDateComHora,
   parseValorCalendarioSomenteDia,
 } from "@/lib/calendario-datas-formulario";
 import { atributosSemSugestaoBrowser } from "@/lib/input-sem-sugestao-browser";
+import { valorSnParaSwitch } from "@/lib/valor-sn-para-switch";
 
 function camposTodosDaSecao(secao: SecaoFormularioCadastro): CampoFormularioCadastro[] {
   if (secao.grupos?.length) {
@@ -204,29 +207,13 @@ function LigaFormularioCadastroCarregandoSplash({
 // Helpers internos de renderização
 // ---------------------------------------------------------------------------
 
-/** Primeiro input/select/textarea editável visível no painel principal do formulário. */
 function focarPrimeiroCampoEditavelNoPainel(root: HTMLElement): void {
   const painel = root.querySelector(".liga-formulario-secao-conteudo");
-  if (!painel) return;
-  const seletor =
-    "input:not([disabled]):not([type='hidden']):not([type='submit']):not([type='button']), select:not([disabled]), textarea:not([disabled])";
-  const candidatos = painel.querySelectorAll<HTMLElement>(seletor);
-  for (const el of candidatos) {
-    if (el.closest(".liga-formulario-sidebar")) continue;
-    if ("readOnly" in el && el.readOnly) continue;
-    const r = el.getBoundingClientRect();
-    if (r.width === 0 && r.height === 0) continue;
-    el.focus({ preventScroll: true });
-    return;
-  }
+  focarPrimeiroCampoHabilitado(painel instanceof HTMLElement ? painel : null);
 }
 
 function textoLimpo(v: unknown): string {
   return v == null ? "" : String(v).trim();
-}
-
-function valorAtivoParaSwitch(v: unknown): boolean {
-  return v === true || v === "S" || v === "s";
 }
 
 /** Valor S/N (ou legado true/false) coerente para rádio ativo. */
@@ -475,13 +462,13 @@ function renderCampo(
   const cnCampo = classeCampoContainer(campo, linhaToda);
   const acaoDireita = acoesCampoDireita[chave];
 
-  if (tipo === "ativo") {
+  if (tipo === "ativo" || tipo === "char1") {
     return (
       <CampoWrapper key={chave} label={label} obrigatorio={obrigatorio} erro={erro} className={cnCampo}>
         <div style={{ paddingTop: "0.4rem" }}>
           <InputSwitch
-            checked={valorAtivoParaSwitch(valor)}
-            onChange={(e) => onChange(chave, Boolean(e.value))}
+            checked={valorSnParaSwitch(valor)}
+            onChange={(e) => onChange(chave, e.value ? "S" : "N")}
             disabled={desabilitado}
             data-campo-chave={chave}
           />
@@ -629,11 +616,12 @@ function renderCampo(
             }
           }}
           disabled={desabilitado}
-          className="p-inputtext-sm w-full liga-campo-com-botao-interno"
+          className={`p-inputtext-sm w-full ${LIGA_CALENDARIO_GRUPO_CLASS}`}
           invalid={Boolean(erro)}
           data-campo-chave={chave}
           dateFormat="dd/mm/yy"
           showIcon
+          iconPos="right"
           showButtonBar
           showTime={comHora}
           hourFormat="24"
@@ -1242,7 +1230,7 @@ export function LigaFormularioCadastroBase({
     return (
       <section
         className="liga-formulario-cadastro-base"
-        style={{ padding: "0.5rem 0 1rem" }}
+        style={{ padding: "0.5rem 3px 1rem" }}
       >
         <div className="liga-formulario-cadastro-splash-centro">
           <LigaFormularioCadastroCarregandoSplash
@@ -1258,7 +1246,7 @@ export function LigaFormularioCadastroBase({
     <section
       ref={raizFormularioRef}
       className="liga-formulario-cadastro-base"
-      style={{ padding: "0.5rem 0 1rem" }}
+      style={{ padding: "0.5rem 3px 1rem" }}
     >
       <LigaMensagemPopUp
         aberto={dialogoConfirmarExclusaoAberto}

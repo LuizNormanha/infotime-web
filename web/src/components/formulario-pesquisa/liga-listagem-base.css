@@ -161,6 +161,14 @@
   width: auto;
 }
 
+.liga-listagem-titulo-acoes .liga-listagem-botao-novo.p-button,
+.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button {
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
+}
+
 .liga-listagem-moldura-tabela {
   display: flex;
   flex-direction: column;
@@ -340,7 +348,7 @@ html[data-theme="dark"] .liga-listagem-moldura-tabela .liga-listagem-grid.p-data
   max-width: 310px;
   min-width: 0;
   position: relative;
-  min-height: 2.25rem;
+  min-height: var(--liga-botao-contorno-altura);
   border-radius: 10px;
   border: 1px solid var(--liga-borda-suave);
   background: var(--liga-moldura-externa);
@@ -352,7 +360,7 @@ html[data-theme="dark"] .liga-listagem-moldura-tabela .liga-listagem-grid.p-data
   flex-direction: row;
   align-items: stretch;
   width: 100%;
-  min-height: 2.25rem;
+  min-height: var(--liga-botao-contorno-altura);
 }
 
 .liga-listagem-busca-com-icones .liga-listagem-busca-input.p-inputtext {
@@ -384,11 +392,11 @@ html[data-theme="dark"] .liga-listagem-moldura-tabela .liga-listagem-grid.p-data
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
   padding: 0;
   border: none;
-  border-radius: 8px;
+  border-radius: 980px;
   background: transparent;
   color: var(--liga-texto-secundario);
   cursor: pointer;
@@ -476,7 +484,10 @@ html[data-theme="dark"] .liga-listagem-busca-destaque {
  */
 .liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined {
   align-items: center;
-  padding-inline: 0.75rem 0.85rem;
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
   background: var(--liga-moldura-interna);
   border-color: var(--liga-borda-suave);
   color: var(--liga-texto-secundario);
@@ -991,8 +1002,8 @@ html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown-
   justify-content: center;
   flex-shrink: 0;
   box-sizing: border-box;
-  width: 2.375rem;
-  height: 2.375rem;
+  width: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
   margin-inline: 0.28rem;
   padding: 0;
   border: none;
@@ -1038,6 +1049,15 @@ html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown-
   flex-shrink: 0;
 }
 
+/* «Limpar» na barra de filtros: mesma altura/cápsula que Novo/Exportar. */
+.liga-listagem-toolbar-busca-linha .liga-listagem-filtros-limpar-btn.p-button.p-button-sm,
+.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button.p-button-sm {
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
+}
+
 /* Contém o anel interno de foco sem alterar o border-radius do tema (Prime). */
 .liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button.p-component {
   overflow: hidden;
@@ -1047,13 +1067,13 @@ html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown-
 .liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button.p-button-icon-only {
   flex-shrink: 0;
   box-sizing: border-box;
-  width: 2.375rem !important;
-  min-width: 2.375rem !important;
-  height: 2.375rem !important;
+  width: var(--liga-botao-contorno-altura) !important;
+  min-width: var(--liga-botao-contorno-altura) !important;
+  height: var(--liga-botao-contorno-altura) !important;
   margin-inline: 0.28rem;
   padding: 0 !important;
   border: none !important;
-  border-radius: 6px !important;
+  border-radius: 980px !important;
   background: transparent !important;
   box-shadow: none !important;
   overflow: visible;
@@ -1172,6 +1192,13 @@ html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown-
   justify-content: center;
 }
 
+.liga-listagem-filtros-overflow-panel .liga-listagem-filtros-limpar-btn.p-button.p-button-sm {
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
+}
+
 /* Botão secundário “Limpar”: contorno + moldura (padroes-ui / barra de listagem). */
 .liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-limpar-btn.p-button.p-button-outlined {
   background: var(--liga-moldura-interna);
@@ -1268,15 +1295,15 @@ html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown-
   max-width: 14rem;
 }
 
-/* Mesmo arredondamento e altura da moldura de busca (.liga-listagem-busca: min-height 2.25rem). */
+/* Mesma altura que a moldura de busca e botões Novo/Exportar (`--liga-botao-contorno-altura`). */
 .liga-listagem-toolbar-busca-linha .liga-listagem-pesquisar-por.p-dropdown {
   display: inline-flex;
   align-items: stretch;
   box-sizing: border-box;
   min-width: 0;
-  min-height: 2.25rem;
-  height: 2.25rem;
-  max-height: 2.25rem;
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  max-height: var(--liga-botao-contorno-altura);
   border-radius: 10px;
   /* overflow:visible — overflow:hidden cortava anel de foco do tema e, em alguns layouts com barra rolável,
      interferia no overlay do painel quando ancorado ao próprio trigger */
@@ -1594,34 +1621,7 @@ html[data-theme="dark"]
   color: var(--liga-texto-secundario);
 }
 
-/* Calendar filtro refinado: mesmo padrão visual do formulário (ícone dentro do input). */
-.liga-listagem-refinado-datas .liga-campo-com-botao-interno.p-calendar {
-  position: relative;
-}
-
-.liga-listagem-refinado-datas .liga-campo-com-botao-interno.p-calendar .p-inputtext {
-  padding-right: 2.2rem;
-}
-
-.liga-listagem-refinado-datas .liga-campo-com-botao-interno.p-calendar .p-datepicker-trigger {
-  position: absolute;
-  top: 50%;
-  right: 0.35rem;
-  transform: translateY(-50%);
-  width: 1.75rem;
-  height: 1.75rem;
-  min-width: 1.75rem;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--liga-texto-secundario);
-  box-shadow: none;
-}
-
-.liga-listagem-refinado-datas .liga-campo-com-botao-interno.p-calendar .p-datepicker-trigger:hover {
-  background: color-mix(in srgb, var(--liga-borda-suave) 35%, transparent);
-  color: var(--liga-texto-principal);
-}
+/* Calendar filtro refinado: padrão global `liga-calendar-grupo-data` (`liga-tema.css`). */
 
 .liga-listagem-refinado-limpar-campo {
   margin-top: 0;

@@ -1,10 +1,17 @@
 /**
  * Conversões e constante compartilhada para `Calendar` (PrimeReact) em formulários Liga.
- * Estilos do painel compacto: `liga-formulario-cadastro-base.css` (classe abaixo).
+ * Estilos do painel compacto: `liga-formulario-cadastro-base.css`.
+ * Estilo do campo + faixa verde: `liga-tema.css` (classe `LIGA_CALENDARIO_GRUPO_CLASS`).
  */
 
 /** Classe no overlay do `Calendar` — painel mais compacto (padrao Liga). */
 export const LIGA_CALENDARIO_PANEL_CLASS = "liga-datepicker-panel--compact";
+
+/**
+ * Classe no `Calendar` com `showIcon` — grupo único: campo branco + faixa verde com ícone
+ * (`liga-tema.css`).
+ */
+export const LIGA_CALENDARIO_GRUPO_CLASS = "liga-calendar-grupo-data";
 
 /**
  * API / estado: `YYYY-MM-DD` ou string ISO com hora → `Date` em **meia-noite local**

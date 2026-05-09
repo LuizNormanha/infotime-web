@@ -19,7 +19,7 @@ import {
   validarTermoBuscaMascara,
 } from "./liga-listagem-mascara-busca";
 import { atributosSemSugestaoBrowser } from "@/lib/input-sem-sugestao-browser";
-import { LIGA_CALENDARIO_PANEL_CLASS } from "@/lib/calendario-datas-formulario";
+import { LIGA_CALENDARIO_GRUPO_CLASS, LIGA_CALENDARIO_PANEL_CLASS } from "@/lib/calendario-datas-formulario";
 
 type TradutorHome = ReturnType<typeof useTranslations<"home">>;
 
@@ -238,10 +238,11 @@ function EditorCampo({
       const propsCalendarioData = {
         dateFormat: "dd/mm/yy" as const,
         showIcon: true,
+        iconPos: "right" as const,
         showButtonBar: true,
         mask: "99/99/9999",
         panelClassName: LIGA_CALENDARIO_PANEL_CLASS,
-        className: "p-inputtext-sm w-full liga-campo-com-botao-interno",
+        className: `p-inputtext-sm w-full ${LIGA_CALENDARIO_GRUPO_CLASS}`,
         placeholder: t("listagem.comum.filtroRefinadoDataPlaceholder"),
       };
 

@@ -87,6 +87,21 @@ export const LigaBarraMenuTopo = forwardRef<HTMLElement, LigaBarraMenuTopoProps>
 
     const arvoreMenu = useMemo(() => normalizarMenu(menuIds), [menuIds]);
 
+    /**
+     * Folhas promovidas diretamente na barra (ex.: «Clientes» = `cadastros-clientes`).
+     * O mesmo id pode existir na árvore DST sob um pai (ex.: Comercial); nesse caso o destino
+     * real é a folha da barra — o pai não deve ficar com o mesmo destaque «ativo».
+     */
+    const idsItemFolhaNaRaiz = useMemo(
+      () =>
+        new Set(
+          arvoreMenu
+            .filter((n) => n.filhos.length === 0)
+            .map((n) => n.id),
+        ),
+      [arvoreMenu],
+    );
+
     /** Evita :hover “preso” em alguns browsers após fechar o painel em portal (sem alterar estado React). */
     function limparHoverPresoNaBarra(nav: HTMLElement | null) {
       if (!nav || typeof window === "undefined") return;
@@ -210,7 +225,10 @@ export const LigaBarraMenuTopo = forwardRef<HTMLElement, LigaBarraMenuTopoProps>
             const possuiFilhos = no.filhos.length > 0;
             const painelAberto = painelTopo?.id === no.id;
             const ativa =
-              itemAtivoId && descendenteAtivo(no, itemAtivoId) && !painelAberto;
+              Boolean(itemAtivoId) &&
+              descendenteAtivo(no, itemAtivoId) &&
+              !painelAberto &&
+              !idsItemFolhaNaRaiz.has(itemAtivoId);
 
             if (possuiFilhos) {
               return (

@@ -3,6 +3,11 @@
   /** Espaçamento horizontal/vertical entre campos dos grids do formulário (padronizado). */
   --liga-cli-form-gap-col: 0.5rem;
   --liga-cli-form-gap-row: 0.35rem;
+  /**
+   * Entre linhas horizontais de campos (ex.: L1↔L2 do grid de Identificação).
+   * Todas as seções do formulário cliente usam este token para row-gap e margens verticais entre blocos.
+   */
+  --liga-cli-form-entre-linhas: var(--liga-cli-form-gap-row);
 }
 
 /** Linha única do módulo: título (shell) + portal das ações da listagem (Exportar / Novo). */
@@ -29,21 +34,240 @@
   padding-inline-start: 0;
 }
 
+.liga-cliente-infotime-form .liga-formulario-topo {
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.liga-cliente-infotime-form .liga-formulario-topo-textos {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.liga-cliente-infotime-form .liga-formulario-acoes-topo {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+/* Subtítulo junto ao título «Cliente»: inclusão em verde da marca; edição mantém destaque laranja. */
+.liga-cliente-infotime-form--inclusao .liga-formulario-subtitulo-interno {
+  color: var(--liga-verde-escuro, #2d6a5e);
+  font-weight: 600;
+}
+
+html[data-theme="dark"] .liga-cliente-infotime-form--inclusao .liga-formulario-subtitulo-interno {
+  color: var(--liga-verde-link-claro, #9fd86a);
+}
+
+.liga-cliente-infotime-form:not(.liga-cliente-infotime-form--inclusao) .liga-formulario-subtitulo-interno {
+  color: #c2410c;
+  font-weight: 600;
+}
+
+/** Resumo (ID, fantasia, documento, situação) alinhado ao topo da palavra «Cliente», não ao centro do bloco com subtítulo. */
+.liga-cliente-infotime-form .liga-formulario-titulo {
+  align-items: flex-start;
+  gap: 0.65rem 1rem;
+}
+
+/** Menos espaço vertical no shell: aba «Endereço» + mapa cabem sem rolagem no `main`. */
+.liga-cliente-infotime-form .liga-formulario {
+  gap: 1rem;
+}
+
+.liga-cliente-infotime-form .liga-formulario-cartao {
+  padding: 1.05rem calc(1.2rem + 2px) 1rem;
+}
+
+.liga-cliente-infotime-form .liga-formulario-secao-cabecalho {
+  margin-bottom: 0.92rem;
+}
+
+.liga-cliente-infotime-titulo-resumo--faixa {
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin-left: 0;
+  flex: 1 1 12rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-self: flex-start;
+  column-gap: 1.65rem;
+  row-gap: 0.55rem;
+}
+
+.liga-cliente-infotime-titulo-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.liga-cliente-infotime-titulo-item-icone {
+  flex-shrink: 0;
+  font-size: 1rem;
+  color: var(--liga-verde, #22c55e);
+  line-height: 1;
+}
+
+.liga-cliente-infotime-titulo-item--situacao {
+  flex-shrink: 0;
+}
+
+.liga-cliente-infotime-titulo-texto {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--liga-texto-principal);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.liga-cliente-infotime-titulo-texto--fantasia {
+  max-width: min(36rem, 48vw);
+}
+
+.liga-cliente-infotime-titulo-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--liga-borda-suave, #d1d5db);
+  background: color-mix(in srgb, var(--liga-moldura-externa, #f3f4f6) 88%, transparent);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--liga-texto-principal);
+}
+
+.liga-cliente-infotime-titulo-chip--id {
+  color: #166534;
+  border-color: #86efac;
+  background: #dcfce7;
+}
+
 /**
- * Linha 1 (Identificação): razão social | tipo pessoa | situação | código.
- * Só a razão social usa `1fr` (recebe todo o espaço sobrando); demais colunas com largura contida.
+ * Agrupa o grid (linhas 1–2), bloco PF opcional e Contatos com o mesmo espaçamento vertical
+ * entre linhas de campos que o `row-gap` L1↔L2 de `.liga-cliente-infotime-form-ident-grid`
+ * (`--liga-cli-form-entre-linhas`).
  */
+.liga-cliente-infotime-form-ident-secao {
+  --liga-ident-gap-x: var(--liga-cli-form-gap-col, 0.5rem);
+  /** Mesmas trilhas de `.liga-cliente-infotime-form-ident-grid` — alinha Contatos / Informações adicionais. */
+  --liga-ident-grid-cols:
+    minmax(12.5rem, 1fr)
+    minmax(8.25rem, 0.5fr)
+    minmax(9.5rem, 0.28fr)
+    minmax(5.25rem, 0.22fr);
+  display: flex;
+  flex-direction: column;
+  gap: var(--liga-cli-form-entre-linhas);
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-cliente-infotime-form-ident {
+  width: 100%;
+  margin-bottom: 0;
+  min-width: 0;
+}
+
+/**
+ * Coluna 1 (fantasia / razão): 1fr; colunas 2–4 somam 1fr — mesma repartição horizontal da linha 3
+ * (Contatos | Info = 1fr 1fr), alinhando o fim da coluna 1 ao fim do campo Contatos.
+ * Dentro da metade direita (1fr), col2 = col3+col4 em fatias → largura(situação) ≈ largura(conta caixa).
+ */
+.liga-cliente-infotime-form-ident-grid {
+  display: grid;
+  grid-template-columns: var(--liga-ident-grid-cols);
+  grid-template-rows: auto auto;
+  column-gap: var(--liga-ident-gap-x);
+  row-gap: var(--liga-cli-form-entre-linhas);
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-cliente-infotime-form-ident .liga-cliente-infotime-primeira-linha-controles .p-inputtext,
+.liga-cliente-infotime-form-ident .liga-cliente-infotime-primeira-linha-controles .p-dropdown {
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+}
+
+.liga-cliente-infotime-form-ident-grid > .liga-cliente-infotime-campo-primeira-linha {
+  gap: var(--liga-cli-form-gap-row);
+  min-width: 0;
+}
+
+.liga-cliente-infotime-form-ident-grid .liga-cliente-infotime-primeira-linha-controles {
+  min-height: 2.5rem;
+}
+
+.liga-cliente-infotime-form-ident-cel-fantasia {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.liga-cliente-infotime-form-ident-cel-situacao {
+  grid-row: 1;
+  grid-column: 2;
+}
+
+.liga-cliente-infotime-form-ident-cel-tipo {
+  grid-row: 1;
+  grid-column: 3;
+}
+
+.liga-cliente-infotime-form-ident-cel-id {
+  grid-row: 1;
+  grid-column: 4;
+}
+
+.liga-cliente-infotime-form-ident-cel-razao {
+  grid-row: 2;
+  grid-column: 1;
+}
+
+.liga-cliente-infotime-form-ident-grid .liga-cliente-infotime-radio-linha {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  gap: 0.45rem;
+}
+
+.liga-cliente-infotime-form-ident-conta-municipio {
+  grid-row: 2;
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--liga-ident-gap-x);
+  row-gap: var(--liga-cli-form-entre-linhas);
+  align-items: start;
+  min-width: 0;
+}
+
+.liga-cliente-infotime-form-ident-conta-municipio > .liga-cliente-infotime-campo-primeira-linha {
+  min-width: 0;
+}
+
+.liga-cliente-infotime-form-ident-conta-municipio .p-dropdown,
+.liga-cliente-infotime-form-ident-conta-municipio .p-inputtext {
+  width: 100%;
+  min-width: 0;
+}
+
+/** Layout antigo (duas colunas): mantido para eventual reuso em outra seção. */
 .liga-cliente-infotime-form-primeira-linha {
   display: grid;
-  grid-template-columns:
-    minmax(18rem, 1fr)
-    max-content
-    minmax(10.5rem, 14rem)
-    minmax(4.25rem, 5.75rem);
+  grid-template-columns: minmax(16rem, 1fr) minmax(12rem, 16rem);
   column-gap: var(--liga-cli-form-gap-col);
   row-gap: var(--liga-cli-form-gap-row);
   align-items: start;
-  margin: 0 0 1rem;
+  margin: 0 0 var(--liga-cli-form-entre-linhas);
   padding: 0;
   width: 100%;
   min-width: 0;
@@ -55,36 +279,13 @@
   gap: 0.5rem;
 }
 
-/** Razão social: ocupar toda a célula (evita largura artificialmente curta). */
-.liga-cliente-infotime-form-primeira-linha
-  > .liga-cliente-infotime-campo-primeira-linha:nth-child(1)
-  .p-inputtext,
-.liga-cliente-infotime-form-primeira-linha
-  > .liga-cliente-infotime-campo-primeira-linha:nth-child(1)
-  input.p-inputtext {
-  width: 100%;
-  max-width: none;
-}
-
-.liga-cliente-infotime-form-primeira-linha
-  > .liga-cliente-infotime-campo-primeira-linha:nth-child(4)
-  .liga-cliente-infotime-primeira-linha-controles
-  input,
-.liga-cliente-infotime-form-primeira-linha
-  > .liga-cliente-infotime-campo-primeira-linha:nth-child(4)
-  .p-inputtext {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 /** Linha 2: nome fantasia 10% mais largo que o e-mail; ocupa 100% da faixa. */
 .liga-cliente-infotime-form-linha-fantasia-email {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   column-gap: var(--liga-cli-form-gap-col);
   row-gap: var(--liga-cli-form-gap-row);
-  margin-bottom: 1rem;
+  margin-bottom: var(--liga-cli-form-entre-linhas);
   width: 100%;
 }
 
@@ -104,7 +305,7 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   column-gap: var(--liga-cli-form-gap-col);
   row-gap: var(--liga-cli-form-gap-row);
-  margin-bottom: 1rem;
+  margin-bottom: var(--liga-cli-form-entre-linhas);
   width: 100%;
 }
 
@@ -122,14 +323,25 @@
   width: 100%;
 }
 
-/** Contatos | observações — metade da largura cada um (seção Identificação). */
+/**
+ * Contatos (col. 1 = fantasia/razão) | Informações adicionais (cols. 2–4 = situação…município).
+ * Mesmo `grid-template-columns` que `.liga-cliente-infotime-form-ident-grid`.
+ */
 .liga-cliente-infotime-form-linha-contatos-observacoes {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  column-gap: var(--liga-cli-form-gap-col);
+  grid-template-columns: var(--liga-ident-grid-cols);
+  column-gap: var(--liga-ident-gap-x);
   row-gap: var(--liga-cli-form-gap-row);
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   width: 100%;
+}
+
+.liga-cliente-infotime-form-linha-contatos-observacoes > div:first-child {
+  grid-column: 1;
+}
+
+.liga-cliente-infotime-form-linha-contatos-observacoes > div:nth-child(2) {
+  grid-column: 2 / -1;
 }
 
 .liga-cliente-infotime-form-linha-contatos-observacoes > div {
@@ -144,14 +356,26 @@
   box-sizing: border-box;
 }
 
+/** Identificação: altura maior das textareas + encostar no grid sem margem extra. */
+.liga-cliente-infotime-form-ident-contatos-linha {
+  margin-top: 0;
+}
+
+.liga-cliente-infotime-form-ident-contatos-linha .p-inputtextarea,
+.liga-cliente-infotime-form-ident-contatos-linha textarea {
+  min-height: 12.5rem;
+  resize: vertical;
+}
+
 /** Barra do formulário: Voltar + ações de licença (tenant principal) + Salvar à direita. */
 .liga-cliente-infotime-form-barra-acoes {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 0.5rem;
   width: 100%;
   min-width: 0;
+  overflow-x: auto;
 }
 
 .liga-cliente-infotime-form-barra-acoes-empurra {
@@ -159,20 +383,27 @@
   min-width: 0.25rem;
 }
 
+/** Dados adicionais: duas linhas; mesmas trilhas de grid para alinhar campos entre L1 e L2. */
+.liga-cliente-infotime-form-dados-add-secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--liga-cli-form-entre-linhas);
+  width: 100%;
+  min-width: 0;
+  --liga-da-grid-cols:
+    minmax(0, 1fr) minmax(11.5rem, 15rem) minmax(7rem, 0.65fr) minmax(9.5rem, 17rem)
+    minmax(5.25rem, 7rem);
+}
+
 /**
- * Dados adicionais — linha 1: chave | data | qtd (rótulo sem quebra) | canal | cliente público (estreito).
+ * Dados adicionais — linha 1: canal | data expiração | qtd lic. | chave | cliente público.
  */
 .liga-cliente-infotime-form-dados-add-linha1 {
   display: grid;
-  grid-template-columns:
-    minmax(0, 12.5rem)
-    minmax(0, 1fr)
-    minmax(11.5rem, 15rem)
-    minmax(8rem, 1fr)
-    minmax(5.25rem, 7rem);
+  grid-template-columns: var(--liga-da-grid-cols);
   column-gap: var(--liga-cli-form-gap-col);
   row-gap: var(--liga-cli-form-gap-row);
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   width: 100%;
 }
 
@@ -188,6 +419,13 @@
   text-align: center;
 }
 
+/** Flags `CHAR(1)` S/N — alinhar o switch ao bloco rótulo + controle. */
+.liga-cliente-infotime-char1-switch {
+  padding-top: 0.4rem;
+  display: flex;
+  align-items: center;
+}
+
 .liga-cliente-infotime-form-dados-add-linha1 .p-dropdown,
 .liga-cliente-infotime-form-dados-add-linha1 .p-inputtext,
 .liga-cliente-infotime-form-dados-add-linha1 .p-calendar,
@@ -196,14 +434,20 @@
   min-width: 0;
 }
 
-/** Dados adicionais — linha 2: home page (`homepage` no backend) + tipo + concorrente + emite boleto. */
+/** Dados adicionais — linha 2: homepage | concorrente | tipo (cols 3–4, fim = fim da chave L1) | emite boleto. */
 .liga-cliente-infotime-form-dados-add-linha2 {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 1fr));
+  grid-template-columns: var(--liga-da-grid-cols);
   column-gap: var(--liga-cli-form-gap-col);
   row-gap: var(--liga-cli-form-gap-row);
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   width: 100%;
+}
+
+/** Colunas 3–4 da L1 (qtd licenças + chave) — borda direita alinhada ao fim de «Chave de acesso». */
+.liga-cliente-infotime-form-da2-col-tipo-ate-fim-chave {
+  grid-column: 3 / 5;
+  min-width: 0;
 }
 
 .liga-cliente-infotime-form-dados-add-linha2 > div {
@@ -222,7 +466,7 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   column-gap: var(--liga-cli-form-gap-col);
   row-gap: var(--liga-cli-form-gap-row);
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   width: 100%;
 }
 
@@ -239,40 +483,32 @@
 
 /** Nome fantasia em linha única (e-mail vai para endereço). */
 .liga-cliente-infotime-form-linha-fantasia-so {
-  margin-bottom: 1rem;
+  margin-bottom: var(--liga-cli-form-entre-linhas);
   width: 100%;
   min-width: 0;
-}
-
-.liga-cliente-infotime-form-ident-conta-municipio {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  column-gap: var(--liga-cli-form-gap-col);
-  row-gap: var(--liga-cli-form-gap-row);
-  margin-bottom: 1rem;
-  width: 100%;
-}
-
-.liga-cliente-infotime-form-ident-conta-municipio > div {
-  min-width: 0;
-}
-
-.liga-cliente-infotime-form-ident-conta-municipio .p-dropdown,
-.liga-cliente-infotime-form-ident-conta-municipio .p-inputtext {
-  width: 100%;
 }
 
 /**
- * Endereço (referência visual InfoTIME): CEP | logradouro | nº | compl.;
- * bairro | cidade | lat | lon | UF; região estadual | tipo logradouro; contatos; mapa OSM.
+ * Endereço: grid 7×2 — L1: CEP|tipo|logradouro(c3–c5)|nº|compl.
+ * L2: bairro(c1–c2)|cidade(c3)|lat(c4)|lon(c5)|UF(c6–c7).
+ * Depois: região|tel+cel|e-mail; mapa OSM embutido baixo para evitar rolagem extra na seção.
  */
 .liga-cliente-infotime-endereco-bloco {
-  --liga-inf-end-cep: minmax(5.25rem, 7rem);
-  --liga-inf-end-num: minmax(4rem, 6.75rem);
-  --liga-inf-end-comp: minmax(0, 1fr);
-  --liga-inf-end-logra: minmax(0, 1.85fr);
-  --liga-inf-end-coord: minmax(5.5rem, 8.5rem);
-  --liga-inf-end-uf: minmax(11rem, 1fr);
+  --liga-inf-end-cep: minmax(7.25rem, 9.75rem);
+  --liga-inf-end-tipo: minmax(5.75rem, 9.25rem);
+  /** Faixa do logradouro — soma de fr menor que antes para abrir espaço ao complemento/UF; coords mais estreitas que 1fr. */
+  --liga-inf-end-logra-cidade: minmax(0, 1.55fr);
+  --liga-inf-end-logra-coord: minmax(4.15rem, 0.62fr);
+  --liga-inf-end-num: minmax(4.85rem, 7.5rem);
+  --liga-inf-end-comp: minmax(6.5rem, 0.48fr);
+  display: flex;
+  flex-direction: column;
+  gap: var(--liga-cli-form-entre-linhas);
+  box-sizing: border-box;
+  /** Folga para o halo de foco dos inputs nas colunas extremas; evita `overflow-x: hidden` recortar. */
+  padding-inline: 3px;
+  overflow-x: visible;
+  overflow-y: visible;
 }
 
 .liga-cliente-infotime-endereco-linha {
@@ -280,55 +516,162 @@
   column-gap: var(--liga-cli-form-gap-col);
   row-gap: var(--liga-cli-form-gap-row);
   align-items: start;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   width: 100%;
 }
 
-.liga-cliente-infotime-endereco-linha--cep-logra {
+.liga-cliente-infotime-endereco-grid-duas-linhas {
+  display: grid;
   grid-template-columns:
     var(--liga-inf-end-cep)
-    var(--liga-inf-end-logra)
+    var(--liga-inf-end-tipo)
+    var(--liga-inf-end-logra-cidade)
+    var(--liga-inf-end-logra-coord)
+    var(--liga-inf-end-logra-coord)
     var(--liga-inf-end-num)
     var(--liga-inf-end-comp);
+  grid-template-rows: auto auto;
+  column-gap: var(--liga-cli-form-gap-col);
+  row-gap: var(--liga-cli-form-entre-linhas);
+  align-items: start;
+  margin-bottom: 0;
+  width: 100%;
+  min-width: 0;
 }
 
-.liga-cliente-infotime-endereco-linha--cep-logra > div {
+.liga-cliente-infotime-endereco-grid-duas-linhas > .liga-cliente-infotime-endereco-cel {
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--liga-cli-form-gap-row);
 }
 
-.liga-cliente-infotime-endereco-linha--cep-logra .p-inputtext,
-.liga-cliente-infotime-endereco-linha--cep-logra .p-inputmask {
+.liga-cliente-infotime-endereco-grid-duas-linhas .p-inputtext,
+.liga-cliente-infotime-endereco-grid-duas-linhas .p-inputmask,
+.liga-cliente-infotime-endereco-grid-duas-linhas .p-dropdown {
   width: 100%;
   min-width: 0;
+}
+
+.liga-cliente-infotime-endereco-grid-duas-linhas .p-dropdown .p-dropdown-label {
+  width: 100%;
+}
+
+.liga-cliente-infotime-endereco-gdl-r1c1 {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.liga-cliente-infotime-endereco-gdl-r1c2 {
+  grid-row: 1;
+  grid-column: 2;
+}
+
+/** Logradouro ocupa as trilhas da “faixa” (cols. 3–5). */
+.liga-cliente-infotime-endereco-gdl-r1c3 {
+  grid-row: 1;
+  grid-column: 3 / span 3;
+}
+
+.liga-cliente-infotime-endereco-gdl-r1c4 {
+  grid-row: 1;
+  grid-column: 6;
+}
+
+.liga-cliente-infotime-endereco-gdl-r1c5 {
+  grid-row: 1;
+  grid-column: 7;
+}
+
+/** Bairro: CEP + tipo (fim alinhado ao tipo). */
+.liga-cliente-infotime-endereco-gdl-r2c1 {
+  grid-row: 2;
+  grid-column: 1 / span 2;
+}
+
+/** Cidade: col. 3 (faixa do logradouro; mais larga que lat/lon). */
+.liga-cliente-infotime-endereco-gdl-r2c2 {
+  grid-row: 2;
+  grid-column: 3;
+}
+
+.liga-cliente-infotime-endereco-gdl-r2c3 {
+  grid-row: 2;
+  grid-column: 4;
+}
+
+.liga-cliente-infotime-endereco-gdl-r2c4 {
+  grid-row: 2;
+  grid-column: 5;
+}
+
+/** UF: número + complemento (cols. 6–7). */
+.liga-cliente-infotime-endereco-gdl-r2c5 {
+  grid-row: 2;
+  grid-column: 6 / span 2;
 }
 
 .liga-cliente-infotime-endereco-label-nowrap {
   white-space: nowrap;
 }
 
-.liga-cliente-infotime-endereco-linha--local {
+/** Mesmas 7 trilhas: região | telefone+celular (col. cidade) | e-mail (cols. lat…UF). */
+.liga-cliente-infotime-endereco-linha--regiao-contato {
   grid-template-columns:
-    minmax(0, 1fr)
-    minmax(0, 1fr)
-    var(--liga-inf-end-coord)
-    var(--liga-inf-end-coord)
-    var(--liga-inf-end-uf);
-}
-
-.liga-cliente-infotime-endereco-linha--local > div {
+    var(--liga-inf-end-cep)
+    var(--liga-inf-end-tipo)
+    var(--liga-inf-end-logra-cidade)
+    var(--liga-inf-end-logra-coord)
+    var(--liga-inf-end-logra-coord)
+    var(--liga-inf-end-num)
+    var(--liga-inf-end-comp);
   min-width: 0;
 }
 
-.liga-cliente-infotime-endereco-linha--local .p-inputtext,
-.liga-cliente-infotime-endereco-linha--local .p-dropdown {
+.liga-cliente-infotime-endereco-rc {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--liga-cli-form-gap-row);
+}
+
+.liga-cliente-infotime-endereco-rc-regiao {
+  grid-column: 1 / span 2;
+}
+
+.liga-cliente-infotime-endereco-rc-tel-cel {
+  grid-column: 3;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--liga-cli-form-gap-col);
+  align-items: start;
+  min-width: 0;
+}
+
+.liga-cliente-infotime-endereco-rc-inner {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--liga-cli-form-gap-row);
+}
+
+.liga-cliente-infotime-endereco-rc-inner .p-inputmask {
   width: 100%;
   min-width: 0;
 }
 
-.liga-cliente-infotime-endereco-linha--local .p-dropdown .p-dropdown-label {
+.liga-cliente-infotime-endereco-rc-email {
+  grid-column: 4 / span 4;
+}
+
+.liga-cliente-infotime-endereco-linha--regiao-contato .p-inputtext,
+.liga-cliente-infotime-endereco-linha--regiao-contato .p-inputmask,
+.liga-cliente-infotime-endereco-linha--regiao-contato .p-dropdown {
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-cliente-infotime-endereco-linha--regiao-contato .p-dropdown .p-dropdown-label {
   width: 100%;
 }
 
@@ -336,40 +679,14 @@
   max-width: min(28rem, 92vw);
 }
 
-.liga-cliente-infotime-endereco-linha--regiao {
-  grid-template-columns: minmax(0, 1fr) minmax(8rem, 14rem);
-}
-
-.liga-cliente-infotime-endereco-linha--regiao > div {
-  min-width: 0;
-}
-
-.liga-cliente-infotime-endereco-linha--regiao .p-dropdown {
-  width: 100%;
-}
-
-.liga-cliente-infotime-endereco-linha--contato {
-  grid-template-columns: minmax(9rem, 1fr) minmax(0, 1.15fr) minmax(0, 1.35fr);
-}
-
-.liga-cliente-infotime-endereco-linha--contato > div {
-  min-width: 0;
-}
-
-.liga-cliente-infotime-endereco-celula-telefones {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--liga-cli-form-gap-col);
-  min-width: 0;
-}
-
-.liga-cliente-infotime-endereco-celula-telefones .p-inputmask {
-  width: 100%;
-}
-
 .liga-cliente-infotime-endereco-mapa-wrap {
-  margin-top: 0.35rem;
+  margin-top: 0;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  /** Igual ao espaço label↔controle nos demais campos (`--liga-cli-form-gap-row`). */
+  gap: var(--liga-cli-form-gap-row);
+  overflow: hidden;
 }
 
 .liga-cliente-infotime-endereco-mapa-label-linha {
@@ -377,30 +694,64 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0;
 }
 
-.liga-cliente-infotime-endereco-mapa-botao-circulo.p-button.p-button-outlined {
+.liga-cliente-infotime-endereco-mapa-label-linha .liga-cliente-infotime-label {
+  margin-bottom: 0;
+}
+
+/**
+ * Expandir mapa: ícone + rótulo — mesma altura/padding que listagem (Novo/Exportar) e barra do formulário.
+ */
+.liga-cliente-infotime-endereco-mapa-botao-expandir.p-button.p-button-outlined {
   flex-shrink: 0;
-  width: 2.65rem;
-  height: 2.65rem;
-  padding: 0;
-  border-radius: 50%;
+  box-sizing: border-box;
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  width: auto;
+  min-width: 0;
+  padding-block: 0;
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  /* Herda `border-radius: 980px` de `.p-button` em `liga-tema.css` (igual listagem / barra do formulário). */
+  align-items: center;
+  justify-content: center;
+}
+
+/** Mapa embutido: altura um pouco maior após o entre-linhas compacto; ainda capada para evitar rolagem em `.liga-formulario-main`. */
+.liga-cliente-infotime-endereco-mapa-iframe-casca {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--liga-borda-suave, #dee2e6);
+  border-radius: var(--p-border-radius-md, 6px);
+  height: min(calc(12.35rem - 6px), calc(26vh - 6px));
+  max-height: calc(13.65rem - 6px);
+}
+
+.liga-cliente-infotime-endereco-mapa-iframe-casca--dialog {
+  height: min(70vh, 520px);
+  max-height: none;
 }
 
 .liga-cliente-infotime-endereco-mapa-iframe {
   display: block;
   width: 100%;
-  height: min(22rem, 52vw);
-  border: 1px solid var(--liga-borda-suave, #dee2e6);
-  border-radius: var(--p-border-radius-md, 6px);
+  height: 100%;
+  border: none;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
 }
 
 .liga-cliente-infotime-endereco-mapa-vazio {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: min(22rem, 52vw);
+  box-sizing: border-box;
+  height: min(calc(12.35rem - 6px), calc(26vh - 6px));
+  max-height: calc(13.65rem - 6px);
   padding: 1rem;
   border: 1px dashed var(--liga-borda-suave, #dee2e6);
   border-radius: var(--p-border-radius-md, 6px);
@@ -409,11 +760,9 @@
   text-align: center;
 }
 
-.liga-cliente-infotime-mapa-dialog-corpo .liga-cliente-infotime-endereco-mapa-iframe {
-  height: min(70vh, 520px);
-}
-
-.liga-cliente-infotime-mapa-dialog-corpo .liga-cliente-infotime-endereco-mapa-vazio {
+.liga-cliente-infotime-endereco-mapa-vazio--dialog {
+  height: auto;
+  max-height: none;
   min-height: min(70vh, 520px);
 }
 
@@ -455,6 +804,26 @@
     grid-template-columns: 1fr;
   }
 
+  .liga-cliente-infotime-form-ident-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+
+  .liga-cliente-infotime-form-ident-cel-fantasia,
+  .liga-cliente-infotime-form-ident-cel-situacao,
+  .liga-cliente-infotime-form-ident-cel-tipo,
+  .liga-cliente-infotime-form-ident-cel-id,
+  .liga-cliente-infotime-form-ident-cel-razao {
+    grid-row: auto;
+    grid-column: 1;
+  }
+
+  .liga-cliente-infotime-form-ident-conta-municipio {
+    grid-row: auto;
+    grid-column: 1;
+    grid-template-columns: 1fr;
+  }
+
   .liga-cliente-infotime-form-linha-fantasia-email {
     grid-template-columns: 1fr;
   }
@@ -467,12 +836,21 @@
     grid-template-columns: 1fr;
   }
 
+  .liga-cliente-infotime-form-linha-contatos-observacoes > div:first-child,
+  .liga-cliente-infotime-form-linha-contatos-observacoes > div:nth-child(2) {
+    grid-column: 1;
+  }
+
   .liga-cliente-infotime-form-dados-add-linha1 {
     grid-template-columns: 1fr;
   }
 
   .liga-cliente-infotime-form-dados-add-linha2 {
     grid-template-columns: 1fr;
+  }
+
+  .liga-cliente-infotime-form-da2-col-tipo-ate-fim-chave {
+    grid-column: 1;
   }
 
   .liga-cliente-infotime-form-documentos-grid {
@@ -483,14 +861,27 @@
     grid-template-columns: 1fr;
   }
 
-  .liga-cliente-infotime-endereco-linha--cep-logra,
-  .liga-cliente-infotime-endereco-linha--local,
-  .liga-cliente-infotime-endereco-linha--regiao,
-  .liga-cliente-infotime-endereco-linha--contato {
+  .liga-cliente-infotime-endereco-grid-duas-linhas {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .liga-cliente-infotime-endereco-grid-duas-linhas > * {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .liga-cliente-infotime-endereco-linha--regiao-contato {
     grid-template-columns: 1fr;
   }
 
-  .liga-cliente-infotime-endereco-celula-telefones {
+  .liga-cliente-infotime-endereco-rc-regiao,
+  .liga-cliente-infotime-endereco-rc-tel-cel,
+  .liga-cliente-infotime-endereco-rc-email {
+    grid-column: 1 / -1;
+  }
+
+  .liga-cliente-infotime-endereco-rc-tel-cel {
     grid-template-columns: 1fr;
   }
 }
@@ -505,8 +896,8 @@
 .liga-cliente-infotime-form-grid2 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: var(--liga-cli-form-entre-linhas) var(--liga-cli-form-gap-col);
+  margin-bottom: 0;
 }
 
 .liga-cliente-infotime-label {
@@ -526,4 +917,61 @@
   gap: 0.5rem;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.liga-cliente-infotime-situacao-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5.25rem;
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border: 1px solid transparent;
+}
+
+.liga-cliente-infotime-situacao-badge--ativo {
+  color: #166534;
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+.liga-cliente-infotime-situacao-badge--inativo {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.liga-cliente-infotime-situacao-badge--lead {
+  color: #1d4ed8;
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.liga-cliente-infotime-situacao-badge--prospect {
+  color: #7c3aed;
+  background: #ede9fe;
+  border-color: #c4b5fd;
+}
+
+.liga-cliente-infotime-situacao-badge--outro {
+  color: var(--text-color-secondary, #6b7280);
+  background: color-mix(in srgb, var(--liga-moldura-externa, #f3f4f6) 86%, transparent);
+  border-color: var(--liga-borda-suave, #d1d5db);
+}
+
+/** Diálogo «alterações não salvas»: três ações; permite quebra em telas estreitas. */
+.liga-cliente-infotime-dialogo-pendencia-rodape {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/** Diálogo «confirmar exclusão»: cancelar à esquerda, excluir à direita. */
+.liga-cliente-infotime-dialogo-exclusao-rodape {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
 }

@@ -12,7 +12,7 @@
 .liga-formulario-topo {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   flex-shrink: 0;
@@ -27,6 +27,31 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--liga-texto-principal);
+  flex-wrap: wrap;
+}
+
+.liga-formulario-titulo-coluna-texto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.12rem;
+  min-width: min(11rem, 100%);
+}
+
+.liga-formulario-titulo-nome {
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: 1.15;
+}
+
+.liga-formulario-subtitulo-interno {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--liga-texto-secundario);
+  letter-spacing: 0.01em;
 }
 
 /** Título (h2) da seção + bloco opcional (ex.: legenda) na mesma faixa. */
@@ -120,6 +145,14 @@
   flex-shrink: 0;
 }
 
+/* Padrão visual dos botões da listagem (Exportar/Novo): mesma altura e padding (`liga-tema.css`). */
+.liga-formulario-acoes-topo .p-button {
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
+}
+
 .liga-formulario-abaixo-topo {
   width: 100%;
   flex-shrink: 0;
@@ -183,6 +216,14 @@
   padding-top: 0.85rem;
   border-top: 1px solid var(--liga-borda-suave);
   flex-shrink: 0;
+}
+
+/* Voltar / Avançar / Concluir: mesma altura que Exportar (`--liga-botao-contorno-*`). */
+.liga-formulario-etapas-rodape .p-button {
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
 }
 
 .liga-formulario-sidebar {
@@ -263,6 +304,12 @@ html[data-theme="dark"] .liga-formulario-nav-item-ativo {
   min-height: 0;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  /**
+   * Folga horizontal para o halo de foco (`box-shadow`) dos controles não ser recortado por
+   * `overflow-x: hidden` junto às bordas do `main`.
+   */
+  padding-inline: 3px;
   /**
    * Rolagem no `main` em vez de recortar lookups (`LigaLookupCombobox`) no conteúdo da seção:
    * `overflow: hidden` no cartão + `overflow: auto` na área de conteúdo cortavam o painel absoluto
@@ -277,7 +324,7 @@ html[data-theme="dark"] .liga-formulario-nav-item-ativo {
   border: 1px solid var(--liga-borda-suave);
   background: var(--liga-moldura-externa);
   box-shadow: var(--liga-sombra-bloco);
-  padding: 1.15rem 1.25rem 1.35rem;
+  padding: 1.15rem calc(1.25rem + 2px) 1.35rem;
   flex: 1;
   min-height: 0;
   display: flex;
@@ -332,6 +379,13 @@ html[data-theme="dark"] .liga-formulario-nav-item-ativo {
   flex-shrink: 0;
   align-self: flex-start;
   margin-top: 0.05rem;
+}
+
+.liga-formulario-secao-cabecalho-acoes .p-button {
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
 }
 
 .liga-formulario-secao-cabecalho-acoes .p-button {
@@ -424,7 +478,10 @@ html[data-theme="dark"] .liga-formulario-secao-titulo {
  */
 .liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined {
   align-items: center;
-  padding-inline: 0.75rem 0.85rem;
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
   background: var(--liga-moldura-interna);
   border-color: var(--liga-borda-suave);
   color: var(--liga-texto-secundario);

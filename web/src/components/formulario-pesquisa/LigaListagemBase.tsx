@@ -1024,6 +1024,7 @@ export function LigaListagemBase({
         {aoNovo ? (
           <Button
             type="button"
+            size="small"
             icon="pi pi-plus"
             label={textoBotaoNovo}
             className="liga-listagem-botao-novo"

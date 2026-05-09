@@ -41,7 +41,7 @@
 .liga-formulario-topo {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   flex-shrink: 0;
@@ -175,12 +175,13 @@ html[data-theme="dark"] .liga-formulario-nav-item-ativo {
   border: 1px solid var(--liga-borda-suave);
   background: var(--liga-moldura-externa);
   box-shadow: var(--liga-sombra-bloco);
-  padding: 1.15rem 1.25rem 1.35rem;
+  padding: 1.15rem calc(1.25rem + 2px) 1.35rem;
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /** Igual ao shell em `liga-formulario-base.css` — evita recortar halo de foco nos cantos. */
+  overflow: visible;
 }
 
 .liga-formulario-cartao .p-hidden-accessible input[type="text"],
@@ -264,7 +265,8 @@ html[data-theme="dark"] .liga-formulario-secao-titulo {
   gap: 1rem;
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  /** Rolagem no `liga-formulario-main` (shell); aqui `auto` recortava o halo de foco nas bordas. */
+  overflow: visible;
 }
 
 /* Abaixo da borda inferior do cartão (fora do group box). */
@@ -585,7 +587,8 @@ html[data-theme="dark"] .liga-formulario-input--auditoria.p-inputtextarea:disabl
 
 .liga-formulario-input-native:focus {
   outline: none;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
+  /* Inset: halo completo sem depender de margem extra (ancestrais com `overflow` não recortam). */
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
   border-color: color-mix(in srgb, var(--liga-verde) 35%, var(--liga-borda-suave));
 }
 
@@ -651,8 +654,41 @@ html[data-theme="dark"] .p-dropdown.liga-formulario-input--readonly.p-disabled .
 .liga-formulario-input.p-inputtext:enabled:focus,
 .liga-formulario-input.p-inputtextarea:enabled:focus,
 .liga-formulario-input.p-password input:enabled:focus {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
+  outline: none;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
   border-color: color-mix(in srgb, var(--liga-verde) 35%, var(--liga-borda-suave));
+}
+
+/** PrimeReact: foco no invólucro (evita halo externo recortado nas colunas da grade). */
+.liga-formulario-cadastro-base
+  .liga-formulario-campo
+  .p-dropdown:not(.p-disabled).p-focus,
+.liga-formulario-cadastro-base
+  .liga-formulario-campo
+  .p-dropdown:not(.p-disabled).p-inputwrapper-focus,
+.liga-formulario-cadastro-base
+  .liga-formulario-campo
+  .p-calendar:not(.p-disabled).p-focus,
+.liga-formulario-cadastro-base
+  .liga-formulario-campo
+  .p-calendar:not(.p-disabled).p-inputwrapper-focus,
+.liga-formulario-cadastro-base
+  .liga-formulario-campo
+  .p-inputnumber:not(.p-disabled).p-focus,
+.liga-formulario-cadastro-base
+  .liga-formulario-campo
+  .p-inputnumber:not(.p-disabled).p-inputwrapper-focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
+  border-color: color-mix(in srgb, var(--liga-verde) 35%, var(--liga-borda-suave));
+}
+
+.liga-formulario-cadastro-base
+  .liga-formulario-campo
+  .p-inputnumber
+  .p-inputnumber-input:enabled:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
 }
 
 .liga-formulario-erro {
@@ -974,7 +1010,7 @@ html[data-theme="dark"] .p-dropdown.liga-formulario-input--readonly.p-disabled .
 
 .liga-multiselecao-modal-input:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--liga-verde) 22%, transparent);
   border-color: color-mix(in srgb, var(--liga-verde) 35%, var(--liga-borda-suave));
 }
 
@@ -1005,6 +1041,13 @@ html[data-theme="dark"] .p-dropdown.liga-formulario-input--readonly.p-disabled .
   justify-content: flex-end;
   gap: 0.5rem;
   margin-top: 0.75rem;
+}
+
+.liga-multiselecao-modal-acoes .p-button {
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
 }
 
 /* MultiSelect + botão lista embutido (modal PickList auxiliar). */
@@ -1051,34 +1094,7 @@ html[data-theme="dark"] .p-dropdown.liga-formulario-input--readonly.p-disabled .
   cursor: not-allowed;
 }
 
-/* PrimeReact Calendar: mantém trigger visualmente dentro do input. */
-.liga-formulario-cadastro-base .liga-campo-com-botao-interno.p-calendar {
-  position: relative;
-}
-
-.liga-formulario-cadastro-base .liga-campo-com-botao-interno.p-calendar .p-inputtext {
-  padding-right: 2.2rem;
-}
-
-.liga-formulario-cadastro-base .liga-campo-com-botao-interno.p-calendar .p-datepicker-trigger {
-  position: absolute;
-  top: 50%;
-  right: 0.35rem;
-  transform: translateY(-50%);
-  width: 1.75rem;
-  height: 1.75rem;
-  min-width: 1.75rem;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--liga-texto-secundario);
-  box-shadow: none;
-}
-
-.liga-formulario-cadastro-base .liga-campo-com-botao-interno.p-calendar .p-datepicker-trigger:hover {
-  background: color-mix(in srgb, var(--liga-borda-suave) 35%, transparent);
-  color: var(--liga-texto-principal);
-}
+/* PrimeReact Calendar: estilo de grupo (campo + faixa verde) — ver `LIGA_CALENDARIO_GRUPO_CLASS` em `liga-tema.css`. */
 
 .liga-formulario-acoes-secundaria.p-button.p-button-outlined {
   border-color: var(--liga-borda-suave);
@@ -1171,7 +1187,10 @@ html[data-theme="dark"] .p-dropdown.liga-formulario-input--readonly.p-disabled .
 
 .p-datepicker-panel.liga-datepicker-panel--compact .p-datepicker-buttonbar .p-button {
   font-size: 0.78rem;
-  padding: 0.25rem 0.45rem;
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
 }
 
 .liga-formulario-campo-label {

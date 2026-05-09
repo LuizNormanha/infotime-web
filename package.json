@@ -12,7 +12,7 @@
     "test": "nx run-many -t test -p api,web",
     "dev:api": "nx run api:start:dev",
     "dev:web": "nx run web:dev",
-    "dev": "node scripts/prisma-generate-dev.mjs && concurrently -n api,web -c blue,magenta \"nx run api:start:dev:watch\" \"nx run web:dev\"",
+    "dev": "node scripts/liberar-portas-dev.mjs && node scripts/prisma-generate-dev.mjs && concurrently -n api,web -c blue,magenta \"nx run api:start:dev:watch\" \"nx run web:dev\"",
     "migrate:deploy": "npm run prisma:migrate:deploy -w api",
     "prisma:baseline": "node scripts/prisma-baseline-marcar-aplicadas.mjs",
     "template:zip": "node scripts/gerar-template-zip.mjs"

@@ -14,6 +14,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "primereact/button";
 import { Message } from "primereact/message";
 import { LigaAba } from "../abas/LigaAba";
+import { focarPrimeiroCampoHabilitado } from "./focar-primeiro-campo-secao";
 import "./liga-formulario-base.css";
 
 export type LigaFormularioSecao = {
@@ -112,6 +113,11 @@ type LigaFormularioBaseProps = {
   controleEtapasExternoRef?: MutableRefObject<LigaFormularioEtapasControle | null>;
   /** Barra vertical verde à esquerda do título (mesmo padrão visual das listagens). */
   tituloComBarraVerde?: boolean;
+  /**
+   * Quando `true`, `subtitulo` é renderizado dentro do `h1`, logo abaixo de `titulo`
+   * (coluna de texto), em vez de um `p` separado — útil para cabeçalhos estilo “marca + faixa”.
+   */
+  subtituloAgrupadoAoTitulo?: boolean;
 };
 
 export function LigaFormularioBase({
@@ -138,6 +144,7 @@ export function LigaFormularioBase({
   onAposAvancarEtapas,
   controleEtapasExternoRef,
   tituloComBarraVerde = false,
+  subtituloAgrupadoAoTitulo = false,
 }: LigaFormularioBaseProps) {
   const t = useTranslations("home.formulario");
   const primeira = secoes[0]?.id ?? "";
@@ -146,6 +153,7 @@ export function LigaFormularioBase({
   const [secaoAtiva, setSecaoAtiva] = useState(secaoPadrao);
   const [indiceEtapaMaxDesbloqueado, setIndiceEtapaMaxDesbloqueado] = useState(0);
   const [mensagemErroEtapa, setMensagemErroEtapa] = useState<string | null>(null);
+  const secaoConteudoRef = useRef<HTMLDivElement | null>(null);
   const ativo = secoes.find((s) => s.id === secaoAtiva);
   const ehEtapas = navegacaoSecoes === "etapasHorizontais";
   const ehAbasTopo = navegacaoSecoes === "abasTopo";
@@ -215,6 +223,14 @@ export function LigaFormularioBase({
       setIndiceEtapaMaxDesbloqueado((atual) => (idx > atual ? idx : atual));
     }
   }, [secaoParaAtivar, secaoAtiva, idsConcatenados, secoes, ehEtapas]);
+
+  /** Após alinhar `secaoParaAtivar`, foca o primeiro campo habilitado da seção visível. */
+  useLayoutEffect(() => {
+    const idFrame = window.requestAnimationFrame(() => {
+      focarPrimeiroCampoHabilitado(secaoConteudoRef.current);
+    });
+    return () => window.cancelAnimationFrame(idFrame);
+  }, [secaoAtiva]);
 
   const tentarSelecionarEtapa = useCallback(
     (id: string) => {
@@ -388,10 +404,19 @@ export function LigaFormularioBase({
                       aria-hidden="true"
                     />
                   ) : null}
-                  {titulo}
+                  {subtituloAgrupadoAoTitulo ? (
+                    <span className="liga-formulario-titulo-coluna-texto">
+                      <span className="liga-formulario-titulo-nome">{titulo}</span>
+                      {subtitulo ? (
+                        <span className="liga-formulario-subtitulo-interno">{subtitulo}</span>
+                      ) : null}
+                    </span>
+                  ) : (
+                    titulo
+                  )}
                   {sufixoTitulo ?? null}
                 </h1>
-                {subtitulo ? (
+                {subtitulo && !subtituloAgrupadoAoTitulo ? (
                   <p className="liga-formulario-subtitulo">{subtitulo}</p>
                 ) : null}
               </div>
@@ -553,7 +578,9 @@ export function LigaFormularioBase({
                     </div>
                   ) : null}
                 </div>
-                <div className="liga-formulario-secao-conteudo">{ativo.conteudo}</div>
+                <div ref={secaoConteudoRef} className="liga-formulario-secao-conteudo">
+                  {ativo.conteudo}
+                </div>
                 {ehEtapas ? (
                   <div className="liga-formulario-etapas-rodape">
                     <Button

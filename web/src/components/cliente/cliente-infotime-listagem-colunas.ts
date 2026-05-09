@@ -1,10 +1,50 @@
 import type { LigaColunaListagem } from "@/components/formulario-pesquisa/liga-listagem.types";
+import { createElement } from "react";
+
+function formatarDocumentoCliente(valor: unknown): string {
+  const bruto = String(valor ?? "").trim();
+  if (!bruto) return "—";
+  const digitos = bruto.replace(/\D/g, "");
+  if (digitos.length === 11) {
+    return digitos.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  }
+  if (digitos.length === 14) {
+    return digitos.replace(
+      /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
+      "$1.$2.$3/$4-$5",
+    );
+  }
+  return bruto;
+}
+
+function normalizarSituacao(valor: unknown): "ativo" | "inativo" | "lead" | "prospect" | "outro" {
+  const s = String(valor ?? "")
+    .trim()
+    .toLocaleLowerCase("pt-BR");
+  if (s === "ativo") return "ativo";
+  if (s === "inativo") return "inativo";
+  if (s === "lead") return "lead";
+  if (s === "prospect") return "prospect";
+  return "outro";
+}
+
+function badgeSituacaoCliente(valor: unknown) {
+  const texto = String(valor ?? "").trim() || "—";
+  const tipo = normalizarSituacao(valor);
+  return createElement(
+    "span",
+    {
+      className: `liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--${tipo}`,
+    },
+    texto,
+  );
+}
 
 /** Colunas alinhadas ao SQL legado Cliente_Lst e ao payload `ClienteListaItemDto` da API. */
 export const CLIENTE_INFOTIME_COLUNAS_LISTAGEM: LigaColunaListagem[] = [
   {
     campo: "nomeFantasia",
-    cabecalho: "Cliente",
+    cabecalho: "Nome Fantaisa",
     ordenavel: true,
     pesquisaServidor: true,
     campoConsulta: "nomeFantasia",
@@ -39,6 +79,8 @@ export const CLIENTE_INFOTIME_COLUNAS_LISTAGEM: LigaColunaListagem[] = [
     mascaraBuscaServidor: "cnpj",
     visivelPadrao: true,
     filtroRefinado: { tipo: "texto" },
+    corpoCelula: (linha) =>
+      formatarDocumentoCliente((linha as Record<string, unknown>).cnpj),
   },
   {
     campo: "cidade",
@@ -94,7 +136,7 @@ export const CLIENTE_INFOTIME_COLUNAS_LISTAGEM: LigaColunaListagem[] = [
     visivelPadrao: true,
     filtroRefinado: { tipo: "inteiro" },
     corpoCelula: (linha) =>
-      String((linha as Record<string, unknown>).situacaoClienteDescricao ?? "—"),
+      badgeSituacaoCliente((linha as Record<string, unknown>).situacaoClienteDescricao),
   },
   {
     campo: "idTipoCliente",
@@ -121,20 +163,13 @@ export const CLIENTE_INFOTIME_COLUNAS_LISTAGEM: LigaColunaListagem[] = [
     quebraLinhaTexto: true,
   },
   {
-    campo: "unidades",
-    cabecalho: "Unidades",
-    ordenavel: false,
-    alinhamento: "right",
-    visivelPadrao: true,
-  },
-  {
     campo: "idCliente",
-    cabecalho: "Código",
+    cabecalho: "ID",
     ordenavel: true,
     pesquisaServidor: true,
     campoConsulta: "idCliente",
     colunaChavePrimaria: true,
-    visivelPadrao: false,
+    visivelPadrao: true,
     alinhamento: "right",
     larguraMinPx: 88,
   },

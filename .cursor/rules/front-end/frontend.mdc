@@ -20,3 +20,7 @@ alwaysApply: true
 - Seguir padrão existente (fetch/BFF), alinhado a rotas **BFF** em Next quando for o fluxo do projeto.
 - Chamadas à API com **credenciais/cookies** quando aplicável; manter consistência com autenticação.
 - O recurso **`ai`** está permitido no BFF (`web/src/app/api/[...path]/route.ts`): `POST /api/ai/generate` segue o mesmo padrão de cookie JWT que o restante da API.
+
+## Formulários em grade (Liga)
+
+- **Alinhamento** entre linhas e **espaçamento** só com tokens padronizados (`--liga-cli-form-gap-col`, `--liga-cli-form-gap-row` no padrão do cliente Infotime, ou variáveis CSS que os referenciem); evitar margens arbitrárias entre linhas quando já houver `row-gap` ou wrapper com `gap` equivalente. Detalhes e código de referência: `.cursor/rules/patterns/patterns.mdc` e `ai/domains/padroes-ui/forms/formulario/alinhamento-espacamento-formulario.md`.

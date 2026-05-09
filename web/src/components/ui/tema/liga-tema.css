@@ -18,6 +18,14 @@
   /* Listagem modo claro: realce ao passar o mouse (verde primavera suave) */
   --liga-listagem-zebra-hover: color-mix(in srgb, #eef1f5 72%, var(--liga-verde) 28%);
 
+  /**
+   * Botões de contorno nas barras de listagem (Novo, Exportar, Limpar, …) e no topo/cabeçalho
+   * de formulários (`LigaFormularioBase`): altura fixa ~40px + padding horizontal — referência
+   * medida no Chrome no botão «Exportar» (`p-button-sm` + outlined). Forma cápsula: `.p-button` abaixo.
+   */
+  --liga-botao-contorno-altura: 2.5rem;
+  --liga-botao-contorno-padding-inline: 0.75rem 0.85rem;
+
   --liga-font-family: "Inter", system-ui, -apple-system, sans-serif;
   font-family: var(--liga-font-family);
   --font-family: var(--liga-font-family);
@@ -66,9 +74,113 @@ html[data-theme="light"] {
 }
 
 /**
- * Botões PrimeReact — cápsula contínua (mesmo padrão dos formulários / referência tipo Apple).
- * Não altera posição nem tamanho; apenas o raio dos cantos.
+ * Botões PrimeReact — cápsula contínua (listagem + formulários; referência tipo Apple).
+ * Altura do **Exportar** (`p-button-sm` + outlined, ~40px): token `--liga-botao-contorno-altura`.
  */
 .p-button {
   border-radius: 980px;
+  box-sizing: border-box;
+}
+
+/**
+ * `p-button-sm`: mesma altura do Exportar na listagem (~40px em 16px root).
+ * Texto+ícone: padding horizontal do token. Só ícone: quadrado com lado = altura do token.
+ */
+.p-button.p-button-sm:not(.p-button-link) {
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  box-sizing: border-box;
+}
+
+.p-button.p-button-sm:not(.p-button-link):not(.p-button-icon-only) {
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+}
+
+.p-button.p-button-sm.p-button-icon-only:not(.p-button-link) {
+  width: var(--liga-botao-contorno-altura);
+  min-width: var(--liga-botao-contorno-altura);
+  padding-inline: 0;
+}
+
+/** Rodapés de `Dialog` Prime (exceto CTA `.liga-botao`, com padding próprio). */
+.p-dialog-footer .p-button:not(.liga-botao) {
+  min-height: var(--liga-botao-contorno-altura);
+  height: var(--liga-botao-contorno-altura);
+  padding-inline: var(--liga-botao-contorno-padding-inline);
+  box-sizing: border-box;
+}
+
+/**
+ * Calendar (`showIcon`): uma única moldura — texto à esquerda, faixa verde com ícone à direita.
+ * Usar com a classe exportada `LIGA_CALENDARIO_GRUPO_CLASS` em `calendario-datas-formulario.ts`.
+ */
+.liga-calendar-grupo-data.p-calendar {
+  display: inline-flex;
+  width: 100%;
+  max-width: 100%;
+  align-items: stretch;
+  padding: 0;
+  border: 1px solid var(--liga-borda-suave, #e2e8f0);
+  border-radius: var(--p-border-radius, 6px);
+  background: var(--liga-moldura-interna, #fff);
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.liga-calendar-grupo-data.p-calendar .p-inputtext {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent;
+  min-height: 2.5rem;
+}
+
+/* Formulário catalogado: variante `sm` um pouco mais baixa. */
+.liga-calendar-grupo-data.p-calendar.p-inputtext-sm .p-inputtext {
+  min-height: 2.35rem;
+}
+
+.liga-calendar-grupo-data.p-calendar .p-datepicker-trigger {
+  position: static;
+  flex: 0 0 auto;
+  align-self: stretch;
+  width: 2.65rem;
+  min-width: 2.65rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0 !important;
+  background: var(--liga-verde) !important;
+  color: #fff !important;
+  box-shadow: none;
+}
+
+.liga-calendar-grupo-data.p-calendar .p-datepicker-trigger:hover:enabled {
+  background: var(--liga-verde-hover) !important;
+  color: #fff !important;
+}
+
+.liga-calendar-grupo-data.p-calendar .p-datepicker-trigger .p-button-icon,
+.liga-calendar-grupo-data.p-calendar .p-datepicker-trigger .p-icon,
+.liga-calendar-grupo-data.p-calendar .p-datepicker-trigger .pi {
+  color: #fff;
+}
+
+.liga-calendar-grupo-data.p-calendar .p-datepicker-trigger:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, #fff 55%, transparent);
+}
+
+.liga-calendar-grupo-data.p-calendar.p-invalid {
+  border-color: var(--p-input-border-color, #f87171);
+}
+
+html[data-theme="dark"] .liga-calendar-grupo-data.p-calendar {
+  background: var(--liga-moldura-interna, #222c38);
+  border-color: var(--liga-borda-suave);
+}
+
+html[data-theme="dark"] .liga-calendar-grupo-data.p-calendar .p-inputtext {
+  color: var(--liga-texto-principal);
 }
