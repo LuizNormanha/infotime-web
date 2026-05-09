@@ -6,6 +6,13 @@
   min-height: 0;
 }
 
+/** Cabeçalho da página omitido — mantém só as ações alinhadas à direita (fallback sem portal). */
+.liga-listagem-cabecalho-acoes-fallback {
+  display: flex;
+  justify-content: flex-end;
+  padding-inline: 0.65rem;
+}
+
 .liga-listagem-pagina-cabecalho {
   display: flex;
   flex-direction: column;

@@ -61,6 +61,13 @@ const STORAGE_AVISO_LICENCA_POS_LOGIN = "liga.licenca.avisoPosLogin.v1";
 
 const MAPA_ABAS_POR_ID_MENU: Record<string, LigaAbaHome> = {
   dashboard: ABA_DASHBOARD,
+  "cadastros-clientes": {
+    id: "cadastros-clientes",
+    tituloKey: "cadastroClienteInfotime",
+    icone: iconeMenuItem("cadastros-clientes"),
+    fechavel: true,
+    conteudoKey: "cadastroClienteInfotime",
+  },
   "ajuda-documentacao": {
     id: "ajuda-documentacao",
     tituloKey: "ajudaDocumentacao",

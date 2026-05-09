@@ -12,6 +12,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ModuloAutenticacao } from './autenticacao/autenticacao.module';
 import { GrupoPerfilModule } from './grupo-perfil/grupo-perfil.module';
 import { LayoutModule } from './layout/layout.module';
+import { ClienteModule } from './cliente/cliente.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { UsuarioPermissoesModule } from './usuario-permissoes/usuario-permissoes.module';
 
@@ -57,6 +58,7 @@ import { UsuarioPermissoesModule } from './usuario-permissoes/usuario-permissoes
     ModuloAutenticacao,
     GrupoPerfilModule,
     UsuarioModule,
+    ClienteModule,
     UsuarioPermissoesModule,
     LayoutModule,
   ],

@@ -22,6 +22,7 @@ import { InputMask } from "primereact/inputmask";
 import { InputText } from "primereact/inputtext";
 import { Menu } from "primereact/menu";
 import { MultiSelect } from "primereact/multiselect";
+import { createPortal } from "react-dom";
 import "./liga-listagem-base.css";
 import { LigaListagemBarraFiltrosAtivos } from "./LigaListagemBarraFiltrosAtivos";
 import { LigaListagemFiltroRefinadoSidebarForm } from "./LigaListagemFiltroRefinadoSidebar";
@@ -330,6 +331,15 @@ type LigaListagemBaseProps = {
   habilitarSeletorColunas?: boolean;
   /** Exibe botão Exportar (CSV nativo; PDF no menu, desabilitado até implementação futura). Default: true. */
   habilitarExportacao?: boolean;
+  /**
+   * Quando `true`, não renderiza o cabeçalho interno (título `nomeTabela` + subtítulo).
+   * Use com `hostPortalCabecalhoAcoes` para portar Exportar/Novo ao cabeçalho do módulo (shell).
+   */
+  omitirCabecalhoPagina?: boolean;
+  /** Destino DOM para portal das ações Exportar + Novo (ex.: container na linha do título do módulo). */
+  hostPortalCabecalhoAcoes?: HTMLElement | null;
+  /** `id` do título visível para `aria-labelledby` da seção (obrigatório quando `omitirCabecalhoPagina`). */
+  idTituloListagemAcessivel?: string;
 };
 
 export function LigaListagemBase({
@@ -371,6 +381,9 @@ export function LigaListagemBase({
   habilitarFiltroRefinado: habilitarFiltroRefinadoProp,
   habilitarSeletorColunas: habilitarSeletorColunasProp,
   habilitarExportacao = true,
+  omitirCabecalhoPagina = false,
+  hostPortalCabecalhoAcoes = null,
+  idTituloListagemAcessivel = "liga-listagem-titulo-principal",
 }: LigaListagemBaseProps) {
   const t = useTranslations("home");
   const colunasOrdenadas = useMemo(
@@ -864,7 +877,7 @@ export function LigaListagemBase({
 
   if (aguardandoDefinicoes) {
     return (
-      <section className="liga-listagem-base" aria-labelledby="liga-listagem-titulo-principal">
+      <section className="liga-listagem-base" aria-labelledby={idTituloListagemAcessivel}>
         <LigaListagemCarregandoSplash
           titulo={t("listagem.comum.carregando")}
           subtitulo={t("listagem.comum.carregandoDica")}
@@ -974,110 +987,122 @@ export function LigaListagemBase({
     return botaoPrincipal;
   };
 
-  return (
-    <section className="liga-listagem-base" aria-labelledby="liga-listagem-titulo-principal">
-      <header className="liga-listagem-pagina-cabecalho">
-        <div className="liga-listagem-titulo-linha">
-          <div className="liga-listagem-titulo-esquerda">
-            <span className="liga-listagem-barra-verde" aria-hidden="true" />
-            <h1 id="liga-listagem-titulo-principal" className="liga-listagem-titulo-principal">
-              {iconeTitulo ? (
-                <i
-                  className={`pi ${iconeTitulo} liga-listagem-titulo-icone`}
-                  aria-hidden="true"
-                />
-              ) : null}
-              {nomeTabela}
-            </h1>
-          </div>
-          {habilitarExportacao || aoNovo ? (
-            <div className="liga-listagem-titulo-acoes">
-              {habilitarExportacao ? (
-                <>
-                  <Button
-                    type="button"
-                    size="small"
-                    outlined
-                    className="liga-listagem-botao-novo liga-listagem-botao-export-dropdown"
-                    disabled={ordenados.length === 0}
-                    title={
-                      ordenados.length === 0
-                        ? t("listagem.comum.nenhumRegistro")
-                        : undefined
-                    }
-                    aria-haspopup="menu"
-                    aria-expanded={menuExportAberto}
-                    onClick={(e) => menuExportRef.current?.toggle(e)}
-                  >
-                    <span className="liga-listagem-export-botao-conteudo">
-                      <i className="pi pi-download" aria-hidden />
-                      <span>{t("listagem.comum.exportar")}</span>
-                      <i
-                        className="pi pi-angle-down liga-listagem-export-seta"
-                        aria-hidden
-                      />
-                    </span>
-                  </Button>
-                  <Menu
-                    ref={menuExportRef}
-                    popup
-                    model={itensMenuExportacao}
-                    onShow={() => setMenuExportAberto(true)}
-                    onHide={() => setMenuExportAberto(false)}
-                    className="liga-listagem-menu-export"
-                  />
-                </>
-              ) : null}
-              {aoNovo ? (
-                <Button
-                  type="button"
-                  icon="pi pi-plus"
-                  label={textoBotaoNovo}
-                  className="liga-listagem-botao-novo"
-                  title={
-                    botaoNovoDesabilitado && mensagemBotaoNovoBloqueado
-                      ? mensagemBotaoNovoBloqueado
-                      : undefined
-                  }
-                  disabled={
-                    !permissoesCarregadas ||
-                    (modoSelecao && !permitirNovoEmModoSelecao) ||
-                    botaoNovoDesabilitado
-                  }
-                  onClick={() => {
-                    const executar = async () => {
-                      await executarComPrecheckSessao(
-                        () => {
-                          if (botaoNovoDesabilitado) {
-                            if (mensagemBotaoNovoBloqueado) {
-                              feedback.aviso(mensagemBotaoNovoBloqueado);
-                            }
-                            return;
-                          }
-                          if (modoSelecao && !permitirNovoEmModoSelecao) return;
-                          if (!permissoes.incluir) {
-                            feedback.aviso(
-                              `Perfil sem permissao para incluir nesta tela (${tela ?? "nao identificada"}). Permissoes: incluir=${permissoes.incluir ? "S" : "N"}, editar=${permissoes.editar ? "S" : "N"}, excluir=${permissoes.excluir ? "S" : "N"}.`,
-                            );
-                            return;
-                          }
-                          aoNovo();
-                        },
-                        (acaoPendente) =>
-                          solicitarReautenticacaoGlobal(() => void acaoPendente()),
-                      );
-                    };
-                    void executar();
-                  }}
-                />
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-        {subtitulo ? (
-          <p className="liga-listagem-subtitulo">{subtitulo}</p>
+  const cabecalhoAcoesJsx =
+    habilitarExportacao || aoNovo ? (
+      <div className="liga-listagem-titulo-acoes">
+        {habilitarExportacao ? (
+          <>
+            <Button
+              type="button"
+              size="small"
+              outlined
+              className="liga-listagem-botao-novo liga-listagem-botao-export-dropdown"
+              disabled={ordenados.length === 0}
+              title={
+                ordenados.length === 0 ? t("listagem.comum.nenhumRegistro") : undefined
+              }
+              aria-haspopup="menu"
+              aria-expanded={menuExportAberto}
+              onClick={(e) => menuExportRef.current?.toggle(e)}
+            >
+              <span className="liga-listagem-export-botao-conteudo">
+                <i className="pi pi-download" aria-hidden />
+                <span>{t("listagem.comum.exportar")}</span>
+                <i className="pi pi-angle-down liga-listagem-export-seta" aria-hidden />
+              </span>
+            </Button>
+            <Menu
+              ref={menuExportRef}
+              popup
+              model={itensMenuExportacao}
+              onShow={() => setMenuExportAberto(true)}
+              onHide={() => setMenuExportAberto(false)}
+              className="liga-listagem-menu-export"
+            />
+          </>
         ) : null}
-      </header>
+        {aoNovo ? (
+          <Button
+            type="button"
+            icon="pi pi-plus"
+            label={textoBotaoNovo}
+            className="liga-listagem-botao-novo"
+            title={
+              botaoNovoDesabilitado && mensagemBotaoNovoBloqueado
+                ? mensagemBotaoNovoBloqueado
+                : undefined
+            }
+            disabled={
+              !permissoesCarregadas ||
+              (modoSelecao && !permitirNovoEmModoSelecao) ||
+              botaoNovoDesabilitado
+            }
+            onClick={() => {
+              const executar = async () => {
+                await executarComPrecheckSessao(
+                  () => {
+                    if (botaoNovoDesabilitado) {
+                      if (mensagemBotaoNovoBloqueado) {
+                        feedback.aviso(mensagemBotaoNovoBloqueado);
+                      }
+                      return;
+                    }
+                    if (modoSelecao && !permitirNovoEmModoSelecao) return;
+                    if (!permissoes.incluir) {
+                      feedback.aviso(
+                        `Perfil sem permissao para incluir nesta tela (${tela ?? "nao identificada"}). Permissoes: incluir=${permissoes.incluir ? "S" : "N"}, editar=${permissoes.editar ? "S" : "N"}, excluir=${permissoes.excluir ? "S" : "N"}.`,
+                      );
+                      return;
+                    }
+                    aoNovo();
+                  },
+                  (acaoPendente) =>
+                    solicitarReautenticacaoGlobal(() => void acaoPendente()),
+                );
+              };
+              void executar();
+            }}
+          />
+        ) : null}
+      </div>
+    ) : null;
+
+  const portalCabecalhoAcoesDom =
+    omitirCabecalhoPagina && hostPortalCabecalhoAcoes && cabecalhoAcoesJsx != null
+      ? createPortal(cabecalhoAcoesJsx, hostPortalCabecalhoAcoes)
+      : null;
+
+  return (
+    <section className="liga-listagem-base" aria-labelledby={idTituloListagemAcessivel}>
+      {!omitirCabecalhoPagina ? (
+        <header className="liga-listagem-pagina-cabecalho">
+          <div className="liga-listagem-titulo-linha">
+            <div className="liga-listagem-titulo-esquerda">
+              <span className="liga-listagem-barra-verde" aria-hidden="true" />
+              <h1 id="liga-listagem-titulo-principal" className="liga-listagem-titulo-principal">
+                {iconeTitulo ? (
+                  <i
+                    className={`pi ${iconeTitulo} liga-listagem-titulo-icone`}
+                    aria-hidden="true"
+                  />
+                ) : null}
+                {nomeTabela}
+              </h1>
+            </div>
+            {cabecalhoAcoesJsx}
+          </div>
+          {subtitulo ? (
+            <p className="liga-listagem-subtitulo">{subtitulo}</p>
+          ) : null}
+        </header>
+      ) : (
+        <>
+          {portalCabecalhoAcoesDom}
+          {!hostPortalCabecalhoAcoes && cabecalhoAcoesJsx != null ? (
+            <div className="liga-listagem-cabecalho-acoes-fallback">{cabecalhoAcoesJsx}</div>
+          ) : null}
+        </>
+      )}
 
       <div className="liga-listagem-barra-ferramentas">
         <div className="liga-listagem-barra-metade-tela liga-listagem-barra-ferramentas--busca-e-novo">

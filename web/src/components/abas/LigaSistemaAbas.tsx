@@ -16,6 +16,7 @@ import "./liga-sistema-abas.css";
 import { TelaAtivaContext } from "@/contexts/TelaAtivaContext";
 import { LigaAba } from "@/components/abas/LigaAba";
 import { LigaMensagemPopUp } from "@/components/ui/dialogo/LigaMensagemPopUp";
+import { LigaClienteInfotimePainel } from "@/components/cliente/LigaClienteInfotimePainel";
 import { useSessaoAtual } from "@/hooks/useSessaoAtual";
 
 /** Aba do shell da home (cadastros serão recriados para o DDL InfoTIME). */
@@ -219,6 +220,11 @@ export function LigaSistemaAbas({
     }
     if (aba.conteudoKey === "ajudaSuporte") {
       return <AbaAjudaEstatica aba={aba} chave="ajudaSuporte" />;
+    }
+    if (aba.conteudoKey === "cadastroClienteInfotime") {
+      return (
+        <LigaClienteInfotimePainel idTenacidade={sessao.idTenacidade} />
+      );
     }
     if (aba.conteudoKey === "dashboard") {
       const subtitulo = t("conteudo.dashboard.subtitulo");

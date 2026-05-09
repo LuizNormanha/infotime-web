@@ -4,6 +4,7 @@
  */
 export const RECURSOS_PERMITIDOS = new Set([
   "auth",
+  "clientes",
   "grupos-perfil",
   "usuario-permissoes",
   "usuarios",

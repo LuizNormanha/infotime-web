@@ -10,4 +10,5 @@ alwaysApply: false
 - Utilizar componentes reutilizáveis.
 - Manter consistência visual.
 - Para documentação de domínio alinhada à tela, considerar `ai/domains/<tema>/` (ver `ai/README.md`); sugestões via API em `POST /ai/generate` quando aplicável.
+- **Bloco de endereço (CEP automático ViaCEP, lat/long, mapa OSM, modal):** prescrever em `ai/domains/padroes-ui/forms/formulario/endereco-cep-geocode-mapa.md` (manifest `padroes-ui`); implementação de referência em `web/src/components/cliente/` e domínio em `web/src/domain/cliente-infotime/`.
 - Domínios padrão do template para exemplos: **`tenacidade`** e **`usuario`** (citar estes ao precisar ilustrar um domínio neste repositório).

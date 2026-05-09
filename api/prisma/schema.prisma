@@ -266,7 +266,6 @@ model infotime_cbo {
   endereco_ip_auditoria        String?                        @db.VarChar(20)
   nome_aplicacao_auditoria     String?                        @db.VarChar(255)
   infotime_usuario              infotime_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cbo_id_usuario_auditoria")
-  infotime_cliente              infotime_cliente[]
   infotime_convenio_tiss        infotime_convenio_tiss[]
   infotime_especialidade_medica infotime_especialidade_medica[]
   @@map("infotime_cbo")
@@ -287,69 +286,61 @@ model infotime_cid {
   @@map("infotime_cid")
 }
 
+/// Cadastro comercial ERP (`public.cliente` renomeado para `infotime_cliente`). Ver `docs/liga_infotime_postgres.sql`.
 model infotime_cliente {
-  // Tabela física `infotime_cliente` após migration `20260514120000_rename_physical_tables_infotime`.
-  // A migration `20260507200000_infotime_view_clientes_compat` (+ atualização na rename migration)
-  // pode expor a view `clientes` para compatibilidade de leitura onde existir.
-  id_cliente                   BigInt                         @id @default(autoincrement())
-  id_tenacidade                BigInt
-  id_cliente_mae               BigInt?
-  id_cliente_pai               BigInt?
-  id_cliente_acompanhante      BigInt?
-  id_cbo                       BigInt?
-  id_raca                      BigInt?
-  id_etnia                     BigInt?
-  id_vet_raca                  BigInt?
-  id_vet_especie               BigInt?
-  id_necessidade_especial      BigInt?
-  id_usuario_auditoria         BigInt?
-  nome                         String?                        @db.VarChar(100)
-  nome_social                  String?                        @db.VarChar(100)
-  sexo                         String?                        @db.Char(1)
-  estado_civil                 String?                        @db.VarChar(1)
-  data_nascimento              DateTime?                      @db.Date
-  peso                         BigInt?
-  altura                       BigInt?
-  cpf                          String?                        @db.VarChar(11)
-  documento                    String?                        @db.VarChar(30)
-  codigo_passaporte            String?                        @db.VarChar(8)
-  diabetico                    String?                        @db.Char(1)
-  bloqueado                    String?                        @db.Char(1)
-  receber_mensagem             String?                        @db.Char(1)
-  falecido                     String?                        @db.Char(1)
-  cep                          String?                        @db.VarChar(10)
-  logradouro                   String?                        @db.VarChar(100)
-  numero                       String?                        @db.VarChar(10)
-  complemento                  String?                        @db.VarChar(50)
-  bairro                       String?                        @db.VarChar(100)
-  cidade                       String?                        @db.VarChar(100)
-  estado                       String?                        @db.Char(2)
-  endereco_referencia          String?                        @db.VarChar(100)
-  telefone                     String?                        @db.VarChar(30)
-  celular                      String?                        @db.VarChar(30)
-  email                        String?                        @db.VarChar(255)
-  data_inclusao                DateTime?                      @db.Timestamp(6)
-  data_admissao                DateTime?                      @db.Timestamp(6)
-  senha_internet               String?                        @db.VarChar(100)
-  observacao_resultado         String?
-  prontuario                   String?                        @db.VarChar(50)
-  codigo_externo               String?                        @db.VarChar(50)
-  codigo_migracao              BigInt?
-  endereco_ip_auditoria        String?                        @db.VarChar(20)
-  nome_aplicacao_auditoria     String?                        @db.VarChar(255)
-  infotime_cbo                  infotime_cbo?                   @relation(fields: [id_cbo], references: [id_cbo], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cbo")
-  infotime_cliente_acomp_rel    infotime_cliente?               @relation("infotime_cliente_id_cliente_acompanhanteToinfotime_cliente", fields: [id_cliente_acompanhante], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_acompanhante")
-  infotime_cliente_acomp        infotime_cliente[]              @relation("infotime_cliente_id_cliente_acompanhanteToinfotime_cliente")
-  infotime_cliente_mae_rel      infotime_cliente?               @relation("infotime_cliente_id_cliente_maeToinfotime_cliente", fields: [id_cliente_mae], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_mae")
-  infotime_cliente_mae          infotime_cliente[]              @relation("infotime_cliente_id_cliente_maeToinfotime_cliente")
-  infotime_cliente_pai_rel      infotime_cliente?               @relation("infotime_cliente_id_cliente_paiToinfotime_cliente", fields: [id_cliente_pai], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_cliente_pai")
-  infotime_cliente_pai          infotime_cliente[]              @relation("infotime_cliente_id_cliente_paiToinfotime_cliente")
-  infotime_etnia                infotime_etnia?                 @relation(fields: [id_etnia], references: [id_etnia], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_etnia")
-  infotime_raca                 infotime_raca?                  @relation(fields: [id_raca], references: [id_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_raca")
-  infotime_tenacidade           infotime_tenacidade             @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_cliente_id_tenacidade")
-  infotime_usuario              infotime_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_usuario_auditoria")
-  infotime_vet_especie          infotime_vet_especie?           @relation(fields: [id_vet_especie], references: [id_vet_especie], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_vet_especie")
-  infotime_vet_raca             infotime_vet_raca?              @relation(fields: [id_vet_raca], references: [id_vet_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_id_vet_raca")
+  id_cliente               BigInt    @id @default(autoincrement())
+  id_tenacidade            BigInt?
+  id_situacao_cliente      BigInt?
+  id_cliente_pai           BigInt?
+  id_concorrente           BigInt?
+  id_tipo_cliente          BigInt?
+  id_regiao_estadual       BigInt?
+  id_cliente_canal         BigInt?
+  id_conta_caixa           BigInt?
+  id_municipio             BigInt?
+  id_usuario_auditoria     BigInt?
+  tipo_pessoa              String?   @db.Char(1)
+  razao_social             String?   @db.VarChar(255)
+  nome_fantasia            String?   @db.VarChar(255)
+  sexo                     String?   @db.Char(1)
+  data_nascimento          DateTime? @db.Timestamp(6)
+  cnpj                     String?   @db.VarChar(14)
+  inscricao_estadual       String?   @db.VarChar(20)
+  inscricao_municipal      String?   @db.VarChar(20)
+  cep                      String?   @db.VarChar(8)
+  tipo_logradouro          String?   @db.VarChar(100)
+  logradouro               String?   @db.VarChar(100)
+  numero                   String?   @db.VarChar(100)
+  complemento              String?   @db.VarChar(100)
+  bairro                   String?   @db.VarChar(100)
+  cidade                   String?   @db.VarChar(100)
+  estado                   String?   @db.Char(2)
+  latitude                 Float?    @db.DoublePrecision
+  longitude                Float?    @db.DoublePrecision
+  telefone                 String?   @db.VarChar(50)
+  celular                  String?   @db.VarChar(50)
+  email                    String?   @db.VarChar(100)
+  home_page                String?   @db.VarChar(255)
+  contatos                 String?   @db.VarChar(255)
+  numero_antigo            BigInt?
+  id_cliente_infolab       BigInt?
+  observacoes              String?
+  emite_boleto             String?   @db.Char(1)
+  certificado_registro     String?   @db.VarChar(10)
+  data_emissao_cr          DateTime? @db.Date
+  data_validade_cr         DateTime? @db.Date
+  chave_acesso             String?   @db.VarChar(50)
+  data_expiracao           DateTime? @db.Date
+  qtd_licenca              Int?      @db.SmallInt
+  cliente_publico          String?   @db.Char(1)
+  endereco_ip_auditoria    String?   @db.VarChar(50)
+  nome_aplicacao_auditoria String?   @db.VarChar(255)
+
+  infotime_tenacidade infotime_tenacidade? @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_cliente_ibfk_1")
+  infotime_usuario    infotime_usuario?     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_cliente_ibfk_9")
+  cliente_pai         infotime_cliente?     @relation("ClienteUnidades", fields: [id_cliente_pai], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_cliente_ibfk_3")
+  unidades            infotime_cliente[]    @relation("ClienteUnidades")
+
   @@map("infotime_cliente")
 }
 
@@ -739,7 +730,6 @@ model infotime_etnia {
   id_etnia        BigInt            @id @default(autoincrement())
   id_raca         BigInt?
   nome            String?           @db.VarChar(100)
-  infotime_cliente infotime_cliente[]
   infotime_raca    infotime_raca?     @relation(fields: [id_raca], references: [id_raca], onDelete: Restrict, onUpdate: Restrict, map: "fk_etnia_id_raca")
   @@map("infotime_etnia")
 }
@@ -1025,7 +1015,6 @@ model infotime_raca {
   endereco_ip_auditoria    String?           @db.VarChar(255)
   nome_aplicacao_auditoria String?           @db.VarChar(255)
   nome                     String?           @db.VarChar(80)
-  infotime_cliente          infotime_cliente[]
   infotime_etnia            infotime_etnia[]
   infotime_usuario          infotime_usuario?  @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_raca_id_usuario_auditoria")
   @@map("infotime_raca")
@@ -1350,7 +1339,6 @@ model infotime_vet_especie {
   nome                     String?                    @db.VarChar(80)
   endereco_ip_auditoria    String?                    @db.VarChar(20)
   nome_aplicacao_auditoria String?                    @db.VarChar(255)
-  infotime_cliente          infotime_cliente[]
   infotime_usuario          infotime_usuario?           @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_especie_id_usuario_auditoria")
   infotime_vet_raca         infotime_vet_raca[]
   @@map("infotime_vet_especie")
@@ -1363,7 +1351,6 @@ model infotime_vet_raca {
   nome                     String?                    @db.VarChar(100)
   endereco_ip_auditoria    String?                    @db.VarChar(20)
   nome_aplicacao_auditoria String?                    @db.VarChar(255)
-  infotime_cliente          infotime_cliente[]
   infotime_usuario          infotime_usuario?           @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_raca_id_usuario_auditoria")
   infotime_vet_especie      infotime_vet_especie?       @relation(fields: [id_vet_especie], references: [id_vet_especie], onDelete: Restrict, onUpdate: Restrict, map: "fk_vet_raca_id_vet_especie")
   @@map("infotime_vet_raca")

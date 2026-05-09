@@ -11,6 +11,7 @@ As regras por **tipo de tela** passam a viver em `forms/<tipo>/`. Pastas adotada
 | `forms/listagem/README.md` | **Listagem:** layout, i18n, interações, contrato HTTP, matriz exemplo Clientes — entra no manifest **logo após** este índice. |
 | `forms/formulario/README.md` | **Formulário cadastro/edição:** layout, UX de campos (rótulos, **calendário visual único**, número, máscaras/dígitos no salvar, autocomplete), subtítulo/topo, validação, auditoria, ações, BFF — exemplo Unidade de atendimento; manifest após a listagem. |
 | `forms/formulario/cartao-selecao.md` | **Lookup + cartão de resumo em groupbox:** seleção com `LigaLookupCombobox`, `fieldset`/`legend`, cartão somente leitura. |
+| `forms/formulario/endereco-cep-geocode-mapa.md` | **Endereço BR:** CEP com ViaCEP automático (sem botão), Nominatim via BFF `/api/geo/nominatim`, lat/long persistidas quando houver colunas, mapa OSM + modal. |
 | `Rules-shell-paginas.md` | Shell de páginas, cadastro ↔ listagem, menu e abas. *(planejado — adicionado conforme adoção)* |
 | `Rules-formulario-sidebar.md` | Formulário com sidebar (padrão CRUD). *(planejado)* |
 | `Rules-formulario-etapas.md` | Wizard horizontal — só se o produto pedir. *(planejado)* |
@@ -24,6 +25,7 @@ As regras por **tipo de tela** passam a viver em `forms/<tipo>/`. Pastas adotada
 - **Listagem (servidor, filtros, chips, export):** `forms/listagem/README.md`.
 - **Formulário cadastro/edição (`LigaFormularioCadastroBase`, hook, layout por seções):** `forms/formulario/README.md`.
 - **Lookup + cartão de seleção em groupbox:** `forms/formulario/cartao-selecao.md`.
+- **Endereço com CEP, geocodificação e mapa:** `forms/formulario/endereco-cep-geocode-mapa.md`.
 
 ## Documentação humana fora do manifest
 
