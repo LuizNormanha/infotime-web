@@ -13,6 +13,10 @@ import { ModuloAutenticacao } from './autenticacao/autenticacao.module';
 import { GrupoPerfilModule } from './grupo-perfil/grupo-perfil.module';
 import { LayoutModule } from './layout/layout.module';
 import { ClienteModule } from './cliente/cliente.module';
+import { ContasPagarModule } from './contas-pagar/contas-pagar.module';
+import { ContasReceberModule } from './contas-receber/contas-receber.module';
+import { FinanceiroModule } from './financeiro/financeiro.module';
+import { FornecedorModule } from './fornecedor/fornecedor.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { UsuarioPermissoesModule } from './usuario-permissoes/usuario-permissoes.module';
 
@@ -59,6 +63,10 @@ import { UsuarioPermissoesModule } from './usuario-permissoes/usuario-permissoes
     GrupoPerfilModule,
     UsuarioModule,
     ClienteModule,
+    FornecedorModule,
+    ContasPagarModule,
+    ContasReceberModule,
+    FinanceiroModule,
     UsuarioPermissoesModule,
     LayoutModule,
   ],

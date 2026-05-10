@@ -43,6 +43,11 @@ import {
   reautenticarSessao,
 } from "@/lib/autenticacao/reautenticacao";
 import { executarComPrecheckSessao } from "@/lib/autenticacao/withSessionGuard";
+import {
+  EVENTO_ABRIR_ABA_MENU,
+  chaveStorageIntentPainel,
+  type DetalheAbrirAbaMenu,
+} from "@/lib/navegacao/financeiro-abas-home";
 import { STORAGE_ESTADO_ABAS_HOME } from "@/lib/navegacao/home-estado-abas";
 
 export type LigaHomeNavegacaoProps = {
@@ -67,6 +72,34 @@ const MAPA_ABAS_POR_ID_MENU: Record<string, LigaAbaHome> = {
     icone: iconeMenuItem("cadastros-clientes"),
     fechavel: true,
     conteudoKey: "cadastroClienteInfotime",
+  },
+  "cad-estoque-fornecedores-fabricantes": {
+    id: "cad-estoque-fornecedores-fabricantes",
+    tituloKey: "cadastroFornecedorInfotime",
+    icone: iconeMenuItem("cad-estoque-fornecedores-fabricantes"),
+    fechavel: true,
+    conteudoKey: "cadastroFornecedorInfotime",
+  },
+  "infotime-fin-gestao-integrada": {
+    id: "infotime-fin-gestao-integrada",
+    tituloKey: "financeiroGestaoIntegrada",
+    icone: iconeMenuItem("infotime-fin-gestao-integrada"),
+    fechavel: true,
+    conteudoKey: "financeiroGestaoIntegrada",
+  },
+  "infotime-fin-contas-pagar": {
+    id: "infotime-fin-contas-pagar",
+    tituloKey: "cadastroContasPagarInfotime",
+    icone: iconeMenuItem("infotime-fin-contas-pagar"),
+    fechavel: true,
+    conteudoKey: "cadastroContasPagarInfotime",
+  },
+  "infotime-fin-contas-receber": {
+    id: "infotime-fin-contas-receber",
+    tituloKey: "cadastroContasReceberInfotime",
+    icone: iconeMenuItem("infotime-fin-contas-receber"),
+    fechavel: true,
+    conteudoKey: "cadastroContasReceberInfotime",
   },
   "ajuda-documentacao": {
     id: "ajuda-documentacao",
@@ -301,10 +334,44 @@ export function LigaHomeNavegacao({ menuIds }: LigaHomeNavegacaoProps) {
     setMenuMobileAberto(false);
   }, [construirAbaPorId]);
 
+  const abrirAbaInternaRef = useRef(abrirAbaInterna);
+  abrirAbaInternaRef.current = abrirAbaInterna;
+
+  useEffect(() => {
+    const aoPedirAbrirAba = (ev: Event) => {
+      const det = (ev as CustomEvent<DetalheAbrirAbaMenu>).detail;
+      if (!det?.menuId) return;
+      void executarComPrecheckSessao(
+        () => abrirAbaInternaRef.current(det.menuId),
+        (acaoPendente) => abrirModalReautenticacao(() => void acaoPendente()),
+      );
+    };
+    window.addEventListener(EVENTO_ABRIR_ABA_MENU, aoPedirAbrirAba as EventListener);
+    return () => {
+      window.removeEventListener(EVENTO_ABRIR_ABA_MENU, aoPedirAbrirAba as EventListener);
+    };
+  }, [abrirModalReautenticacao]);
+
   const abrirAbaPorMenuId = useCallback(
     async (menuId: string) => {
       await executarComPrecheckSessao(
-        () => abrirAbaInterna(menuId),
+        () => {
+          if (menuId === "infotime-fin-contas-receber") {
+            try {
+              sessionStorage.removeItem(chaveStorageIntentPainel("contas-receber"));
+            } catch {
+              /* ignore */
+            }
+          }
+          if (menuId === "infotime-fin-contas-pagar") {
+            try {
+              sessionStorage.removeItem(chaveStorageIntentPainel("contas-pagar"));
+            } catch {
+              /* ignore */
+            }
+          }
+          abrirAbaInterna(menuId);
+        },
         (acaoPendente) => abrirModalReautenticacao(() => void acaoPendente()),
       );
     },

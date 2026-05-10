@@ -85,7 +85,8 @@
   border-radius: 0 0 12px 12px;
   background: var(--liga-moldura-externa);
   box-shadow: var(--liga-sombra-moldura);
-  padding: 1.25rem 1.35rem 1.35rem;
+  /* Um pouco menos de padding vertical que antes — ganha área útil para o painel e reduz rolagem “só por uns px”. */
+  padding: 1.12rem 1.35rem 1.12rem;
   overflow: hidden;
 }
 
@@ -101,7 +102,8 @@
   flex: 1;
   min-height: 0;
   flex-direction: column;
-  overflow: auto;
+  /* Sem rolagem aqui: evita segunda barra vertical competindo com `.liga-formulario-main` / listagem. */
+  overflow: hidden;
   display: none;
 }
 
@@ -113,9 +115,44 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
   cursor: default;
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* Listagem: ocupa a altura útil do módulo e rola só o bloco da grade (não o painel da aba). */
+.liga-home-modulo-vazio > .liga-listagem-base {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+/* Formulário cliente/fornecedor no shell da home: altura limitada ao painel; rolagem no `liga-formulario-main`. */
+.liga-home-modulo-vazio > .liga-cliente-infotime-form {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.liga-home-modulo-vazio > .liga-cliente-infotime-form > .liga-formulario {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+.liga-home-modulo-vazio > .liga-home-conteudo-area-vazia {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
 }
 
 .liga-home-modulo-vazio * {

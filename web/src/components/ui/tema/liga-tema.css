@@ -83,6 +83,33 @@ html[data-theme="light"] {
 }
 
 /**
+ * Foco em botões Prime: o tema usa `box-shadow` em `:focus`, o que com borda + raio cápsula gera anel duplicado ou “quebrado”.
+ * Sem sombra no foco; anel só com `:focus-visible` (teclado); clique com rato não duplica; `outlined` com feedback ao pressionar.
+ * Exclui `p-button-link`. Exceções: trigger do calendário (anel interno claro) e botão «Novo» primário na listagem (anel claro sobre verde).
+ */
+.p-button:not(.p-button-link):focus,
+.p-button:not(.p-button-link):focus-visible {
+  box-shadow: none !important;
+}
+
+.p-button:not(.p-button-link):focus:not(:focus-visible) {
+  outline: none;
+}
+
+.p-button:not(.p-button-link):focus-visible {
+  outline: 2px solid var(--liga-verde);
+  outline-offset: 2px;
+}
+
+.p-button:not(.p-button-link):enabled:active:not(:disabled) {
+  outline: none;
+}
+
+.p-button.p-button-outlined:not(.p-button-link):enabled:active:not(:disabled) {
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+}
+
+/**
  * `p-button-sm`: mesma altura do Exportar na listagem (~40px em 16px root).
  * Texto+ícone: padding horizontal do token. Só ícone: quadrado com lado = altura do token.
  */
@@ -168,8 +195,13 @@ html[data-theme="light"] {
   color: #fff;
 }
 
+.liga-calendar-grupo-data.p-calendar .p-datepicker-trigger:focus:not(:focus-visible) {
+  outline: none;
+}
+
 .liga-calendar-grupo-data.p-calendar .p-datepicker-trigger:focus-visible {
-  box-shadow: inset 0 0 0 2px color-mix(in srgb, #fff 55%, transparent);
+  outline: none;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, #fff 55%, transparent) !important;
 }
 
 .liga-calendar-grupo-data.p-calendar.p-invalid {

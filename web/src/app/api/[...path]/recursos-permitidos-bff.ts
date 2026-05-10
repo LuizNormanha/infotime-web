@@ -5,6 +5,10 @@
 export const RECURSOS_PERMITIDOS = new Set([
   "auth",
   "clientes",
+  "contas-pagar",
+  "contas-receber",
+  "financeiro",
+  "fornecedores",
   "grupos-perfil",
   "usuario-permissoes",
   "usuarios",

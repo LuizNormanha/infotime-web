@@ -11,6 +11,10 @@ export type QueryListagemCrudPadrao = {
   pagina?: string;
   tamanhoPagina?: string;
   filtroRefinado?: string;
+  /** Drilldown cockpit: previsão no dia civil atual, ainda não quitado. */
+  venceHoje?: string;
+  /** Drilldown cockpit: previsão antes de hoje, ainda não quitado. */
+  atrasado?: string;
 };
 
 /** `true` quando o cliente pediu o modo paginado / filtrado no servidor (não só lista legada). */
@@ -22,7 +26,9 @@ export function modoListagemCrudNovo(query?: QueryListagemCrudPadrao): boolean {
     query.tamanhoPagina != null ||
     query.campoPesquisa != null ||
     query.q !== undefined ||
-    (query.filtroRefinado != null && query.filtroRefinado.trim() !== '')
+    (query.filtroRefinado != null && query.filtroRefinado.trim() !== '') ||
+    query.venceHoje?.trim() === 'true' ||
+    query.atrasado?.trim() === 'true'
   );
 }
 

@@ -190,6 +190,7 @@ export function tryMontarMenuHomeBarraInfotime(
   };
 
   const financeiroFilhosRef: LigaMenuEntrada[] = [
+    "infotime-fin-gestao-integrada",
     "infotime-fin-contas-pagar",
     "infotime-fin-contas-receber",
     {

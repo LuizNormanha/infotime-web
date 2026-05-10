@@ -2404,6 +2404,8 @@ CREATE TABLE infotime_fornecedor (
 	bairro varchar(100) DEFAULT NULL::character varying NULL,
 	cidade varchar(100) DEFAULT NULL::character varying NULL,
 	estado bpchar(2) DEFAULT NULL::bpchar NULL,
+	latitude float8 NULL,
+	longitude float8 NULL,
 	telefone varchar(50) DEFAULT NULL::character varying NULL,
 	celular varchar(50) DEFAULT NULL::character varying NULL,
 	email varchar(100) DEFAULT NULL::character varying NULL,

@@ -17,6 +17,10 @@ import { TelaAtivaContext } from "@/contexts/TelaAtivaContext";
 import { LigaAba } from "@/components/abas/LigaAba";
 import { LigaMensagemPopUp } from "@/components/ui/dialogo/LigaMensagemPopUp";
 import { LigaClienteInfotimePainel } from "@/components/cliente/LigaClienteInfotimePainel";
+import { LigaContasPagarInfotimePainel } from "@/components/contas-pagar/LigaContasPagarInfotimePainel";
+import { LigaContasReceberInfotimePainel } from "@/components/contas-receber/LigaContasReceberInfotimePainel";
+import { LigaFornecedorInfotimePainel } from "@/components/fornecedor/LigaFornecedorInfotimePainel";
+import { FinanceiroGestaoIntegrada } from "@/features/financeiro-cockpit/pages/FinanceiroGestaoIntegrada";
 import { useSessaoAtual } from "@/hooks/useSessaoAtual";
 
 /** Aba do shell da home (cadastros serão recriados para o DDL InfoTIME). */
@@ -225,6 +229,24 @@ export function LigaSistemaAbas({
       return (
         <LigaClienteInfotimePainel idTenacidade={sessao.idTenacidade} />
       );
+    }
+    if (aba.conteudoKey === "cadastroFornecedorInfotime") {
+      return (
+        <LigaFornecedorInfotimePainel idTenacidade={sessao.idTenacidade} />
+      );
+    }
+    if (aba.conteudoKey === "cadastroContasPagarInfotime") {
+      return (
+        <LigaContasPagarInfotimePainel idTenacidade={sessao.idTenacidade} />
+      );
+    }
+    if (aba.conteudoKey === "cadastroContasReceberInfotime") {
+      return (
+        <LigaContasReceberInfotimePainel idTenacidade={sessao.idTenacidade} />
+      );
+    }
+    if (aba.conteudoKey === "financeiroGestaoIntegrada") {
+      return <FinanceiroGestaoIntegrada modoNavegacao="abas" />;
     }
     if (aba.conteudoKey === "dashboard") {
       const subtitulo = t("conteudo.dashboard.subtitulo");

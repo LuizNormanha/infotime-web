@@ -1,0 +1,123 @@
+.liga-fornecedor-infotime-painel .liga-fornecedor-infotime-cabecalho-acoes-host {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+}
+
+.liga-fornecedor-infotime-form .liga-fornecedor-infotime-form-barra-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.liga-fornecedor-infotime-form .liga-fornecedor-infotime-form-barra-acoes-empurra {
+  flex: 1 1 auto;
+}
+
+.liga-fornecedor-infotime-cabecalho-fixo {
+  display: grid;
+  gap: var(--liga-cli-form-gap-row, 0.75rem) var(--liga-cli-form-gap-col, 1rem);
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--surface-border, #dee2e6);
+  border-radius: 6px;
+  background: var(--surface-card, #fff);
+}
+
+.liga-fornecedor-infotime-cabecalho-fixo .liga-fornecedor-infotime-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.liga-fornecedor-infotime-cabecalho-fixo .liga-fornecedor-infotime-tipo-pessoa-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.liga-fornecedor-infotime-aba-grid {
+  display: grid;
+  gap: var(--liga-cli-form-gap-row, 0.75rem) var(--liga-cli-form-gap-col, 1rem);
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.liga-fornecedor-infotime-aba-grid .liga-fornecedor-infotime-campo-full {
+  grid-column: 1 / -1;
+}
+
+.liga-fornecedor-infotime-badge-fab {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.liga-fornecedor-infotime-badge-fab--sim {
+  background: var(--green-100, #e8f5e9);
+  color: var(--green-900, #1b5e20);
+}
+
+.liga-fornecedor-infotime-badge-fab--nao {
+  color: var(--text-color-secondary, #6c757d);
+}
+
+/** Linha 2 do grid de identificação: razão (col.1 — classe cliente) | CNPJ/CPF | código legado | fabricante */
+.liga-fornecedor-infotime-ident-l2-doc,
+.liga-fornecedor-infotime-ident-l2-legado,
+.liga-fornecedor-infotime-ident-l2-fab {
+  grid-row: 2;
+  min-width: 0;
+}
+
+.liga-fornecedor-infotime-ident-l2-doc {
+  grid-column: 2;
+}
+
+.liga-fornecedor-infotime-ident-l2-legado {
+  grid-column: 3;
+}
+
+.liga-fornecedor-infotime-ident-l2-fab {
+  grid-column: 4;
+}
+
+@media (max-width: 768px) {
+  .liga-fornecedor-infotime-ident-l2-doc,
+  .liga-fornecedor-infotime-ident-l2-legado,
+  .liga-fornecedor-infotime-ident-l2-fab {
+    grid-row: auto;
+    grid-column: 1;
+  }
+}
+
+/**
+ * Mapa embutido (Endereço): o conteúdo da seção fica dentro de `.liga-formulario-main`, que tem
+ * `overflow-y: auto` (liga-formulario-base.css). Alturas em `vh` muito altas (ex.: ~48vh) faziam
+ * grelha + mapa excederem a área útil e aparecia barra de rolagem no `main`. Aqui limitamos com
+ * `vh` modesto (próximo ao padrão do cliente ~26vh) e `min-height: 0` no wrap para o flex encolher.
+ */
+.liga-fornecedor-infotime-form .liga-cliente-infotime-endereco-mapa-wrap {
+  min-height: 0;
+  flex-shrink: 1;
+}
+
+.liga-fornecedor-infotime-form
+  .liga-cliente-infotime-endereco-mapa-iframe-casca:not(
+    .liga-cliente-infotime-endereco-mapa-iframe-casca--dialog
+  ) {
+  height: min(calc(15rem - 6px), calc(30vh - 6px));
+  max-height: min(calc(16.5rem - 6px), calc(32vh - 6px));
+}
+
+.liga-fornecedor-infotime-form
+  .liga-cliente-infotime-endereco-mapa-vazio:not(.liga-cliente-infotime-endereco-mapa-vazio--dialog) {
+  height: min(calc(15rem - 6px), calc(30vh - 6px));
+  max-height: min(calc(16.5rem - 6px), calc(32vh - 6px));
+}

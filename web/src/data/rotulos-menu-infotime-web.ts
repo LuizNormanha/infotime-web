@@ -33,8 +33,9 @@ export const ROTULOS_MENU_INFOTIME_WEB: Record<string, string> = {
   "infotime-comercial-demais-recepcao": "Mais recepção",
   "infotime-comercial-demais-faturamento": "Mais faturamento",
 
-  "infotime-fin-contas-pagar": "Contas a Pagar (Despesas)",
-  "infotime-fin-contas-receber": "Contas a Receber (Receitas)",
+  "infotime-fin-gestao-integrada": "Gestão integrada",
+  "infotime-fin-contas-pagar": "Contas a pagar",
+  "infotime-fin-contas-receber": "Contas a receber",
   "infotime-fin-grupo-faturamento": "Faturamento",
   "infotime-fin-fat-aniversarios-contrato": "Aniversários de contrato",
   "infotime-fin-fat-boletos": "Boletos",

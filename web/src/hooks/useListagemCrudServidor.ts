@@ -14,6 +14,8 @@ import {
 export type UseListagemCrudServidorOptions = {
   /** URL do BFF sem trailing slash, ex.: `/api/clientes`. Pode incluir query fixa (`/api/x?foo=1`). */
   resourcePath: string;
+  /** Parâmetros extras sempre enviados (ex.: `venceHoje` / `atrasado` vindos da URL do cockpit). */
+  queryExtraFixo?: Record<string, string>;
   /** Valor inicial do dropdown “Pesquisar por” (campo whitelist na API). */
   campoPesquisaInicial: string;
   /**
@@ -72,6 +74,7 @@ export function useListagemCrudServidor({
   modoSelecao = false,
   linhasPorPaginaInicial = 10,
   aoFalhaCarregar,
+  queryExtraFixo,
 }: UseListagemCrudServidorOptions) {
   const [registros, setRegistros] = useState<Record<string, unknown>[]>([]);
   const [carregando, setCarregando] = useState(true);
@@ -91,6 +94,16 @@ export function useListagemCrudServidor({
     [filtrosRefinadoApi],
   );
 
+  const mesclarQueryExtra = useCallback(
+    (params: URLSearchParams) => {
+      if (!queryExtraFixo) return;
+      for (const [k, v] of Object.entries(queryExtraFixo)) {
+        if (v !== "") params.set(k, v);
+      }
+    },
+    [queryExtraFixo],
+  );
+
   const registrosRef = useRef<Record<string, unknown>[]>([]);
   registrosRef.current = registros;
 
@@ -104,6 +117,7 @@ export function useListagemCrudServidor({
         resourcePath.includes("?") ? resourcePath.slice(resourcePath.indexOf("?") + 1) : "",
       );
       merged.set("todos", "1");
+      mesclarQueryExtra(merged);
       const base = resourcePath.split("?")[0];
       const url = `${base}?${merged.toString()}`;
       fetch(url, { signal: sinal })
@@ -125,7 +139,7 @@ export function useListagemCrudServidor({
           if (!sinal?.aborted) setCarregando(false);
         });
     },
-    [resourcePath],
+    [resourcePath, mesclarQueryExtra],
   );
 
   const carregarListagemServidor = useCallback(
@@ -141,6 +155,7 @@ export function useListagemCrudServidor({
         campoPesquisa: pesquisaSrv.campo,
         filtroRefinadoJson: filtroRefinadoQuery,
       });
+      mesclarQueryExtra(params);
       const url = mesclarQueryNaUrl(resourcePath, params);
       fetch(url, { signal: sinal })
         .then(async (res) => {
@@ -159,7 +174,14 @@ export function useListagemCrudServidor({
           if (!sinal?.aborted) setCarregando(false);
         });
     },
-    [resourcePath, primeiroIndice, linhasPagina, pesquisaSrv, filtroRefinadoQuery],
+    [
+      resourcePath,
+      primeiroIndice,
+      linhasPagina,
+      pesquisaSrv,
+      filtroRefinadoQuery,
+      mesclarQueryExtra,
+    ],
   );
 
   const aoFiltrosRefinadoServidor = useCallback(

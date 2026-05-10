@@ -503,18 +503,6 @@ html[data-theme="dark"] .liga-formulario-secao-titulo {
   color: var(--liga-texto-principal);
 }
 
-.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined:focus,
-.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined:focus-visible {
-  box-shadow: none;
-  outline: 2px solid var(--liga-verde);
-  outline-offset: 2px;
-}
-
-.liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined:enabled:active:not(:disabled) {
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
-  outline: none;
-}
-
 .liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined.p-disabled,
 .liga-formulario-acoes-topo .liga-formulario-botao-acoes-dropdown.p-button.p-button-outlined:disabled {
   opacity: 0.55;

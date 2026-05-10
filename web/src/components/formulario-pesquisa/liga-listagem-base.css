@@ -178,8 +178,8 @@
   border: 1px solid var(--liga-borda-suave);
   background: var(--liga-moldura-interna);
   box-shadow: var(--liga-sombra-bloco);
-  overflow-x: auto;
-  overflow-y: hidden;
+  /* Sem rolagem na moldura: barras só na área da tabela (`.p-datatable-wrapper`). */
+  overflow: hidden;
 }
 
 .liga-listagem-moldura-tabela:has(.p-datatable-loading-overlay) {
@@ -463,18 +463,18 @@ html[data-theme="dark"] .liga-listagem-busca-destaque {
 }
 
 /*
- * Painéis da home usam overflow:hidden — foco/sombra padrão do Prime sai da caixa e corta.
- * Anel de foco dentro do botão + sem box-shadow externo no foco.
+ * Primário «Novo» na faixa de ações: painéis com overflow:hidden — anel claro interno (sobrepõe o foco global em `liga-tema.css`).
+ * Só o botão cheio (não `outlined`); «Exportar» compartilha classe visual antiga mas é outlined e segue regras do dropdown.
  */
-.liga-listagem-botao-novo.p-button:focus,
-.liga-listagem-botao-novo.p-button:focus-visible {
-  box-shadow: none;
+.liga-listagem-titulo-acoes .liga-listagem-botao-novo.p-button:not(.p-button-outlined):focus,
+.liga-listagem-titulo-acoes .liga-listagem-botao-novo.p-button:not(.p-button-outlined):focus-visible {
+  box-shadow: none !important;
   outline: 2px solid rgba(255, 255, 255, 0.9);
   outline-offset: -2px;
 }
 
-.liga-listagem-botao-novo.p-button:enabled:active:not(:disabled) {
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.18);
+.liga-listagem-titulo-acoes .liga-listagem-botao-novo.p-button:not(.p-button-outlined):enabled:active:not(:disabled) {
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.18) !important;
   outline: none;
 }
 
@@ -510,18 +510,6 @@ html[data-theme="dark"] .liga-listagem-busca-destaque {
   color: var(--liga-texto-principal);
 }
 
-.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined:focus,
-.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined:focus-visible {
-  box-shadow: none;
-  outline: 2px solid var(--liga-verde);
-  outline-offset: 2px;
-}
-
-.liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined:enabled:active:not(:disabled) {
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
-  outline: none;
-}
-
 .liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined.p-disabled,
 .liga-listagem-titulo-acoes .liga-listagem-botao-export-dropdown.p-button.p-button-outlined:disabled {
   opacity: 0.55;
@@ -546,6 +534,7 @@ html[data-theme="dark"] .liga-listagem-busca-destaque {
 }
 
 .liga-listagem-grid.p-datatable {
+  position: relative;
   border: 0;
   border-radius: 0 0 8px 8px;
   overflow: hidden;
@@ -553,11 +542,14 @@ html[data-theme="dark"] .liga-listagem-busca-destaque {
   width: 100%;
   min-width: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
+/* Rolagem horizontal/vertical só aqui (thead+tbody), quando necessário — não na moldura nem no cartão. */
 .liga-listagem-grid.p-datatable > .p-datatable-wrapper {
   min-width: 0;
-  overflow-x: auto;
+  max-width: 100%;
+  overflow: auto;
 }
 
 .liga-listagem-grid .p-datatable-table {
@@ -1095,15 +1087,6 @@ html[data-theme="dark"] .liga-listagem-barra-paginador .p-paginator .p-dropdown-
   background: color-mix(in srgb, var(--liga-borda-suave) 42%, transparent) !important;
   border: none !important;
   box-shadow: none !important;
-}
-
-.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button.p-button-icon-only:enabled:focus {
-  box-shadow: none !important;
-}
-
-.liga-listagem-barra-filtros-visiveis .liga-listagem-filtros-ellipsis.p-button.p-button-icon-only:focus-visible {
-  outline: 2px solid var(--liga-verde);
-  outline-offset: 2px;
 }
 
 /* Mesmo tamanho de ícone que o botão Limpar (p-button-sm). */

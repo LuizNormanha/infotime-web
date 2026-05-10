@@ -38,6 +38,7 @@ model infotime_tenacidade {
   nome_aplicacao_auditoria  String?   @db.VarChar(255)
   infotime_cliente                                                          infotime_cliente[]
   infotime_cliente_indicacao                                                infotime_cliente_indicacao[]
+  infotime_fornecedor                                                       infotime_fornecedor[]
   infotime_convenio                                                         infotime_convenio[]
   infotime_convenio_autorizador                                             infotime_convenio_autorizador[]
   infotime_convenio_contato                                                 infotime_convenio_contato[]
@@ -74,6 +75,8 @@ model infotime_tenacidade {
   infotime_unidade_relatorio                                                infotime_unidade_relatorio[]
   infotime_usuario                                                          infotime_usuario[]
   infotime_versao_tiss                                                      infotime_versao_tiss[]
+  infotime_lancamento_despesa                                               infotime_lancamento_despesa[]
+  infotime_lancamento_receita                                               infotime_lancamento_receita[]
   @@map("infotime_tenacidade")
 }
 
@@ -128,6 +131,7 @@ model infotime_usuario {
   infotime_cid                                                                                                                                 infotime_cid[]
   infotime_cliente                                                                                                                             infotime_cliente[]
   infotime_cliente_indicacao                                                                                                                   infotime_cliente_indicacao[]
+  infotime_fornecedor                                                                                                                          infotime_fornecedor[]
   infotime_conselho_regional                                                                                                                   infotime_conselho_regional[]
   infotime_convenio                                                                                                                            infotime_convenio[]
   infotime_convenio_autorizador                                                                                                                infotime_convenio_autorizador[]
@@ -340,6 +344,8 @@ model infotime_cliente {
   infotime_usuario    infotime_usuario?     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_cliente_ibfk_9")
   cliente_pai         infotime_cliente?     @relation("ClienteUnidades", fields: [id_cliente_pai], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_cliente_ibfk_3")
   unidades            infotime_cliente[]    @relation("ClienteUnidades")
+  lancamentos_despesa  infotime_lancamento_despesa[]
+  lancamentos_receita  infotime_lancamento_receita[]
 
   @@map("infotime_cliente")
 }
@@ -356,6 +362,185 @@ model infotime_cliente_indicacao {
   infotime_tenacidade       infotime_tenacidade @relation(fields: [id_tenacidade], references: [id_tenacidade], onUpdate: Restrict, map: "fk_cliente_indicacao_id_tenacidade")
   infotime_usuario          infotime_usuario?   @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_cliente_indicacao_id_usuario_auditoria")
   @@map("infotime_cliente_indicacao")
+}
+
+/// Situação do cadastro de fornecedor (catálogo global). Ver `docs/liga_infotime_postgres.sql`.
+model infotime_situacao_fornecedor {
+  id_situacao_fornecedor BigInt                @id @default(autoincrement())
+  descricao              String?               @db.VarChar(255)
+  infotime_fornecedor    infotime_fornecedor[]
+
+  @@map("infotime_situacao_fornecedor")
+}
+
+/// Cadastro de fornecedor/fabricante ERP. Ver `docs/liga_infotime_postgres.sql`.
+model infotime_fornecedor {
+  id_fornecedor            BigInt    @id @default(autoincrement())
+  id_tenacidade            BigInt?
+  id_situacao_fornecedor   BigInt?
+  id_usuario_auditoria     BigInt?
+  tipo_pessoa              String?   @db.Char(1)
+  razao_social             String?   @db.VarChar(255)
+  nome_fantasia            String?   @db.VarChar(255)
+  cnpj                     String?   @db.VarChar(14)
+  cep                      String?   @db.VarChar(10)
+  tipo_logradouro          String?   @db.VarChar(100)
+  logradouro               String?   @db.VarChar(100)
+  numero                   String?   @db.VarChar(100)
+  complemento              String?   @db.VarChar(100)
+  bairro                   String?   @db.VarChar(100)
+  cidade                   String?   @db.VarChar(100)
+  estado                   String?   @db.Char(2)
+  latitude                 Float?    @db.DoublePrecision
+  longitude                Float?    @db.DoublePrecision
+  telefone                 String?   @db.VarChar(50)
+  celular                  String?   @db.VarChar(50)
+  email                    String?   @db.VarChar(100)
+  home_page                String?   @db.VarChar(255)
+  contatos                 String?   @db.VarChar(255)
+  numero_antigo            BigInt?
+  observacoes              String?
+  fabricante               String?   @db.Char(1)
+  endereco_ip_auditoria    String?   @db.VarChar(50)
+  nome_aplicacao_auditoria String?   @db.VarChar(255)
+
+  infotime_tenacidade           infotime_tenacidade?           @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_fornecedor_fornecedor_ibfk_1")
+  infotime_situacao_fornecedor  infotime_situacao_fornecedor?  @relation(fields: [id_situacao_fornecedor], references: [id_situacao_fornecedor], onDelete: Restrict, onUpdate: Restrict, map: "fk_fornecedor_fornecedor_ibfk_2")
+  infotime_usuario              infotime_usuario?              @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_fornecedor_fornecedor_ibfk_3")
+  lancamentos_despesa           infotime_lancamento_despesa[]
+  lancamentos_receita           infotime_lancamento_receita[]
+
+  @@map("infotime_fornecedor")
+}
+
+/// Contas a pagar (`lancamentodespesa` legado). Ver `docs/liga_infotime_postgres.sql` — `infotime_lancamento_despesa`.
+/// Relações opcionais apenas com modelos já mapeados no Prisma; demais FKs ficam como escalares.
+model infotime_lancamento_despesa {
+  id_lancamento_despesa            BigInt    @id @default(autoincrement())
+  id_tenacidade                    BigInt?
+  id_fornecedor                    BigInt?
+  id_conta_caixa                   BigInt?
+  id_plano_conta                   BigInt?
+  id_situacao_documento            BigInt?
+  id_tipo_especie                  BigInt?
+  id_empresa                       BigInt?
+  id_cheque                        BigInt?
+  id_conta_caixa_registro          BigInt?
+  id_lancamento_despesa_pai        BigInt?
+  id_conta_caixa_transferencia     BigInt?
+  id_usuario_inclusao              BigInt?
+  id_usuario_previsao              BigInt?
+  id_usuario_agendamento           BigInt?
+  id_usuario_realizacao            BigInt?
+  id_usuario_baixa                 BigInt?
+  id_lancamento_despesa_recorrente BigInt?
+  id_tipo_agente                   BigInt?
+  id_cliente                       BigInt?
+  id_colaborador                   BigInt?
+  id_almoxarifado_entrada          BigInt?
+  id_usuario_auditoria             BigInt?
+  parcela                          Int?      @db.SmallInt
+  qtd_parcela                      Int?      @db.SmallInt
+  data_inclusao                    DateTime? @db.Timestamp(6)
+  data_previsao                    DateTime? @db.Timestamp(6)
+  valor_previsao                   Decimal?  @db.Decimal(10, 2)
+  valor_previsao_liquido           Decimal?  @db.Decimal(10, 2)
+  data_agendamento                 DateTime? @db.Timestamp(6)
+  data_realizacao                  DateTime? @db.Timestamp(6)
+  valor_acrescimo                  Decimal?  @db.Decimal(10, 2)
+  valor_desconto                   Decimal?  @db.Decimal(10, 2)
+  valor_multa                      Decimal?  @db.Decimal(10, 2)
+  valor_juros                      Decimal?  @db.Decimal(10, 2)
+  valor_realizacao                 Decimal?  @db.Decimal(10, 2)
+  numero_documento                 String?   @db.VarChar(100)
+  conta_contabil                   String?   @db.VarChar(50)
+  data_baixa                       DateTime? @db.Timestamp(6)
+  data_competencia                 DateTime? @db.Date
+  historico                        String?   @db.VarChar(100)
+  observacoes                      String?
+  nome_arquivo_boleto              String?   @db.VarChar(255)
+  nome_referencia_boleto           String?   @db.VarChar(255)
+  nome_arquivo_nota_fiscal         String?   @db.VarChar(255)
+  nome_referencia_nota_fiscal      String?   @db.VarChar(255)
+  nome_arquivo_comprovante         String?   @db.VarChar(255)
+  nome_referencia_comprovante      String?   @db.VarChar(255)
+  nome_referencia_anexo            String?   @db.VarChar(255)
+  nome_arquivo_anexo               String?   @db.VarChar(255)
+  fechamento_financeiro            String?   @db.Char(1)
+  endereco_ip_auditoria          String?   @db.VarChar(50)
+  nome_aplicacao_auditoria       String?   @db.VarChar(255)
+
+  infotime_tenacidade  infotime_tenacidade?  @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_lancamento_despesa_lancamento_despesa_ibfk_1")
+  infotime_cliente     infotime_cliente?     @relation(fields: [id_cliente], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_lancamento_despesa_lancamento_despesa_ibfk_19")
+  infotime_fornecedor  infotime_fornecedor?  @relation(fields: [id_fornecedor], references: [id_fornecedor], onDelete: Restrict, onUpdate: Restrict, map: "fk_lancamento_despesa_lancamento_despesa_ibfk_2")
+
+  @@index([data_previsao, id_situacao_documento], map: "idx_lancamento_despesa_data_previsao_id_situcacao_documento")
+  @@index([id_tenacidade], map: "idx_lancamento_despesa_id_tenacidade")
+  @@map("infotime_lancamento_despesa")
+}
+
+/// Contas a receber (`lancamentoreceita` legado). Ver `docs/liga_infotime_postgres.sql` — `infotime_lancamento_receita`.
+model infotime_lancamento_receita {
+  id_lancamento_receita            BigInt    @id @default(autoincrement())
+  id_tenacidade                    BigInt?
+  id_cliente                       BigInt?
+  id_conta_caixa                   BigInt?
+  id_plano_conta                   BigInt?
+  id_situacao_documento            BigInt?
+  id_tipo_especie                  BigInt?
+  id_nota_fiscal                   BigInt?
+  id_empresa                       BigInt?
+  id_conta_caixa_registro          BigInt?
+  id_lancamento_receita_pai        BigInt?
+  id_conta_caixa_transferencia     BigInt?
+  id_usuario_inclusao              BigInt?
+  id_usuario_previsao              BigInt?
+  id_usuario_realizacao            BigInt?
+  idusuario_baixa                  BigInt?
+  id_contrato                      BigInt?
+  id_lancamento_receita_recorrente BigInt?
+  id_tipo_agente                   BigInt?
+  id_fornecedor                    BigInt?
+  id_colaborador                   BigInt?
+  id_usuario_auditoria             BigInt?
+  parcela                          Int?      @db.SmallInt
+  data_inclusao                    DateTime? @db.Timestamp(6)
+  data_previsao                    DateTime? @db.Timestamp(6)
+  valor_previsao                   Decimal?  @db.Decimal(10, 2)
+  data_realizacao                  DateTime? @db.Timestamp(6)
+  valor_acrescimo                  Decimal?  @db.Decimal(10, 2)
+  valor_desconto                   Decimal?  @db.Decimal(10, 2)
+  valor_multa                      Decimal?  @db.Decimal(10, 2)
+  valor_juros                      Decimal?  @db.Decimal(10, 2)
+  valor_realizacao                 Decimal?  @db.Decimal(10, 2)
+  numero_documento                 String?   @db.VarChar(100)
+  conta_contabil                   String?   @db.VarChar(50)
+  data_baixa                       DateTime? @db.Timestamp(6)
+  data_competencia                 DateTime? @db.Date
+  historico                        String?   @db.VarChar(200)
+  nome_arquivo1                    String?   @db.VarChar(255)
+  nome_referencia1                 String?   @db.VarChar(255)
+  nome_arquivo2                    String?   @db.VarChar(255)
+  nome_referencia2                 String?   @db.VarChar(255)
+  observacoes                      String?
+  nosso_numero                     BigInt?
+  valor_original                   Decimal?  @db.Decimal(10, 2)
+  unidade_origem                   String?   @db.Char(2)
+  enviou_email                     String?   @db.Char(1)
+  enviou_email_cobranca            String?   @db.Char(1)
+  lido_email_cobranca              String?   @db.Char(1)
+  nota_fiscal                      String?   @db.VarChar(50)
+  fechamento_financeiro            String?   @db.Char(1)
+  usuario_externo                  String?   @db.VarChar(10)
+  endereco_ip_auditoria            String?   @db.VarChar(50)
+  nome_aplicacao_auditoria         String?   @db.VarChar(255)
+
+  infotime_tenacidade infotime_tenacidade? @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_lancamento_receita_lancamento_receita_ibfk_1")
+  infotime_cliente    infotime_cliente?    @relation(fields: [id_cliente], references: [id_cliente], onDelete: Restrict, onUpdate: Restrict, map: "fk_lancamento_receita_lancamento_receita_ibfk_2")
+  infotime_fornecedor infotime_fornecedor? @relation(fields: [id_fornecedor], references: [id_fornecedor], onDelete: Restrict, onUpdate: Restrict, map: "fk_lancamento_receita_lancamento_receita_ibfk_19")
+
+  @@index([id_tenacidade], map: "idx_lancamento_receita_id_tenacidade")
+  @@map("infotime_lancamento_receita")
 }
 
 model infotime_conselho_regional {

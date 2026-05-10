@@ -283,7 +283,7 @@ type LigaListagemBaseProps = {
   ariaLabelAcaoLinhaSecundaria?: string;
   /** PrimeIcons, ex. `pi-th-large`. Default `pi-th-large`. */
   iconeAcaoLinhaSecundaria?: string;
-  /** Exibe o título "Ações" no cabeçalho da coluna (default: só leitores de tela). */
+  /** Exibe o título da coluna de ícone (ex.: «Ações») no cabeçalho. Default: visível; `false` deixa só para leitores de tela. */
   tituloColunaAcoesVisivel?: boolean;
   ordenacaoInicial?: LigaListagemOrdenacaoInicial;
   iconeTitulo?: string;
@@ -338,6 +338,10 @@ type LigaListagemBaseProps = {
   omitirCabecalhoPagina?: boolean;
   /** Destino DOM para portal das ações Exportar + Novo (ex.: container na linha do título do módulo). */
   hostPortalCabecalhoAcoes?: HTMLElement | null;
+  /**
+   * Botões ou controles extras na mesma faixa de Exportar / Novo (ex.: «Autorizações» no cadastro de fornecedor).
+   */
+  cabecalhoAcoesSuplementares?: ReactNode;
   /** `id` do título visível para `aria-labelledby` da seção (obrigatório quando `omitirCabecalhoPagina`). */
   idTituloListagemAcessivel?: string;
 };
@@ -361,7 +365,7 @@ export function LigaListagemBase({
   aoAcaoLinhaSecundaria,
   ariaLabelAcaoLinhaSecundaria,
   iconeAcaoLinhaSecundaria = "pi-th-large",
-  tituloColunaAcoesVisivel = false,
+  tituloColunaAcoesVisivel = true,
   ordenacaoInicial,
   iconeTitulo,
   subtitulo,
@@ -383,6 +387,7 @@ export function LigaListagemBase({
   habilitarExportacao = true,
   omitirCabecalhoPagina = false,
   hostPortalCabecalhoAcoes = null,
+  cabecalhoAcoesSuplementares = null,
   idTituloListagemAcessivel = "liga-listagem-titulo-principal",
 }: LigaListagemBaseProps) {
   const t = useTranslations("home");
@@ -988,7 +993,7 @@ export function LigaListagemBase({
   };
 
   const cabecalhoAcoesJsx =
-    habilitarExportacao || aoNovo ? (
+    habilitarExportacao || aoNovo || cabecalhoAcoesSuplementares ? (
       <div className="liga-listagem-titulo-acoes">
         {habilitarExportacao ? (
           <>
@@ -1021,6 +1026,7 @@ export function LigaListagemBase({
             />
           </>
         ) : null}
+        {cabecalhoAcoesSuplementares}
         {aoNovo ? (
           <Button
             type="button"
@@ -1352,7 +1358,11 @@ export function LigaListagemBase({
               headerClassName="liga-listagem-celula--nowrap"
               bodyClassName="liga-listagem-celula--nowrap"
               style={{
-                width: aoAcaoLinhaSecundaria ? "min(7.25rem, 22vw)" : "3.465rem",
+                width: aoAcaoLinhaSecundaria
+                  ? "min(7.25rem, 22vw)"
+                  : tituloColunaAcoesVisivel
+                    ? "min(5.65rem, 32vw)"
+                    : "3.465rem",
                 textAlign: "center",
               }}
             />
