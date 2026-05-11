@@ -1,6 +1,6 @@
 # Alinhamento e espaçamento em formulários (grid Liga)
 
-**Referência de implementação:** formulário de cliente Infotime — `web/src/components/cliente/liga-cliente-infotime.css`, `liga-cliente-infotime-formulario-secoes.tsx`, tokens em `.liga-cliente-infotime-painel` (`liga-cliente-infotime.css`).
+**Referência de implementação:** tokens canónicos em `.liga-formulario` (`web/src/components/formulario-base/liga-formulario-base.css`), herdados por todo o shell `LigaFormularioBase` (inclui faixa `abaixoDoTopo` e área rolável principal). Grids e campos reutilizam `--liga-cli-form-gap-col`, `--liga-cli-form-gap-row` e `--liga-cli-form-entre-linhas` (valores alinhados ao formulário cliente Infotime em `web/src/components/cliente/liga-cliente-infotime.css`).
 
 ## Regra geral
 

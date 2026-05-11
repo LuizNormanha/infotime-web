@@ -685,7 +685,7 @@ export function LigaListagemBase({
     setLinhasPagina(patch.rows ?? linhasPorPaginaPadrao);
   }
 
-  function aplicarQuickSearch() {
+  const aplicarQuickSearch = useCallback(() => {
     const colAtiva =
       modoServidor && opcoesDropdownPesquisa.length > 0
         ? colunasComPesquisaServidor[indiceCampoPesquisa]
@@ -716,10 +716,21 @@ export function LigaListagemBase({
 
     setTermoBuscaAplicado(bruto);
     setFirst(0);
-  }
+  }, [
+    modoServidor,
+    opcoesDropdownPesquisa.length,
+    colunasComPesquisaServidor,
+    indiceCampoPesquisa,
+    entradaBusca,
+    aoPesquisarServidor,
+    feedback,
+    t,
+  ]);
 
   const aplicarQuickSearchRef = useRef(aplicarQuickSearch);
-  aplicarQuickSearchRef.current = aplicarQuickSearch;
+  useLayoutEffect(() => {
+    aplicarQuickSearchRef.current = aplicarQuickSearch;
+  }, [aplicarQuickSearch]);
 
   /**
    * Modo servidor + máscara CPF/CNPJ: ao completar todos os dígitos, dispara a busca sem exigir Enter

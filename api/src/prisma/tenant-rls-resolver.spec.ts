@@ -12,8 +12,6 @@ describe('resolverEscopoRlsTenant', () => {
   });
 
   it('retorna null quando tenantId não é numérico', () => {
-    expect(
-      resolverEscopoRlsTenant({ tenantId: 'nao-e-numero' }),
-    ).toBeNull();
+    expect(resolverEscopoRlsTenant({ tenantId: 'nao-e-numero' })).toBeNull();
   });
 });

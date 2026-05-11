@@ -133,7 +133,7 @@ export class FornecedorService {
         ...parcial,
         latitude: null,
         longitude: null,
-      } as infotime_fornecedor;
+      };
     }
   }
 
@@ -152,7 +152,7 @@ export class FornecedorService {
           FROM infotime_fornecedor f
           WHERE f.id_tenacidade = ${idTenacidade}
             AND regexp_replace(COALESCE(f.cnpj, ''), '[^0-9]', '', 'g') = ${digitos}
-            AND f.id_fornecedor <> ${excetoIdFornecedor!}
+            AND f.id_fornecedor <> ${excetoIdFornecedor}
           LIMIT 1
         `
       : await this.prisma.$queryRaw<{ id: bigint }[]>`
@@ -175,7 +175,10 @@ export class FornecedorService {
     qTexto: string,
   ): Prisma.infotime_fornecedorWhereInput {
     const q = qTexto.trim();
-    const contains = { contains: q, mode: Prisma.QueryMode.insensitive } as const;
+    const contains = {
+      contains: q,
+      mode: Prisma.QueryMode.insensitive,
+    } as const;
     switch (campoPesquisa) {
       case 'nomeFantasia':
         return { nome_fantasia: contains };
@@ -262,7 +265,7 @@ export class FornecedorService {
     }
 
     if (partes.length === 0) return {};
-    return partes.length === 1 ? partes[0]! : { AND: partes };
+    return partes.length === 1 ? partes[0] : { AND: partes };
   }
 
   private async mapaSituacao(ids: bigint[]): Promise<Map<string, string>> {
@@ -330,7 +333,7 @@ export class FornecedorService {
       idSituacaoFornecedor: r.id_situacao_fornecedor?.toString() ?? null,
       situacaoFornecedorDescricao:
         r.id_situacao_fornecedor != null
-          ? situacao.get(r.id_situacao_fornecedor.toString()) ?? null
+          ? (situacao.get(r.id_situacao_fornecedor.toString()) ?? null)
           : null,
       fabricante: (r.fabricante ?? '').trim().toUpperCase() === 'S',
       contatos: r.contatos,
@@ -380,7 +383,9 @@ export class FornecedorService {
     let whereExtra: Prisma.infotime_fornecedorWhereInput = {};
     if (qTexto !== '' && campoPesquisa !== '') {
       if (!camposPesquisa.has(campoPesquisa)) {
-        throw new BadRequestException(`campoPesquisa inválido: ${campoPesquisa}`);
+        throw new BadRequestException(
+          `campoPesquisa inválido: ${campoPesquisa}`,
+        );
       }
       whereExtra = this.whereCampoPesquisa(campoPesquisa, qTexto);
     }
@@ -441,15 +446,18 @@ export class FornecedorService {
     if (dto.tipoLogradouro !== undefined) {
       row['tipo_logradouro'] = dto.tipoLogradouro ?? null;
     }
-    if (dto.logradouro !== undefined) row['logradouro'] = dto.logradouro ?? null;
+    if (dto.logradouro !== undefined)
+      row['logradouro'] = dto.logradouro ?? null;
     if (dto.numero !== undefined) row['numero'] = dto.numero ?? null;
-    if (dto.complemento !== undefined) row['complemento'] = dto.complemento ?? null;
+    if (dto.complemento !== undefined)
+      row['complemento'] = dto.complemento ?? null;
     if (dto.bairro !== undefined) row['bairro'] = dto.bairro ?? null;
     if (dto.cidade !== undefined) row['cidade'] = dto.cidade ?? null;
     if (dto.estado !== undefined) row['estado'] = dto.estado ?? null;
     if (dto.latitude !== undefined) row['latitude'] = dto.latitude;
     if (dto.longitude !== undefined) row['longitude'] = dto.longitude;
-    if (dto.observacoes !== undefined) row['observacoes'] = dto.observacoes ?? null;
+    if (dto.observacoes !== undefined)
+      row['observacoes'] = dto.observacoes ?? null;
 
     return row;
   }
@@ -489,7 +497,7 @@ export class FornecedorService {
 
     json['situacaoFornecedorDescricao'] =
       registro.id_situacao_fornecedor != null
-        ? situacao.get(registro.id_situacao_fornecedor.toString()) ?? null
+        ? (situacao.get(registro.id_situacao_fornecedor.toString()) ?? null)
         : null;
 
     return { dados: json };
@@ -500,10 +508,7 @@ export class FornecedorService {
     tenantContexto: TenantContexto,
     ip: string,
   ): Promise<{ id: string }> {
-    await this.assertCnpjUnicoNoTenant(
-      tenantContexto.idTenacidade,
-      dto.cnpj,
-    );
+    await this.assertCnpjUnicoNoTenant(tenantContexto.idTenacidade, dto.cnpj);
 
     const dadosParciais = this.montarDadosGravacao(dto, true);
 

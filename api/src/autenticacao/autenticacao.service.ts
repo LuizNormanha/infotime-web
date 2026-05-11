@@ -319,10 +319,16 @@ export class ServicoAutenticacao {
     });
   }
 
-  async obterPermissoesTela(idUsuario: bigint, tela: string, ehSuporte = false) {
+  async obterPermissoesTela(
+    idUsuario: bigint,
+    tela: string,
+    ehSuporte = false,
+  ) {
     const codigoTela = tela.trim().toLowerCase();
     if (!codigoTela) {
-      throw new BadRequestException('Informe a tela para consultar permissões.');
+      throw new BadRequestException(
+        'Informe a tela para consultar permissões.',
+      );
     }
 
     if (ehSuporte) {
@@ -359,7 +365,9 @@ export class ServicoAutenticacao {
     }
 
     if (!usuario) {
-      throw new UnauthorizedException('Usuário não encontrado na sessão atual.');
+      throw new UnauthorizedException(
+        'Usuário não encontrado na sessão atual.',
+      );
     }
 
     // Compatibilidade: sem perfil atribuído mantém acesso livre (comportamento legado).
@@ -435,7 +443,10 @@ export class ServicoAutenticacao {
    * Mesma regra que `obterPermissoesTela`: sem linha na tabela para (grupo, form) → tudo permitido;
    * com linha → cada ação só se `S`.
    */
-  async listarPermissoesPerfilUsuario(idUsuario: bigint, ehSuporte = false): Promise<{
+  async listarPermissoesPerfilUsuario(
+    idUsuario: bigint,
+    ehSuporte = false,
+  ): Promise<{
     porCodigo: Record<
       string,
       { incluir: boolean; editar: boolean; excluir: boolean }
@@ -452,7 +463,10 @@ export class ServicoAutenticacao {
         where: { ativo: true },
         select: { codigo: true },
       });
-      const porCodigo: Record<string, { incluir: boolean; editar: boolean; excluir: boolean }> = {};
+      const porCodigo: Record<
+        string,
+        { incluir: boolean; editar: boolean; excluir: boolean }
+      > = {};
       for (const f of formularios) {
         porCodigo[f.codigo.toLowerCase()] = { ...permissivo };
       }
@@ -488,7 +502,9 @@ export class ServicoAutenticacao {
     }
 
     if (!usuario) {
-      throw new UnauthorizedException('Usuário não encontrado na sessão atual.');
+      throw new UnauthorizedException(
+        'Usuário não encontrado na sessão atual.',
+      );
     }
 
     const formularios = await this.prisma.infotime_formulario.findMany({
@@ -729,7 +745,9 @@ export class ServicoAutenticacao {
     return {
       access_token,
       refresh_token,
-      ...(avisoLicenca ? { aviso_licenca_proxima_expiracao: avisoLicenca } : {}),
+      ...(avisoLicenca
+        ? { aviso_licenca_proxima_expiracao: avisoLicenca }
+        : {}),
     };
   }
 

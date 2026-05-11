@@ -19,6 +19,7 @@ import { LigaMensagemPopUp } from "@/components/ui/dialogo/LigaMensagemPopUp";
 import { LigaClienteInfotimePainel } from "@/components/cliente/LigaClienteInfotimePainel";
 import { LigaContasPagarInfotimePainel } from "@/components/contas-pagar/LigaContasPagarInfotimePainel";
 import { LigaContasReceberInfotimePainel } from "@/components/contas-receber/LigaContasReceberInfotimePainel";
+import { LigaColaboradorInfotimePainel } from "@/components/colaborador/LigaColaboradorInfotimePainel";
 import { LigaFornecedorInfotimePainel } from "@/components/fornecedor/LigaFornecedorInfotimePainel";
 import { FinanceiroGestaoIntegrada } from "@/features/financeiro-cockpit/pages/FinanceiroGestaoIntegrada";
 import { useSessaoAtual } from "@/hooks/useSessaoAtual";
@@ -233,6 +234,11 @@ export function LigaSistemaAbas({
     if (aba.conteudoKey === "cadastroFornecedorInfotime") {
       return (
         <LigaFornecedorInfotimePainel idTenacidade={sessao.idTenacidade} />
+      );
+    }
+    if (aba.conteudoKey === "cadastroColaboradorInfotime") {
+      return (
+        <LigaColaboradorInfotimePainel idTenacidade={sessao.idTenacidade} />
       );
     }
     if (aba.conteudoKey === "cadastroContasPagarInfotime") {

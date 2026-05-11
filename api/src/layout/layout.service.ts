@@ -86,10 +86,7 @@ export class LayoutService {
     const u = await this.prisma.infotime_usuario.findFirst({
       where: {
         id_usuario: ctx.idUsuario,
-        OR: [
-          { id_tenacidade: ctx.idTenacidade },
-          { id_tenacidade: null },
-        ],
+        OR: [{ id_tenacidade: ctx.idTenacidade }, { id_tenacidade: null }],
       },
       select: { id_grupo_usuario: true },
     });

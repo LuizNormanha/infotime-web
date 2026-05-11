@@ -194,6 +194,7 @@ export function LigaListagemBarraFiltrosAtivos({
   );
   const [limparInline, setLimparInline] = useState(true);
 
+  const recalcularRef = useRef<(() => void) | null>(null);
   const recalcular = useCallback(() => {
     const wrap = containerRef.current;
     const med = medicaoRef.current;
@@ -225,7 +226,9 @@ export function LigaListagemBarraFiltrosAtivos({
     if (temChipSemLargura) {
       if (medicaoRetryRef.current < 32) {
         medicaoRetryRef.current += 1;
-        requestAnimationFrame(() => recalcular());
+        requestAnimationFrame(() => {
+          recalcularRef.current?.();
+        });
         return;
       }
       medicaoRetryRef.current = 0;
@@ -253,6 +256,10 @@ export function LigaListagemBarraFiltrosAtivos({
     setInlineIndices(idx);
     setLimparInline(li);
   }, [filtrosAtivosLista]);
+
+  useLayoutEffect(() => {
+    recalcularRef.current = recalcular;
+  }, [recalcular]);
 
   useEffect(() => {
     medicaoRetryRef.current = 0;

@@ -1,9 +1,17 @@
 "use client";
 
-import { useCallback, useMemo, useState, type RefCallback } from "react";
+import {
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type RefCallback,
+} from "react";
 import { useTranslations } from "next-intl";
 
 import { LigaListagemBase } from "@/components/formulario-pesquisa/LigaListagemBase";
+import { sincronizarBadgesLarguraIgualNoContainer } from "@/components/ui/badge/sincronizar-badges-largura-igual";
 import { useListagemCrudServidor } from "@/hooks/useListagemCrudServidor";
 
 import { CLIENTE_INFOTIME_COLUNAS_LISTAGEM } from "./cliente-infotime-listagem-colunas";
@@ -32,34 +40,58 @@ function ListaClienteInfotimeInterna({
     linhasPorPaginaInicial: 10,
   });
   const colunas = useMemo(() => CLIENTE_INFOTIME_COLUNAS_LISTAGEM, []);
+  const refLista = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const root = refLista.current;
+    if (!root) return;
+
+    const aplicar = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => sincronizarBadgesLarguraIgualNoContainer(root));
+      });
+    };
+
+    const ro = new ResizeObserver(() => {
+      aplicar();
+    });
+    ro.observe(root);
+    aplicar();
+
+    return () => {
+      ro.disconnect();
+    };
+  }, [listagemHook.registros, listagemHook.carregando]);
 
   return (
-    <LigaListagemBase
-      nomeTabela="infotime_cliente"
-      codigoTela="clientes"
-      listarTodos={false}
-      registros={listagemHook.registros}
-      colunas={colunas}
-      chavePrimaria="idCliente"
-      linhasPorPaginaPadrao={10}
-      textoBotaoNovo={t("lista.botaoNovo")}
-      placeholderBusca={t("lista.placeholderBusca")}
-      textoNenhumRegistro={t("lista.vazio")}
-      aoNovo={aoNovo}
-      aoAcaoLinha={aoAbrirCadastro}
-      ariaLabelAcaoLinha={t("lista.abrirCadastro")}
-      ordenacaoInicial={{ campo: "nomeFantasia", ordem: 1 }}
-      omitirCabecalhoPagina
-      hostPortalCabecalhoAcoes={hostPortalCabecalhoAcoes}
-      idTituloListagemAcessivel={ID_TITULO_LISTAGEM_CLIENTE}
-      carregando={listagemHook.carregando}
-      fonteListagem="servidor"
-      paginacaoServidor={listagemHook.servidor?.paginacaoServidor}
-      aoPesquisarServidor={listagemHook.servidor?.aoPesquisarServidor}
-      aoCampoPesquisaServidorChange={listagemHook.servidor?.aoCampoPesquisaServidorChange}
-      aoFiltrosRefinadoServidor={listagemHook.servidor?.aoFiltrosRefinadoServidor}
-      aoLimparBusca={listagemHook.servidor?.aoLimparBusca}
-    />
+    <div ref={refLista}>
+      <LigaListagemBase
+        nomeTabela="infotime_cliente"
+        codigoTela="clientes"
+        listarTodos={false}
+        registros={listagemHook.registros}
+        colunas={colunas}
+        chavePrimaria="idCliente"
+        linhasPorPaginaPadrao={10}
+        textoBotaoNovo={t("lista.botaoNovo")}
+        placeholderBusca={t("lista.placeholderBusca")}
+        textoNenhumRegistro={t("lista.vazio")}
+        aoNovo={aoNovo}
+        aoAcaoLinha={aoAbrirCadastro}
+        ariaLabelAcaoLinha={t("lista.abrirCadastro")}
+        ordenacaoInicial={{ campo: "nomeFantasia", ordem: 1 }}
+        omitirCabecalhoPagina
+        hostPortalCabecalhoAcoes={hostPortalCabecalhoAcoes}
+        idTituloListagemAcessivel={ID_TITULO_LISTAGEM_CLIENTE}
+        carregando={listagemHook.carregando}
+        fonteListagem="servidor"
+        paginacaoServidor={listagemHook.servidor?.paginacaoServidor}
+        aoPesquisarServidor={listagemHook.servidor?.aoPesquisarServidor}
+        aoCampoPesquisaServidorChange={listagemHook.servidor?.aoCampoPesquisaServidorChange}
+        aoFiltrosRefinadoServidor={listagemHook.servidor?.aoFiltrosRefinadoServidor}
+        aoLimparBusca={listagemHook.servidor?.aoLimparBusca}
+      />
+    </div>
   );
 }
 

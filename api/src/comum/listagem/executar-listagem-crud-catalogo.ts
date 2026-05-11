@@ -7,7 +7,10 @@ import {
 } from './query-listagem-crud';
 
 /** Une base + extras em `{ AND: [...] }` quando necessário (Prisma). */
-export function mergeWhereAnd<T extends object>(base: T, ...extras: object[]): T {
+export function mergeWhereAnd<T extends object>(
+  base: T,
+  ...extras: object[]
+): T {
   const partes: object[] = [base];
   for (const ex of extras) {
     if (ex != null && typeof ex === 'object' && Object.keys(ex).length > 0) {
@@ -95,13 +98,13 @@ export async function executarListagemCrudCatalogo<TDto>(opts: {
 
   const total = await opts.delegate.count({ where });
 
-  const linhas = (await opts.delegate.findMany({
+  const linhas = await opts.delegate.findMany({
     where,
     orderBy: opts.orderBy,
     skip: pagina * tamanhoPagina,
     take: tamanhoPagina,
     select: opts.skipTakeSelect.select,
-  })) as unknown[];
+  });
 
   return {
     dados: linhas.map(opts.mapRow),

@@ -409,7 +409,11 @@ export function LigaFornecedorInfotimeFormulario({
             });
           },
         )
-        .catch(() => {});
+        .catch((err: unknown) => {
+          if (process.env.NODE_ENV === "development") {
+            console.warn("[ViaCEP fornecedor]", err);
+          }
+        });
     }, 450);
     return () => {
       ac.abort();
@@ -656,7 +660,7 @@ export function LigaFornecedorInfotimeFormulario({
       ) : null}
       {situacaoSelecionada ? (
         <span className="liga-cliente-infotime-titulo-item liga-cliente-infotime-titulo-item--situacao">
-          <span className="liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--outro">
+          <span className="liga-padrao-badge liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--outro">
             {situacaoSelecionada}
           </span>
         </span>

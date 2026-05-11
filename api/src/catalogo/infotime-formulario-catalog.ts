@@ -17,6 +17,8 @@ const mapaCodigoParaId = new Map<string, bigint>(
   FORMULARIOS.map((f) => [f.codigo, f.id]),
 );
 
-export function idFormularioEsperadoPorCodigo(codigo: string): bigint | undefined {
+export function idFormularioEsperadoPorCodigo(
+  codigo: string,
+): bigint | undefined {
   return mapaCodigoParaId.get(codigo.trim().toLowerCase());
 }

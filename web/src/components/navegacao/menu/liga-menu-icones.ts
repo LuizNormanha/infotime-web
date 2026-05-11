@@ -6,6 +6,7 @@ const ICONE_MENU_OVERRIDES: Record<string, string> = {
   dashboard: "pi-sliders-h",
   "cad-acesso-usuário": "pi-users",
   "cadastros-clientes": "pi-users",
+  "cadastros-colaboradores": "pi-id-card",
   "cad-estoque-fornecedores-fabricantes": "pi-user-plus",
   cadastros: "pi-cog",
   "infotime-cad-acessos": "pi-key",
@@ -63,7 +64,6 @@ const ICONE_MENU_OVERRIDES: Record<string, string> = {
   "infotime-comercial-pesquisas-satisfacao": "pi-star",
   "infotime-comercial-pipeline": "pi-chart-line",
   "infotime-comercial-propostas": "pi-file-edit",
-  "infotime-complemento-sistema": "pi-sitemap",
   "infotime-estoque": "pi-th-large",
   "infotime-estoque-demais": "pi-list",
   "infotime-fin-gestao-integrada": "pi-th-large",
@@ -96,6 +96,7 @@ const ICONE_MENU_OVERRIDES: Record<string, string> = {
 const ICONE_MENU_LEGADO: Record<string, string> = {
   dashboard: "pi-home",
   relatorios: "pi-chart-bar",
+  "cadastros-colaboradores": "pi-id-card",
   "relatorios-tipos": "pi-file-pdf",
   ajuda: "pi-question-circle",
   "ajuda-documentacao": "pi-book",

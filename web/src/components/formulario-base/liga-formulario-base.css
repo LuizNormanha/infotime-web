@@ -1,6 +1,13 @@
 /* Layout base do formulario com sidebar + cartao */
 
 .liga-formulario {
+  /**
+   * Espaçamento label↔controle e entre linhas/colunas nos grids Liga (referência: cliente Infotime).
+   * Escopo: todo o shell `LigaFormularioBase` (inclui `abaixoDoTopo` e área principal).
+   */
+  --liga-cli-form-gap-col: 0.5rem;
+  --liga-cli-form-gap-row: 0.35rem;
+  --liga-cli-form-entre-linhas: var(--liga-cli-form-gap-row);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;

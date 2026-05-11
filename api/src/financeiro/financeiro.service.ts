@@ -9,6 +9,9 @@ import type {
   CockpitMiniItemDto,
   CockpitResponseDto,
 } from './dto/cockpit-response.dto';
+import type { FinanceiroAgingResponseDto } from './dto/financeiro-aging-response.dto';
+import type { FinanceiroDreResponseDto } from './dto/financeiro-dre-response.dto';
+import type { ReguaCobrancaListaResponseDto } from './dto/regua-cobranca-lista-response.dto';
 
 const ID_SITUACAO_DOCUMENTO_PAGO = 4n;
 const ID_SITUACAO_DOCUMENTO_PAGO_PARCIAL = 24n;
@@ -56,7 +59,10 @@ export class FinanceiroService {
         { id_situacao_documento: null },
         {
           id_situacao_documento: {
-            notIn: [ID_SITUACAO_DOCUMENTO_PAGO, ID_SITUACAO_DOCUMENTO_PAGO_PARCIAL],
+            notIn: [
+              ID_SITUACAO_DOCUMENTO_PAGO,
+              ID_SITUACAO_DOCUMENTO_PAGO_PARCIAL,
+            ],
           },
         },
       ],
@@ -115,15 +121,18 @@ export class FinanceiroService {
     };
   }
 
-  private nomeAgenteReceita(r: {
-    id_tipo_agente: bigint | null;
-    id_colaborador: bigint | null;
-    infotime_cliente: {
-      nome_fantasia: string | null;
-      razao_social: string | null;
-    } | null;
-    infotime_fornecedor: { nome_fantasia: string | null } | null;
-  }, mapCol: Map<string, string>): string {
+  private nomeAgenteReceita(
+    r: {
+      id_tipo_agente: bigint | null;
+      id_colaborador: bigint | null;
+      infotime_cliente: {
+        nome_fantasia: string | null;
+        razao_social: string | null;
+      } | null;
+      infotime_fornecedor: { nome_fantasia: string | null } | null;
+    },
+    mapCol: Map<string, string>,
+  ): string {
     const ta = r.id_tipo_agente;
     if (ta === 1n) {
       return (
@@ -141,15 +150,18 @@ export class FinanceiroService {
     return '—';
   }
 
-  private nomeAgenteDespesa(r: {
-    id_tipo_agente: bigint | null;
-    id_colaborador: bigint | null;
-    infotime_cliente: {
-      nome_fantasia: string | null;
-      razao_social: string | null;
-    } | null;
-    infotime_fornecedor: { nome_fantasia: string | null } | null;
-  }, mapCol: Map<string, string>): string {
+  private nomeAgenteDespesa(
+    r: {
+      id_tipo_agente: bigint | null;
+      id_colaborador: bigint | null;
+      infotime_cliente: {
+        nome_fantasia: string | null;
+        razao_social: string | null;
+      } | null;
+      infotime_fornecedor: { nome_fantasia: string | null } | null;
+    },
+    mapCol: Map<string, string>,
+  ): string {
     return this.nomeAgenteReceita(r, mapCol);
   }
 
@@ -159,7 +171,9 @@ export class FinanceiroService {
   ): Promise<Map<string, string>> {
     const uniq = [...new Set(ids.filter((x): x is bigint => x != null))];
     if (uniq.length === 0) return new Map();
-    const rows = await this.prisma.$queryRaw<{ id: bigint; nome: string | null }[]>`
+    const rows = await this.prisma.$queryRaw<
+      { id: bigint; nome: string | null }[]
+    >`
       SELECT id_colaborador AS id, nome
       FROM infotime_colaborador
       WHERE id_tenacidade = ${idTenacidade}
@@ -186,8 +200,12 @@ export class FinanceiroService {
     return Math.max(0, diff);
   }
 
-  private async fluxo14Dias(idTenacidade: bigint): Promise<CockpitFluxoDiaDto[]> {
-    const rows = await this.prisma.$queryRaw<{ data: string; entradas: unknown; saidas: unknown }[]>`
+  private async fluxo14Dias(
+    idTenacidade: bigint,
+  ): Promise<CockpitFluxoDiaDto[]> {
+    const rows = await this.prisma.$queryRaw<
+      { data: string; entradas: unknown; saidas: unknown }[]
+    >`
       WITH dias AS (
         SELECT gs::date AS d
         FROM generate_series(
@@ -277,20 +295,14 @@ export class FinanceiroService {
       this.prisma.infotime_lancamento_receita.aggregate({
         where: {
           id_tenacidade: idTenacidade,
-          AND: [
-            { data_previsao: { gte: ini, lte: fim30 } },
-            whereNaoRec,
-          ],
+          AND: [{ data_previsao: { gte: ini, lte: fim30 } }, whereNaoRec],
         },
         _sum: { valor_previsao: true },
       }),
       this.prisma.infotime_lancamento_despesa.aggregate({
         where: {
           id_tenacidade: idTenacidade,
-          AND: [
-            { data_previsao: { gte: ini, lte: fim30 } },
-            whereNaoPago,
-          ],
+          AND: [{ data_previsao: { gte: ini, lte: fim30 } }, whereNaoPago],
         },
         _sum: { valor_previsao: true },
       }),
@@ -305,7 +317,10 @@ export class FinanceiroService {
         where: {
           id_tenacidade: idTenacidade,
           id_situacao_documento: {
-            in: [ID_SITUACAO_DOCUMENTO_PAGO, ID_SITUACAO_DOCUMENTO_PAGO_PARCIAL],
+            in: [
+              ID_SITUACAO_DOCUMENTO_PAGO,
+              ID_SITUACAO_DOCUMENTO_PAGO_PARCIAL,
+            ],
           },
           data_realizacao: { gte: iniMes, lte: fimMes },
         },
@@ -422,13 +437,15 @@ export class FinanceiroService {
       dataPrevisao: this.dataIso(r.data_previsao),
     }));
 
-    const miniReceberAtraso: CockpitMiniItemDto[] = miniRecAtrasoRows.map((r) => ({
-      id: r.id_lancamento_receita.toString(),
-      nomeAgente: this.nomeAgenteReceita(r, mapCol),
-      valorPrevisao: this.decParaNum(r.valor_previsao),
-      dataPrevisao: this.dataIso(r.data_previsao),
-      diasAtraso: this.diasAtraso(r.data_previsao),
-    }));
+    const miniReceberAtraso: CockpitMiniItemDto[] = miniRecAtrasoRows.map(
+      (r) => ({
+        id: r.id_lancamento_receita.toString(),
+        nomeAgente: this.nomeAgenteReceita(r, mapCol),
+        valorPrevisao: this.decParaNum(r.valor_previsao),
+        dataPrevisao: this.dataIso(r.data_previsao),
+        diasAtraso: this.diasAtraso(r.data_previsao),
+      }),
+    );
 
     const miniPagarHoje: CockpitMiniItemDto[] = miniDespHojeRows.map((r) => ({
       id: r.id_lancamento_despesa.toString(),
@@ -437,13 +454,15 @@ export class FinanceiroService {
       dataPrevisao: this.dataIso(r.data_previsao),
     }));
 
-    const miniPagarAtraso: CockpitMiniItemDto[] = miniDespAtrasoRows.map((r) => ({
-      id: r.id_lancamento_despesa.toString(),
-      nomeAgente: this.nomeAgenteDespesa(r, mapCol),
-      valorPrevisao: this.decParaNum(r.valor_previsao),
-      dataPrevisao: this.dataIso(r.data_previsao),
-      diasAtraso: this.diasAtraso(r.data_previsao),
-    }));
+    const miniPagarAtraso: CockpitMiniItemDto[] = miniDespAtrasoRows.map(
+      (r) => ({
+        id: r.id_lancamento_despesa.toString(),
+        nomeAgente: this.nomeAgenteDespesa(r, mapCol),
+        valorPrevisao: this.decParaNum(r.valor_previsao),
+        dataPrevisao: this.dataIso(r.data_previsao),
+        diasAtraso: this.diasAtraso(r.data_previsao),
+      }),
+    );
 
     const saldoPrevisto30d =
       this.decParaNum(somaRec30._sum.valor_previsao) -
@@ -469,5 +488,36 @@ export class FinanceiroService {
       miniPagarHoje,
       miniPagarAtraso,
     };
+  }
+
+  /** Aging em aberto (placeholder até consulta por faixas estar ligada ao modelo físico). */
+  getAgingResumo(idTenacidade: bigint): Promise<FinanceiroAgingResponseDto> {
+    void idTenacidade;
+    const ref = this.inicioDiaCivilAtual().toISOString().slice(0, 10);
+    return Promise.resolve({
+      referencia: ref,
+      faixas: [],
+      totalEmAberto: 0,
+    });
+  }
+
+  /** DRE por mês civil corrente (placeholder até natureza_dre / lançamentos contábeis). */
+  getDreSintetico(idTenacidade: bigint): Promise<FinanceiroDreResponseDto> {
+    void idTenacidade;
+    const inicio = this.inicioMesAtual().toISOString().slice(0, 10);
+    const fim = this.fimMesAtual().toISOString().slice(0, 10);
+    return Promise.resolve({
+      periodoInicio: inicio,
+      periodoFim: fim,
+      linhas: [],
+    });
+  }
+
+  /** Lista de réguas de cobrança do tenant (placeholder até CRUD Prisma). */
+  listReguaCobranca(
+    idTenacidade: bigint,
+  ): Promise<ReguaCobrancaListaResponseDto> {
+    void idTenacidade;
+    return Promise.resolve({ itens: [] });
   }
 }

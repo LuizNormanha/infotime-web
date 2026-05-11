@@ -20,7 +20,7 @@
 
 .liga-fornecedor-infotime-cabecalho-fixo {
   display: grid;
-  gap: var(--liga-cli-form-gap-row, 0.75rem) var(--liga-cli-form-gap-col, 1rem);
+  gap: var(--liga-cli-form-gap-row) var(--liga-cli-form-gap-col);
   grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
   margin-bottom: 1rem;
   padding: 0.75rem 1rem;
@@ -39,12 +39,12 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem 1rem;
+  gap: var(--liga-cli-form-gap-row) var(--liga-cli-form-gap-col);
 }
 
 .liga-fornecedor-infotime-aba-grid {
   display: grid;
-  gap: var(--liga-cli-form-gap-row, 0.75rem) var(--liga-cli-form-gap-col, 1rem);
+  gap: var(--liga-cli-form-gap-row) var(--liga-cli-form-gap-col);
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
 }
 
@@ -52,11 +52,9 @@
   grid-column: 1 / -1;
 }
 
+/** Combinar com `liga-padrao-badge`; só cores e ajuste fino. */
 .liga-fornecedor-infotime-badge-fab {
-  display: inline-block;
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 .liga-fornecedor-infotime-badge-fab--sim {
@@ -98,26 +96,10 @@
 }
 
 /**
- * Mapa embutido (Endereço): o conteúdo da seção fica dentro de `.liga-formulario-main`, que tem
- * `overflow-y: auto` (liga-formulario-base.css). Alturas em `vh` muito altas (ex.: ~48vh) faziam
- * grelha + mapa excederem a área útil e aparecia barra de rolagem no `main`. Aqui limitamos com
- * `vh` modesto (próximo ao padrão do cliente ~26vh) e `min-height: 0` no wrap para o flex encolher.
+ * Mapa embutido (Endereço): secção dentro de `.liga-formulario-main` (`overflow-y: auto`).
+ * Alturas do iframe seguem `--liga-inf-mapa-embed-h` em `liga-cliente-infotime.css`; aqui só flex.
  */
 .liga-fornecedor-infotime-form .liga-cliente-infotime-endereco-mapa-wrap {
   min-height: 0;
   flex-shrink: 1;
-}
-
-.liga-fornecedor-infotime-form
-  .liga-cliente-infotime-endereco-mapa-iframe-casca:not(
-    .liga-cliente-infotime-endereco-mapa-iframe-casca--dialog
-  ) {
-  height: min(calc(15rem - 6px), calc(30vh - 6px));
-  max-height: min(calc(16.5rem - 6px), calc(32vh - 6px));
-}
-
-.liga-fornecedor-infotime-form
-  .liga-cliente-infotime-endereco-mapa-vazio:not(.liga-cliente-infotime-endereco-mapa-vazio--dialog) {
-  height: min(calc(15rem - 6px), calc(30vh - 6px));
-  max-height: min(calc(16.5rem - 6px), calc(32vh - 6px));
 }

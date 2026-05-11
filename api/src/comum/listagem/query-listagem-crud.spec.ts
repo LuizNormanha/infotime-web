@@ -31,7 +31,9 @@ describe('query-listagem-crud', () => {
         pagina: 0,
         tamanhoPagina: 10,
       });
-      expect(parsePaginaETamanhoPagina({ pagina: '2', tamanhoPagina: '999' })).toEqual({
+      expect(
+        parsePaginaETamanhoPagina({ pagina: '2', tamanhoPagina: '999' }),
+      ).toEqual({
         pagina: 2,
         tamanhoPagina: 100,
       });

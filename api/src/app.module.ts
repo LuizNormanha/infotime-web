@@ -11,8 +11,10 @@ import { GuardAutenticacaoJwtMultiTenant } from './autenticacao/autenticacao.gua
 import { PrismaModule } from './prisma/prisma.module';
 import { ModuloAutenticacao } from './autenticacao/autenticacao.module';
 import { GrupoPerfilModule } from './grupo-perfil/grupo-perfil.module';
+import { FilasModule } from './filas/filas.module';
 import { LayoutModule } from './layout/layout.module';
 import { ClienteModule } from './cliente/cliente.module';
+import { ColaboradorModule } from './colaborador/colaborador.module';
 import { ContasPagarModule } from './contas-pagar/contas-pagar.module';
 import { ContasReceberModule } from './contas-receber/contas-receber.module';
 import { FinanceiroModule } from './financeiro/financeiro.module';
@@ -59,10 +61,12 @@ import { UsuarioPermissoesModule } from './usuario-permissoes/usuario-permissoes
       },
     }),
     PrismaModule,
+    FilasModule.forRootAsync(),
     ModuloAutenticacao,
     GrupoPerfilModule,
     UsuarioModule,
     ClienteModule,
+    ColaboradorModule,
     FornecedorModule,
     ContasPagarModule,
     ContasReceberModule,

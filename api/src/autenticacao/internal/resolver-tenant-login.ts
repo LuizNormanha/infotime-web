@@ -42,10 +42,7 @@ function eAusenciaFuncaoTenantDominio(e: unknown): boolean {
     const meta = e.meta as { code?: string; message?: string } | undefined;
     if (meta?.code === '42883') return true;
     const msg = meta?.message ?? '';
-    return (
-      msg.includes('42883') &&
-      msg.includes('tenant_ativo_por_dominio')
-    );
+    return msg.includes('42883') && msg.includes('tenant_ativo_por_dominio');
   }
   if (e instanceof Prisma.PrismaClientUnknownRequestError) {
     return (

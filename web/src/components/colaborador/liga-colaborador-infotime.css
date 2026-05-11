@@ -1,0 +1,430 @@
+.liga-colaborador-infotime-painel {
+  width: 100%;
+}
+
+/**
+ * Sexo (M/F): combina `liga-padrao-badge` + cor neutra local.
+ */
+.liga-colaborador-infotime-sexo-badge {
+  min-width: 1.75rem;
+  justify-content: center;
+  font-weight: 600;
+  text-align: center;
+  color: var(--liga-texto-principal);
+  background: color-mix(in srgb, var(--liga-moldura-externa, #f3f4f6) 88%, transparent);
+  border-color: var(--liga-borda-suave, #d1d5db);
+}
+
+/**
+ * Cores da paleta (id % 6): vermelho, verde, azul, laranja, preto, cinza.
+ * Estrutura: sempre `liga-padrao-badge` + modificador `--*`.
+ */
+
+.liga-colaborador-infotime-paleta-badge--vermelho {
+  color: #fff;
+  background: #dc2626;
+  border-color: #991b1b;
+}
+
+.liga-colaborador-infotime-paleta-badge--verde {
+  color: #fff;
+  background: #16a34a;
+  border-color: #166534;
+}
+
+.liga-colaborador-infotime-paleta-badge--azul {
+  color: #fff;
+  background: #2563eb;
+  border-color: #1e40af;
+}
+
+.liga-colaborador-infotime-paleta-badge--laranja {
+  color: #fff;
+  background: #ea580c;
+  border-color: #9a3412;
+}
+
+.liga-colaborador-infotime-paleta-badge--preto {
+  color: #fafafa;
+  background: #171717;
+  border-color: #404040;
+}
+
+.liga-colaborador-infotime-paleta-badge--cinza {
+  color: #1f2937;
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.liga-colaborador-infotime-titulo-login-sufixo {
+  font-weight: 500;
+  color: var(--text-color-secondary, #6b7280);
+}
+
+/**
+ * Cabeçalho do colaborador: alinhar verticalmente ao centro itens do resumo
+ * para que badges (Tipo/Situação) fiquem na mesma linha visual do nome
+ * e do chip do ID. O `liga-cliente-infotime-titulo-resumo--faixa` usa
+ * `align-items: flex-start`, que joga os badges (com padding) acima do texto.
+ */
+.liga-colaborador-infotime-form .liga-cliente-infotime-titulo-resumo--faixa {
+  align-items: center;
+}
+
+/**
+ * Wrapper de igualar-larguras de Tipo+Situação no cabeçalho:
+ * `display: contents` para que cada item participe do mesmo flex do resumo
+ * (herdando `column-gap` ~1.65rem). Sem isso os badges ficam colados.
+ */
+.liga-colaborador-infotime-titulo-grupo-badges {
+  display: contents;
+}
+
+/** Dropdowns tipo/situação na identificação: valor e lista com badge. */
+.liga-colaborador-infotime-ident-dropdown-lookup .p-dropdown-label {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-ident-dropdown-badge-opcao {
+  display: inline-flex;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-ident-dropdown-badge-opcao .liga-padrao-badge {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.p-dropdown-panel.liga-colaborador-infotime-ident-lookup-panel .p-dropdown-item {
+  padding-block: 0.4rem;
+}
+
+.p-dropdown-panel.liga-padrao-badge-lookup-panel--largura-igual
+  .liga-colaborador-infotime-ident-dropdown-badge-opcao {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/**
+ * Painel dos lookups de Tipo/Situação do colaborador:
+ * a largura padrão de `liga-padrao-badge-lookup-panel--largura-igual` estica os
+ * badges a 100% do painel — aqui queremos uniformidade por conteúdo (min-width
+ * sincronizado em JS via medidor invisível), não por largura do gatilho.
+ */
+.p-dropdown-panel.liga-padrao-badge-lookup-panel--largura-igual.liga-colaborador-infotime-ident-lookup-panel
+  .p-dropdown-item
+  .liga-padrao-badge {
+  width: fit-content;
+  min-width: fit-content;
+  max-width: 100%;
+}
+
+.p-dropdown-panel.liga-padrao-badge-lookup-panel--largura-igual.liga-colaborador-infotime-ident-lookup-panel
+  .liga-colaborador-infotime-ident-dropdown-badge-opcao {
+  width: fit-content;
+  max-width: 100%;
+  justify-content: flex-start;
+}
+
+/**
+ * Medidor invisível usado apenas para calcular a largura máxima dos rótulos
+ * de Tipo + Situação. Mantemos fora do fluxo visual com `position: absolute`
+ * para não afetar o layout do grid de identificação.
+ */
+.liga-colaborador-infotime-medidor-badges-lookup {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  top: -9999px;
+  left: -9999px;
+  height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/**
+ * Linhas 1, 2 e 3 da secção Identificação: mesma grelha de trilhas (alinhamento apelido↔nome, sexo↔tipo).
+ * Linha 1: nome, tipo, situação, login [, ID].
+ * Linha 2 (edição): apelido, sexo, empresa; CPF nas trilhas do login ao ID (colunas 4–5), largura do campo limitada à máscara.
+ * Linha 2 (inclusão): apelido, sexo, empresa, senha; CPF da trilha do login ao fim (mesma largura visual).
+ * Linha 3 (documentos): e-mail (trilha do antigo CPF; em 5 col. ocupa cols 1–2), RG, CTPS, PIS.
+ */
+.liga-colaborador-infotime-ident-linha1,
+.liga-colaborador-infotime-ident-linha2,
+.liga-colaborador-infotime-ident-linha3 {
+  grid-column: 1 / -1;
+  display: grid;
+  column-gap: var(--liga-cli-form-gap-col);
+  row-gap: var(--liga-cli-form-gap-row);
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-ident-linha1 > .liga-cliente-infotime-campo-primeira-linha,
+.liga-colaborador-infotime-ident-linha2 > .liga-cliente-infotime-campo-primeira-linha,
+.liga-colaborador-infotime-ident-linha3 > .liga-cliente-infotime-campo-primeira-linha {
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-ident-linha1 .p-dropdown,
+.liga-colaborador-infotime-ident-linha1 .p-inputtext,
+.liga-colaborador-infotime-ident-linha2 .p-dropdown,
+.liga-colaborador-infotime-ident-linha2 .p-inputtext,
+.liga-colaborador-infotime-ident-linha2 .p-inputmask,
+.liga-colaborador-infotime-ident-linha2 .p-password,
+.liga-colaborador-infotime-ident-linha3 .p-inputtext {
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-ident-linha2 .p-password .p-inputtext {
+  width: 100%;
+}
+
+/** Slot largo ao fim da linha 2 (trilhas login→ID em 5 col.; inclusão: após senha): CPF usa a mesma área que o e-mail. */
+.liga-colaborador-infotime-ident-linha2-email-login-ate-id {
+  grid-column: 4 / -1;
+  min-width: 0;
+}
+
+/** Inclusão (4 colunas): slot largo na 2.ª linha (CPF), da trilha do login até ao fim. */
+.liga-colaborador-infotime-ident-linha2-email-desde-login {
+  grid-column: 4 / -1;
+  grid-row: 2;
+  min-width: 0;
+}
+
+/** CPF no fim da linha 2: mantém a grelha do antigo e-mail; o input não estica à largura das duas trilhas. */
+.liga-colaborador-infotime-ident-linha2-slot-cpf-fim {
+  justify-self: start;
+  width: 100%;
+}
+
+.liga-colaborador-infotime-ident-linha2-slot-cpf-fim .p-inputmask {
+  max-width: 13rem;
+  width: 100%;
+}
+
+/**
+ * Ordem: nome, tipo, situação, login [, ID].
+ * Nome / apelido na col 1 ficam um pouco mais estreitos; a folga vai para a col 2 (tipo / sexo),
+ * que ganha um max-width maior. Situação, login e ID permanecem nas mesmas trilhas.
+ */
+.liga-colaborador-infotime-ident-linha1--4col,
+.liga-colaborador-infotime-ident-linha2--4col,
+.liga-colaborador-infotime-ident-linha3--4col {
+  grid-template-columns:
+    minmax(7rem, 1.1fr)
+    minmax(6.05rem, 15rem)
+    minmax(4rem, 0.45fr)
+    minmax(4rem, 0.4fr);
+}
+
+.liga-colaborador-infotime-ident-linha1--5col,
+.liga-colaborador-infotime-ident-linha2--5col,
+.liga-colaborador-infotime-ident-linha3--5col {
+  grid-template-columns:
+    minmax(7rem, 0.95fr)
+    minmax(5.5rem, 14rem)
+    minmax(3.5rem, 0.4fr)
+    minmax(3.5rem, 0.36fr)
+    minmax(4rem, 6rem);
+}
+
+/**
+ * Linha 3 (documentos): e-mail, RG, CTPS, PIS. Em 5 col., e-mail ocupa cols 1–2 (largura próxima ao antigo e-mail à direita);
+ * RG/CTPS/PIS deslocam-se para as trilhas 3–5. Em 4 col., um campo por coluna.
+ */
+.liga-colaborador-infotime-ident-linha3--5col
+  > .liga-cliente-infotime-campo-primeira-linha.liga-colaborador-infotime-ident-linha3-email-primeiro {
+  grid-column: 1 / 3;
+}
+
+.liga-colaborador-infotime-ident-linha3--4col
+  > .liga-cliente-infotime-campo-primeira-linha.liga-colaborador-infotime-ident-linha3-email-primeiro {
+  grid-column: 1;
+}
+
+.liga-colaborador-infotime-ident-linha3--5col
+  > .liga-cliente-infotime-campo-primeira-linha:nth-child(2) {
+  grid-column: 3;
+}
+
+.liga-colaborador-infotime-ident-linha3--5col
+  > .liga-cliente-infotime-campo-primeira-linha:nth-child(3) {
+  grid-column: 4;
+}
+
+.liga-colaborador-infotime-ident-linha3--5col
+  > .liga-cliente-infotime-campo-primeira-linha:nth-child(4) {
+  grid-column: 5;
+}
+
+.liga-colaborador-infotime-ident-linha3--4col
+  > .liga-cliente-infotime-campo-primeira-linha:nth-child(2) {
+  grid-column: 2;
+}
+
+.liga-colaborador-infotime-ident-linha3--4col
+  > .liga-cliente-infotime-campo-primeira-linha:nth-child(3) {
+  grid-column: 3;
+}
+
+.liga-colaborador-infotime-ident-linha3--4col
+  > .liga-cliente-infotime-campo-primeira-linha:nth-child(4) {
+  grid-column: 4;
+}
+
+/**
+ * Contatos e observações compartilham as mesmas trilhas das linhas 1/2 para
+ * alinhar Contatos com Nome/Apelido (col 1) e Observações com Tipo/Sexo (col 2),
+ * estendendo Observações até o fim do grid (mesmo limite direito de login/ID).
+ */
+.liga-colaborador-infotime-ident-linha-contatos-obs {
+  grid-column: 1 / -1;
+  display: grid;
+  column-gap: var(--liga-cli-form-gap-col);
+  row-gap: var(--liga-cli-form-gap-row);
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-ident-linha-contatos-obs--4col {
+  grid-template-columns:
+    minmax(7rem, 1.1fr)
+    minmax(6.05rem, 15rem)
+    minmax(4rem, 0.45fr)
+    minmax(4rem, 0.4fr);
+}
+
+.liga-colaborador-infotime-ident-linha-contatos-obs--5col {
+  grid-template-columns:
+    minmax(7rem, 0.95fr)
+    minmax(5.5rem, 14rem)
+    minmax(3.5rem, 0.4fr)
+    minmax(3.5rem, 0.36fr)
+    minmax(4rem, 6rem);
+}
+
+.liga-colaborador-infotime-ident-linha-contatos-obs > .liga-cliente-infotime-campo-primeira-linha {
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-ident-linha-contatos-obs
+  > .liga-cliente-infotime-campo-primeira-linha:first-child {
+  grid-column: 1;
+}
+
+.liga-colaborador-infotime-ident-linha-contatos-obs
+  > .liga-cliente-infotime-campo-primeira-linha:nth-child(2) {
+  grid-column: 2 / -1;
+}
+
+.liga-colaborador-infotime-ident-linha-contatos-obs .p-inputtextarea {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .liga-colaborador-infotime-ident-linha1--4col,
+  .liga-colaborador-infotime-ident-linha1--5col,
+  .liga-colaborador-infotime-ident-linha2--4col,
+  .liga-colaborador-infotime-ident-linha2--5col,
+  .liga-colaborador-infotime-ident-linha3--4col,
+  .liga-colaborador-infotime-ident-linha3--5col {
+    grid-template-columns: 1fr;
+  }
+
+  .liga-colaborador-infotime-ident-linha3 > .liga-cliente-infotime-campo-primeira-linha:nth-child(1),
+  .liga-colaborador-infotime-ident-linha3 > .liga-cliente-infotime-campo-primeira-linha:nth-child(2),
+  .liga-colaborador-infotime-ident-linha3 > .liga-cliente-infotime-campo-primeira-linha:nth-child(3),
+  .liga-colaborador-infotime-ident-linha3 > .liga-cliente-infotime-campo-primeira-linha:nth-child(4) {
+    grid-column: 1 / -1;
+  }
+
+  .liga-colaborador-infotime-ident-linha-contatos-obs,
+  .liga-colaborador-infotime-ident-linha-contatos-obs--4col,
+  .liga-colaborador-infotime-ident-linha-contatos-obs--5col {
+    grid-template-columns: 1fr;
+  }
+
+  .liga-colaborador-infotime-ident-linha-contatos-obs
+    > .liga-cliente-infotime-campo-primeira-linha:first-child,
+  .liga-colaborador-infotime-ident-linha-contatos-obs
+    > .liga-cliente-infotime-campo-primeira-linha:nth-child(2) {
+    grid-column: 1 / -1;
+  }
+
+  .liga-colaborador-infotime-ident-linha2-email-login-ate-id,
+  .liga-colaborador-infotime-ident-linha2-email-desde-login {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+}
+
+/**
+ * Linha de contato (telefone | celular | e-mail) na seção «Endereço» do colaborador.
+ * Replica as 7 trilhas do `liga-cliente-infotime-endereco-grid-duas-linhas`, mas sem a
+ * coluna de «região estadual» (não aplicável a colaborador): telefone ocupa cols. 1–2,
+ * celular fica na col. 3 (faixa da cidade) e o e-mail ocupa as cols. 4–7 (lat…UF).
+ */
+.liga-colaborador-infotime-endereco-linha--contato {
+  grid-template-columns:
+    var(--liga-inf-end-cep)
+    var(--liga-inf-end-tipo)
+    var(--liga-inf-end-logra-cidade)
+    var(--liga-inf-end-logra-coord)
+    var(--liga-inf-end-logra-coord)
+    var(--liga-inf-end-num)
+    var(--liga-inf-end-comp);
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-endereco-rc {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--liga-cli-form-gap-row);
+}
+
+.liga-colaborador-infotime-endereco-rc-tel {
+  grid-column: 1 / span 2;
+}
+
+.liga-colaborador-infotime-endereco-rc-cel {
+  grid-column: 3;
+}
+
+.liga-colaborador-infotime-endereco-rc-email {
+  grid-column: 4 / span 4;
+}
+
+.liga-colaborador-infotime-endereco-linha--contato .p-inputtext,
+.liga-colaborador-infotime-endereco-linha--contato .p-inputmask {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .liga-colaborador-infotime-endereco-linha--contato {
+    grid-template-columns: 1fr;
+  }
+
+  .liga-colaborador-infotime-endereco-rc-tel,
+  .liga-colaborador-infotime-endereco-rc-cel,
+  .liga-colaborador-infotime-endereco-rc-email {
+    grid-column: 1 / -1;
+  }
+}

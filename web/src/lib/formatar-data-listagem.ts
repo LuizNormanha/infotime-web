@@ -57,3 +57,38 @@ export function formatarApenasDiaListagemPtBr(val: unknown): string {
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
 }
+
+/**
+ * Idade em anos, meses e dias completos (calendário civil no fuso local),
+ * no formato compacto `67a 5m 3d` (`a` = anos, `m` = meses, `d` = dias).
+ */
+export function formatarIdadeAnosMesesDiasCurtaPtBr(
+  val: unknown,
+  referencia: Date = new Date(),
+): string {
+  const parsed = extrairDateListagem(val);
+  if (!parsed) return "";
+  const nasc = new Date(
+    parsed.d.getFullYear(),
+    parsed.d.getMonth(),
+    parsed.d.getDate(),
+  );
+  const ref = new Date(
+    referencia.getFullYear(),
+    referencia.getMonth(),
+    referencia.getDate(),
+  );
+  if (ref < nasc) return "";
+  let anos = ref.getFullYear() - nasc.getFullYear();
+  let meses = ref.getMonth() - nasc.getMonth();
+  let dias = ref.getDate() - nasc.getDate();
+  if (dias < 0) {
+    meses -= 1;
+    dias += new Date(ref.getFullYear(), ref.getMonth(), 0).getDate();
+  }
+  if (meses < 0) {
+    anos -= 1;
+    meses += 12;
+  }
+  return `${anos}a ${meses}m ${dias}d`;
+}

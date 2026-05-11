@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -214,9 +215,11 @@ export function LigaPainelAjudaLigia({
   /** Incrementado só ao iniciar cada execução debounced; async antigo ignora setState se obsoleto. */
   const pesquisaCorpoSeqRef = useRef(0);
   const pesquisaMenuRef = useRef(pesquisaMenu);
-  pesquisaMenuRef.current = pesquisaMenu;
   const tRef = useRef(t);
-  tRef.current = t;
+  useLayoutEffect(() => {
+    pesquisaMenuRef.current = pesquisaMenu;
+    tRef.current = t;
+  }, [pesquisaMenu, t]);
 
   const cacheMd = useRef<Map<string, string>>(new Map());
   const refArtigo = useRef<HTMLElement>(null);
@@ -343,12 +346,11 @@ export function LigaPainelAjudaLigia({
   const algumTopicoPodeBaterNoCorpo = useMemo(() => {
     const q = pesquisaMenu.trim();
     if (!q) return false;
-    const tt = tRef.current;
     return itensPerfil.some((e) => {
-      const rotulo = tt(e.tituloKey as Parameters<typeof tt>[0]);
+      const rotulo = t(e.tituloKey as Parameters<typeof t>[0]);
       return !entradaCombinaPesquisaSync(e, q, rotulo);
     });
-  }, [itensPerfil, pesquisaMenu]);
+  }, [itensPerfil, pesquisaMenu, t]);
 
   const obterMarkdownParaPesquisa = useCallback(
     async (p: PerfilAjudaLigia, entrada: EntradaManifestAjuda): Promise<string> => {

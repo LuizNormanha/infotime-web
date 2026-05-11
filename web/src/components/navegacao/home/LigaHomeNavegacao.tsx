@@ -16,12 +16,7 @@ import "./liga-home-navegacao.css";
 import { LigaPainelAjudaLigia } from "@/components/ajuda/LigaPainelAjudaLigia";
 import { abaAtivaEmContextoSoroteca } from "@/lib/navegacao/ligia-ajuda-contexto";
 import { LigaBotaoFlutuante } from "../../ui/botoes/LigaBotaoFlutuante";
-import {
-  ICONE_MENU_ITEM,
-  LigaMenuDrawer,
-  type LigaMenuEntrada,
-  type LigaMenuEstruturaIds,
-} from "../menu/LigaMenuDrawer";
+import { ICONE_MENU_ITEM, LigaMenuDrawer, type LigaMenuEstruturaIds } from "../menu/LigaMenuDrawer";
 import { iconeMenuItem } from "../menu/liga-menu-icones";
 import {
   MENU_ID_ABA_CANONICO,
@@ -80,6 +75,13 @@ const MAPA_ABAS_POR_ID_MENU: Record<string, LigaAbaHome> = {
     fechavel: true,
     conteudoKey: "cadastroFornecedorInfotime",
   },
+  "cadastros-colaboradores": {
+    id: "cadastros-colaboradores",
+    tituloKey: "cadastroColaboradorInfotime",
+    icone: iconeMenuItem("cadastros-colaboradores"),
+    fechavel: true,
+    conteudoKey: "cadastroColaboradorInfotime",
+  },
   "infotime-fin-gestao-integrada": {
     id: "infotime-fin-gestao-integrada",
     tituloKey: "financeiroGestaoIntegrada",
@@ -125,6 +127,7 @@ export function LigaHomeNavegacao({ menuIds }: LigaHomeNavegacaoProps) {
   const [painelAjudaLigiaAberto, setPainelAjudaLigiaAberto] = useState(false);
   const [larguraViewport, setLarguraViewport] = useState(0);
   const [menuHorizontalTransbordou, setMenuHorizontalTransbordou] = useState(true);
+  const [avisoLicencaPosLogin, setAvisoLicencaPosLogin] = useState<string | null>(null);
 
   const viewportEstreito = larguraViewport > 0 && larguraViewport <= 960;
   const usarDrawer = viewportEstreito || menuHorizontalTransbordou;
@@ -185,7 +188,6 @@ export function LigaHomeNavegacao({ menuIds }: LigaHomeNavegacaoProps) {
     pergunta: string;
   } | null>(null);
   const [captchaRespostaReautenticacao, setCaptchaRespostaReautenticacao] = useState("");
-  const [avisoLicencaPosLogin, setAvisoLicencaPosLogin] = useState<string | null>(null);
   const [modalSubstituirSessaoAberta, setModalSubstituirSessaoAberta] =
     useState(false);
   const [mensagemModalSubstituirSessao, setMensagemModalSubstituirSessao] =
@@ -335,7 +337,9 @@ export function LigaHomeNavegacao({ menuIds }: LigaHomeNavegacaoProps) {
   }, [construirAbaPorId]);
 
   const abrirAbaInternaRef = useRef(abrirAbaInterna);
-  abrirAbaInternaRef.current = abrirAbaInterna;
+  useLayoutEffect(() => {
+    abrirAbaInternaRef.current = abrirAbaInterna;
+  }, [abrirAbaInterna]);
 
   useEffect(() => {
     const aoPedirAbrirAba = (ev: Event) => {
@@ -607,6 +611,7 @@ export function LigaHomeNavegacao({ menuIds }: LigaHomeNavegacaoProps) {
     captchaRespostaReautenticacao,
     router,
     tLogin,
+    setAvisoLicencaPosLogin,
   ]);
 
   return (

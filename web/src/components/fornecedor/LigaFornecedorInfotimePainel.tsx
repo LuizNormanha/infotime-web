@@ -1,10 +1,18 @@
 "use client";
 
-import { useCallback, useMemo, useState, type RefCallback } from "react";
+import {
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type RefCallback,
+} from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "primereact/button";
 
 import { LigaListagemBase } from "@/components/formulario-pesquisa/LigaListagemBase";
+import { sincronizarBadgesLarguraIgualNoContainer } from "@/components/ui/badge/sincronizar-badges-largura-igual";
 import { useListagemCrudServidor } from "@/hooks/useListagemCrudServidor";
 import { usePermissaoPerfilTelaAtiva } from "@/hooks/usePermissaoPerfilTelaAtiva";
 import { useLigaFeedback } from "@/components/ui/feedback/LigaFeedback";
@@ -46,6 +54,28 @@ function ListaFornecedorInfotimeInterna({
     linhasPorPaginaInicial: 10,
   });
   const colunas = useMemo(() => FORNECEDOR_INFOTIME_COLUNAS_LISTAGEM, []);
+  const refLista = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const root = refLista.current;
+    if (!root) return;
+
+    const aplicar = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => sincronizarBadgesLarguraIgualNoContainer(root));
+      });
+    };
+
+    const ro = new ResizeObserver(() => {
+      aplicar();
+    });
+    ro.observe(root);
+    aplicar();
+
+    return () => {
+      ro.disconnect();
+    };
+  }, [listagemHook.registros, listagemHook.carregando]);
 
   const mostrarBotaoAutorizacoes =
     sessao.ehSuporte === true ||
@@ -70,33 +100,35 @@ function ListaFornecedorInfotimeInterna({
   ) : null;
 
   return (
-    <LigaListagemBase
-      nomeTabela="infotime_fornecedor"
-      codigoTela="fornecedores"
-      listarTodos={false}
-      registros={listagemHook.registros}
-      colunas={colunas}
-      chavePrimaria="idFornecedor"
-      linhasPorPaginaPadrao={10}
-      textoBotaoNovo={t("lista.botaoNovo")}
-      placeholderBusca={t("lista.placeholderBusca")}
-      textoNenhumRegistro={t("lista.vazio")}
-      aoNovo={aoNovo}
-      aoAcaoLinha={aoAbrirCadastro}
-      ariaLabelAcaoLinha={t("lista.abrirCadastro")}
-      ordenacaoInicial={{ campo: "nomeFantasia", ordem: 1 }}
-      omitirCabecalhoPagina
-      hostPortalCabecalhoAcoes={hostPortalCabecalhoAcoes}
-      idTituloListagemAcessivel={ID_TITULO_LISTAGEM}
-      carregando={listagemHook.carregando}
-      fonteListagem="servidor"
-      paginacaoServidor={listagemHook.servidor?.paginacaoServidor}
-      aoPesquisarServidor={listagemHook.servidor?.aoPesquisarServidor}
-      aoCampoPesquisaServidorChange={listagemHook.servidor?.aoCampoPesquisaServidorChange}
-      aoFiltrosRefinadoServidor={listagemHook.servidor?.aoFiltrosRefinadoServidor}
-      aoLimparBusca={listagemHook.servidor?.aoLimparBusca}
-      cabecalhoAcoesSuplementares={acoesSuplementares}
-    />
+    <div ref={refLista}>
+      <LigaListagemBase
+        nomeTabela="infotime_fornecedor"
+        codigoTela="fornecedores"
+        listarTodos={false}
+        registros={listagemHook.registros}
+        colunas={colunas}
+        chavePrimaria="idFornecedor"
+        linhasPorPaginaPadrao={10}
+        textoBotaoNovo={t("lista.botaoNovo")}
+        placeholderBusca={t("lista.placeholderBusca")}
+        textoNenhumRegistro={t("lista.vazio")}
+        aoNovo={aoNovo}
+        aoAcaoLinha={aoAbrirCadastro}
+        ariaLabelAcaoLinha={t("lista.abrirCadastro")}
+        ordenacaoInicial={{ campo: "nomeFantasia", ordem: 1 }}
+        omitirCabecalhoPagina
+        hostPortalCabecalhoAcoes={hostPortalCabecalhoAcoes}
+        idTituloListagemAcessivel={ID_TITULO_LISTAGEM}
+        carregando={listagemHook.carregando}
+        fonteListagem="servidor"
+        paginacaoServidor={listagemHook.servidor?.paginacaoServidor}
+        aoPesquisarServidor={listagemHook.servidor?.aoPesquisarServidor}
+        aoCampoPesquisaServidorChange={listagemHook.servidor?.aoCampoPesquisaServidorChange}
+        aoFiltrosRefinadoServidor={listagemHook.servidor?.aoFiltrosRefinadoServidor}
+        aoLimparBusca={listagemHook.servidor?.aoLimparBusca}
+        cabecalhoAcoesSuplementares={acoesSuplementares}
+      />
+    </div>
   );
 }
 

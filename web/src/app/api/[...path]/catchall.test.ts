@@ -44,12 +44,21 @@ describe("RECURSOS_PERMITIDOS — allowlist do catch-all BFF", () => {
 
   it("tem exatamente o número de recursos da allowlist", () => {
     const esperados = [
+      "auth",
+      "clientes",
+      "colaboradores",
+      "contas-pagar",
+      "contas-receber",
+      "financeiro",
+      "fornecedores",
       "grupos-perfil",
       "usuario-permissoes",
       "usuarios",
-      "auth",
     ];
     expect(RECURSOS_PERMITIDOS.size).toBe(esperados.length);
+    for (const r of esperados) {
+      expect(RECURSOS_PERMITIDOS.has(r)).toBe(true);
+    }
   });
 });
 

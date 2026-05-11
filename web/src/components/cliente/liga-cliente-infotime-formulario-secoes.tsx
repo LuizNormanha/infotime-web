@@ -97,7 +97,7 @@ export function criarSecoesFormularioClienteInfotime(
     const tipo = normalizarSituacaoTag(opt.label);
     return (
       <span
-        className={`liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--${tipo}`}
+        className={`liga-padrao-badge liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--${tipo}`}
       >
         {opt.label}
       </span>
@@ -141,6 +141,7 @@ export function criarSecoesFormularioClienteInfotime(
                 <Dropdown
                   inputId="liga-cli-situacao-linha1"
                   className="w-full"
+                  panelClassName="liga-padrao-badge-lookup-panel--largura-igual"
                   value={campos.idSituacaoCliente || null}
                   options={dropdownOpts.situacoes}
                   itemTemplate={templateSituacao}

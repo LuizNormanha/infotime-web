@@ -114,12 +114,16 @@ export const FORNECEDOR_INFOTIME_COLUNAS_LISTAGEM: LigaColunaListagem[] = [
       const sim = (linha as Record<string, unknown>).fabricante === true;
       return createElement(
         "span",
-        {
-          className: sim
-            ? "liga-fornecedor-infotime-badge-fab liga-fornecedor-infotime-badge-fab--sim"
-            : "liga-fornecedor-infotime-badge-fab liga-fornecedor-infotime-badge-fab--nao",
-        },
-        sim ? "Sim" : "—",
+        { "data-liga-badge-coluna": "fornecedor-fabricante" },
+        createElement(
+          "span",
+          {
+            className: sim
+              ? "liga-padrao-badge liga-fornecedor-infotime-badge-fab liga-fornecedor-infotime-badge-fab--sim"
+              : "liga-padrao-badge liga-fornecedor-infotime-badge-fab liga-fornecedor-infotime-badge-fab--nao",
+          },
+          sim ? "Sim" : "—",
+        ),
       );
     },
   },

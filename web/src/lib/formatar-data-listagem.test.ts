@@ -4,6 +4,7 @@ import {
   ehValorTipoDataListagem,
   formatarApenasDiaListagemPtBr,
   formatarDataHoraListagemPtBr,
+  formatarIdadeAnosMesesDiasCurtaPtBr,
 } from "./formatar-data-listagem";
 
 describe("formatar-data-listagem", () => {
@@ -27,5 +28,10 @@ describe("formatar-data-listagem", () => {
   it("não trata número como data", () => {
     expect(ehValorTipoDataListagem(20250101)).toBe(false);
     expect(formatarDataHoraListagemPtBr(20250101)).toBe("20250101");
+  });
+
+  it("idade curta no formato anos, meses, dias (67a 3m 9d)", () => {
+    const ref = new Date(2026, 4, 11); // 11 mai 2026
+    expect(formatarIdadeAnosMesesDiasCurtaPtBr("1959-02-02", ref)).toBe("67a 3m 9d");
   });
 });

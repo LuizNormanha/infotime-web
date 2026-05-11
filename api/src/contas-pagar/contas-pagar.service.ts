@@ -83,7 +83,9 @@ export class ContasPagarService {
     if (s == null || s.trim() === '') return null;
     const d = new Date(s);
     if (Number.isNaN(d.getTime())) {
-      throw new BadRequestException(`${nomeCampo}: data ou data/hora inválida.`);
+      throw new BadRequestException(
+        `${nomeCampo}: data ou data/hora inválida.`,
+      );
     }
     return d;
   }
@@ -159,7 +161,10 @@ export class ContasPagarService {
   ): Promise<bigint[]> {
     const t = q.trim();
     if (!t) return [];
-    const esc = t.replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_');
+    const esc = t
+      .replace(/\\/g, '\\\\')
+      .replace(/%/g, '\\%')
+      .replace(/_/g, '\\_');
     const like = `%${esc}%`;
     if (modo === 'nome') {
       const rows = await this.prisma.$queryRaw<{ id: bigint }[]>`
@@ -187,7 +192,10 @@ export class ContasPagarService {
     qTexto: string,
   ): Prisma.infotime_lancamento_despesaWhereInput {
     const q = qTexto.trim();
-    const contains = { contains: q, mode: Prisma.QueryMode.insensitive } as const;
+    const contains = {
+      contains: q,
+      mode: Prisma.QueryMode.insensitive,
+    } as const;
     switch (campoPesquisa) {
       case 'historico':
         return { historico: contains };
@@ -210,7 +218,10 @@ export class ContasPagarService {
     qTexto: string,
   ): Promise<Prisma.infotime_lancamento_despesaWhereInput> {
     const q = qTexto.trim();
-    const contains = { contains: q, mode: Prisma.QueryMode.insensitive } as const;
+    const contains = {
+      contains: q,
+      mode: Prisma.QueryMode.insensitive,
+    } as const;
     if (campoPesquisa === 'nomeAgente') {
       const idsCol = await this.idsColaboradorNomeOuCpfContem(
         idTenacidade,
@@ -370,19 +381,19 @@ export class ContasPagarService {
           fim.setHours(23, 59, 59, 999);
           partes.push({
             [col]: { gte: de, lte: fim },
-          } as Prisma.infotime_lancamento_despesaWhereInput);
+          });
         } else if (de) {
           const fimDia = new Date(de);
           fimDia.setHours(23, 59, 59, 999);
           partes.push({
             [col]: { gte: de, lte: fimDia },
-          } as Prisma.infotime_lancamento_despesaWhereInput);
+          });
         }
       }
     }
 
     if (partes.length === 0) return {};
-    return partes.length === 1 ? partes[0]! : { AND: partes };
+    return partes.length === 1 ? partes[0] : { AND: partes };
   }
 
   private inicioDiaCivilAtual(): Date {
@@ -486,7 +497,9 @@ export class ContasPagarService {
   ): Promise<{ nome: Map<string, string>; cpf: Map<string, string> }> {
     const nome = new Map<string, string>();
     const cpf = new Map<string, string>();
-    const uniq = [...new Set(ids.map((x) => x.toString()))].map((s) => BigInt(s));
+    const uniq = [...new Set(ids.map((x) => x.toString()))].map((s) =>
+      BigInt(s),
+    );
     if (uniq.length === 0) return { nome, cpf };
     const rows = await this.prisma.$queryRaw<
       { id: bigint; nome: string | null; cpf: string | null }[]
@@ -660,7 +673,10 @@ export class ContasPagarService {
         cnpj: string | null;
         razao_social: string | null;
       } | null;
-      infotime_fornecedor: { nome_fantasia: string | null; cnpj: string | null } | null;
+      infotime_fornecedor: {
+        nome_fantasia: string | null;
+        cnpj: string | null;
+      } | null;
     }>,
   ): Promise<ContasPagarListaItemDto[]> {
     const idsTipoEspecie = [
@@ -734,7 +750,7 @@ export class ContasPagarService {
       const nomeAgente = this.nomeAgenteLinha(r, colaboradores.nome, idCol);
       const cnpjCpf = this.cnpjCpfLinha(r, colaboradores.cpf, idCol);
       const cnpjFornecedor =
-        r.id_tipo_agente === 2n ? r.infotime_fornecedor?.cnpj ?? null : null;
+        r.id_tipo_agente === 2n ? (r.infotime_fornecedor?.cnpj ?? null) : null;
       return {
         idLancamentoDespesa: r.id_lancamento_despesa.toString(),
         dataPrevisao: r.data_previsao,
@@ -745,7 +761,7 @@ export class ContasPagarService {
         idTipoEspecie: r.id_tipo_especie?.toString() ?? null,
         tipoEspecieDescricao:
           r.id_tipo_especie != null
-            ? tipoEspecie.get(r.id_tipo_especie.toString()) ?? null
+            ? (tipoEspecie.get(r.id_tipo_especie.toString()) ?? null)
             : null,
         nomeAgente,
         cnpjCpf,
@@ -754,26 +770,28 @@ export class ContasPagarService {
         idContaCaixa: r.id_conta_caixa?.toString() ?? null,
         contaCaixaDescricao:
           r.id_conta_caixa != null
-            ? contaCaixa.get(r.id_conta_caixa.toString()) ?? null
+            ? (contaCaixa.get(r.id_conta_caixa.toString()) ?? null)
             : null,
         idSituacaoDocumento: r.id_situacao_documento?.toString() ?? null,
         situacaoDocumentoDescricao:
           r.id_situacao_documento != null
-            ? situacao.get(r.id_situacao_documento.toString()) ?? null
+            ? (situacao.get(r.id_situacao_documento.toString()) ?? null)
             : null,
         idEmpresa: r.id_empresa?.toString() ?? null,
         empresaDescricao:
-          r.id_empresa != null ? empresa.get(r.id_empresa.toString()) ?? null : null,
+          r.id_empresa != null
+            ? (empresa.get(r.id_empresa.toString()) ?? null)
+            : null,
         idPlanoConta: r.id_plano_conta?.toString() ?? null,
         planoContaDescricao:
           r.id_plano_conta != null
-            ? planoConta.get(r.id_plano_conta.toString()) ?? null
+            ? (planoConta.get(r.id_plano_conta.toString()) ?? null)
             : null,
         dataBaixa: r.data_baixa,
         idTipoAgente: r.id_tipo_agente?.toString() ?? null,
         tipoAgenteDescricao:
           r.id_tipo_agente != null
-            ? tipoAgente.get(r.id_tipo_agente.toString()) ?? null
+            ? (tipoAgente.get(r.id_tipo_agente.toString()) ?? null)
             : null,
         dataInclusao: r.data_inclusao,
         qtdParcela: r.qtd_parcela,
@@ -814,7 +832,11 @@ export class ContasPagarService {
         ORDER BY descricao NULLS LAST
       `,
       this.prisma.$queryRaw<
-        { id: bigint; nome_fantasia: string | null; tipo_empresa: string | null }[]
+        {
+          id: bigint;
+          nome_fantasia: string | null;
+          tipo_empresa: string | null;
+        }[]
       >`
         SELECT id_empresa AS id, nome_fantasia, tipo_empresa
         FROM infotime_empresa
@@ -875,7 +897,8 @@ export class ContasPagarService {
         const d = r.descricao?.trim() ?? '';
         return {
           id: r.id.toString(),
-          rotulo: [c, d].filter(Boolean).join(' — ') || d || c || r.id.toString(),
+          rotulo:
+            [c, d].filter(Boolean).join(' — ') || d || c || r.id.toString(),
         };
       }),
     };
@@ -925,7 +948,9 @@ export class ContasPagarService {
     let whereExtra: Prisma.infotime_lancamento_despesaWhereInput = {};
     if (qTexto !== '' && campoPesquisa !== '') {
       if (!camposPesquisa.has(campoPesquisa)) {
-        throw new BadRequestException(`campoPesquisa inválido: ${campoPesquisa}`);
+        throw new BadRequestException(
+          `campoPesquisa inválido: ${campoPesquisa}`,
+        );
       }
       whereExtra = await this.whereCampoPesquisaAsync(
         tenantContexto.idTenacidade,
@@ -936,7 +961,12 @@ export class ContasPagarService {
 
     const whereFiltro = this.whereFiltroRefinado(query?.filtroRefinado);
     const whereDrilldown = this.whereDespesaListagemDrilldown(query);
-    const where = mergeWhereAnd(baseWhere, whereExtra, whereFiltro, whereDrilldown);
+    const where = mergeWhereAnd(
+      baseWhere,
+      whereExtra,
+      whereFiltro,
+      whereDrilldown,
+    );
 
     const total = await this.prisma.infotime_lancamento_despesa.count({
       where,
@@ -1020,7 +1050,9 @@ export class ContasPagarService {
         select: { id_fornecedor: true },
       });
       if (!f) {
-        throw new BadRequestException('Fornecedor inválido para esta tenacidade.');
+        throw new BadRequestException(
+          'Fornecedor inválido para esta tenacidade.',
+        );
       }
     } else if (idTipoAgente === 3n) {
       if (idColaborador == null) {
@@ -1032,7 +1064,9 @@ export class ContasPagarService {
         LIMIT 1
       `;
       if (rows.length === 0) {
-        throw new BadRequestException('Colaborador inválido para esta tenacidade.');
+        throw new BadRequestException(
+          'Colaborador inválido para esta tenacidade.',
+        );
       }
     } else {
       throw new BadRequestException('Tipo de agente inválido.');
@@ -1091,19 +1125,43 @@ export class ContasPagarService {
     tenantContexto: TenantContexto,
     ip: string,
   ): Prisma.infotime_lancamento_despesaUncheckedCreateInput {
-    const idTipoAgente = this.parseBigIntObrigatorio(dto.idTipoAgente, 'idTipoAgente');
+    const idTipoAgente = this.parseBigIntObrigatorio(
+      dto.idTipoAgente,
+      'idTipoAgente',
+    );
     const idCliente = this.parseBigIntOpcional(dto.idCliente, 'idCliente');
-    const idFornecedor = this.parseBigIntOpcional(dto.idFornecedor, 'idFornecedor');
-    const idColaborador = this.parseBigIntOpcional(dto.idColaborador, 'idColaborador');
-    const idPlanoConta = this.parseBigIntObrigatorio(dto.idPlanoConta, 'idPlanoConta');
+    const idFornecedor = this.parseBigIntOpcional(
+      dto.idFornecedor,
+      'idFornecedor',
+    );
+    const idColaborador = this.parseBigIntOpcional(
+      dto.idColaborador,
+      'idColaborador',
+    );
+    const idPlanoConta = this.parseBigIntObrigatorio(
+      dto.idPlanoConta,
+      'idPlanoConta',
+    );
     const idSituacao = this.parseBigIntObrigatorio(
       dto.idSituacaoDocumento,
       'idSituacaoDocumento',
     );
-    const dataPrevisao = this.parseDataObrigatoria(dto.dataPrevisao, 'dataPrevisao');
-    const valorPrevisao = this.parseDecimalObrigatorio(dto.valorPrevisao, 'valorPrevisao');
-    const valorReal = this.parseDecimalOpcional(dto.valorRealizacao, 'valorRealizacao');
-    const idTipoEspecie = this.parseBigIntOpcional(dto.idTipoEspecie, 'idTipoEspecie');
+    const dataPrevisao = this.parseDataObrigatoria(
+      dto.dataPrevisao,
+      'dataPrevisao',
+    );
+    const valorPrevisao = this.parseDecimalObrigatorio(
+      dto.valorPrevisao,
+      'valorPrevisao',
+    );
+    const valorReal = this.parseDecimalOpcional(
+      dto.valorRealizacao,
+      'valorRealizacao',
+    );
+    const idTipoEspecie = this.parseBigIntOpcional(
+      dto.idTipoEspecie,
+      'idTipoEspecie',
+    );
     const idCheque = this.parseBigIntOpcional(dto.idCheque, 'idCheque');
 
     return {
@@ -1115,7 +1173,10 @@ export class ContasPagarService {
       id_empresa: this.parseBigIntOpcional(dto.idEmpresa, 'idEmpresa'),
       id_plano_conta: idPlanoConta,
       id_situacao_documento: idSituacao,
-      id_conta_caixa: this.parseBigIntOpcional(dto.idContaCaixa, 'idContaCaixa'),
+      id_conta_caixa: this.parseBigIntOpcional(
+        dto.idContaCaixa,
+        'idContaCaixa',
+      ),
       valor_previsao: valorPrevisao,
       valor_previsao_liquido: this.parseDecimalOpcional(
         dto.valorPrevisaoLiquido,
@@ -1123,19 +1184,34 @@ export class ContasPagarService {
       ),
       data_previsao: dataPrevisao,
       valor_realizacao: valorReal,
-      data_realizacao: this.parseDataHoraOpcional(dto.dataRealizacao, 'dataRealizacao'),
+      data_realizacao: this.parseDataHoraOpcional(
+        dto.dataRealizacao,
+        'dataRealizacao',
+      ),
       id_tipo_especie: idTipoEspecie,
       id_cheque: idTipoEspecie === ID_TIPO_ESPECIE_CHEQUE ? idCheque : null,
       numero_documento:
         idTipoEspecie === ID_TIPO_ESPECIE_CHEQUE
           ? null
           : (dto.numeroDocumento ?? null),
-      data_agendamento: this.parseDataHoraOpcional(dto.dataAgendamento, 'dataAgendamento'),
-      data_competencia: this.parseDataHoraOpcional(dto.dataCompetencia, 'dataCompetencia'),
+      data_agendamento: this.parseDataHoraOpcional(
+        dto.dataAgendamento,
+        'dataAgendamento',
+      ),
+      data_competencia: this.parseDataHoraOpcional(
+        dto.dataCompetencia,
+        'dataCompetencia',
+      ),
       conta_contabil: dto.contaContabil ?? null,
       historico: dto.historico ?? null,
-      valor_acrescimo: this.parseDecimalOpcional(dto.valorAcrescimo, 'valorAcrescimo'),
-      valor_desconto: this.parseDecimalOpcional(dto.valorDesconto, 'valorDesconto'),
+      valor_acrescimo: this.parseDecimalOpcional(
+        dto.valorAcrescimo,
+        'valorAcrescimo',
+      ),
+      valor_desconto: this.parseDecimalOpcional(
+        dto.valorDesconto,
+        'valorDesconto',
+      ),
       valor_multa: this.parseDecimalOpcional(dto.valorMulta, 'valorMulta'),
       valor_juros: this.parseDecimalOpcional(dto.valorJuros, 'valorJuros'),
       data_baixa: this.parseDataHoraOpcional(dto.dataBaixa, 'dataBaixa'),
@@ -1154,22 +1230,34 @@ export class ContasPagarService {
   ): Prisma.infotime_lancamento_despesaUncheckedUpdateInput {
     const patch: Prisma.infotime_lancamento_despesaUncheckedUpdateInput = {};
     if (dto.idTipoAgente !== undefined) {
-      patch.id_tipo_agente = this.parseBigIntObrigatorio(dto.idTipoAgente, 'idTipoAgente');
+      patch.id_tipo_agente = this.parseBigIntObrigatorio(
+        dto.idTipoAgente,
+        'idTipoAgente',
+      );
     }
     if (dto.idCliente !== undefined) {
       patch.id_cliente = this.parseBigIntOpcional(dto.idCliente, 'idCliente');
     }
     if (dto.idFornecedor !== undefined) {
-      patch.id_fornecedor = this.parseBigIntOpcional(dto.idFornecedor, 'idFornecedor');
+      patch.id_fornecedor = this.parseBigIntOpcional(
+        dto.idFornecedor,
+        'idFornecedor',
+      );
     }
     if (dto.idColaborador !== undefined) {
-      patch.id_colaborador = this.parseBigIntOpcional(dto.idColaborador, 'idColaborador');
+      patch.id_colaborador = this.parseBigIntOpcional(
+        dto.idColaborador,
+        'idColaborador',
+      );
     }
     if (dto.idEmpresa !== undefined) {
       patch.id_empresa = this.parseBigIntOpcional(dto.idEmpresa, 'idEmpresa');
     }
     if (dto.idPlanoConta !== undefined) {
-      patch.id_plano_conta = this.parseBigIntObrigatorio(dto.idPlanoConta, 'idPlanoConta');
+      patch.id_plano_conta = this.parseBigIntObrigatorio(
+        dto.idPlanoConta,
+        'idPlanoConta',
+      );
     }
     if (dto.idSituacaoDocumento !== undefined) {
       patch.id_situacao_documento = this.parseBigIntObrigatorio(
@@ -1178,7 +1266,10 @@ export class ContasPagarService {
       );
     }
     if (dto.idContaCaixa !== undefined) {
-      patch.id_conta_caixa = this.parseBigIntOpcional(dto.idContaCaixa, 'idContaCaixa');
+      patch.id_conta_caixa = this.parseBigIntOpcional(
+        dto.idContaCaixa,
+        'idContaCaixa',
+      );
     }
     if (dto.valorPrevisao !== undefined) {
       patch.valor_previsao = this.parseDecimalObrigatorio(
@@ -1193,7 +1284,10 @@ export class ContasPagarService {
       );
     }
     if (dto.dataPrevisao !== undefined) {
-      patch.data_previsao = this.parseDataObrigatoria(dto.dataPrevisao, 'dataPrevisao');
+      patch.data_previsao = this.parseDataObrigatoria(
+        dto.dataPrevisao,
+        'dataPrevisao',
+      );
     }
     if (dto.valorRealizacao !== undefined) {
       patch.valor_realizacao = this.parseDecimalOpcional(
@@ -1232,7 +1326,8 @@ export class ContasPagarService {
         'dataCompetencia',
       );
     }
-    if (dto.contaContabil !== undefined) patch.conta_contabil = dto.contaContabil ?? null;
+    if (dto.contaContabil !== undefined)
+      patch.conta_contabil = dto.contaContabil ?? null;
     if (dto.historico !== undefined) patch.historico = dto.historico ?? null;
     if (dto.valorAcrescimo !== undefined) {
       patch.valor_acrescimo = this.parseDecimalOpcional(
@@ -1247,15 +1342,22 @@ export class ContasPagarService {
       );
     }
     if (dto.valorMulta !== undefined) {
-      patch.valor_multa = this.parseDecimalOpcional(dto.valorMulta, 'valorMulta');
+      patch.valor_multa = this.parseDecimalOpcional(
+        dto.valorMulta,
+        'valorMulta',
+      );
     }
     if (dto.valorJuros !== undefined) {
-      patch.valor_juros = this.parseDecimalOpcional(dto.valorJuros, 'valorJuros');
+      patch.valor_juros = this.parseDecimalOpcional(
+        dto.valorJuros,
+        'valorJuros',
+      );
     }
     if (dto.dataBaixa !== undefined) {
       patch.data_baixa = this.parseDataHoraOpcional(dto.dataBaixa, 'dataBaixa');
     }
-    if (dto.observacoes !== undefined) patch.observacoes = dto.observacoes ?? null;
+    if (dto.observacoes !== undefined)
+      patch.observacoes = dto.observacoes ?? null;
     return patch;
   }
 
@@ -1284,7 +1386,11 @@ export class ContasPagarService {
     const json = Object.fromEntries(
       Object.entries(registro).map(([k, v]) => [
         k,
-        typeof v === 'bigint' ? v.toString() : v instanceof Prisma.Decimal ? v.toString() : v,
+        typeof v === 'bigint'
+          ? v.toString()
+          : v instanceof Prisma.Decimal
+            ? v.toString()
+            : v,
       ]),
     ) as Record<string, unknown>;
 
@@ -1296,20 +1402,44 @@ export class ContasPagarService {
     tenantContexto: TenantContexto,
     ip: string,
   ): Promise<{ id: string }> {
-    const idTipoAgente = this.parseBigIntObrigatorio(dto.idTipoAgente, 'idTipoAgente');
+    const idTipoAgente = this.parseBigIntObrigatorio(
+      dto.idTipoAgente,
+      'idTipoAgente',
+    );
     const idCliente = this.parseBigIntOpcional(dto.idCliente, 'idCliente');
-    const idFornecedor = this.parseBigIntOpcional(dto.idFornecedor, 'idFornecedor');
-    const idColaborador = this.parseBigIntOpcional(dto.idColaborador, 'idColaborador');
-    const idPlanoConta = this.parseBigIntObrigatorio(dto.idPlanoConta, 'idPlanoConta');
-    const dataPrevisao = this.parseDataObrigatoria(dto.dataPrevisao, 'dataPrevisao');
+    const idFornecedor = this.parseBigIntOpcional(
+      dto.idFornecedor,
+      'idFornecedor',
+    );
+    const idColaborador = this.parseBigIntOpcional(
+      dto.idColaborador,
+      'idColaborador',
+    );
+    const idPlanoConta = this.parseBigIntObrigatorio(
+      dto.idPlanoConta,
+      'idPlanoConta',
+    );
+    const dataPrevisao = this.parseDataObrigatoria(
+      dto.dataPrevisao,
+      'dataPrevisao',
+    );
     const idSituacao = this.parseBigIntObrigatorio(
       dto.idSituacaoDocumento,
       'idSituacaoDocumento',
     );
-    const valorReal = this.parseDecimalOpcional(dto.valorRealizacao, 'valorRealizacao');
-    const idTipoEspecie = this.parseBigIntOpcional(dto.idTipoEspecie, 'idTipoEspecie');
+    const valorReal = this.parseDecimalOpcional(
+      dto.valorRealizacao,
+      'valorRealizacao',
+    );
+    const idTipoEspecie = this.parseBigIntOpcional(
+      dto.idTipoEspecie,
+      'idTipoEspecie',
+    );
     const idCheque = this.parseBigIntOpcional(dto.idCheque, 'idCheque');
-    const dataRealizacao = this.parseDataHoraOpcional(dto.dataRealizacao, 'dataRealizacao');
+    const dataRealizacao = this.parseDataHoraOpcional(
+      dto.dataRealizacao,
+      'dataRealizacao',
+    );
     const dataBaixaVal = this.parseDataHoraOpcional(dto.dataBaixa, 'dataBaixa');
 
     await this.assertAgentesETenant(
@@ -1319,7 +1449,10 @@ export class ContasPagarService {
       idFornecedor,
       idColaborador,
     );
-    await this.assertPlanoContaTenant(tenantContexto.idTenacidade, idPlanoConta);
+    await this.assertPlanoContaTenant(
+      tenantContexto.idTenacidade,
+      idPlanoConta,
+    );
     await this.assertPeriodoLivreParaInclusao(
       tenantContexto.idTenacidade,
       dataPrevisao,
@@ -1368,11 +1501,13 @@ export class ContasPagarService {
 
     const idTipo =
       (patch.id_tipo_agente as bigint | undefined) ?? atual.id_tipo_agente;
-    const idCli = (patch.id_cliente as bigint | null | undefined) ?? atual.id_cliente;
+    const idCli =
+      (patch.id_cliente as bigint | null | undefined) ?? atual.id_cliente;
     const idForn =
       (patch.id_fornecedor as bigint | null | undefined) ?? atual.id_fornecedor;
     const idCol =
-      (patch.id_colaborador as bigint | null | undefined) ?? atual.id_colaborador;
+      (patch.id_colaborador as bigint | null | undefined) ??
+      atual.id_colaborador;
     const idPlano =
       (patch.id_plano_conta as bigint | undefined) ?? atual.id_plano_conta;
     const idSit =
@@ -1384,8 +1519,10 @@ export class ContasPagarService {
       (patch.valor_realizacao as Prisma.Decimal | null | undefined) ??
       atual.valor_realizacao;
     const idTipoEsp =
-      (patch.id_tipo_especie as bigint | null | undefined) ?? atual.id_tipo_especie;
-    const idChq = (patch.id_cheque as bigint | null | undefined) ?? atual.id_cheque;
+      (patch.id_tipo_especie as bigint | null | undefined) ??
+      atual.id_tipo_especie;
+    const idChq =
+      (patch.id_cheque as bigint | null | undefined) ?? atual.id_cheque;
     const dataReal =
       patch.data_realizacao !== undefined
         ? (patch.data_realizacao as Date | null)

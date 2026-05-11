@@ -3,7 +3,7 @@
 // [APRESENTAÇÃO] Hook de ciclo de vida de formulário de cadastro.
 // Não contém lógica de negócio — apenas chama endpoints da API BFF e repassa erros.
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { useLigaFeedback } from "@/components/ui/feedback/LigaFeedback";
@@ -121,7 +121,9 @@ export function useCadastroFormulario<T extends Record<string, unknown>>(
 
   /** Evita reexecutar o efeito de carga quando o pai passa `aposCarregarDados` inline (nova referência a cada render). */
   const aposCarregarDadosRef = useRef(aposCarregarDados);
-  aposCarregarDadosRef.current = aposCarregarDados;
+  useLayoutEffect(() => {
+    aposCarregarDadosRef.current = aposCarregarDados;
+  }, [aposCarregarDados]);
 
   const [valores, setValores] = useState<T>(estadoVazio);
   // Comeca em loading na edicao para evitar "flash" de formulario vazio
@@ -205,6 +207,8 @@ export function useCadastroFormulario<T extends Record<string, unknown>>(
       });
 
     return () => ac.abort();
+    // estadoVazio: função estável por contrato do hook; incluir reexecutaria o GET ao trocar referência.
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- estadoVazio omitido de propósito (ver comentário acima)
   }, [idEdicao, endpoint]);
 
   // Preenche automaticamente os campos de auditoria a partir da sessão.

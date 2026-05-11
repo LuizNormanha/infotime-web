@@ -17,6 +17,7 @@ export const ROTULOS_MENU_INFOTIME_WEB: Record<string, string> = {
   "infotime-rh-niveis-classificacao-cargos": "Níveis de Classificação de Cargos",
   "infotime-rh-pop-documentos": "POP - Documentos",
   "infotime-rh-tarefas-colaborador": "Tarefas de Colaborador",
+  "cadastros-colaboradores": "Colaboradores",
 
   "infotime-comercial-clientes-congresso": "Clientes (congresso)",
   "infotime-comercial-implantacoes": "Implantações",
@@ -89,6 +90,4 @@ export const ROTULOS_MENU_INFOTIME_WEB: Record<string, string> = {
   "infotime-cad-sup-triggers-auditoria": "Gerar triggers auditoria",
   "infotime-cad-sup-sincronizar-grupos-apps":
     "Sincronizar grupos e aplicações",
-
-  "infotime-complemento-sistema": "Demais rotinas do sistema",
 };

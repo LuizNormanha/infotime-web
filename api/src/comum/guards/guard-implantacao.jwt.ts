@@ -14,9 +14,7 @@ import type { Request } from 'express';
 export class GuardImplantacaoJwt implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const req = context.switchToHttp().getRequest<Request>();
-    const user = req['user'] as
-      | { suporte?: boolean; email?: string }
-      | undefined;
+    const user = req['user'];
 
     if (!user?.suporte) {
       throw new ForbiddenException('Acesso restrito à implantação.');

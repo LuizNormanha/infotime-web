@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import type {
   LigaFiltroRefinadoValor,
@@ -105,10 +105,14 @@ export function useListagemCrudServidor({
   );
 
   const registrosRef = useRef<Record<string, unknown>[]>([]);
-  registrosRef.current = registros;
+  useLayoutEffect(() => {
+    registrosRef.current = registros;
+  }, [registros]);
 
   const aoFalhaCarregarRef = useRef(aoFalhaCarregar);
-  aoFalhaCarregarRef.current = aoFalhaCarregar;
+  useLayoutEffect(() => {
+    aoFalhaCarregarRef.current = aoFalhaCarregar;
+  }, [aoFalhaCarregar]);
 
   const carregarModoSelecao = useCallback(
     (sinal?: AbortSignal) => {

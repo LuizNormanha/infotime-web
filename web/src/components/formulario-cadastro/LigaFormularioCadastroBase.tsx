@@ -2,7 +2,6 @@
 
 import {
   Fragment,
-  isValidElement,
   useCallback,
   useId,
   useLayoutEffect,

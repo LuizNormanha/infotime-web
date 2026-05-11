@@ -1,5 +1,5 @@
 import { INestApplication, Injectable } from '@nestjs/common';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 import { setCurrentTenantLocal } from './set-current-tenant-local';
 import {

@@ -105,10 +105,11 @@ export class UsuarioController {
     @UsuarioAtual() idUsuario: bigint,
     @Req() req: Request,
   ) {
-    const user = req['user'] as { suporte?: boolean; email?: string } | undefined;
+    const user = req['user'];
     const email = user?.email?.trim().toLowerCase() ?? '';
     const loginLocal = email.split('@')[0]?.trim() ?? '';
-    const ehTecnicoGlobal = loginLocal === 'suporte' || loginLocal === 'implantacao';
+    const ehTecnicoGlobal =
+      loginLocal === 'suporte' || loginLocal === 'implantacao';
     const tenantContexto: TenantContexto = {
       idTenacidade,
       idUsuario,

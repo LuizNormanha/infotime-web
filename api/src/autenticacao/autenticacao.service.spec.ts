@@ -66,7 +66,13 @@ function makeService() {
     registrarSucesso: jest.fn(),
     registrarFalha: jest.fn(),
   } as unknown as ServicoCaptchaLogin;
-  const service = new ServicoAutenticacao(prisma, jwt, geradorSenha, config, captchaLogin);
+  const service = new ServicoAutenticacao(
+    prisma,
+    jwt,
+    geradorSenha,
+    config,
+    captchaLogin,
+  );
   return { service, prisma, jwt, geradorSenha, config };
 }
 

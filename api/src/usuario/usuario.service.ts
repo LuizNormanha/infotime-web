@@ -129,7 +129,10 @@ export class UsuarioService {
       const letra =
         u === 'S' || u.startsWith('SIM') || u.startsWith('ATIV')
           ? 'S'
-          : u === 'N' || u.startsWith('NÃO') || u.startsWith('NAO') || u.startsWith('INAT')
+          : u === 'N' ||
+              u.startsWith('NÃO') ||
+              u.startsWith('NAO') ||
+              u.startsWith('INAT')
             ? 'N'
             : null;
       if (letra != null) {
@@ -191,7 +194,7 @@ export class UsuarioService {
     }
 
     if (partes.length === 0) return {};
-    return partes.length === 1 ? partes[0]! : { AND: partes };
+    return partes.length === 1 ? partes[0] : { AND: partes };
   }
 
   async listar(

@@ -11,12 +11,18 @@
   max-width: min(36rem, 100%);
 }
 
+/**
+ * Rodapé padrão dos diálogos do template (cliente, fornecedor, colaborador,
+ * contas a pagar/receber, etc.). Quebra em telas estreitas para evitar
+ * botão estourando para a direita quando há 3+ ações (ex.: pendência ao voltar).
+ */
 .liga-mensagem-pop-up-rodape {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 0.75rem;
   justify-content: flex-end;
   align-items: center;
+  row-gap: 0.5rem;
 }
 
 .liga-mensagem-pop-up-rodape .p-button {

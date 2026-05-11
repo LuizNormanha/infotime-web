@@ -35,12 +35,17 @@ function coletarIdsMenuPermitido(estrutura: LigaMenuEstruturaIds): Set<string> {
   return s;
 }
 
+/** Itens da barra InfoTIME Web que não dependem do menu DST do layout para serem exibidos. */
+function idFolhaSemprePermitidoMenuReorganizado(id: string): boolean {
+  return id.startsWith("infotime-") || id === "cadastros-colaboradores";
+}
+
 function filtrarEntrada(
   e: LigaMenuEntrada,
   permitidos: Set<string>,
 ): LigaMenuEntrada | null {
   if (typeof e === "string") {
-    if (e.startsWith("infotime-")) return e;
+    if (idFolhaSemprePermitidoMenuReorganizado(e)) return e;
     return permitidos.has(e) ? e : null;
   }
   const filhos = (e.filhos ?? [])
@@ -63,7 +68,7 @@ function filtrarPorPermissao(
 }
 
 /**
- * Barra e cascatas InfoTIME (referência nas telas enviadas) + complemento do restante do DST.
+ * Barra e cascatas InfoTIME (referência nas telas enviadas), sem reexportar o restante legado do DST.
  */
 export function tryMontarMenuHomeBarraInfotime(
   estrutura: LigaMenuEstruturaIds,
@@ -73,7 +78,6 @@ export function tryMontarMenuHomeBarraInfotime(
   const modulos = noPorId(raiz, "modulos");
   const cadastros = noPorId(raiz, "cadastros");
   const dashboard = noPorId(raiz, "dashboard");
-  const relatorios = noPorId(raiz, "relatorios");
   if (!modulos || !cadastros || !dashboard) {
     return estrutura;
   }
@@ -83,15 +87,6 @@ export function tryMontarMenuHomeBarraInfotime(
   const modFinanceiro = filhoDireto(modulos, "mod-financeiro");
   const modEstoque = filhoDireto(modulos, "mod-estoque");
 
-  const idsModExtraidos = new Set([
-    "mod-recepção",
-    "mod-faturamento",
-    "mod-financeiro",
-    "mod-estoque",
-  ]);
-  const modulosRestantes = modulos.filhos.filter((n) => !idsModExtraidos.has(n.id));
-
-  const cadGrupoClientes = filhoDireto(cadastros, "cad-grupo-clientes");
   const cadEstoque = filhoDireto(cadastros, "cad-estoque");
   const cadFinanceiro = filhoDireto(cadastros, "cad-financeiro");
   const cadAcesso = filhoDireto(cadastros, "cad-acesso");
@@ -103,14 +98,16 @@ export function tryMontarMenuHomeBarraInfotime(
     ? noPorId(cadEstoque.filhos, "cad-estoque-fornecedores-fabricantes")
     : null;
 
+  /** Ordem alinhada ao legado: Colaboradores e rotinas de RH antes de «Usuários» e demais cadastros de acesso. */
   const rhFilhosRef: LigaMenuEntrada[] = [
-    "cad-acesso-usuário",
+    "cadastros-colaboradores",
     "cad-acesso-pessoal-cargos",
     "infotime-rh-classificacao-cargo",
     "infotime-rh-motivos-reajuste",
     "infotime-rh-niveis-classificacao-cargos",
     "infotime-rh-pop-documentos",
     "infotime-rh-tarefas-colaborador",
+    "cad-acesso-usuário",
   ];
 
   if (cadAcesso) {
@@ -267,6 +264,8 @@ export function tryMontarMenuHomeBarraInfotime(
   };
 
   const cadastrosFilhosRef: LigaMenuEntrada[] = [
+    /** Listagem de colaboradores (RH) — também disponível na barra sob o grupo R.H. */
+    "cadastros-colaboradores",
     {
       id: "infotime-cad-acessos",
       filhos: ["cad-acesso-usuário", "cad-acesso-perfil"],
@@ -351,45 +350,6 @@ export function tryMontarMenuHomeBarraInfotime(
       filhos: ["infotime-cad-sup-triggers-auditoria"],
     },
   ];
-
-  const complementoCadastros: LigaMenuEntrada[] = [];
-
-  if (modulosRestantes.length > 0) {
-    complementoCadastros.push({
-      id: "infotime-modulos-operacionais",
-      filhos: modulosRestantes.map(cloneNo),
-    });
-  }
-  if (relatorios) complementoCadastros.push(cloneNo(relatorios));
-
-  if (cadGrupoClientes) {
-    const filhosSemListaPrincipal = cadGrupoClientes.filhos.filter(
-      (f) => f.id !== "cadastros-clientes",
-    );
-    if (filhosSemListaPrincipal.length > 0) {
-      complementoCadastros.push({
-        id: cadGrupoClientes.id,
-        filhos: filhosSemListaPrincipal.map(cloneNo),
-      });
-    }
-  }
-
-  const idsCadBarra = new Set(["cad-estoque", "cad-financeiro", "cad-acesso"]);
-  const outrosCadastros = cadastros.filhos.filter((n) => !idsCadBarra.has(n.id));
-
-  for (const n of outrosCadastros) {
-    if (n.id === "cad-grupo-clientes") continue;
-    if (n.id === "cad-empresas") continue;
-    if (n.id === "cad-integrações") continue;
-    complementoCadastros.push(cloneNo(n));
-  }
-
-  if (complementoCadastros.length > 0) {
-    cadastrosFilhosRef.push({
-      id: "infotime-complemento-sistema",
-      filhos: complementoCadastros,
-    });
-  }
 
   const cadastrosAgrupado: LigaMenuEntrada = {
     id: "cadastros",

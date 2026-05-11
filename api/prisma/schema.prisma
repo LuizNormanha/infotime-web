@@ -39,6 +39,9 @@ model infotime_tenacidade {
   infotime_cliente                                                          infotime_cliente[]
   infotime_cliente_indicacao                                                infotime_cliente_indicacao[]
   infotime_fornecedor                                                       infotime_fornecedor[]
+  infotime_colaborador                                                      infotime_colaborador[]
+  infotime_tipo_colaborador                                                 infotime_tipo_colaborador[]
+  infotime_situacao_colaborador                                             infotime_situacao_colaborador[]
   infotime_convenio                                                         infotime_convenio[]
   infotime_convenio_autorizador                                             infotime_convenio_autorizador[]
   infotime_convenio_contato                                                 infotime_convenio_contato[]
@@ -183,6 +186,9 @@ model infotime_usuario {
   infotime_versao_tiss                                                                                                                         infotime_versao_tiss[]
   infotime_vet_especie                                                                                                                         infotime_vet_especie[]
   infotime_vet_raca                                                                                                                            infotime_vet_raca[]
+  infotime_colaborador                                                                                                                         infotime_colaborador[]
+  infotime_tipo_colaborador                                                                                                                    infotime_tipo_colaborador[]
+  infotime_situacao_colaborador                                                                                                                infotime_situacao_colaborador[]
   @@map("infotime_usuario")
 }
 
@@ -411,6 +417,110 @@ model infotime_fornecedor {
   lancamentos_receita           infotime_lancamento_receita[]
 
   @@map("infotime_fornecedor")
+}
+
+/// Tipos de colaborador (CLT/PJ etc.). Ver `docs/liga_infotime_postgres.sql`.
+model infotime_tipo_colaborador {
+  id_tipo_colaborador      BigInt    @id @default(autoincrement())
+  id_tenacidade            BigInt?
+  id_usuario_auditoria     BigInt?
+  descricao                String?   @db.VarChar(255)
+  exige_data_clt           String?   @db.Char(1)
+  endereco_ip_auditoria    String?   @db.VarChar(50)
+  nome_aplicacao_auditoria String?   @db.VarChar(255)
+
+  infotime_tenacidade  infotime_tenacidade?  @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_colaborador_tipo_colaborador_ibfk_1")
+  infotime_usuario     infotime_usuario?     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_tipo_colaborador_tipo_colaborador_ibfk_2")
+  colaboradores        infotime_colaborador[]
+
+  @@map("infotime_tipo_colaborador")
+}
+
+/// Situação do colaborador no cadastro RH. Ver `docs/liga_infotime_postgres.sql`.
+model infotime_situacao_colaborador {
+  id_situacao_colaborador  BigInt    @id @default(autoincrement())
+  id_tenacidade            BigInt?
+  id_usuario_auditoria     BigInt?
+  descricao                String?   @db.VarChar(255)
+  endereco_ip_auditoria    String?   @db.VarChar(50)
+  nome_aplicacao_auditoria String?   @db.VarChar(255)
+
+  infotime_tenacidade  infotime_tenacidade?  @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_situacao_colaborador_situacao_colaborador_ibfk_1")
+  infotime_usuario     infotime_usuario?     @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_situacao_colaborador_situacao_colaborador_ibfk_2")
+  colaboradores        infotime_colaborador[]
+
+  @@map("infotime_situacao_colaborador")
+}
+
+/// Cadastro central de colaborador (RH). Ver `docs/liga_infotime_postgres.sql`.
+model infotime_colaborador {
+  id_colaborador               BigInt    @id @default(autoincrement())
+  id_tenacidade                BigInt?
+  id_tipo_colaborador          BigInt?
+  id_situacao_colaborador      BigInt?
+  id_banco                     BigInt?
+  id_agencia                   BigInt?
+  id_cargo_classificacao_nivel BigInt?
+  id_empresa                   BigInt?
+  id_tipo_estado_civil         BigInt?
+  id_usuario_auditoria         BigInt?
+  numero_conta                String?   @db.VarChar(20)
+  nome                         String?   @db.VarChar(255)
+  apelido                      String?   @db.VarChar(50)
+  login                        String?   @db.VarChar(100)
+  senha                        String?   @db.VarChar(100)
+  sexo                         String?   @db.Char(1)
+  data_nascimento              DateTime? @db.Timestamp(6)
+  data_admissao                DateTime? @db.Timestamp(6)
+  data_demissao                DateTime? @db.Timestamp(6)
+  data_estagio                 DateTime? @db.Timestamp(6)
+  cpf                          String?   @db.VarChar(11)
+  carteira_identidade          String?   @db.VarChar(20)
+  carteira_trabalho            String?   @db.VarChar(20)
+  numero_pis                   String?   @db.VarChar(20)
+  cep                          String?   @db.VarChar(10)
+  tipo_logradouro              String?   @db.VarChar(100)
+  logradouro                   String?   @db.VarChar(100)
+  numero                       String?   @db.VarChar(100)
+  complemento                  String?   @db.VarChar(100)
+  bairro                       String?   @db.VarChar(100)
+  cidade                       String?   @db.VarChar(100)
+  estado                       String?   @db.Char(2)
+  latitude                     Float?    @db.DoublePrecision
+  longitude                    Float?    @db.DoublePrecision
+  telefone                     String?   @db.VarChar(50)
+  celular                      String?   @db.VarChar(50)
+  pix                          String?   @db.VarChar(50)
+  email                        String?   @db.VarChar(100)
+  contatos                     String?   @db.VarChar(255)
+  hora_trabalho_entrada        DateTime? @db.Timestamp(6)
+  hora_trabalho_saida          DateTime? @db.Timestamp(6)
+  hora_almoco_inicio           DateTime? @db.Timestamp(6)
+  hora_almoco_fim              DateTime? @db.Timestamp(6)
+  trabalha_sabado              String?   @db.Char(1)
+  trabalha_domingo             String?   @db.Char(1)
+  regime_trabalho              String?   @db.Char(1)
+  vale_alimentacao             Decimal?  @db.Decimal(10, 2)
+  vale_transporte            Decimal?  @db.Decimal(10, 2)
+  foto                         Bytes?
+  numero_antigo                BigInt?
+  observacoes                  String?
+  salario                      Decimal?  @db.Decimal(10, 2)
+  comissao                     Decimal?  @db.Decimal(10, 2)
+  insalubridade                Decimal?  @db.Decimal(10, 2)
+  implanta                     String?   @db.Char(1)
+  lider_implantacao            String?   @db.Char(1)
+  consultor_implantacao        String?   @db.Char(1)
+  lista_pop_documento          String?   @db.VarChar(255)
+  endereco_ip_auditoria        String?   @db.VarChar(50)
+  nome_aplicacao_auditoria     String?   @db.VarChar(255)
+
+  infotime_tenacidade            infotime_tenacidade?            @relation(fields: [id_tenacidade], references: [id_tenacidade], onDelete: Restrict, onUpdate: Restrict, map: "fk_colaborador_colaborador_ibfk_1")
+  infotime_tipo_colaborador      infotime_tipo_colaborador?      @relation(fields: [id_tipo_colaborador], references: [id_tipo_colaborador], onDelete: Restrict, onUpdate: Restrict, map: "fk_colaborador_colaborador_ibfk_2")
+  infotime_situacao_colaborador  infotime_situacao_colaborador?  @relation(fields: [id_situacao_colaborador], references: [id_situacao_colaborador], onDelete: Restrict, onUpdate: Restrict, map: "fk_colaborador_colaborador_ibfk_3")
+  infotime_usuario               infotime_usuario?               @relation(fields: [id_usuario_auditoria], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_colaborador_colaborador_ibfk_8")
+
+  @@map("infotime_colaborador")
 }
 
 /// Contas a pagar (`lancamentodespesa` legado). Ver `docs/liga_infotime_postgres.sql` — `infotime_lancamento_despesa`.

@@ -290,7 +290,9 @@ export function LigaFormularioBase({
     onAposAvancarEtapas,
   ]);
 
-  acoesEtapasRef.current = { avancarEtapa, tentarSelecionarEtapa };
+  useLayoutEffect(() => {
+    acoesEtapasRef.current = { avancarEtapa, tentarSelecionarEtapa };
+  }, [avancarEtapa, tentarSelecionarEtapa]);
 
   useLayoutEffect(() => {
     if (!controleEtapasExternoRef) return;

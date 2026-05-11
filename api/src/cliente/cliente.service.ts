@@ -178,7 +178,10 @@ export class ClienteService {
     qTexto: string,
   ): Prisma.infotime_clienteWhereInput {
     const q = qTexto.trim();
-    const contains = { contains: q, mode: Prisma.QueryMode.insensitive } as const;
+    const contains = {
+      contains: q,
+      mode: Prisma.QueryMode.insensitive,
+    } as const;
     switch (campoPesquisa) {
       case 'nomeFantasia':
         return { nome_fantasia: contains };
@@ -289,7 +292,7 @@ export class ClienteService {
     }
 
     if (partes.length === 0) return {};
-    return partes.length === 1 ? partes[0]! : { AND: partes };
+    return partes.length === 1 ? partes[0] : { AND: partes };
   }
 
   private async carregarMapasDescricao(opts: {
@@ -394,14 +397,20 @@ export class ClienteService {
         ORDER BY descricao NULLS LAST
       `,
       this.prisma.$queryRaw<
-        { id: bigint; nome_fantasia: string | null; nome_sistema: string | null }[]
+        {
+          id: bigint;
+          nome_fantasia: string | null;
+          nome_sistema: string | null;
+        }[]
       >`
         SELECT id_concorrente AS id, nome_fantasia, nome_sistema
         FROM infotime_concorrente
         WHERE id_tenacidade IS NULL OR id_tenacidade = ${idTenacidade}
         ORDER BY nome_fantasia NULLS LAST
       `,
-      this.prisma.$queryRaw<{ id: bigint; nome: string | null; uf: string | null }[]>`
+      this.prisma.$queryRaw<
+        { id: bigint; nome: string | null; uf: string | null }[]
+      >`
         SELECT id_municipio AS id, nome, uf
         FROM infotime_municipio
         WHERE id_tenacidade IS NULL OR id_tenacidade = ${idTenacidade}
@@ -442,8 +451,7 @@ export class ClienteService {
       })),
       municipios: municipios.map((r) => ({
         id: r.id.toString(),
-        rotulo:
-          [r.nome, r.uf].filter(Boolean).join(' / ') || r.id.toString(),
+        rotulo: [r.nome, r.uf].filter(Boolean).join(' / ') || r.id.toString(),
       })),
       regioesEstaduais: regioesEstaduais.map((r) => ({
         id: r.id.toString(),
@@ -502,17 +510,17 @@ export class ClienteService {
       idSituacaoCliente: r.id_situacao_cliente?.toString() ?? null,
       situacaoClienteDescricao:
         r.id_situacao_cliente != null
-          ? maps.situacao.get(r.id_situacao_cliente.toString()) ?? null
+          ? (maps.situacao.get(r.id_situacao_cliente.toString()) ?? null)
           : null,
       idTipoCliente: r.id_tipo_cliente?.toString() ?? null,
       tipoClienteDescricao:
         r.id_tipo_cliente != null
-          ? maps.tipo.get(r.id_tipo_cliente.toString()) ?? null
+          ? (maps.tipo.get(r.id_tipo_cliente.toString()) ?? null)
           : null,
       idClienteCanal: r.id_cliente_canal?.toString() ?? null,
       canalDescricao:
         r.id_cliente_canal != null
-          ? maps.canal.get(r.id_cliente_canal.toString()) ?? null
+          ? (maps.canal.get(r.id_cliente_canal.toString()) ?? null)
           : null,
       unidades: r._count.unidades,
     });
@@ -582,7 +590,9 @@ export class ClienteService {
     let whereExtra: Prisma.infotime_clienteWhereInput = {};
     if (qTexto !== '' && campoPesquisa !== '') {
       if (!camposPesquisa.has(campoPesquisa)) {
-        throw new BadRequestException(`campoPesquisa inválido: ${campoPesquisa}`);
+        throw new BadRequestException(
+          `campoPesquisa inválido: ${campoPesquisa}`,
+        );
       }
       whereExtra = this.whereCampoPesquisa(campoPesquisa, qTexto);
     }
@@ -689,23 +699,27 @@ export class ClienteService {
     if (dto.tipoLogradouro !== undefined) {
       row['tipo_logradouro'] = dto.tipoLogradouro ?? null;
     }
-    if (dto.logradouro !== undefined) row['logradouro'] = dto.logradouro ?? null;
+    if (dto.logradouro !== undefined)
+      row['logradouro'] = dto.logradouro ?? null;
     if (dto.numero !== undefined) row['numero'] = dto.numero ?? null;
-    if (dto.complemento !== undefined) row['complemento'] = dto.complemento ?? null;
+    if (dto.complemento !== undefined)
+      row['complemento'] = dto.complemento ?? null;
     if (dto.bairro !== undefined) row['bairro'] = dto.bairro ?? null;
     if (dto.cidade !== undefined) row['cidade'] = dto.cidade ?? null;
     if (dto.estado !== undefined) row['estado'] = dto.estado ?? null;
     if (dto.latitude !== undefined) row['latitude'] = dto.latitude;
     if (dto.longitude !== undefined) row['longitude'] = dto.longitude;
     if (dto.homepage !== undefined) row['home_page'] = dto.homepage ?? null;
-    if (dto.emiteBoleto !== undefined) row['emite_boleto'] = dto.emiteBoleto ?? null;
+    if (dto.emiteBoleto !== undefined)
+      row['emite_boleto'] = dto.emiteBoleto ?? null;
     const dexp = this.parseDataSomenteDia(dto.dataExpiracao ?? undefined);
     if (dexp !== undefined) row['data_expiracao'] = dexp;
     if (dto.qtdLicenca !== undefined) row['qtd_licenca'] = dto.qtdLicenca;
     if (dto.clientePublico !== undefined) {
       row['cliente_publico'] = dto.clientePublico ?? null;
     }
-    if (dto.observacoes !== undefined) row['observacoes'] = dto.observacoes ?? null;
+    if (dto.observacoes !== undefined)
+      row['observacoes'] = dto.observacoes ?? null;
     if (dto.certificadoRegistro !== undefined) {
       row['certificado_registro'] = dto.certificadoRegistro ?? null;
     }
@@ -741,8 +755,11 @@ export class ClienteService {
 
     const maps = await this.carregarMapasDescricao({
       idsSituacao:
-        registro.id_situacao_cliente != null ? [registro.id_situacao_cliente] : [],
-      idsTipo: registro.id_tipo_cliente != null ? [registro.id_tipo_cliente] : [],
+        registro.id_situacao_cliente != null
+          ? [registro.id_situacao_cliente]
+          : [],
+      idsTipo:
+        registro.id_tipo_cliente != null ? [registro.id_tipo_cliente] : [],
       idsCanal:
         registro.id_cliente_canal != null ? [registro.id_cliente_canal] : [],
       idTenacidade: tenantContexto.idTenacidade,
@@ -757,15 +774,15 @@ export class ClienteService {
 
     json['situacaoClienteDescricao'] =
       registro.id_situacao_cliente != null
-        ? maps.situacao.get(registro.id_situacao_cliente.toString()) ?? null
+        ? (maps.situacao.get(registro.id_situacao_cliente.toString()) ?? null)
         : null;
     json['tipoClienteDescricao'] =
       registro.id_tipo_cliente != null
-        ? maps.tipo.get(registro.id_tipo_cliente.toString()) ?? null
+        ? (maps.tipo.get(registro.id_tipo_cliente.toString()) ?? null)
         : null;
     json['canalDescricao'] =
       registro.id_cliente_canal != null
-        ? maps.canal.get(registro.id_cliente_canal.toString()) ?? null
+        ? (maps.canal.get(registro.id_cliente_canal.toString()) ?? null)
         : null;
 
     return { dados: json };
@@ -829,8 +846,7 @@ export class ClienteService {
       dto.idSituacaoCliente !== undefined
         ? BigInt(dto.idSituacaoCliente)
         : atual.id_situacao_cliente;
-    const cnpjFinal =
-      dto.cnpj !== undefined ? dto.cnpj : atual.cnpj;
+    const cnpjFinal = dto.cnpj !== undefined ? dto.cnpj : atual.cnpj;
     this.validarDocumentoPorSituacao(idSitFinal, cnpjFinal);
 
     await this.assertClienteDevedorNaoReduzExpiracao({

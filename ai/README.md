@@ -63,6 +63,12 @@ O Cursor **não** passa a ler `ai/domains` automaticamente em todo chat. Para a 
 | `OPENAI_CHAT_TEMPERATURE` | Opcional | Padrão: `0.2`. |
 | `AI_DOMAINS_ROOT` | Opcional | Caminho absoluto para a pasta `domains`. Se omitido, a API tenta `../ai/domains` em relação ao diretório de trabalho (tipicamente ao rodar a partir de `api/`). |
 
+### 4.1 Financeiro avançado — migrações em fatias, staging e PRs
+
+- **Migrações:** o schema financeiro evolui em **fatias** ordenadas em `api/prisma/migrations/` (`20260520100000` … `20260520100600`, prefixo `financeiro_fatia_*`). Cada `migration.sql` é idempotente onde faz sentido (`IF NOT EXISTS`, `ADD COLUMN IF NOT EXISTS`) e aplica **RLS + GRANTs** na mesma fatia que cria tabelas com `id_tenacidade`.
+- **Staging (smoke):** em homologação, após `npm run prisma:migrate:deploy -w api` (ou `prisma migrate deploy` na pasta `api/`), correr `API_SMOKE_URL=… API_SMOKE_TOKEN=… npm run smoke:financeiro -w api` (opcional: `SMOKE_STRICT=1` para exigir também `/financeiro/aging`, `/financeiro/dre` e `/financeiro/regua/cobranca`). Validar ainda jobs/filas (Redis/BullMQ) se estiverem ativos no ambiente.
+- **PRs pequenos:** preferir um PR por fatia (ou fatia + código que a consome), em vez de um único PR monolítico com todas as tabelas e todos os módulos — revisão e rollback mais seguros.
+
 ---
 
 ## 5. Desenvolvimento: fluxo do dia a dia

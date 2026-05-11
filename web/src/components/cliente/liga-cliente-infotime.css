@@ -1,13 +1,9 @@
+/**
+ * Folga inferior da página do módulo. Tokens de campo estão em `.liga-formulario`
+ * (`liga-formulario-base.css`) quando o fluxo usa `LigaFormularioBase`.
+ */
 .liga-cliente-infotime-painel {
   padding-bottom: 2rem;
-  /** Espaçamento horizontal/vertical entre campos dos grids do formulário (padronizado). */
-  --liga-cli-form-gap-col: 0.5rem;
-  --liga-cli-form-gap-row: 0.35rem;
-  /**
-   * Entre linhas horizontais de campos (ex.: L1↔L2 do grid de Identificação).
-   * Todas as seções do formulário cliente usam este token para row-gap e margens verticais entre blocos.
-   */
-  --liga-cli-form-entre-linhas: var(--liga-cli-form-gap-row);
 }
 
 /** Linha única do módulo: título (shell) + portal das ações da listagem (Exportar / Novo). */
@@ -687,6 +683,13 @@ html[data-theme="dark"] .liga-cliente-infotime-form--inclusao .liga-formulario-s
   /** Igual ao espaço label↔controle nos demais campos (`--liga-cli-form-gap-row`). */
   gap: var(--liga-cli-form-gap-row);
   overflow: hidden;
+  /**
+   * Mapa embutido (OSM): altura herdada pelos filhos `.liga-cliente-infotime-endereco-mapa-iframe-casca`
+   * e `.liga-cliente-infotime-endereco-mapa-vazio`. Limitada em rem + vh para não empurrar barra de
+   * rolagem extra no `.liga-formulario-main` (overflow-y: auto). Pode sobrescrever por formulário.
+   */
+  --liga-inf-mapa-embed-h: min(calc(17rem - 6px), calc(36vh - 6px));
+  --liga-inf-mapa-embed-max: calc(19rem - 6px);
 }
 
 .liga-cliente-infotime-endereco-mapa-label-linha {
@@ -718,7 +721,23 @@ html[data-theme="dark"] .liga-cliente-infotime-form--inclusao .liga-formulario-s
   justify-content: center;
 }
 
-/** Mapa embutido: altura um pouco maior após o entre-linhas compacto; ainda capada para evitar rolagem em `.liga-formulario-main`. */
+/** Mapa embutido: usa `--liga-inf-mapa-embed-h` / `--liga-inf-mapa-embed-max` definidos no wrap. */
+.liga-cliente-infotime-endereco-mapa-iframe-casca:not(
+    .liga-cliente-infotime-endereco-mapa-iframe-casca--dialog
+  ) {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--liga-borda-suave, #dee2e6);
+  border-radius: var(--p-border-radius-md, 6px);
+  height: var(
+    --liga-inf-mapa-embed-h,
+    min(calc(17rem - 6px), calc(36vh - 6px))
+  );
+  max-height: var(--liga-inf-mapa-embed-max, calc(19rem - 6px));
+}
+
 .liga-cliente-infotime-endereco-mapa-iframe-casca {
   width: 100%;
   overflow: hidden;
@@ -726,8 +745,6 @@ html[data-theme="dark"] .liga-cliente-infotime-form--inclusao .liga-formulario-s
   box-sizing: border-box;
   border: 1px solid var(--liga-borda-suave, #dee2e6);
   border-radius: var(--p-border-radius-md, 6px);
-  height: min(calc(12.35rem - 6px), calc(26vh - 6px));
-  max-height: calc(13.65rem - 6px);
 }
 
 .liga-cliente-infotime-endereco-mapa-iframe-casca--dialog {
@@ -750,14 +767,20 @@ html[data-theme="dark"] .liga-cliente-infotime-form--inclusao .liga-formulario-s
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  height: min(calc(12.35rem - 6px), calc(26vh - 6px));
-  max-height: calc(13.65rem - 6px);
   padding: 1rem;
   border: 1px dashed var(--liga-borda-suave, #dee2e6);
   border-radius: var(--p-border-radius-md, 6px);
   color: var(--text-color-secondary, #6c757d);
   font-size: 0.9rem;
   text-align: center;
+}
+
+.liga-cliente-infotime-endereco-mapa-vazio:not(.liga-cliente-infotime-endereco-mapa-vazio--dialog) {
+  height: var(
+    --liga-inf-mapa-embed-h,
+    min(calc(17rem - 6px), calc(36vh - 6px))
+  );
+  max-height: var(--liga-inf-mapa-embed-max, calc(19rem - 6px));
 }
 
 .liga-cliente-infotime-endereco-mapa-vazio--dialog {
@@ -889,7 +912,7 @@ html[data-theme="dark"] .liga-cliente-infotime-form--inclusao .liga-formulario-s
 .liga-cliente-infotime-radio-linha {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--liga-cli-form-gap-col);
   flex-wrap: wrap;
 }
 
@@ -919,18 +942,9 @@ html[data-theme="dark"] .liga-cliente-infotime-form--inclusao .liga-formulario-s
   flex-wrap: wrap;
 }
 
+/** Combinar com `liga-padrao-badge` (layout intrínseco ao rótulo). */
 .liga-cliente-infotime-situacao-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 5.25rem;
-  padding: 0.12rem 0.55rem;
-  border-radius: 999px;
-  font-size: 0.76rem;
-  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  border: 1px solid transparent;
 }
 
 .liga-cliente-infotime-situacao-badge--ativo {

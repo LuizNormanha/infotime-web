@@ -92,7 +92,7 @@ export class GrupoPerfilService {
     }
 
     if (partes.length === 0) return {};
-    return partes.length === 1 ? partes[0]! : { AND: partes };
+    return partes.length === 1 ? partes[0] : { AND: partes };
   }
 
   private fatiarIp(ip: string): string {
@@ -136,7 +136,9 @@ export class GrupoPerfilService {
     validarMenuJson(menu);
     const idFormMenu = await this.idFormularioMenu(tx);
     if (!idFormMenu) {
-      throw new NotFoundException('Formulário "menu" não encontrado no catálogo.');
+      throw new NotFoundException(
+        'Formulário "menu" não encontrado no catálogo.',
+      );
     }
     const json = serializarConfiguracaoMenu(menu);
     await tx.infotime_layout_formulario.upsert({
@@ -294,10 +296,10 @@ export class GrupoPerfilService {
     const ten = registro.infotime_tenacidade;
     const cfgs = ten?.infotime_tenacidade_configuracao ?? [];
     const cfg =
-      cfgs.find((c) => (c.dominio_tenacidade ?? "").trim()) ?? cfgs[0];
+      cfgs.find((c) => (c.dominio_tenacidade ?? '').trim()) ?? cfgs[0];
     const nomeTen =
-      (cfg?.nome_fantasia ?? "").trim() ||
-      (cfg?.razao_social ?? "").trim() ||
+      (cfg?.nome_fantasia ?? '').trim() ||
+      (cfg?.razao_social ?? '').trim() ||
       null;
 
     return {

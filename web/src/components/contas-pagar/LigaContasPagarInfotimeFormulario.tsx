@@ -174,6 +174,8 @@ export function LigaContasPagarInfotimeFormulario({
   const [campos, setCampos] = useState<CamposContasPagar>(camposVazio);
   const [auditoriaLinhas, setAuditoriaLinhas] = useState<{ label: string; valor: string }[]>([]);
   const [arquivosLinhas, setArquivosLinhas] = useState<{ label: string; valor: string }[]>([]);
+  /** Mensagens de validação rejeitadas pela API (exibidas no topo do formulário). */
+  const [mensagemErroRespostaApi, setMensagemErroRespostaApi] = useState<string | null>(null);
 
   useEffect(() => {
     const ac = new AbortController();
@@ -376,6 +378,7 @@ export function LigaContasPagarInfotimeFormulario({
       return;
     }
     setSalvando(true);
+    setMensagemErroRespostaApi(null);
     try {
       const corpo = montarPayload(campos);
       const url = idLancamentoDespesa
@@ -388,22 +391,24 @@ export function LigaContasPagarInfotimeFormulario({
         body: JSON.stringify(corpo),
       });
       if (!res.ok) {
-        const corpoErro = await res.json().catch(() => ({}));
+        const corpoErro = (await res.json().catch(() => ({}))) as Record<string, unknown>;
         const { campos: errosApi, global } = traduzirErrosValidacaoParaFormulario(
           corpoErro,
           (key, values) => tValidacao(key, values),
         );
-        if (Object.keys(errosApi).length > 0) {
-          feedback.aviso(tFeedback("toastValidacaoCampos"));
-        } else {
-          feedback.erroDetalhado(
-            tFeedback("toastFalhaOperacao"),
-            global ?? (typeof corpoErro.message === "string" ? corpoErro.message : ""),
-          );
+        const detalhePorCampo = Object.values(errosApi).filter(Boolean).join("\n");
+        if (detalhePorCampo) {
+          setMensagemErroRespostaApi(detalhePorCampo);
+          feedback.erroDetalhado(tFeedback("toastValidacaoCampos"), detalhePorCampo);
+          return;
         }
-        void errosApi;
+        const fallback =
+          global ?? (typeof corpoErro.message === "string" ? corpoErro.message : "");
+        setMensagemErroRespostaApi(fallback.trim() ? fallback : null);
+        feedback.erroDetalhado(tFeedback("toastFalhaOperacao"), fallback);
         return;
       }
+      setMensagemErroRespostaApi(null);
       feedback.salvo();
       if (idLancamentoDespesa) {
         aoSalvo(idLancamentoDespesa);
@@ -611,6 +616,7 @@ export function LigaContasPagarInfotimeFormulario({
         tituloComBarraVerde
         iconeTitulo="pi-minus-circle"
         temLegendaCamposObrigatorios
+        mensagemErroGlobal={mensagemErroRespostaApi}
         secaoInicialId="identificacao"
         barraAcoes={
           <div className="liga-cliente-infotime-form-barra-acoes">

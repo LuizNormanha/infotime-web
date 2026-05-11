@@ -132,7 +132,7 @@ export class UsuarioPermissoesService {
     }
 
     if (partes.length === 0) return {};
-    return partes.length === 1 ? partes[0]! : { AND: partes };
+    return partes.length === 1 ? partes[0] : { AND: partes };
   }
 
   async listar(

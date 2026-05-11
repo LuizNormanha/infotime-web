@@ -606,7 +606,11 @@ export function LigaClienteInfotimeFormulario({
             return next;
           });
         })
-        .catch(() => {});
+        .catch((err: unknown) => {
+          if (process.env.NODE_ENV === "development") {
+            console.warn("[ViaCEP cliente]", err);
+          }
+        });
     }, 450);
     return () => {
       window.clearTimeout(atraso);
@@ -969,7 +973,7 @@ export function LigaClienteInfotimeFormulario({
       {situacaoSelecionada ? (
         <span className="liga-cliente-infotime-titulo-item liga-cliente-infotime-titulo-item--situacao">
           <span
-            className={`liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--${normalizarSituacaoTag(situacaoSelecionada)}`}
+            className={`liga-padrao-badge liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--${normalizarSituacaoTag(situacaoSelecionada)}`}
           >
             {situacaoSelecionada}
           </span>

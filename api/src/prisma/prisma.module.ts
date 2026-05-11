@@ -37,7 +37,7 @@ function nomeBancoDaUrl(url: string): string {
           throw err;
         });
         // Runtime = cliente estendido (RLS); ver tipo `AppPrismaService` em prisma.service.ts.
-        return attachPrismaLifecycle(client) as unknown as PrismaService;
+        return attachPrismaLifecycle(client);
       },
     },
   ],

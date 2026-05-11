@@ -1,0 +1,57 @@
+/**
+ * Badge pill padrão Infotime: largura intrínseca ao rótulo + padding horizontal fixo.
+ * Combinar sempre com a classe de cor do módulo (ex.: `liga-cliente-infotime-situacao-badge--ativo`).
+ */
+:root {
+  --liga-badge-padrao-padding-y: 0.12rem;
+  --liga-badge-padrao-padding-x: 0.65rem;
+  --liga-badge-padrao-font-size: 0.76rem;
+  --liga-badge-padrao-font-weight: 700;
+  --liga-badge-padrao-letter-spacing: 0.03em;
+  --liga-badge-padrao-radius: 999px;
+}
+
+.liga-padrao-badge {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: fit-content;
+  max-width: 100%;
+  padding: var(--liga-badge-padrao-padding-y) var(--liga-badge-padrao-padding-x);
+  border-radius: var(--liga-badge-padrao-radius);
+  font-size: var(--liga-badge-padrao-font-size);
+  font-weight: var(--liga-badge-padrao-font-weight);
+  letter-spacing: var(--liga-badge-padrao-letter-spacing);
+  line-height: 1.2;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-transform: none;
+}
+
+/**
+ * Dropdown cujas opções são badges: largura do painel = maior opção;
+ * cada badge estica para a mesma largura (lista vertical).
+ */
+.p-dropdown-panel.liga-padrao-badge-lookup-panel--largura-igual .p-dropdown-items {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 100%;
+}
+
+.p-dropdown-panel.liga-padrao-badge-lookup-panel--largura-igual .p-dropdown-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.p-dropdown-panel.liga-padrao-badge-lookup-panel--largura-igual .p-dropdown-item .liga-padrao-badge {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}

@@ -33,10 +33,14 @@ function badgeSituacaoCliente(valor: unknown) {
   const tipo = normalizarSituacao(valor);
   return createElement(
     "span",
-    {
-      className: `liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--${tipo}`,
-    },
-    texto,
+    { "data-liga-badge-coluna": "cliente-situacao" },
+    createElement(
+      "span",
+      {
+        className: `liga-padrao-badge liga-cliente-infotime-situacao-badge liga-cliente-infotime-situacao-badge--${tipo}`,
+      },
+      texto,
+    ),
   );
 }
 

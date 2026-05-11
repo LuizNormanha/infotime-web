@@ -8,6 +8,7 @@ import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/lara-light-green/theme.css";
 import "primeicons/primeicons.css";
 import "@/components/ui/tema/liga-tema.css";
+import "@/components/ui/badge/liga-padrao-badge.css";
 import "./globals.css";
 
 export const metadata: Metadata = {

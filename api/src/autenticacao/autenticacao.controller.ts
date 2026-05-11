@@ -162,7 +162,10 @@ export class ControladorAutenticacao {
   }
 
   @Get('permissoes-perfil')
-  async permissoesPerfil(@UsuarioAtual() idUsuario: bigint, @Req() req: Request) {
+  async permissoesPerfil(
+    @UsuarioAtual() idUsuario: bigint,
+    @Req() req: Request,
+  ) {
     const ehSuporte = (req['user'] as { suporte?: boolean }).suporte === true;
     return this.servico.listarPermissoesPerfilUsuario(idUsuario, ehSuporte);
   }
