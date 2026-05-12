@@ -29,11 +29,34 @@ export type UseListagemCrudServidorOptions = {
   aoFalhaCarregar?: () => void;
 };
 
-/** Resposta típica dos endpoints de listagem CRUD Infotime. */
-type RespostaListagemJson = {
-  dados?: Record<string, unknown>[];
-  total?: number;
-};
+/**
+ * Normaliza `{ dados, total }` após `JSON.parse`.
+ * `total` pode vir como string ou ausente; no DataTable em modo lazy, `totalRegistros === 0`
+ * com linhas na página faz a grelha aparecer vazia.
+ */
+export function normalizarRespostaListagemJson(json: unknown): {
+  dados: Record<string, unknown>[];
+  total: number;
+} {
+  const o = json != null && typeof json === "object" ? (json as Record<string, unknown>) : {};
+  const rawDados = o["dados"];
+  const dados = Array.isArray(rawDados) ? (rawDados as Record<string, unknown>[]) : [];
+
+  const rawTotal = o["total"];
+  let total = 0;
+  if (typeof rawTotal === "number" && Number.isFinite(rawTotal)) {
+    total = rawTotal;
+  } else if (typeof rawTotal === "string") {
+    const t = Number.parseInt(rawTotal.trim(), 10);
+    if (Number.isFinite(t)) total = t;
+  }
+
+  if (dados.length > 0 && total === 0) {
+    total = dados.length;
+  }
+
+  return { dados, total };
+}
 
 function mesclarQueryNaUrl(resourcePath: string, params: URLSearchParams): string {
   const qMark = resourcePath.indexOf("?");
@@ -127,11 +150,10 @@ export function useListagemCrudServidor({
       fetch(url, { signal: sinal })
         .then(async (res) => {
           if (!res.ok) throw new Error();
-          const json = (await res.json()) as RespostaListagemJson;
-          setRegistros(Array.isArray(json.dados) ? json.dados : []);
-          setTotalRegistros(
-            typeof json.total === "number" ? json.total : json.dados?.length ?? 0,
-          );
+          const json: unknown = await res.json();
+          const { dados, total } = normalizarRespostaListagemJson(json);
+          setRegistros(dados);
+          setTotalRegistros(total);
         })
         .catch((e: unknown) => {
           if (e instanceof DOMException && e.name === "AbortError") return;
@@ -164,9 +186,10 @@ export function useListagemCrudServidor({
       fetch(url, { signal: sinal })
         .then(async (res) => {
           if (!res.ok) throw new Error();
-          const json = (await res.json()) as RespostaListagemJson;
-          setRegistros(Array.isArray(json.dados) ? json.dados : []);
-          setTotalRegistros(typeof json.total === "number" ? json.total : 0);
+          const json: unknown = await res.json();
+          const { dados, total } = normalizarRespostaListagemJson(json);
+          setRegistros(dados);
+          setTotalRegistros(total);
         })
         .catch((e: unknown) => {
           if (e instanceof DOMException && e.name === "AbortError") return;

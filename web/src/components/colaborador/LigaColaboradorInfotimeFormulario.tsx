@@ -1060,7 +1060,7 @@ export function LigaColaboradorInfotimeFormulario({
               placeholder={t("selecione")}
             />
           </div>
-          <div className="liga-cliente-infotime-campo-primeira-linha">
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha1-slot-login liga-colaborador-infotime-ident-slot-input-cpf-largura">
             <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-login">
               {t("login")}
             </label>
@@ -1072,7 +1072,7 @@ export function LigaColaboradorInfotimeFormulario({
             />
           </div>
           {idColaborador ? (
-            <div className="liga-cliente-infotime-campo-primeira-linha">
+            <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha1-slot-id">
               <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-id">
                 {t("idColaborador")}
               </label>
@@ -1121,18 +1121,26 @@ export function LigaColaboradorInfotimeFormulario({
               showClear
             />
           </div>
-          <div className="liga-cliente-infotime-campo-primeira-linha">
-            <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-empresa">
-              {t("empresa")}
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha2-slot-datanasc">
+            <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-datanasc">
+              {t("dataNascimento")}
             </label>
-            <Dropdown
-              id="liga-colab-empresa"
-              className="w-full"
-              value={campos.idEmpresa || null}
-              options={optsEmpresa}
-              onChange={(e) => setCampos((p) => ({ ...p, idEmpresa: String(e.value ?? "") }))}
-              placeholder={t("selecione")}
-              showClear
+            <input
+              id="liga-colab-datanasc"
+              type="date"
+              className="p-inputtext p-component w-full"
+              value={
+                campos.dataNascimento
+                  ? `${campos.dataNascimento.getUTCFullYear()}-${String(campos.dataNascimento.getUTCMonth() + 1).padStart(2, "0")}-${String(campos.dataNascimento.getUTCDate()).padStart(2, "0")}`
+                  : ""
+              }
+              onChange={(e) => {
+                const v = e.target.value;
+                setCampos((p) => ({
+                  ...p,
+                  dataNascimento: v ? parseDataApi(v) : null,
+                }));
+              }}
             />
           </div>
           {!idColaborador ? (
@@ -1151,13 +1159,7 @@ export function LigaColaboradorInfotimeFormulario({
               />
             </div>
           ) : null}
-          <div
-            className={
-              idColaborador
-                ? "liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha2-email-login-ate-id liga-colaborador-infotime-ident-linha2-slot-cpf-fim"
-                : "liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha2-email-desde-login liga-colaborador-infotime-ident-linha2-slot-cpf-fim"
-            }
-          >
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha2-slot-cpf liga-colaborador-infotime-ident-slot-input-cpf-largura">
             <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-doc-cpf">
               {t("cpf")}
             </label>
@@ -1177,6 +1179,26 @@ export function LigaColaboradorInfotimeFormulario({
               }
             />
           </div>
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha2-slot-pis">
+            <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-doc-pis">
+              {t("pis")}
+            </label>
+            <InputMask
+              id="liga-colab-doc-pis"
+              mask="999.99999.99-9"
+              unmask
+              autoClear={false}
+              className="w-full"
+              inputMode="numeric"
+              value={campos.numeroPis.replace(/\D/g, "").slice(0, 11)}
+              onChange={(e) =>
+                setCampos((p) => ({
+                  ...p,
+                  numeroPis: digitosMascaraPis(String(e.value ?? "")),
+                }))
+              }
+            />
+          </div>
         </div>
         <div
           className={
@@ -1185,7 +1207,7 @@ export function LigaColaboradorInfotimeFormulario({
               : "liga-colaborador-infotime-ident-linha3 liga-colaborador-infotime-ident-linha3--4col"
           }
         >
-          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha3-email-primeiro">
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha3-slot-email">
             <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-email">
               {t("email")}
             </label>
@@ -1196,7 +1218,21 @@ export function LigaColaboradorInfotimeFormulario({
               onChange={(e) => setCampos((p) => ({ ...p, email: e.target.value }))}
             />
           </div>
-          <div className="liga-cliente-infotime-campo-primeira-linha">
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha3-slot-empresa">
+            <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-empresa">
+              {t("empresa")}
+            </label>
+            <Dropdown
+              id="liga-colab-empresa"
+              className="w-full"
+              value={campos.idEmpresa || null}
+              options={optsEmpresa}
+              onChange={(e) => setCampos((p) => ({ ...p, idEmpresa: String(e.value ?? "") }))}
+              placeholder={t("selecione")}
+              showClear
+            />
+          </div>
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha3-slot-rg">
             <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-doc-rg">
               {t("rg")}
             </label>
@@ -1216,7 +1252,7 @@ export function LigaColaboradorInfotimeFormulario({
               }
             />
           </div>
-          <div className="liga-cliente-infotime-campo-primeira-linha">
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-ident-linha3-slot-ctps">
             <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-doc-ctps">
               {t("ctps")}
             </label>
@@ -1232,26 +1268,6 @@ export function LigaColaboradorInfotimeFormulario({
                 setCampos((p) => ({
                   ...p,
                   carteiraTrabalho: digitosMascaraCtps(String(e.value ?? "")),
-                }))
-              }
-            />
-          </div>
-          <div className="liga-cliente-infotime-campo-primeira-linha">
-            <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-doc-pis">
-              {t("pis")}
-            </label>
-            <InputMask
-              id="liga-colab-doc-pis"
-              mask="999.99999.99-9"
-              unmask
-              autoClear={false}
-              className="w-full"
-              inputMode="numeric"
-              value={campos.numeroPis.replace(/\D/g, "").slice(0, 11)}
-              onChange={(e) =>
-                setCampos((p) => ({
-                  ...p,
-                  numeroPis: digitosMascaraPis(String(e.value ?? "")),
                 }))
               }
             />
@@ -1348,297 +1364,273 @@ export function LigaColaboradorInfotimeFormulario({
     titulo: t("abaTrabalho"),
     icone: "pi-briefcase",
     conteudo: (
-      <div className="liga-cliente-infotime-form-ident-secao liga-cliente-infotime-form-ident-grid">
-        <div className="liga-cliente-infotime-campo-primeira-linha liga-cliente-infotime-form-span-2">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("cargo")}</label>
-          <Dropdown
-            className="w-full"
-            value={campos.idCargoClassificacaoNivel || null}
-            options={optsCargo}
-            onChange={(e) =>
-              setCampos((p) => ({ ...p, idCargoClassificacaoNivel: String(e.value ?? "") }))
-            }
-            placeholder={t("selecione")}
-            filter
-            showClear
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("dataAdmissao")}</label>
-          <input
-            type="date"
-            className="p-inputtext p-component w-full"
-            value={
-              campos.dataAdmissao
-                ? `${campos.dataAdmissao.getUTCFullYear()}-${String(campos.dataAdmissao.getUTCMonth() + 1).padStart(2, "0")}-${String(campos.dataAdmissao.getUTCDate()).padStart(2, "0")}`
-                : ""
-            }
-            onChange={(e) => {
-              const v = e.target.value;
-              setCampos((p) => ({
-                ...p,
-                dataAdmissao: v ? parseDataApi(v) : null,
-              }));
-            }}
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("dataDemissao")}</label>
-          <input
-            type="date"
-            className="p-inputtext p-component w-full"
-            value={
-              campos.dataDemissao
-                ? `${campos.dataDemissao.getUTCFullYear()}-${String(campos.dataDemissao.getUTCMonth() + 1).padStart(2, "0")}-${String(campos.dataDemissao.getUTCDate()).padStart(2, "0")}`
-                : ""
-            }
-            onChange={(e) => {
-              const v = e.target.value;
-              setCampos((p) => ({
-                ...p,
-                dataDemissao: v ? parseDataApi(v) : null,
-              }));
-            }}
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("dataEstagio")}</label>
-          <input
-            type="date"
-            className="p-inputtext p-component w-full"
-            value={
-              campos.dataEstagio
-                ? `${campos.dataEstagio.getUTCFullYear()}-${String(campos.dataEstagio.getUTCMonth() + 1).padStart(2, "0")}-${String(campos.dataEstagio.getUTCDate()).padStart(2, "0")}`
-                : ""
-            }
-            onChange={(e) => {
-              const v = e.target.value;
-              setCampos((p) => ({
-                ...p,
-                dataEstagio: v ? parseDataApi(v) : null,
-              }));
-            }}
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("dataNascimento")}</label>
-          <input
-            type="date"
-            className="p-inputtext p-component w-full"
-            value={
-              campos.dataNascimento
-                ? `${campos.dataNascimento.getUTCFullYear()}-${String(campos.dataNascimento.getUTCMonth() + 1).padStart(2, "0")}-${String(campos.dataNascimento.getUTCDate()).padStart(2, "0")}`
-                : ""
-            }
-            onChange={(e) => {
-              const v = e.target.value;
-              setCampos((p) => ({
-                ...p,
-                dataNascimento: v ? parseDataApi(v) : null,
-              }));
-            }}
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha liga-cliente-infotime-form-span-2">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("regimeTrabalho")}</label>
-          <Dropdown
-            className="w-full"
-            value={campos.regimeTrabalho || null}
-            options={REGIME_OPCOES}
-            onChange={(e) => setCampos((p) => ({ ...p, regimeTrabalho: String(e.value ?? "") }))}
-            placeholder={t("selecione")}
-            showClear
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("horaEntrada")}</label>
-          <InputMask
-            className="w-full"
-            mask="99:99"
-            value={campos.horaTrabalhoEntrada}
-            onChange={(e) => setCampos((p) => ({ ...p, horaTrabalhoEntrada: e.value ?? "" }))}
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("horaSaida")}</label>
-          <InputMask
-            className="w-full"
-            mask="99:99"
-            value={campos.horaTrabalhoSaida}
-            onChange={(e) => setCampos((p) => ({ ...p, horaTrabalhoSaida: e.value ?? "" }))}
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("almocoInicio")}</label>
-          <InputMask
-            className="w-full"
-            mask="99:99"
-            value={campos.horaAlmocoInicio}
-            onChange={(e) => setCampos((p) => ({ ...p, horaAlmocoInicio: e.value ?? "" }))}
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("almocoFim")}</label>
-          <InputMask
-            className="w-full"
-            mask="99:99"
-            value={campos.horaAlmocoFim}
-            onChange={(e) => setCampos((p) => ({ ...p, horaAlmocoFim: e.value ?? "" }))}
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-sab">
-            {t("trabalhaSabado")}
-          </label>
-          <div className="liga-cliente-infotime-char1-switch">
-            <InputSwitch
-              inputId="liga-colab-sab"
-              checked={campos.trabalhaSabado}
-              onChange={(e) =>
-                setCampos((p) => ({ ...p, trabalhaSabado: Boolean(e.value) }))
+      <div className="liga-cliente-infotime-form-ident-secao liga-colaborador-infotime-trabalho-secao">
+        <div className="liga-colaborador-infotime-trabalho-alinha-l1-l2">
+          <div className="liga-cliente-infotime-form-ident-grid liga-colaborador-infotime-trabalho-linha-datas">
+          <div className="liga-colaborador-infotime-trabalho-slot-cargo">
+            <div className="liga-cliente-infotime-campo-primeira-linha">
+              <label className="liga-cliente-infotime-primeira-linha-label">{t("cargo")}</label>
+              <Dropdown
+                className="w-full"
+                value={campos.idCargoClassificacaoNivel || null}
+                options={optsCargo}
+                onChange={(e) =>
+                  setCampos((p) => ({ ...p, idCargoClassificacaoNivel: String(e.value ?? "") }))
+                }
+                placeholder={t("selecione")}
+                filter
+                showClear
+              />
+            </div>
+          </div>
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-trabalho-slot-data">
+            <label className="liga-cliente-infotime-primeira-linha-label">{t("dataAdmissao")}</label>
+            <input
+              type="date"
+              className="p-inputtext p-component w-full"
+              value={
+                campos.dataAdmissao
+                  ? `${campos.dataAdmissao.getUTCFullYear()}-${String(campos.dataAdmissao.getUTCMonth() + 1).padStart(2, "0")}-${String(campos.dataAdmissao.getUTCDate()).padStart(2, "0")}`
+                  : ""
               }
+              onChange={(e) => {
+                const v = e.target.value;
+                setCampos((p) => ({
+                  ...p,
+                  dataAdmissao: v ? parseDataApi(v) : null,
+                }));
+              }}
+            />
+          </div>
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-trabalho-slot-data">
+            <label className="liga-cliente-infotime-primeira-linha-label">{t("dataDemissao")}</label>
+            <input
+              type="date"
+              className="p-inputtext p-component w-full"
+              value={
+                campos.dataDemissao
+                  ? `${campos.dataDemissao.getUTCFullYear()}-${String(campos.dataDemissao.getUTCMonth() + 1).padStart(2, "0")}-${String(campos.dataDemissao.getUTCDate()).padStart(2, "0")}`
+                  : ""
+              }
+              onChange={(e) => {
+                const v = e.target.value;
+                setCampos((p) => ({
+                  ...p,
+                  dataDemissao: v ? parseDataApi(v) : null,
+                }));
+              }}
+            />
+          </div>
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-trabalho-slot-data">
+            <label className="liga-cliente-infotime-primeira-linha-label">{t("dataEstagio")}</label>
+            <input
+              type="date"
+              className="p-inputtext p-component w-full"
+              value={
+                campos.dataEstagio
+                  ? `${campos.dataEstagio.getUTCFullYear()}-${String(campos.dataEstagio.getUTCMonth() + 1).padStart(2, "0")}-${String(campos.dataEstagio.getUTCDate()).padStart(2, "0")}`
+                  : ""
+              }
+              onChange={(e) => {
+                const v = e.target.value;
+                setCampos((p) => ({
+                  ...p,
+                  dataEstagio: v ? parseDataApi(v) : null,
+                }));
+              }}
+            />
+          </div>
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-trabalho-slot-regime">
+            <label className="liga-cliente-infotime-primeira-linha-label">{t("regimeTrabalho")}</label>
+            <Dropdown
+              className="w-full"
+              value={campos.regimeTrabalho || null}
+              options={REGIME_OPCOES}
+              onChange={(e) => setCampos((p) => ({ ...p, regimeTrabalho: String(e.value ?? "") }))}
+              placeholder={t("selecione")}
+              showClear
             />
           </div>
         </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-dom">
-            {t("trabalhaDomingo")}
-          </label>
-          <div className="liga-cliente-infotime-char1-switch">
-            <InputSwitch
-              inputId="liga-colab-dom"
-              checked={campos.trabalhaDomingo}
-              onChange={(e) =>
-                setCampos((p) => ({ ...p, trabalhaDomingo: Boolean(e.value) }))
-              }
+        <div className="liga-colaborador-infotime-trabalho-horarios-bloco liga-colaborador-infotime-trabalho-horarios-bloco--cargo">
+          <div className="liga-cliente-infotime-campo-primeira-linha">
+            <label className="liga-cliente-infotime-primeira-linha-label">{t("horaEntrada")}</label>
+            <InputMask
+              className="w-full liga-colaborador-infotime-trabalho-input-hora-compacta"
+              mask="99:99"
+              value={campos.horaTrabalhoEntrada}
+              onChange={(e) => setCampos((p) => ({ ...p, horaTrabalhoEntrada: e.value ?? "" }))}
+            />
+          </div>
+          <div className="liga-cliente-infotime-campo-primeira-linha">
+            <label className="liga-cliente-infotime-primeira-linha-label">{t("horaSaida")}</label>
+            <InputMask
+              className="w-full liga-colaborador-infotime-trabalho-input-hora-compacta"
+              mask="99:99"
+              value={campos.horaTrabalhoSaida}
+              onChange={(e) => setCampos((p) => ({ ...p, horaTrabalhoSaida: e.value ?? "" }))}
             />
           </div>
         </div>
-      </div>
-    ),
-  };
-
-  const secSalario: LigaFormularioSecao = {
-    id: "salario",
-    titulo: t("abaSalario"),
-    icone: "pi-dollar",
-    conteudo: (
-      <div className="liga-cliente-infotime-form-ident-secao liga-cliente-infotime-form-ident-grid">
-        <Message severity="info" className="col-12" text={t("abaSalarioAviso")} />
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("salario")}</label>
-          <InputNumber
-            className="w-full"
-            mode="currency"
-            currency="BRL"
-            locale="pt-BR"
-            value={campos.salario}
-            onValueChange={(e) => setCampos((p) => ({ ...p, salario: e.value ?? null }))}
-          />
+        <div className="liga-colaborador-infotime-trabalho-horarios-bloco liga-colaborador-infotime-trabalho-horarios-bloco--adm">
+          <div className="liga-cliente-infotime-campo-primeira-linha">
+            <label className="liga-cliente-infotime-primeira-linha-label">{t("almocoInicio")}</label>
+            <InputMask
+              className="w-full liga-colaborador-infotime-trabalho-input-hora-compacta"
+              mask="99:99"
+              value={campos.horaAlmocoInicio}
+              onChange={(e) => setCampos((p) => ({ ...p, horaAlmocoInicio: e.value ?? "" }))}
+            />
+          </div>
+          <div className="liga-cliente-infotime-campo-primeira-linha">
+            <label className="liga-cliente-infotime-primeira-linha-label">{t("almocoFim")}</label>
+            <InputMask
+              className="w-full liga-colaborador-infotime-trabalho-input-hora-compacta"
+              mask="99:99"
+              value={campos.horaAlmocoFim}
+              onChange={(e) => setCampos((p) => ({ ...p, horaAlmocoFim: e.value ?? "" }))}
+            />
+          </div>
         </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("comissao")}</label>
-          <InputNumber
-            className="w-full"
-            mode="currency"
-            currency="BRL"
-            locale="pt-BR"
-            value={campos.comissao}
-            onValueChange={(e) => setCampos((p) => ({ ...p, comissao: e.value ?? null }))}
-          />
+        <div className="liga-colaborador-infotime-trabalho-horarios-bloco liga-colaborador-infotime-trabalho-horarios-bloco--dem">
+          <div className="liga-cliente-infotime-campo-primeira-linha">
+            <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-sab">
+              {t("trabalhaSabado")}
+            </label>
+            <div className="liga-cliente-infotime-char1-switch">
+              <InputSwitch
+                inputId="liga-colab-sab"
+                checked={campos.trabalhaSabado}
+                onChange={(e) =>
+                  setCampos((p) => ({ ...p, trabalhaSabado: Boolean(e.value) }))
+                }
+              />
+            </div>
+          </div>
+          <div className="liga-cliente-infotime-campo-primeira-linha">
+            <label className="liga-cliente-infotime-primeira-linha-label" htmlFor="liga-colab-dom">
+              {t("trabalhaDomingo")}
+            </label>
+            <div className="liga-cliente-infotime-char1-switch">
+              <InputSwitch
+                inputId="liga-colab-dom"
+                checked={campos.trabalhaDomingo}
+                onChange={(e) =>
+                  setCampos((p) => ({ ...p, trabalhaDomingo: Boolean(e.value) }))
+                }
+              />
+            </div>
+          </div>
         </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("insalubridade")}</label>
-          <InputNumber
-            className="w-full"
-            mode="currency"
-            currency="BRL"
-            locale="pt-BR"
-            value={campos.insalubridade}
-            onValueChange={(e) => setCampos((p) => ({ ...p, insalubridade: e.value ?? null }))}
-          />
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-trabalho-slot-moeda liga-colaborador-infotime-trabalho-slot-moeda--salario">
+            <label className="liga-cliente-infotime-primeira-linha-label">{t("salario")}</label>
+            <InputNumber
+              className="w-full"
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              value={campos.salario}
+              onValueChange={(e) => setCampos((p) => ({ ...p, salario: e.value ?? null }))}
+            />
+          </div>
+          <div className="liga-cliente-infotime-campo-primeira-linha liga-colaborador-infotime-trabalho-slot-moeda liga-colaborador-infotime-trabalho-slot-moeda--comissao">
+            <label className="liga-cliente-infotime-primeira-linha-label">{t("comissao")}</label>
+            <InputNumber
+              className="w-full"
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              value={campos.comissao}
+              onValueChange={(e) => setCampos((p) => ({ ...p, comissao: e.value ?? null }))}
+            />
+          </div>
         </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("valeAlimentacao")}</label>
-          <InputNumber
-            className="w-full"
-            mode="currency"
-            currency="BRL"
-            locale="pt-BR"
-            value={campos.valeAlimentacao}
-            onValueChange={(e) =>
-              setCampos((p) => ({ ...p, valeAlimentacao: e.value ?? null }))
-            }
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("valeTransporte")}</label>
-          <InputNumber
-            className="w-full"
-            mode="currency"
-            currency="BRL"
-            locale="pt-BR"
-            value={campos.valeTransporte}
-            onValueChange={(e) =>
-              setCampos((p) => ({ ...p, valeTransporte: e.value ?? null }))
-            }
-          />
-        </div>
-      </div>
-    ),
-  };
-
-  const secBanco: LigaFormularioSecao = {
-    id: "banco",
-    titulo: t("abaBanco"),
-    icone: "pi-building-columns",
-    conteudo: (
-      <div className="liga-cliente-infotime-form-ident-secao liga-cliente-infotime-form-ident-grid">
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("banco")}</label>
-          <Dropdown
-            className="w-full"
-            value={campos.idBanco || null}
-            options={optsBanco}
-            onChange={(e) =>
-              setCampos((p) => ({
-                ...p,
-                idBanco: String(e.value ?? ""),
-                idAgencia: "",
-              }))
-            }
-            placeholder={t("selecione")}
-            filter
-            showClear
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("agencia")}</label>
-          <Dropdown
-            className="w-full"
-            value={campos.idAgencia || null}
-            options={optsAgencia}
-            onChange={(e) => setCampos((p) => ({ ...p, idAgencia: String(e.value ?? "") }))}
-            placeholder={t("selecione")}
-            filter
-            showClear
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha liga-cliente-infotime-form-span-2">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("numeroConta")}</label>
-          <InputText
-            className="w-full"
-            value={campos.numeroConta}
-            onChange={(e) => setCampos((p) => ({ ...p, numeroConta: e.target.value }))}
-          />
-        </div>
-        <div className="liga-cliente-infotime-campo-primeira-linha liga-cliente-infotime-form-span-2">
-          <label className="liga-cliente-infotime-primeira-linha-label">{t("pix")}</label>
-          <InputText
-            className="w-full"
-            value={campos.pix}
-            onChange={(e) => setCampos((p) => ({ ...p, pix: e.target.value }))}
-          />
+        <div className="liga-colaborador-infotime-trabalho-linha-valores-banco">
+          <div className="liga-colaborador-infotime-trabalho-vb-fila-unica">
+            <div className="liga-cliente-infotime-campo-primeira-linha">
+              <label className="liga-cliente-infotime-primeira-linha-label">{t("insalubridade")}</label>
+              <InputNumber
+                className="w-full"
+                mode="currency"
+                currency="BRL"
+                locale="pt-BR"
+                value={campos.insalubridade}
+                onValueChange={(e) => setCampos((p) => ({ ...p, insalubridade: e.value ?? null }))}
+              />
+            </div>
+            <div className="liga-cliente-infotime-campo-primeira-linha">
+              <label className="liga-cliente-infotime-primeira-linha-label">{t("valeAlimentacao")}</label>
+              <InputNumber
+                className="w-full"
+                mode="currency"
+                currency="BRL"
+                locale="pt-BR"
+                value={campos.valeAlimentacao}
+                onValueChange={(e) =>
+                  setCampos((p) => ({ ...p, valeAlimentacao: e.value ?? null }))
+                }
+              />
+            </div>
+            <div className="liga-cliente-infotime-campo-primeira-linha">
+              <label className="liga-cliente-infotime-primeira-linha-label">{t("valeTransporte")}</label>
+              <InputNumber
+                className="w-full"
+                mode="currency"
+                currency="BRL"
+                locale="pt-BR"
+                value={campos.valeTransporte}
+                onValueChange={(e) =>
+                  setCampos((p) => ({ ...p, valeTransporte: e.value ?? null }))
+                }
+              />
+            </div>
+            <div className="liga-cliente-infotime-campo-primeira-linha">
+              <label className="liga-cliente-infotime-primeira-linha-label">{t("banco")}</label>
+              <Dropdown
+                className="w-full"
+                value={campos.idBanco || null}
+                options={optsBanco}
+                onChange={(e) =>
+                  setCampos((p) => ({
+                    ...p,
+                    idBanco: String(e.value ?? ""),
+                    idAgencia: "",
+                  }))
+                }
+                placeholder={t("selecione")}
+                filter
+                showClear
+              />
+            </div>
+            <div className="liga-cliente-infotime-campo-primeira-linha">
+              <label className="liga-cliente-infotime-primeira-linha-label">{t("agencia")}</label>
+              <Dropdown
+                className="w-full"
+                value={campos.idAgencia || null}
+                options={optsAgencia}
+                onChange={(e) => setCampos((p) => ({ ...p, idAgencia: String(e.value ?? "") }))}
+                placeholder={t("selecione")}
+                filter
+                showClear
+              />
+            </div>
+            <div className="liga-cliente-infotime-campo-primeira-linha">
+              <label className="liga-cliente-infotime-primeira-linha-label">{t("numeroConta")}</label>
+              <InputText
+                className="w-full"
+                value={campos.numeroConta}
+                onChange={(e) => setCampos((p) => ({ ...p, numeroConta: e.target.value }))}
+              />
+            </div>
+            <div className="liga-cliente-infotime-campo-primeira-linha">
+              <label className="liga-cliente-infotime-primeira-linha-label">{t("pix")}</label>
+              <InputText
+                className="w-full"
+                value={campos.pix}
+                onChange={(e) => setCampos((p) => ({ ...p, pix: e.target.value }))}
+              />
+            </div>
+          </div>
         </div>
       </div>
     ),
@@ -1921,8 +1913,6 @@ export function LigaColaboradorInfotimeFormulario({
   secoes.push(
     secIdentificacao,
     secTrabalho,
-    secSalario,
-    secBanco,
     secEndereco,
     secDocsDigitais,
   );

@@ -154,10 +154,10 @@
 
 /**
  * Linhas 1, 2 e 3 da secção Identificação: mesma grelha de trilhas (alinhamento apelido↔nome, sexo↔tipo).
- * Linha 1: nome, tipo, situação, login [, ID].
- * Linha 2 (edição): apelido, sexo, empresa; CPF nas trilhas do login ao ID (colunas 4–5), largura do campo limitada à máscara.
- * Linha 2 (inclusão): apelido, sexo, empresa, senha; CPF da trilha do login ao fim (mesma largura visual).
- * Linha 3 (documentos): e-mail (trilha do antigo CPF; em 5 col. ocupa cols 1–2), RG, CTPS, PIS.
+ * Linha 1: nome, tipo, situação, login (trilha alinhada ao CPF) [, ID mais largo na col. 5].
+ * Linha 2 (edição): apelido, sexo, data nasc., CPF, PIS/PASEP.
+ * Linha 2 (inclusão): apelido, sexo, data nasc., senha; na 2.ª fila: PIS (cols 1–3) e CPF na trilha do login.
+ * Linha 3: e-mail (col. 1 = apelido), empresa (cols 2–3 = sexo + trilha seguinte), RG, CTPS.
  */
 .liga-colaborador-infotime-ident-linha1,
 .liga-colaborador-infotime-ident-linha2,
@@ -183,6 +183,8 @@
 .liga-colaborador-infotime-ident-linha2 .p-inputtext,
 .liga-colaborador-infotime-ident-linha2 .p-inputmask,
 .liga-colaborador-infotime-ident-linha2 .p-password,
+.liga-colaborador-infotime-ident-linha2 input[type="date"],
+.liga-colaborador-infotime-ident-linha3 .p-dropdown,
 .liga-colaborador-infotime-ident-linha3 .p-inputtext {
   width: 100%;
   min-width: 0;
@@ -192,34 +194,58 @@
   width: 100%;
 }
 
-/** Slot largo ao fim da linha 2 (trilhas login→ID em 5 col.; inclusão: após senha): CPF usa a mesma área que o e-mail. */
-.liga-colaborador-infotime-ident-linha2-email-login-ate-id {
-  grid-column: 4 / -1;
-  min-width: 0;
+/** Login (linha 1) e CPF (linha 2): mesma trilha e mesma largura máxima da máscara de CPF. */
+.liga-colaborador-infotime-ident-linha1-slot-login {
+  grid-column: 4;
 }
 
-/** Inclusão (4 colunas): slot largo na 2.ª linha (CPF), da trilha do login até ao fim. */
-.liga-colaborador-infotime-ident-linha2-email-desde-login {
-  grid-column: 4 / -1;
-  grid-row: 2;
-  min-width: 0;
+.liga-colaborador-infotime-ident-linha1-slot-id {
+  grid-column: 5;
 }
 
-/** CPF no fim da linha 2: mantém a grelha do antigo e-mail; o input não estica à largura das duas trilhas. */
-.liga-colaborador-infotime-ident-linha2-slot-cpf-fim {
+.liga-colaborador-infotime-ident-slot-input-cpf-largura {
   justify-self: start;
   width: 100%;
+  min-width: 0;
 }
 
-.liga-colaborador-infotime-ident-linha2-slot-cpf-fim .p-inputmask {
+.liga-colaborador-infotime-ident-slot-input-cpf-largura .p-inputtext,
+.liga-colaborador-infotime-ident-slot-input-cpf-largura .p-inputmask {
   max-width: 13rem;
   width: 100%;
 }
 
+.liga-colaborador-infotime-ident-linha2-slot-cpf {
+  grid-column: 4;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-ident-linha2--5col .liga-colaborador-infotime-ident-linha2-slot-datanasc {
+  grid-column: 3;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-ident-linha2--5col .liga-colaborador-infotime-ident-linha2-slot-pis {
+  grid-column: 5;
+  min-width: 0;
+}
+
+/** Inclusão (4 col.): 2.ª fila — PIS à esquerda, CPF na trilha do login (col. 4). */
+.liga-colaborador-infotime-ident-linha2--4col .liga-colaborador-infotime-ident-linha2-slot-pis {
+  grid-row: 2;
+  grid-column: 1 / 4;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-ident-linha2--4col .liga-colaborador-infotime-ident-linha2-slot-cpf {
+  grid-row: 2;
+  grid-column: 4;
+  min-width: 0;
+}
+
 /**
  * Ordem: nome, tipo, situação, login [, ID].
- * Nome / apelido na col 1 ficam um pouco mais estreitos; a folga vai para a col 2 (tipo / sexo),
- * que ganha um max-width maior. Situação, login e ID permanecem nas mesmas trilhas.
+ * Col. 4 fixa (~largura CPF) alinha login↔CPF; col. 5 mais larga para o ID.
  */
 .liga-colaborador-infotime-ident-linha1--4col,
 .liga-colaborador-infotime-ident-linha2--4col,
@@ -228,7 +254,7 @@
     minmax(7rem, 1.1fr)
     minmax(6.05rem, 15rem)
     minmax(4rem, 0.45fr)
-    minmax(4rem, 0.4fr);
+    minmax(11rem, 13rem);
 }
 
 .liga-colaborador-infotime-ident-linha1--5col,
@@ -238,52 +264,45 @@
     minmax(7rem, 0.95fr)
     minmax(5.5rem, 14rem)
     minmax(3.5rem, 0.4fr)
-    minmax(3.5rem, 0.36fr)
-    minmax(4rem, 6rem);
+    minmax(11rem, 13rem)
+    minmax(6rem, 14rem);
 }
 
 /**
- * Linha 3 (documentos): e-mail, RG, CTPS, PIS. Em 5 col., e-mail ocupa cols 1–2 (largura próxima ao antigo e-mail à direita);
- * RG/CTPS/PIS deslocam-se para as trilhas 3–5. Em 4 col., um campo por coluna.
+ * Linha 3: e-mail na col. 1 (apelido); empresa cols 2–3 (largura sexo + trilha ao lado); RG (4); CTPS (5).
+ * Em 4 col.: CTPS na 2.ª fila a largura completa.
  */
-.liga-colaborador-infotime-ident-linha3--5col
-  > .liga-cliente-infotime-campo-primeira-linha.liga-colaborador-infotime-ident-linha3-email-primeiro {
-  grid-column: 1 / 3;
-}
-
-.liga-colaborador-infotime-ident-linha3--4col
-  > .liga-cliente-infotime-campo-primeira-linha.liga-colaborador-infotime-ident-linha3-email-primeiro {
+.liga-colaborador-infotime-ident-linha3--5col .liga-colaborador-infotime-ident-linha3-slot-email {
   grid-column: 1;
 }
 
-.liga-colaborador-infotime-ident-linha3--5col
-  > .liga-cliente-infotime-campo-primeira-linha:nth-child(2) {
-  grid-column: 3;
+.liga-colaborador-infotime-ident-linha3--5col .liga-colaborador-infotime-ident-linha3-slot-empresa {
+  grid-column: 2 / 4;
 }
 
-.liga-colaborador-infotime-ident-linha3--5col
-  > .liga-cliente-infotime-campo-primeira-linha:nth-child(3) {
+.liga-colaborador-infotime-ident-linha3--5col .liga-colaborador-infotime-ident-linha3-slot-rg {
   grid-column: 4;
 }
 
-.liga-colaborador-infotime-ident-linha3--5col
-  > .liga-cliente-infotime-campo-primeira-linha:nth-child(4) {
+.liga-colaborador-infotime-ident-linha3--5col .liga-colaborador-infotime-ident-linha3-slot-ctps {
   grid-column: 5;
 }
 
-.liga-colaborador-infotime-ident-linha3--4col
-  > .liga-cliente-infotime-campo-primeira-linha:nth-child(2) {
-  grid-column: 2;
+.liga-colaborador-infotime-ident-linha3--4col .liga-colaborador-infotime-ident-linha3-slot-email {
+  grid-column: 1;
 }
 
-.liga-colaborador-infotime-ident-linha3--4col
-  > .liga-cliente-infotime-campo-primeira-linha:nth-child(3) {
-  grid-column: 3;
+.liga-colaborador-infotime-ident-linha3--4col .liga-colaborador-infotime-ident-linha3-slot-empresa {
+  grid-column: 2 / 4;
 }
 
-.liga-colaborador-infotime-ident-linha3--4col
-  > .liga-cliente-infotime-campo-primeira-linha:nth-child(4) {
+.liga-colaborador-infotime-ident-linha3--4col .liga-colaborador-infotime-ident-linha3-slot-rg {
   grid-column: 4;
+}
+
+.liga-colaborador-infotime-ident-linha3--4col .liga-colaborador-infotime-ident-linha3-slot-ctps {
+  grid-row: 2;
+  grid-column: 1 / -1;
 }
 
 /**
@@ -306,7 +325,7 @@
     minmax(7rem, 1.1fr)
     minmax(6.05rem, 15rem)
     minmax(4rem, 0.45fr)
-    minmax(4rem, 0.4fr);
+    minmax(11rem, 13rem);
 }
 
 .liga-colaborador-infotime-ident-linha-contatos-obs--5col {
@@ -314,8 +333,8 @@
     minmax(7rem, 0.95fr)
     minmax(5.5rem, 14rem)
     minmax(3.5rem, 0.4fr)
-    minmax(3.5rem, 0.36fr)
-    minmax(4rem, 6rem);
+    minmax(11rem, 13rem)
+    minmax(6rem, 14rem);
 }
 
 .liga-colaborador-infotime-ident-linha-contatos-obs > .liga-cliente-infotime-campo-primeira-linha {
@@ -347,11 +366,21 @@
     grid-template-columns: 1fr;
   }
 
-  .liga-colaborador-infotime-ident-linha3 > .liga-cliente-infotime-campo-primeira-linha:nth-child(1),
-  .liga-colaborador-infotime-ident-linha3 > .liga-cliente-infotime-campo-primeira-linha:nth-child(2),
-  .liga-colaborador-infotime-ident-linha3 > .liga-cliente-infotime-campo-primeira-linha:nth-child(3),
-  .liga-colaborador-infotime-ident-linha3 > .liga-cliente-infotime-campo-primeira-linha:nth-child(4) {
+  .liga-colaborador-infotime-ident-linha3 > .liga-cliente-infotime-campo-primeira-linha {
     grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .liga-colaborador-infotime-ident-linha1-slot-login,
+  .liga-colaborador-infotime-ident-linha1-slot-id {
+    grid-column: 1 / -1;
+  }
+
+  .liga-colaborador-infotime-ident-linha2-slot-datanasc,
+  .liga-colaborador-infotime-ident-linha2-slot-cpf,
+  .liga-colaborador-infotime-ident-linha2-slot-pis {
+    grid-column: 1 / -1;
+    grid-row: auto;
   }
 
   .liga-colaborador-infotime-ident-linha-contatos-obs,
@@ -367,10 +396,214 @@
     grid-column: 1 / -1;
   }
 
-  .liga-colaborador-infotime-ident-linha2-email-login-ate-id,
-  .liga-colaborador-infotime-ident-linha2-email-desde-login {
+}
+
+/**
+ * Secção Trabalho — espaço vertical mais curto entre a linha de cabeçalho (cargo…regime)
+ * e as linhas seguintes (horários, valores e banco).
+ */
+.liga-colaborador-infotime-trabalho-secao.liga-cliente-infotime-form-ident-secao {
+  gap: var(--liga-cli-form-gap-row);
+}
+
+/**
+ * Secção Trabalho — linha 1: cinco trilhas; **Regime** com a mesma largura que cada **Data**;
+ * o peso que saía da coluna de regime passa para **Cargo**.
+ * Linha 2: três blocos (`.liga-colaborador-infotime-trabalho-horarios-bloco`), **cada um na mesma
+ * coluna** do pai que Cargo, Data de admissão e Data de demissão — fim de «Saída» alinha ao fim de
+ * «Cargo»; início de «Almoço início» alinha ao início de «Data de admissão».
+ * Linha 3: insalubridade, vales, banco, agência, conta e PIX.
+ */
+.liga-colaborador-infotime-trabalho-alinha-l1-l2 {
+  display: grid;
+  grid-template-columns:
+    minmax(4.5rem, 1.02fr)
+    repeat(3, minmax(3.65rem, 0.48fr))
+    minmax(3.65rem, 0.48fr);
+  grid-template-rows: auto auto;
+  column-gap: var(--liga-ident-gap-x, var(--liga-cli-form-gap-col));
+  row-gap: var(--liga-cli-form-gap-row);
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-linha-datas.liga-cliente-infotime-form-ident-grid {
+  display: contents;
+}
+
+.liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-horarios-bloco {
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: var(--liga-ident-gap-x, var(--liga-cli-form-gap-col));
+  row-gap: 0;
+  min-width: 0;
+  width: 100%;
+  align-items: start;
+  justify-items: stretch;
+}
+
+.liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-horarios-bloco--cargo {
+  grid-column: 1;
+}
+
+.liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-horarios-bloco--adm {
+  grid-column: 2;
+}
+
+.liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-horarios-bloco--dem {
+  grid-column: 3;
+}
+
+.liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-slot-moeda--salario {
+  grid-column: 4;
+  grid-row: 2;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-slot-moeda--comissao {
+  grid-column: 5;
+  grid-row: 2;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-slot-cargo {
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-slot-data {
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-slot-regime {
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-linha-datas .p-dropdown {
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-linha-datas input[type="date"] {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.liga-colaborador-infotime-trabalho-horarios-bloco > .liga-cliente-infotime-campo-primeira-linha {
+  justify-self: stretch;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  align-items: stretch;
+}
+
+.liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-slot-moeda .p-inputnumber,
+.liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-slot-moeda .p-inputnumber-input {
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-horarios-bloco .liga-cliente-infotime-primeira-linha-label {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  max-width: none;
+}
+
+.liga-colaborador-infotime-trabalho-linha-valores-banco {
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-vb-fila-unica {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  /** 7 col.: valores mais estreitos; banco, agência e PIX com mínimos e `fr` maiores. */
+  grid-template-columns:
+    minmax(4.25rem, 0.72fr)
+    minmax(4.25rem, 0.72fr)
+    minmax(4.25rem, 0.72fr)
+    minmax(11rem, 1.45fr)
+    minmax(9.5rem, 1.25fr)
+    minmax(5.5rem, 0.62fr)
+    minmax(13rem, 1.52fr);
+  column-gap: var(--liga-ident-gap-x, var(--liga-cli-form-gap-col));
+  row-gap: 0;
+  align-items: start;
+  justify-items: stretch;
+}
+
+.liga-colaborador-infotime-trabalho-vb-fila-unica > .liga-cliente-infotime-campo-primeira-linha {
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-vb-fila-unica .liga-cliente-infotime-primeira-linha-label {
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.liga-colaborador-infotime-trabalho-linha-valores-banco .p-dropdown,
+.liga-colaborador-infotime-trabalho-linha-valores-banco .p-inputtext {
+  width: 100%;
+  min-width: 0;
+}
+
+.liga-colaborador-infotime-trabalho-linha-valores-banco .p-inputnumber,
+.liga-colaborador-infotime-trabalho-linha-valores-banco .p-inputnumber-input {
+  width: 100%;
+  min-width: 0;
+}
+
+/** Máscaras e wrapper Prime no bloco de horários: ocupar toda a célula. */
+.liga-colaborador-infotime-trabalho-horarios-bloco .liga-colaborador-infotime-trabalho-input-hora-compacta,
+.liga-colaborador-infotime-trabalho-horarios-bloco .liga-colaborador-infotime-trabalho-input-hora-compacta .p-inputtext {
+  max-width: none;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.liga-colaborador-infotime-trabalho-horarios-bloco .liga-colaborador-infotime-trabalho-input-hora-compacta.p-inputmask,
+.liga-colaborador-infotime-trabalho-horarios-bloco .liga-colaborador-infotime-trabalho-input-hora-compacta .p-inputmask {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.liga-colaborador-infotime-trabalho-horarios-bloco .liga-cliente-infotime-char1-switch {
+  width: 100%;
+  min-height: 2.75rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .liga-colaborador-infotime-trabalho-alinha-l1-l2 {
+    grid-template-columns: 1fr;
+  }
+
+  .liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-horarios-bloco--cargo,
+  .liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-horarios-bloco--adm,
+  .liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-horarios-bloco--dem,
+  .liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-slot-moeda--salario,
+  .liga-colaborador-infotime-trabalho-alinha-l1-l2 > .liga-colaborador-infotime-trabalho-slot-moeda--comissao {
     grid-column: 1 / -1;
     grid-row: auto;
+  }
+
+  .liga-colaborador-infotime-trabalho-horarios-bloco {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: stretch;
+  }
+
+  .liga-colaborador-infotime-trabalho-vb-fila-unica {
+    grid-template-columns: 1fr;
   }
 }
 
